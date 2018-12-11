@@ -1,0 +1,18 @@
+﻿@using Svr.Web.Models.RegionsViewModels
+
+@model RegionIndexViewModel
+
+@addTagHelper "*, Svr.Web"
+
+<div>
+    <sort-regions action="Index" up="@Model.SortViewModel.Up"
+                 current="@Model.SortViewModel.Current" property="@Model.SortViewModel.NameSort"
+                 current-filter="@Model.FilterViewModel.SearchString">
+        Имя
+    </sort-regions>
+    <sort-regions action="Index" up="@Model.SortViewModel.Up"
+                 current="@Model.SortViewModel.Current" property="@Model.SortViewModel.CodeSort"
+                 current-filter="@Model.FilterViewModel.SearchString">
+        Код
+    </sort-regions>
+</div>

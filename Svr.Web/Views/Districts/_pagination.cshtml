@@ -1,0 +1,8 @@
+﻿@using Svr.Web.Models.DistrictsViewModels
+@model DistrictIndexViewModel
+
+@addTagHelper "*, Svr.Web"
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-name="@(Model.FilterViewModel.SelectedName)"
+           page-url-region="@(Model.FilterViewModel.SelectedRegion)"
+           page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>

@@ -1,0 +1,73 @@
+﻿@using Svr.Web.Models.RegionsViewModels
+@model RegionIndexViewModel
+@*@Html.Partial("_StatusMessage", Model.StatusMessage)*@
+
+@Html.Partial("_filtration", Model.FilterViewModel)
+
+
+
+@if (Model.RegionItems.Any())
+{
+    @Html.Partial("_sort", Model)
+    @Html.Partial("_pagination", Model)
+
+    @*<page-link page-model="Model.PaginationInfo" page-action="Index"
+        page-url-name="@(Model.FilterViewModel.SelectedName)"
+        page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>*@
+
+
+    @foreach (var item in Model.RegionItems)
+    {
+
+        <div>
+            <hr />
+            <h4>@item.ToString()</h4>
+
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.Code)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.Description)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.CreatedOnUtc)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.CreatedOnUtc)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.UpdatedOnUtc)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.UpdatedOnUtc)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-controller="Regions" class="btn btn-default" asp-route-id="@item.Id">Редактировать</a>
+            <a asp-action="Details" asp-controller="Regions" class="btn btn-default" asp-route-id="@item.Id">Подробнее</a>
+            <a asp-action="Delete" asp-controller="Regions" class="btn btn-default" asp-route-id="@item.Id">Удалить</a>
+        </div>
+    }
+    @Html.Partial("_pagination", Model)
+}
+else
+{
+    <div class="esh-catalog-items row">
+        НЕТ РЕЗУЛЬТАТОВ, СООТВЕТСТВУЮЩИХ ВАШЕМУ ПОИСКУ
+    </div>
+}

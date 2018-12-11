@@ -1,0 +1,8 @@
+﻿@model Svr.Web.Models.RegionsViewModels.FilterViewModel
+<form method="get">
+    <div class="form-group form-inline">
+        <label class="control-label">Поиск: </label>
+        @Html.TextBox("currentFilter", Model.SearchString, htmlAttributes: new { @class = "form-control" })
+        <input type="submit" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
