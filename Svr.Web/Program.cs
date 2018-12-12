@@ -44,17 +44,6 @@ namespace Svr.Web
                         var logger = services.GetRequiredService<ILogger<Program>>();
                         logger.LogError(ex, "Произошла ошибка при заполнении базы данных.");
                     }
-
-                    // try
-                    //{
-                    //    var pereplataDbContext = services.GetRequiredService<PereplataDbContext>();
-                    //    await PereplataDbInitializer.InitializeAsync(pereplataDbContext);
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    var logger = services.GetRequiredService<ILogger<Program>>();
-                    //    logger.LogError(ex, "Произошла ошибка при заполнении базы данных.");
-                    //}
                 }
             }
             host.Run();

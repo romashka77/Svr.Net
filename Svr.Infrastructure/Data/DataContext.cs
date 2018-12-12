@@ -13,7 +13,7 @@ namespace Svr.Infrastructure.Data
 {
     public class DataContext : DbContext
     {
-        private readonly string schema = "pereplata";
+        private readonly string schema = "jurist";
 
         public DbSet<Region> Regions { get; set; }
         public DbSet<District> Districts { get; set; }
