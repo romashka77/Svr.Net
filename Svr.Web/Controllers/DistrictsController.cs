@@ -21,7 +21,7 @@ namespace Svr.Web.Controllers
         private readonly IRegionRepository regionRepository;
         private readonly ILogger<DistrictsController> logger;
 
-        public DistrictsController(IDistrictRepository districtRepository, IRegionRepository regionRepository)
+        public DistrictsController(IDistrictRepository districtRepository, IRegionRepository regionRepository, ILogger<DistrictsController> logger)
         {
             this.logger = logger;
             this.districtRepository = districtRepository;
