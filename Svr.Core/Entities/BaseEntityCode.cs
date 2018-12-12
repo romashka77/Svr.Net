@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Svr.Core.Entities
 {
+    /// <summary>
+    /// Базовая сущьность с наименованием, описанием и кодом
+    /// </summary>
     public abstract class BaseEntityCode : BaseEntityDescription
     {
         /// <summary>

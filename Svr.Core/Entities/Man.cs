@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Svr.Core.Entities
 {
+    /// <summary>
+    /// Человек
+    /// </summary>
     public class Man : BaseEntity
     {
         [Required(ErrorMessage = ErrorStringEmpty)]
