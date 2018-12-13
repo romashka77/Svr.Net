@@ -17,7 +17,7 @@ namespace Svr.Core.Entities
         [Required(ErrorMessage = ErrorStringEmpty)]
         public long CategoryDisputeId { get; set; }
         [Display(Name = "Категория споров")]
-        [ForeignKey("CategoryDisputeId")]
+        //[ForeignKey("CategoryDisputeId")]
         public virtual CategoryDispute CategoryDispute { get; set; }  //навигационное свойство
 
         /// <summary>

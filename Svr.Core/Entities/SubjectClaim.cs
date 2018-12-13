@@ -17,7 +17,7 @@ namespace Svr.Core.Entities
         [Required(ErrorMessage = ErrorStringEmpty)]
         public long GroupClaimId { get; set; }
         [Display(Name = "Группа исков")]
-        [ForeignKey("GroupClaimId")]
+        //[ForeignKey("GroupClaimId")]
         public virtual GroupClaim GroupClaim { get; set; }  //навигационное свойство
 
         public override string ToString() => "Предмет иска";
