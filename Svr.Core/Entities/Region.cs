@@ -15,6 +15,7 @@ namespace Svr.Core.Entities
         /// </summary>
         [Display(Name = "Районы")]
         public virtual ICollection<District> Districts { get; set; }
+
         public Region() { Districts = new List<District>(); }
         public override string ToString() => "Регион";
     }

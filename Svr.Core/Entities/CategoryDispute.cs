@@ -6,7 +6,7 @@ namespace Svr.Core.Entities
     /// <summary>
     /// Категория споров
     /// </summary>
-    class CategoryDispute : BaseEntityDescription
+    public class CategoryDispute : BaseEntityDescription
     {
         /// <summary>
         /// Группа исков

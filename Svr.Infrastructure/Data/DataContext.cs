@@ -18,6 +18,10 @@ namespace Svr.Infrastructure.Data
         public DbSet<Region> Regions { get; set; }
         public DbSet<District> Districts { get; set; }
 
+        public DbSet<CategoryDispute> CategoryDisputes { get; set; }
+        public DbSet<GroupClaim> GroupClaims { get; set; }
+        public DbSet<SubjectClaim> SubjectClaims { get; set; }
+
         //public DbSet<Directory> Directories { get; set; }
 
         public DbSet<Man> Men { get; set; }
@@ -35,6 +39,11 @@ namespace Svr.Infrastructure.Data
             modelBuilder.HasDefaultSchema(this.schema);
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
             modelBuilder.ApplyConfiguration(new DistrictConfiguration());
+
+            modelBuilder.ApplyConfiguration(new CategoryDisputeConfiguration());
+            modelBuilder.ApplyConfiguration(new GroupClaimConfiguration());
+            modelBuilder.ApplyConfiguration(new SubjectClaimConfiguration());
+
 
             modelBuilder.ApplyConfiguration(new ManConfiguration());
 

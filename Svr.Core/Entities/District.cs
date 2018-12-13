@@ -16,7 +16,7 @@ namespace Svr.Core.Entities
         /// </summary>
         [Required(ErrorMessage = ErrorStringEmpty)]
         public long RegionId { get; set; }
-        //[ForeignKey("RegionId")]
+        [ForeignKey("RegionId")]
         [Display(Name = "Регион")]
         public virtual Region Region { get; set; }  // навигационное свойство
         public override string ToString() => "Район";

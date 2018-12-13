@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Svr.Core.Entities
@@ -8,8 +9,17 @@ namespace Svr.Core.Entities
     /// <summary>
     /// Группа исков
     /// </summary>
-    class GroupClaim: BaseEntityCode
+    public class GroupClaim : BaseEntityCode
     {
+        /// <summary>
+        /// Категория споров
+        /// </summary>
+        [Required(ErrorMessage = ErrorStringEmpty)]
+        public long CategoryDisputeId { get; set; }
+        [Display(Name = "Категория споров")]
+        [ForeignKey("CategoryDisputeId")]
+        public virtual CategoryDispute CategoryDispute { get; set; }  //навигационное свойство
+
         /// <summary>
         /// Предметы исков
         /// </summary>

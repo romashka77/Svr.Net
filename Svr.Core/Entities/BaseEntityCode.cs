@@ -14,7 +14,7 @@ namespace Svr.Core.Entities
         /// Код 079
         /// </summary>
         [Required(ErrorMessage = ErrorStringEmpty)]
-        [MaxLength(3, ErrorMessage= ErrorStringMaxLength)]
+        //[MaxLength(10, ErrorMessage= ErrorStringMaxLength)]
         [Display(Name = "Код", Prompt = "Введите код")]
         public string Code { get; set; }
         public override string ToString() => "Базовая сущьность с наименованием, описанием и кодом";

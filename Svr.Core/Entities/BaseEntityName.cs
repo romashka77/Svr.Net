@@ -14,7 +14,7 @@ namespace Svr.Core.Entities
         /// Наименование
         /// </summary>
         [Required(ErrorMessage = ErrorStringEmpty)]
-        [MaxLength(100, ErrorMessage = ErrorStringMaxLength)]
+        //[MaxLength(250, ErrorMessage = ErrorStringMaxLength)]
         [Display(Name = "Наименование", Prompt = "Введите наименование")]
         public string Name { get; set; }
         public override string ToString() => "Базовая сущность c наименованием";
