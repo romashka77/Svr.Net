@@ -4,9 +4,9 @@
     ViewData["Title"] = "Редактировать";
 }
 
-<h2>@ViewData["Title"]</h2>
-@*@Html.Partial("_StatusMessage", Model.StatusMessage)*@
-<h4>Регион</h4>
+<h4>@ViewData["Title"]</h4>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<h4>@Model.ToString()</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -37,6 +37,6 @@
 </div>
 
 
-    
+
 
 

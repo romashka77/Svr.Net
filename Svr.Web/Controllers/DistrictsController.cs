@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,22 +8,41 @@ using Svr.Core.Specifications;
 using Svr.Infrastructure.Data;
 using Svr.Web.Models;
 using Svr.Web.Models.DistrictsViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
     public class DistrictsController : Controller
     {
-        private readonly IDistrictRepository districtRepository;
-        private readonly IRegionRepository regionRepository;
-        private readonly ILogger<DistrictsController> logger;
+        private IDistrictRepository districtRepository;
+        private IRegionRepository regionRepository;
+        private ILogger<DistrictsController> logger;
 
+        [TempData]
+        public string StatusMessage { get; set; }
+        #region Конструктор
         public DistrictsController(IDistrictRepository districtRepository, IRegionRepository regionRepository, ILogger<DistrictsController> logger)
         {
             this.logger = logger;
             this.districtRepository = districtRepository;
             this.regionRepository = regionRepository;
         }
-
+        #endregion
+        #region Деструктор
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                districtRepository = null;
+                regionRepository = null;
+                logger = null;
+            }
+            base.Dispose(disposing);
+        }
+        #endregion
         // GET: Districts
         public async Task<IActionResult> Index(long? region, string name, int page, SortState sortOrder = SortState.NameAsc)
         {
@@ -73,7 +88,7 @@ namespace Svr.Web.Controllers
                 DistrictItems = items,
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(regionRepository.ListAll().ToList(),region ,name)
+                FilterViewModel = new FilterViewModel(regionRepository.ListAll().ToList(), region, name)
             };
             return View(districtIndexModel);
         }
@@ -84,57 +99,56 @@ namespace Svr.Web.Controllers
             var district = await districtRepository.GetByIdAsync(id);
             if (district == null)
             {
-                throw new ApplicationException($"Не удалось загрузить район с ID '{id}'.");
+                throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             return View(district);
         }
 
-        //// GET: Districts/Create
-        //public IActionResult Create()
-        //{
-        //    SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
-        //    ViewBag.Regions = regions;
-        //    return View();
-        //}
+        // GET: Districts/Create
+        public IActionResult Create()
+        {
+            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
+            ViewBag.Regions = regions;
+            return View();
+        }
 
-        //// POST: Districts/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(CreateViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // добавляем новый Район
-        //        var district = await districtRepository.AddAsync(new District { Name = model.Name, Description = model.Description, Region = model.Region });
-        //        if (district != null)
-        //        {
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //    }
-        //    ModelState.AddModelError(string.Empty, "Неудачная попытка регистрации района");
-        //    return View(model);
-        //}
-        ////// GET: Districts/Edit/5
-        //public async Task<IActionResult> Edit(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // POST: Districts/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // добавляем новый Район
+                var district = await districtRepository.AddAsync(new District { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.RegionId });
+                if (district != null)
+                {
+                    StatusMessage = $"Добавлен район с Id={district.Id}, код={district.Code}, имя={district.Name}.";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            ModelState.AddModelError(string.Empty, "Неудачная попытка регистрации района");
+            return View(model);
+        }
+        // get: districts/edit/5
+        public async Task<ActionResult> Edit(long? id)
+        {
+            var district = await districtRepository.GetByIdAsync(id);
+            if (district == null)
+            {
+                throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
+            }
+            var model = new DistrictItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description,RegionId = district.RegionId };
+            ViewBag.StatusMessage = StatusMessage;
 
-        //    var district = await _context.Districts.SingleOrDefaultAsync(m => m.Id == id);
-        //    if (district == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(district);
-        //}
+            return View(model);
+        }
 
-        ////// POST: Districts/Edit/5
-        ////// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        ////// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Districts/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Edit(long id, [Bind("Name,Description,Id,CreatedOnUtc,UpdatedOnUtc")] District district)

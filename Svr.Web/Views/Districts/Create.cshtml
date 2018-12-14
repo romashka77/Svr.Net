@@ -14,6 +14,11 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
             <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -26,7 +31,7 @@
             <div class="form-group">
                 <label asp-for="Region" class="control-label"></label>
                 @*<input asp-for="Region" class="form-control" />*@
-                @Html.DropDownListFor(model => model.Region, ViewBag.Region as SelectList)
+                @Html.DropDownListFor(model => model.RegionId, ViewBag.Regions as SelectList)
                 <span asp-validation-for="Region" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-default">Зарегистрировать</button>

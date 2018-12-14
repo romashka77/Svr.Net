@@ -3,8 +3,9 @@
 @{
     ViewData["Title"] = "Список регионов";
 }
-
-<h2>@ViewData["Title"]</h2>
+@*<h1>@tatusMessage</h1>*@
+<h4>@ViewData["Title"]</h4>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
 <p>
     <a asp-action="Create" asp-controller="Regions" class="btn btn-default">Добавить</a>
 </p>

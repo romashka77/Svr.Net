@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -13,24 +8,40 @@ using Svr.Infrastructure.Data;
 using Svr.Web.Interfaces;
 using Svr.Web.Models;
 using Svr.Web.Models.RegionsViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
     public class RegionsController : Controller
     {
-        private readonly ILogger<RegionsController> logger;
-        private readonly IRegionRepository regionRepository;
+        private ILogger<RegionsController> logger;
+        private IRegionRepository regionRepository;
         //private readonly IRegionService regionService;
 
         [TempData]
         public string StatusMessage { get; set; }
 
-        #region конструктор
+        #region Конструктор
         public RegionsController(IRegionRepository regionRepository, ILogger<RegionsController> logger = null)
         {
             //this.regionService = regionService;
             this.logger = logger;
             this.regionRepository = regionRepository;
+        }
+        #endregion
+        #region Деструктор
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                regionRepository = null;
+                logger = null;
+            }
+            base.Dispose(disposing);
         }
         #endregion
         #region Index
@@ -87,7 +98,8 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(totalItems, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString)
+                FilterViewModel = new FilterViewModel(searchString),
+                StatusMessage = StatusMessage
             };
             return View(regionIndexModel);
         }
@@ -99,7 +111,7 @@ namespace Svr.Web.Controllers
             var region = await regionRepository.GetByIdWithItemsAsync(id);
             if (region == null)
             {
-                throw new ApplicationException($"Не удалось загрузить регион с ID '{id}'.");
+                throw new ApplicationException($"Не удалось загрузить регион с ID {id}.");
             }
             return View(region);
         }
@@ -118,17 +130,17 @@ namespace Svr.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RegionItemViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // добавляем новый регион
+                //добавляем новый регион
                 var region = await regionRepository.AddAsync(new Region { Code = model.Code, Name = model.Name, Description = model.Description });
                 if (region != null)
                 {
-                    StatusMessage = $"Добавлен регион с Id='{region.Id}', код='{region.Code}', имя='{region.Name}'.";
+                    StatusMessage = $"Добавлен {model} с Id={model.Id}, код={model.Code}, имя={model.Name}.";
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ModelState.AddModelError(string.Empty, "Неудачная попытка регистрации региона");
+            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
             return View(model);
         }
         #endregion
@@ -139,10 +151,10 @@ namespace Svr.Web.Controllers
             var region = await regionRepository.GetByIdAsync(id);
             if (region == null)
             {
-                throw new ApplicationException($"Не удалось загрузить регион с ID '{id}'.");
+                StatusMessage = $"Ошибка: Не удалось найти регион с ID = {id}.";
+                return RedirectToAction(nameof(Index));
             }
-            var model = new RegionItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description };
-            ViewBag.StatusMessage = StatusMessage;
+            var model = new RegionItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, StatusMessage = StatusMessage };
             return View(model);
         }
 
@@ -155,33 +167,22 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var region = await regionRepository.GetByIdAsync(model.Id);
-                if (region == null)
-                {
-                    throw new ApplicationException($"Не удалось загрузить регион с ID '{model.Id}'.");
-                    //return NotFound();
-                }
                 try
                 {
-                    if ((region.Name != model.Name) || (region.Description != model.Description) || (region.Code != model.Code))
-                    {
-                        region.Code = model.Code;
-                        region.Name = model.Name;
-                        region.Description = model.Description;
-                        await regionRepository.UpdateAsync(region);
-                        StatusMessage = "Регион обновлен";
-                    }
-                    else { StatusMessage = "Регион не изменен"; }
+                    await regionRepository.UpdateAsync(new Region { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, Districts = model.Districts, UpdatedOnUtc = model.UpdatedOnUtc });
+                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!(await regionRepository.EntityExistsAsync(region.Id)))
+                    if (!(await regionRepository.EntityExistsAsync(model.Id)))
                     {
-                        throw new ApplicationException($"Не удалось загрузить регион с ID '{region.Id}'.");
+                        StatusMessage = $"Не удалось найти регион с ID {model.Id}. {ex.Message}";
+                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        throw new ApplicationException($"Непредвиденная ошибка при обновлении региона с ID '{region.Id}'.");
+                        StatusMessage = $"Непредвиденная ошибка при обновлении региона с ID {model.Id}. {ex.Message}";
+                        return RedirectToAction(nameof(Index));
                     }
                 }
                 //return RedirectToAction(nameof(Index));
@@ -197,10 +198,10 @@ namespace Svr.Web.Controllers
             var region = await regionRepository.GetByIdAsync(id);
             if (region == null)
             {
-                throw new ApplicationException($"Не удалось загрузить регион с ID '{id}'.");
-                //return NotFound();
+                StatusMessage = $"Ошибка: Не удалось найти регион с ID = {id}.";
+                return RedirectToAction(nameof(Index));
             }
-            var model = new RegionItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description};
+            var model = new RegionItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description };
             return View(model);
         }
 
@@ -212,14 +213,13 @@ namespace Svr.Web.Controllers
             try
             {
                 await regionRepository.DeleteAsync(new Region { Id = model.Id, Name = model.Name, Code = model.Code });
-                StatusMessage = $"Удален регион с Id='{model.Id}', код='{model.Code}', имя='{model.Name}'.";
+                StatusMessage = $"Удален {model} с Id='{model.Id}', код='{model.Code}', имя='{model.Name}'.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 StatusMessage = $"Ошибка при удалении региона с Id='{model.Id}', код='{model.Code}', имя='{model.Name}' - '{ex.Message}'.";
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException(StatusMessage);
             }
         }
         #endregion

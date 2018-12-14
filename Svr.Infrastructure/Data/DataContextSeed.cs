@@ -33,8 +33,11 @@ namespace Svr.Infrastructure.Data
                     //Исходящие
                     dataContext.CategoryDisputes.AddRange(GetPreconfiguredCategoryDisputeOut(dataContext));
                     await dataContext.SaveChangesAsync();
-
-                    //categoryDispute = dataContext.CategoryDisputes.Add(new CategoryDispute { Name = "Исходящие", Description = "Исходящие документы" });
+                }
+                if (!dataContext.Performers.Any())
+                {
+                    dataContext.Performers.AddRange(GetPreconfiguredPerformers());
+                    await dataContext.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -49,6 +52,7 @@ namespace Svr.Infrastructure.Data
                 }
             }
         }
+
         private static IEnumerable<CategoryDispute> GetPreconfiguredCategoryDisputeOut(DataContext dataContext)
         {
             categoryDispute = new CategoryDispute { Name = "Исходящие", Description = "Исходящие документы" };
@@ -132,6 +136,7 @@ namespace Svr.Infrastructure.Data
 
             return new List<CategoryDispute>() { categoryDispute };
         }
+
         private static IEnumerable<CategoryDispute> GetPreconfiguredCategoryDisputeIn(DataContext dataContext)
         {
             categoryDispute = new CategoryDispute { Name = "Входящие", Description = "Входящие документы" };
@@ -259,6 +264,48 @@ namespace Svr.Infrastructure.Data
             return new List<CategoryDispute>() { categoryDispute };
         }
 
+        private static IEnumerable<Performer> GetPreconfiguredPerformers()
+        {
+            return new List<Performer>()
+            {
+                new Performer {Name="Белякина Маргарита Александровна" },
+                new Performer {Name="Волосевич Юлия Сергеевна" },
+                new Performer {Name="Арзамасцева Елена Геннадьевна" },
+                new Performer {Name="Галузинская Екатерина Владимировна" },
+                new Performer {Name="Горшкова Ирина Геннадьевна" },
+                new Performer {Name="Грабко Александр Сергеевич" },
+                new Performer {Name="Гунько Анастасия Игоревна" },
+                new Performer {Name="Данилова Виктория Викторовна" },
+                new Performer {Name="Завражнева Ольга Анатольевна" },
+                new Performer {Name="Киянова Татьяна Ивановна" },
+                new Performer {Name="Колотуша Марта Анатольевна" },
+                new Performer {Name="Корнеева Елена Владимировна" },
+                new Performer {Name="Корнишина Лариса Анатольевна" },
+                new Performer {Name="Коханов Дмитрий Павлович" },
+                new Performer {Name="Курьянова Елена Николаевна" },
+                new Performer {Name="Лихачева Елена Николаевна" },
+                new Performer {Name="Ломовцева Татьяна Александровна" },
+                new Performer {Name="Николаев Алексей Евгеньевич" },
+                new Performer {Name="Панова Ольга Анатольевна" },
+                new Performer {Name="Платицына Елена Геннадьевна" },
+                new Performer {Name="Решетова Ирина Николаевна" },
+                new Performer {Name="Рыбкина Ольга Анатольевна" },
+                new Performer {Name="Рыжкова Юлия Владимировна" },
+                new Performer {Name="Сапрыкина Анастасия Александровна" },
+                new Performer {Name="Сиднева Галина Васильевна" },
+                new Performer {Name="Суворин Андрей Владимирович" },
+                new Performer {Name="Сычева Светлана Алексеевна" },
+                new Performer {Name="Тарнопольская Елена Сергеевна" },
+                new Performer {Name="Топорков Илья Николаевич" },
+                new Performer {Name="Труба Антонина Александровна" },
+                new Performer {Name="Фатахутдинов Денис Фаилевич" },
+                new Performer {Name="Черкасова Мария Сергеевна" },
+                new Performer {Name="Четверикова Елена Витальевна" },
+                new Performer {Name="Чубарова Юлия Юрьевна" },
+                new Performer {Name="Шишкова Елена Алексеевна" },
+                new Performer {Name="Яблочкина Татьяна Юрьевна" }
+            };
+        }
 
         private static IEnumerable<Region> GetPreconfiguredRegions()
         {
@@ -295,6 +342,7 @@ namespace Svr.Infrastructure.Data
                 new District { Code="024", Name = "Котовск", Description = "ОПФР по г.Котовску", Region = region },
                 new District { Code="025", Name = "Тамбов", Description = "ОПФР по г.Тамбову", Region = region } };
         }
+
         private static IEnumerable<SubjectClaim> GetPreconfiguredSubjectClaimsOut(int cod)
         {
             switch (cod)

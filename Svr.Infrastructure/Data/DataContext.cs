@@ -22,6 +22,9 @@ namespace Svr.Infrastructure.Data
         public DbSet<GroupClaim> GroupClaims { get; set; }
         public DbSet<SubjectClaim> SubjectClaims { get; set; }
 
+        public DbSet<Performer> Performers { get; set; }
+
+
         //public DbSet<Directory> Directories { get; set; }
 
         public DbSet<Man> Men { get; set; }
@@ -44,6 +47,7 @@ namespace Svr.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new GroupClaimConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectClaimConfiguration());
 
+            modelBuilder.ApplyConfiguration(new PerformerConfiguration());
 
             modelBuilder.ApplyConfiguration(new ManConfiguration());
 
