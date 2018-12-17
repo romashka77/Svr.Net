@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Svr.Core.Interfaces;
+using Svr.Infrastructure;
+using Svr.Infrastructure.Data;
+using Svr.Infrastructure.Identity;
+using Svr.Infrastructure.Services;
+using Svr.Web.Interfaces;
+using Svr.Web.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Svr.Infrastructure.Data;
-using Svr.Infrastructure.Identity;
-using Svr.Core.Interfaces;
-using Svr.Infrastructure.Services;
-using Svr.Infrastructure;
-using Svr.Web.Interfaces;
-using Svr.Web.Services;
 
 namespace Svr.Web
 {
@@ -40,10 +40,13 @@ namespace Svr.Web
 
             services.AddScoped<IRegionRepository, RegionRepository>();
             services.AddScoped<IDistrictRepository, DistrictRepository>();
+            services.AddScoped<ICategoryDisputeRepository, CategoryDisputeRepositiry>();
+
+
 
             services.AddScoped<IRegionService, RegionService>();
 
-            
+
         }
 
         public static void AddTransientServices(this IServiceCollection services)

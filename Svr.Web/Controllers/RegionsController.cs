@@ -45,7 +45,6 @@ namespace Svr.Web.Controllers
         }
         #endregion
         #region Index
-        //[HttpPost]
         [HttpGet]
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string currentFilter = null, string searchString = null, int page = 1)
         {
