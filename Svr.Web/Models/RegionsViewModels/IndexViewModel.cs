@@ -7,9 +7,9 @@ using Svr.Core.Entities;
 
 namespace Svr.Web.Models.RegionsViewModels
 {
-    public class RegionIndexViewModel: StatusMessageViewModel
+    public class IndexViewModel: StatusMessageViewModel
     {
-        public IEnumerable<RegionItemViewModel> RegionItems { get; set; }
+        public IEnumerable<ItemViewModel> RegionItems { get; set; }
         public PageViewModel PageViewModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }
         public SortViewModel SortViewModel { get; set; }

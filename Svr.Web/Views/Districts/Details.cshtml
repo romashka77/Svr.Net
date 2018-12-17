@@ -1,13 +1,12 @@
-﻿@using Svr.Core.Entities
-@model District
+﻿@model Svr.Web.Models.DistrictsViewModels.ItemViewModel
 @{
-    ViewData["Title"] = "Подробности " + Model.Name;
+    ViewData["Title"] = $"Подробности {Model.Name}";
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <div>
-    <h4>@Model.ToString()</h4>
+    <h4>@Model</h4>
     <div>
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
         <a asp-action="Index" class="btn btn-default">Назад</a>
@@ -37,6 +36,12 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.UpdatedOnUtc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Region)
+        </dt>
+        <dd>
+            @Html.RouteLink($"{Model.Region.Name} ({Model.Region.Description})", new { action = "Details", controller = "Regions", id = Model.RegionId })
         </dd>
     </dl>
 </div>

@@ -83,27 +83,32 @@ namespace Svr.Web.Controllers
             // пагинация
             var count = districts.Count();
             var items = districts.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
-            var districtIndexModel = new DistrictIndexViewModel()
+            var districtIndexModel = new IndexViewModel()
             {
                 DistrictItems = items,
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(regionRepository.ListAll().ToList(), region, name)
+                FilterViewModel = new FilterViewModel(regionRepository.ListAll().ToList(), region, name),
+                StatusMessage = StatusMessage
             };
             return View(districtIndexModel);
         }
-
+        #region Details
         // GET: Districts/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            var district = await districtRepository.GetByIdAsync(id);
+            var district = await districtRepository.GetByIdWithItemsAsync(id);
             if (district == null)
             {
-                throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
+                StatusMessage = $"Не удалось загрузить район с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            return View(district);
+            var model = new ItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description, RegionId = district.RegionId,Region =district.Region, StatusMessage = StatusMessage };
+            return View(model);
         }
-
+        #endregion
+        #region Create
         // GET: Districts/Create
         public IActionResult Create()
         {
@@ -117,7 +122,7 @@ namespace Svr.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateViewModel model)
+        public async Task<IActionResult> Create(ItemViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -129,86 +134,91 @@ namespace Svr.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ModelState.AddModelError(string.Empty, "Неудачная попытка регистрации района");
+            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
+            ViewBag.Regions = regions;
             return View(model);
         }
+        #endregion
         // get: districts/edit/5
         public async Task<ActionResult> Edit(long? id)
         {
             var district = await districtRepository.GetByIdAsync(id);
             if (district == null)
             {
-                throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
+                StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new DistrictItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description,RegionId = district.RegionId };
-            ViewBag.StatusMessage = StatusMessage;
-
+            var model = new ItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description, RegionId = district.RegionId, StatusMessage = StatusMessage };
+            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
+            ViewBag.Regions = regions;
             return View(model);
         }
 
         // POST: Districts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(long id, [Bind("Name,Description,Id,CreatedOnUtc,UpdatedOnUtc")] District district)
-        //{
-        //    if (id != district.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await districtRepository.UpdateAsync(new District { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, RegionId = model.RegionId, UpdatedOnUtc = model.UpdatedOnUtc });
+                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    if (!(await regionRepository.EntityExistsAsync(model.Id)))
+                    {
+                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        StatusMessage = $"Непредвиденная ошибка при обновлении района с ID {model.Id}. {ex.Message}";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit));
+            }
+            return View(model);
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(district);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!DistrictExists(district.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(district);
-        //}
+        //// GET: Districts/Delete/5
+        public async Task<IActionResult> Delete(long? id)
+        {
+            var district = await districtRepository.GetByIdAsync(id);
+            if (district == null)
+            {
+                StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+            }
+            var model = new ItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description, RegionId = district.RegionId, CreatedOnUtc = district.CreatedOnUtc, UpdatedOnUtc = district.UpdatedOnUtc, StatusMessage = StatusMessage };
+            return View(model);
+        }
 
-        ////// GET: Districts/Delete/5
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var district = await _context.Districts
-        //        .SingleOrDefaultAsync(m => m.Id == id);
-        //    if (district == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(district);
-        //}
-
-        ////// POST: Districts/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(long id)
-        //{
-        //    var district = await _context.Districts.SingleOrDefaultAsync(m => m.Id == id);
-        //    _context.Districts.Remove(district);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        //// POST: Districts/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
+        {
+            try
+            {
+                await districtRepository.DeleteAsync(new District { Id = model.Id, Name = model.Name, Code = model.Code, });
+                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при удалении района с Id={model.Id}, Name = {model.Name}, Code = {model.Code} - {ex.Message}.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
 
         //private bool DistrictExists(long id)
         //{

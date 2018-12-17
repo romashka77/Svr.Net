@@ -1,10 +1,7 @@
-﻿@using Svr.Web.Models.RegionsViewModels
-@model RegionIndexViewModel
+﻿@model Svr.Web.Models.RegionsViewModels.IndexViewModel
 @*@Html.Partial("_StatusMessage", Model.StatusMessage)*@
 
 @Html.Partial("_filtration", Model.FilterViewModel)
-
-
 
 @if (Model.RegionItems.Any())
 {

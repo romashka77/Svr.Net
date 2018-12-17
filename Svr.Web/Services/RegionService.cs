@@ -51,7 +51,7 @@ namespace Svr.Web.Services
 
         public Task<Region> GetByIdWithItemsAsync(long? id) => _itemRepository.GetByIdWithItemsAsync(id);
 
-        public async Task<RegionIndexViewModel> GetRegionItems(SortState sortOrder = SortState.NameAsc, string searchString = null, int pageIndex = 1, int itemsPage = 10)
+        public async Task<IndexViewModel> GetRegionItems(SortState sortOrder = SortState.NameAsc, string searchString = null, int pageIndex = 1, int itemsPage = 10)
         {
             _logger.LogInformation("GetRegionItems вызван.");
             var root = _itemRepository.ListAll();
@@ -80,9 +80,9 @@ namespace Svr.Web.Services
             //пагинация
             var totalItems = root.Count();
             var itemsOnPage = root.Skip((pageIndex - 1) * itemsPage).Take(itemsPage).ToList();
-            var vm = new RegionIndexViewModel()
+            var vm = new IndexViewModel()
             {
-                RegionItems = itemsOnPage.Select(i => new RegionItemViewModel()
+                RegionItems = itemsOnPage.Select(i => new ItemViewModel()
                 {
                     Id = i.Id,
                     Code = i.Code,

@@ -1,13 +1,14 @@
-﻿@model Svr.Web.Models.RegionsViewModels.RegionItemViewModel
+﻿@model Svr.Web.Models.RegionsViewModels.ItemViewModel
 
 @{
     ViewData["Title"] = "Редактировать";
 }
 
-<h4>@ViewData["Title"]</h4>
+<h2>@ViewData["Title"]</h2>
 @Html.Partial("_StatusMessage", Model.StatusMessage)
-<h4>@Model.ToString()</h4>
+<h4>@Model</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -36,7 +37,9 @@
     </div>
 </div>
 
-
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
 
 
 

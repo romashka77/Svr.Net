@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Svr.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Models.DistrictsViewModels
 {
-    public class IndexViewModel : EditViewModel
+    public class IndexViewModel : StatusMessageViewModel
     {
-        [Display(Name = "Дата создания")]
-        public DateTime CreatedOnUtc { get; set; }
-        [Display(Name = "Дата изменения")]
-        public DateTime UpdatedOnUtc { get; set; }
+        public IEnumerable<District> DistrictItems { get; set; }
+        public PageViewModel PageViewModel { get; set; }
+        public FilterViewModel FilterViewModel { get; set; }
+        public SortViewModel SortViewModel { get; set; }
     }
 }

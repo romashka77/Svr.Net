@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -13,22 +14,22 @@ namespace Svr.Infrastructure.Data
         public DistrictRepository(DataContext context) : base(context)
         {
         }
-        //public virtual District GetByIdWithItems(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(id));
-        //    }
-        //    //return Entities.Include(r => r.Districts).FirstOrDefault(r => r.Id == id);
-        //    return Entities.fi FirstOrDefault(r => r.Id == id);
-        //}
-        //public virtual Task<District> GetByIdWithItemsAsync(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(id));
-        //    }
-        //    return Entities.Include(r => r.Districts).FirstOrDefaultAsync(r => r.Id == id);
-        //}
+        public virtual District GetByIdWithItems(long? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+            //return Entities.Include(r => r.Districts).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(d => d.Region).FirstOrDefault(r => r.Id == id);
+        }
+        public virtual Task<District> GetByIdWithItemsAsync(long? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+            return Entities.Include(r => r.Region).FirstOrDefaultAsync(r => r.Id == id);
+        }
     }
 }

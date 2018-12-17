@@ -5,11 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Svr.Core.Entities;
 
-namespace Svr.Web.Models.RegionsViewModels
+namespace Svr.Web.Models.DistrictsViewModels
 {
-    public class RegionItemViewModel : Region
+    public class ItemViewModel : District
     {
         public string StatusMessage { get; set; }
     }
-
 }

@@ -8,7 +8,7 @@ namespace Svr.Core.Interfaces
 {
     public interface IDistrictRepository : IRepository<District>, IAsyncRepository<District>
     {
-        //District GetByIdWithItems(long? id);
-        //Task<District> GetByIdWithItemsAsync(long? id);
+        District GetByIdWithItems(long? id);
+        Task<District> GetByIdWithItemsAsync(long? id);
     }
 }

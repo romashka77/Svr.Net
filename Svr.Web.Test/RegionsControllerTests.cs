@@ -65,7 +65,7 @@ namespace Svr.Web.Test
             //Является ли возвращаемый результат объектом ViewResult
             var viewResult = Assert.IsType<ViewResult>(result);
             //Передается ли в представление в качестве модели объект RegionIndexViewModel
-            var model = Assert.IsAssignableFrom<RegionIndexViewModel>(viewResult.ViewData.Model);
+            var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
             //количество объектов в модели, которая передается в представление
             Assert.Equal(4, model.RegionItems.Count());
         }

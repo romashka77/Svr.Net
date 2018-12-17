@@ -84,9 +84,9 @@ namespace Svr.Web.Controllers
             //пагинация
             var totalItems = regions.Count();
             var itemsOnPage = regions.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
-            var regionIndexModel = new RegionIndexViewModel()
+            var regionIndexModel = new IndexViewModel()
             {
-                RegionItems = itemsOnPage.Select(i => new RegionItemViewModel()
+                RegionItems = itemsOnPage.Select(i => new ItemViewModel()
                 {
                     Id = i.Id,
                     Code = i.Code,
@@ -111,9 +111,12 @@ namespace Svr.Web.Controllers
             var region = await regionRepository.GetByIdWithItemsAsync(id);
             if (region == null)
             {
-                throw new ApplicationException($"Не удалось загрузить регион с ID {id}.");
+                StatusMessage = $"Не удалось загрузить район с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+                //throw new ApplicationException($"Не удалось загрузить регион с ID {id}.");
             }
-            return View(region);
+            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, Districts = region.Districts, StatusMessage = StatusMessage };
+            return View(model);
         }
         #endregion
         #region Create
@@ -128,9 +131,9 @@ namespace Svr.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RegionItemViewModel model)
+        public async Task<IActionResult> Create(ItemViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 //добавляем новый регион
                 var region = await regionRepository.AddAsync(new Region { Code = model.Code, Name = model.Name, Description = model.Description });
@@ -154,7 +157,7 @@ namespace Svr.Web.Controllers
                 StatusMessage = $"Ошибка: Не удалось найти регион с ID = {id}.";
                 return RedirectToAction(nameof(Index));
             }
-            var model = new RegionItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, StatusMessage = StatusMessage };
+            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, StatusMessage = StatusMessage };
             return View(model);
         }
 
@@ -163,7 +166,7 @@ namespace Svr.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(RegionItemViewModel model)
+        public async Task<IActionResult> Edit(ItemViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -176,7 +179,7 @@ namespace Svr.Web.Controllers
                 {
                     if (!(await regionRepository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти регион с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
                         return RedirectToAction(nameof(Index));
                     }
                     else
@@ -201,24 +204,24 @@ namespace Svr.Web.Controllers
                 StatusMessage = $"Ошибка: Не удалось найти регион с ID = {id}.";
                 return RedirectToAction(nameof(Index));
             }
-            var model = new RegionItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description };
+            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description };
             return View(model);
         }
 
         // POST: Regions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(RegionItemViewModel model)
+        public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
             {
                 await regionRepository.DeleteAsync(new Region { Id = model.Id, Name = model.Name, Code = model.Code });
-                StatusMessage = $"Удален {model} с Id='{model.Id}', код='{model.Code}', имя='{model.Name}'.";
+                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении региона с Id='{model.Id}', код='{model.Code}', имя='{model.Name}' - '{ex.Message}'.";
+                StatusMessage = $"Ошибка при удалении района с Id={model.Id}, Name = {model.Name}, Code = {model.Code} - {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }

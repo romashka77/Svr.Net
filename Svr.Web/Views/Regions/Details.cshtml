@@ -1,5 +1,6 @@
 ﻿@using Svr.Core.Entities
-@model Region
+@model Svr.Web.Models.RegionsViewModels.ItemViewModel
+
 @{
     ViewData["Title"] = "Подробности " + Model.Name;
 }
@@ -44,7 +45,9 @@
             <ul>
                 @foreach (District district in Model.Districts)
                 {
-                    <li>@district.Name (@district.Description)</li>
+                    <li>
+                        @Html.RouteLink($"{district.Name} ({district.Description})", new { action = "Details", controller = "Districts", id = district.Id })
+                    </li>
                 }
             </ul>
         </dd>
