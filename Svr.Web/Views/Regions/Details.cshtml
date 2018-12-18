@@ -46,7 +46,8 @@
                 @foreach (District district in Model.Districts)
                 {
                     <li>
-                        @Html.RouteLink($"{district.Name} ({district.Description})", new { action = "Details", controller = "Districts", id = district.Id })
+                        <a asp-controller="Districts" asp-action="Details" asp-route-id="@district.Id">@district.Name</a>
+                        @*@Html.RouteLink($"{district.Name} ({district.Description})", new { action = "Details", controller = "Districts", id = district.Id })*@
                     </li>
                 }
             </ul>

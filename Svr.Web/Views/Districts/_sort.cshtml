@@ -3,22 +3,22 @@
 @addTagHelper "*, Svr.Web"
 
 <div>
-    <sort-districts action="Index" up="@Model.SortViewModel.Up"
+    <sort-header action="Index" up="@Model.SortViewModel.Up"
                     current="@Model.SortViewModel.Current" property="@Model.SortViewModel.NameSort"
                     current-filter-name="@Model.FilterViewModel.SelectedName"
                     current-filter-region="@Model.FilterViewModel.SelectedRegion">
         Имя
-    </sort-districts>
-    <sort-districts action="Index" up="@Model.SortViewModel.Up"
+    </sort-header>
+    <sort-header action="Index" up="@Model.SortViewModel.Up"
                     current="@Model.SortViewModel.Current" property="@Model.SortViewModel.CodeSort"
                     current-filter-name="@Model.FilterViewModel.SelectedName"
                     current-filter-region="@Model.FilterViewModel.SelectedRegion">
         Код
-    </sort-districts>
-    <sort-districts action="Index" up="@Model.SortViewModel.Up"
+    </sort-header>
+    <sort-header action="Index" up="@Model.SortViewModel.Up"
                     current="@Model.SortViewModel.Current" property="@Model.SortViewModel.RegionSort"
                     current-filter-name="@Model.FilterViewModel.SelectedName"
                     current-filter-region="@Model.FilterViewModel.SelectedRegion">
         Регион
-    </sort-districts>
+    </sort-header>
 </div>

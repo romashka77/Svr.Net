@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Svr.Web.Models.RegionsViewModels
+namespace Svr.Web.Models
 {
     public class SortHeaderTagHelper : TagHelper
     {
-        public string CurrentFilter { get; set; }// фильтрация
+        public string CurrentFilterName { get; set; }// фильтрация
+        public long? CurrentFilterRegion { get; set; }
         public SortState Property { get; set; } // значение текущего свойства, для которого создается тег
         public SortState Current { get; set; }  // значение активного свойства, выбранного для сортировки
         public string Action { get; set; }  // действие контроллера, на которое создается ссылка
@@ -33,10 +34,10 @@ namespace Svr.Web.Models.RegionsViewModels
         {
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
             output.TagName = "a";
-            string url = urlHelper.Action(Action, new { sortOrder = Property, currentFilter = CurrentFilter });
+            string url = urlHelper.Action(Action, new { sortOrder = Property, name = CurrentFilterName, region = CurrentFilterRegion });
             output.Attributes.SetAttribute("href", url);
             // если текущее свойство имеет значение CurrentSort
-            if (Current == Property)
+            if (((Current == SortState.CodeAsc) && (Property == SortState.CodeDesc)) || ((Current == SortState.CodeDesc) && (Property == SortState.CodeAsc)) || ((Current == SortState.NameAsc) && (Property == SortState.NameDesc)) || ((Current == SortState.NameDesc) && (Property == SortState.NameAsc)) || ((Current == SortState.RegionAsc) && (Property == SortState.RegionDesc)) || ((Current == SortState.RegionDesc) && (Property == SortState.RegionAsc)))
             {
                 TagBuilder tag = new TagBuilder("i");
                 tag.AddCssClass("glyphicon");

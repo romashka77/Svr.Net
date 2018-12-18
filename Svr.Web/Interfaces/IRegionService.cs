@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Svr.Core.Interfaces;
+using Svr.Web.Models;
 using Svr.Web.Models.RegionsViewModels;
 
 namespace Svr.Web.Interfaces

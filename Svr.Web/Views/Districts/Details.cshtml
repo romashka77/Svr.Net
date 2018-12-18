@@ -41,7 +41,8 @@
             @Html.DisplayNameFor(model => model.Region)
         </dt>
         <dd>
-            @Html.RouteLink($"{Model.Region.Name} ({Model.Region.Description})", new { action = "Details", controller = "Regions", id = Model.RegionId })
+            <a asp-controller="Regions" asp-action="Details" asp-route-id="@Model.RegionId">@Model.Region.Name</a>
+            @*@Html.RouteLink($"{Model.Region.Name} ({Model.Region.Description})", new { action = "Details", controller = "Regions", id = Model.RegionId })*@
         </dd>
     </dl>
 </div>
