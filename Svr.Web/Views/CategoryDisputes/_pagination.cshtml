@@ -1,0 +1,6 @@
+﻿@model Svr.Web.Models.CategoryDisputesViewModels.IndexViewModel
+
+@addTagHelper "*, Svr.Web"
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-currentfilter="@(Model.FilterViewModel.SearchString)"
+           page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>

@@ -43,6 +43,7 @@ namespace Svr.Web.Controllers
             base.Dispose(disposing);
         }
         #endregion
+        #region Index
         // GET: Districts
         public async Task<IActionResult> Index(long? region, string name, int page, SortState sortOrder = SortState.NameAsc)
         {
@@ -82,17 +83,27 @@ namespace Svr.Web.Controllers
             }
             // пагинация
             var count = districts.Count();
-            var items = districts.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var itemsOnPage = districts.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
             var districtIndexModel = new IndexViewModel()
             {
-                DistrictItems = items,
+                DistrictItems = itemsOnPage.Select(i => new ItemViewModel()
+                {
+                    Id = i.Id,
+                    Code = i.Code,
+                    Name = i.Name,
+                    Description = i.Description,
+                    CreatedOnUtc = i.CreatedOnUtc,
+                    UpdatedOnUtc = i.UpdatedOnUtc
+                }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
                 FilterViewModel = new FilterViewModel(regionRepository.ListAll().ToList(), region, name),
+
                 StatusMessage = StatusMessage
             };
             return View(districtIndexModel);
         }
+        #endregion
         #region Details
         // GET: Districts/Details/5
         public async Task<IActionResult> Details(long? id)
@@ -104,7 +115,7 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description, RegionId = district.RegionId,Region =district.Region, StatusMessage = StatusMessage };
+            var model = new ItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description, RegionId = district.RegionId, Region = district.Region, StatusMessage = StatusMessage, CreatedOnUtc = district.CreatedOnUtc, UpdatedOnUtc = district.UpdatedOnUtc };
             return View(model);
         }
         #endregion
@@ -150,7 +161,7 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description, RegionId = district.RegionId, StatusMessage = StatusMessage };
+            var model = new ItemViewModel { Id = district.Id, Code = district.Code, Name = district.Name, Description = district.Description, RegionId = district.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = district.CreatedOnUtc };
             SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
             ViewBag.Regions = regions;
             return View(model);
@@ -167,7 +178,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await districtRepository.UpdateAsync(new District { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, RegionId = model.RegionId, UpdatedOnUtc = model.UpdatedOnUtc });
+                    await districtRepository.UpdateAsync(new District { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, RegionId = model.RegionId });
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
                 catch (DbUpdateConcurrencyException ex)

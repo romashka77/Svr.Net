@@ -1,0 +1,11 @@
+﻿@model Svr.Web.Models.CategoryDisputesViewModels.IndexViewModel
+
+@addTagHelper "*, Svr.Web"
+
+<div>
+    <sort-header action="Index" up="@Model.SortViewModel.Up"
+                  current="@Model.SortViewModel.Current" property="@Model.SortViewModel.NameSort"
+                  current-filter="@Model.FilterViewModel.SearchString">
+        Имя
+    </sort-header>
+</div>

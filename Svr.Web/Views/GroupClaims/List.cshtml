@@ -1,26 +1,24 @@
-﻿@model Svr.Web.Models.CategoryDisputesViewModels.IndexViewModel
-@*@Html.Partial("_StatusMessage", Model.StatusMessage)*@
+﻿@model Svr.Web.Models.GroupClaimsViewModels.IndexViewModel
 
 @Html.Partial("_filtration", Model.FilterViewModel)
 
-@if (Model.CategoryDisputeItems.Any())
+@if (Model.GroupClaimItems.Any())
 {
     @Html.Partial("_sort", Model)
     @Html.Partial("_pagination", Model)
-
-    @*<page-link page-model="Model.PaginationInfo" page-action="Index"
-        page-url-name="@(Model.FilterViewModel.SelectedName)"
-        page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>*@
-
-
-    @foreach (var item in Model.CategoryDisputeItems)
+    @foreach (var item in Model.GroupClaimItems)
     {
-
         <div>
             <hr />
-            <h4>@item.ToString()</h4>
+            <h4>@item</h4>
 
             <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.Code)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </dd>
                 <dt>
                     @Html.DisplayNameFor(modelItem => item.Name)
                 </dt>
@@ -33,7 +31,12 @@
                 <dd>
                     @Html.DisplayFor(modelItem => item.Description)
                 </dd>
-
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.CategoryDispute)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.CategoryDispute.Name)
+                </dd>
                 <dt>
                     @Html.DisplayNameFor(modelItem => item.CreatedOnUtc)
                 </dt>
@@ -49,9 +52,9 @@
             </dl>
         </div>
         <div>
-            <a asp-action="Edit" asp-controller="CategoryDisputes" class="btn btn-default" asp-route-id="@item.Id">Редактировать</a>
-            <a asp-action="Details" asp-controller="CategoryDisputes" class="btn btn-default" asp-route-id="@item.Id">Подробнее</a>
-            <a asp-action="Delete" asp-controller="CategoryDisputes" class="btn btn-default" asp-route-id="@item.Id">Удалить</a>
+            <a asp-action="Edit" asp-controller="GroupClaims" asp-route-id="@item.Id" class="btn btn-default">Редактировать</a>
+            <a asp-action="Details" asp-controller="GroupClaims" asp-route-id="@item.Id" class="btn btn-default">Подробнее</a>
+            <a asp-action="Delete" asp-controller="GroupClaims" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
         </div>
     }
     @Html.Partial("_pagination", Model)

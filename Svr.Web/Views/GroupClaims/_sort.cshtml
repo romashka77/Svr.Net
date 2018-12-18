@@ -1,0 +1,24 @@
+﻿@model Svr.Web.Models.GroupClaimsViewModels.IndexViewModel
+
+@addTagHelper "*, Svr.Web"
+
+<div>
+    <sort-header action="Index" up="@Model.SortViewModel.Up"
+                    current="@Model.SortViewModel.Current" property="@Model.SortViewModel.NameSort"
+                    current-filter-name="@Model.FilterViewModel.SelectedName"
+                    current-filter-region="@Model.FilterViewModel.SelectedCategoryDispute">
+        Имя
+    </sort-header>
+    <sort-header action="Index" up="@Model.SortViewModel.Up"
+                    current="@Model.SortViewModel.Current" property="@Model.SortViewModel.CodeSort"
+                    current-filter-name="@Model.FilterViewModel.SelectedName"
+                    current-filter-region="@Model.FilterViewModel.SelectedCategoryDispute">
+        Код
+    </sort-header>
+    <sort-header action="Index" up="@Model.SortViewModel.Up"
+                    current="@Model.SortViewModel.Current" property="@Model.SortViewModel.CategoryDisputeSort"
+                    current-filter-name="@Model.FilterViewModel.SelectedName"
+                    current-filter-region="@Model.FilterViewModel.SelectedCategoryDispute">
+        Регион
+    </sort-header>
+</div>

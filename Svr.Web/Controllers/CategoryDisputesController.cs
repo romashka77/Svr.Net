@@ -91,253 +91,124 @@ namespace Svr.Web.Controllers
             return View(categoryDisputeIndexModel);
         }
         #endregion
+        #region Details
+        // GET: CategoryDisputes/Details/5
+        public async Task<IActionResult> Details(long? id)
+        {
+            var сategoryDispute = await сategoryDisputeRepository.GetByIdWithItemsAsync(id);
+            if (сategoryDispute == null)
+            {
+                StatusMessage = $"Не удалось загрузить категорию споров с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+            }
+            var model = new ItemViewModel { Id = сategoryDispute.Id, Name = сategoryDispute.Name, Description = сategoryDispute.Description, GroupClaims = сategoryDispute.GroupClaims, StatusMessage = StatusMessage, CreatedOnUtc = сategoryDispute.CreatedOnUtc, UpdatedOnUtc = сategoryDispute.UpdatedOnUtc };
+            return View(model);
+        }
+        #endregion
+        #region Create
+        // GET: CategoryDisputes/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+        // POST: CategoryDisputes/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //добавляем новый регион
+                var сategoryDispute = await сategoryDisputeRepository.AddAsync(new CategoryDispute { Name = model.Name, Description = model.Description });
+                if (сategoryDispute != null)
+                {
+                    StatusMessage = $"Добавлен {сategoryDispute} с Id={сategoryDispute.Id}, Name={сategoryDispute.Name}.";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            return View(model);
+        }
+        #endregion
+        #region Edit
+        // GET: CategoryDisputes/Edit/5
+        public async Task<IActionResult> Edit(long? id)
+        {
+            var сategoryDispute = await сategoryDisputeRepository.GetByIdAsync(id);
+            if (сategoryDispute == null)
+            {
+                StatusMessage = $"Ошибка: Не удалось найти категорию споров с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+            }
+            var model = new ItemViewModel { Id = сategoryDispute.Id, Name = сategoryDispute.Name, Description = сategoryDispute.Description, StatusMessage = StatusMessage, CreatedOnUtc = сategoryDispute.CreatedOnUtc };
+            return View(model);
+        }
 
-        //// GET: CategoryDisputes/Details/5
-        //public async Task<IActionResult> Details(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // POST: CategoryDisputes/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await сategoryDisputeRepository.UpdateAsync(new CategoryDispute { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc /*Districts = model.Districts*/});
+                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    if (!(await сategoryDisputeRepository.EntityExistsAsync(model.Id)))
+                    {
+                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        StatusMessage = $"Непредвиденная ошибка при обновлении категории споров с ID {model.Id}. {ex.Message}";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                return RedirectToAction(nameof(Edit));
+            }
+            return View(model);
+        }
+        #endregion
+        #region Delete
+        // GET: CategoryDisputes/Delete/5
+        public async Task<IActionResult> Delete(long? id)
+        {
+            var сategoryDispute = await сategoryDisputeRepository.GetByIdAsync(id);
+            if (сategoryDispute == null)
+            {
+                StatusMessage = $"Ошибка: Не удалось найти категорию диспутов с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+            }
+            var model = new ItemViewModel { Id = сategoryDispute.Id, Name = сategoryDispute.Name, Description = сategoryDispute.Description };
+            return View(model);
+        }
 
-        //    var categoryDispute = await _context.CategoryDisputes
-        //        .SingleOrDefaultAsync(m => m.Id == id);
-        //    if (categoryDispute == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(categoryDispute);
-        //}
-
-        //// GET: CategoryDisputes/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: CategoryDisputes/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Description,Name,Id,CreatedOnUtc,UpdatedOnUtc")] CategoryDispute categoryDispute)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(categoryDispute);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(categoryDispute);
-        //}
-
-        //// GET: CategoryDisputes/Edit/5
-        //public async Task<IActionResult> Edit(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var categoryDispute = await _context.CategoryDisputes.SingleOrDefaultAsync(m => m.Id == id);
-        //    if (categoryDispute == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(categoryDispute);
-        //}
-
-        //// POST: CategoryDisputes/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(long id, [Bind("Description,Name,Id,CreatedOnUtc,UpdatedOnUtc")] CategoryDispute categoryDispute)
-        //{
-        //    if (id != categoryDispute.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(categoryDispute);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!CategoryDisputeExists(categoryDispute.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(categoryDispute);
-        //}
-
-        //// GET: CategoryDisputes/Delete/5
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var categoryDispute = await _context.CategoryDisputes
-        //        .SingleOrDefaultAsync(m => m.Id == id);
-        //    if (categoryDispute == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(categoryDispute);
-        //}
-
-        //// POST: CategoryDisputes/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(long id)
-        //{
-        //    var categoryDispute = await _context.CategoryDisputes.SingleOrDefaultAsync(m => m.Id == id);
-        //    _context.CategoryDisputes.Remove(categoryDispute);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool CategoryDisputeExists(long id)
-        //{
-        //    return _context.CategoryDisputes.Any(e => e.Id == id);
-        //}        //// GET: CategoryDisputes/Details/5
-        //public async Task<IActionResult> Details(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var categoryDispute = await _context.CategoryDisputes
-        //        .SingleOrDefaultAsync(m => m.Id == id);
-        //    if (categoryDispute == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(categoryDispute);
-        //}
-
-        //// GET: CategoryDisputes/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: CategoryDisputes/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Description,Name,Id,CreatedOnUtc,UpdatedOnUtc")] CategoryDispute categoryDispute)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(categoryDispute);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(categoryDispute);
-        //}
-
-        //// GET: CategoryDisputes/Edit/5
-        //public async Task<IActionResult> Edit(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var categoryDispute = await _context.CategoryDisputes.SingleOrDefaultAsync(m => m.Id == id);
-        //    if (categoryDispute == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(categoryDispute);
-        //}
-
-        //// POST: CategoryDisputes/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(long id, [Bind("Description,Name,Id,CreatedOnUtc,UpdatedOnUtc")] CategoryDispute categoryDispute)
-        //{
-        //    if (id != categoryDispute.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(categoryDispute);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!CategoryDisputeExists(categoryDispute.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(categoryDispute);
-        //}
-
-        //// GET: CategoryDisputes/Delete/5
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var categoryDispute = await _context.CategoryDisputes
-        //        .SingleOrDefaultAsync(m => m.Id == id);
-        //    if (categoryDispute == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(categoryDispute);
-        //}
-
-        //// POST: CategoryDisputes/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(long id)
-        //{
-        //    var categoryDispute = await _context.CategoryDisputes.SingleOrDefaultAsync(m => m.Id == id);
-        //    _context.CategoryDisputes.Remove(categoryDispute);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool CategoryDisputeExists(long id)
-        //{
-        //    return _context.CategoryDisputes.Any(e => e.Id == id);
-        //}
+        // POST: CategoryDisputes/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
+        {
+            try
+            {
+                await сategoryDisputeRepository.DeleteAsync(new CategoryDispute { Id = model.Id, Name = model.Name});
+                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при удалении района с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+        #endregion
     }
 }

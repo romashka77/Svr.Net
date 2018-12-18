@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Svr.Web.Models.DistrictsViewModels
+namespace Svr.Web.Models.GroupClaimsViewModels
 {
     public class IndexViewModel : StatusMessageViewModel
     {
-        public IEnumerable<ItemViewModel> DistrictItems { get; set; }
+        public IEnumerable<ItemViewModel> GroupClaimItems { get; set; }
         public PageViewModel PageViewModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }
         public SortViewModel SortViewModel { get; set; }

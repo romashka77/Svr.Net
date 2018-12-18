@@ -114,17 +114,16 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить регион с ID {id}.");
             }
-            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, Districts = region.Districts, StatusMessage = StatusMessage };
+            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, Districts = region.Districts, StatusMessage = StatusMessage, CreatedOnUtc = region.CreatedOnUtc, UpdatedOnUtc = region.UpdatedOnUtc };
             return View(model);
         }
         #endregion
         #region Create
-        //        // GET: Regions/Create
+        // GET: Regions/Create
         public IActionResult Create()
         {
             return View();
         }
-
         // POST: Regions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -138,7 +137,7 @@ namespace Svr.Web.Controllers
                 var region = await regionRepository.AddAsync(new Region { Code = model.Code, Name = model.Name, Description = model.Description });
                 if (region != null)
                 {
-                    StatusMessage = $"Добавлен {model} с Id={model.Id}, код={model.Code}, имя={model.Name}.";
+                    StatusMessage = $"Добавлен {region} с Id={region.Id}, Code={region.Code}, Name={region.Name}.";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -156,7 +155,7 @@ namespace Svr.Web.Controllers
                 StatusMessage = $"Ошибка: Не удалось найти регион с ID = {id}.";
                 return RedirectToAction(nameof(Index));
             }
-            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, StatusMessage = StatusMessage };
+            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, StatusMessage = StatusMessage, CreatedOnUtc = region.CreatedOnUtc };
             return View(model);
         }
 
@@ -171,7 +170,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await regionRepository.UpdateAsync(new Region { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, Districts = model.Districts, UpdatedOnUtc = model.UpdatedOnUtc });
+                    await regionRepository.UpdateAsync(new Region { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, Districts = model.Districts, CreatedOnUtc= model.CreatedOnUtc});
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
                 catch (DbUpdateConcurrencyException ex)

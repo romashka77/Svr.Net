@@ -12,6 +12,8 @@ namespace Svr.Web.Models
         CodeAsc,    // по коду по возрастанию
         CodeDesc,    // по коду по убыванию
         RegionAsc,    // по региону по возрастанию
-        RegionDesc    // по региону по убыванию
+        RegionDesc,    // по региону по убыванию
+        CategoryDisputeAsc,    // по категории диспутов по возрастанию
+        CategoryDisputeDesc    // по категории диспутов по убыванию
     }
 }
