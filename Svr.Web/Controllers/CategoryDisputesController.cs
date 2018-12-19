@@ -103,13 +103,13 @@ namespace Svr.Web.Controllers
         // GET: CategoryDisputes/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            var сategoryDispute = await сategoryDisputeRepository.GetByIdWithItemsAsync(id);
-            if (сategoryDispute == null)
+            var item = await сategoryDisputeRepository.GetByIdWithItemsAsync(id);
+            if (item == null)
             {
                 StatusMessage = $"Не удалось загрузить категорию споров с ID = {id}.";
                 return RedirectToAction(nameof(Index));
             }
-            var model = new ItemViewModel { Id = сategoryDispute.Id, Name = сategoryDispute.Name, Description = сategoryDispute.Description, GroupClaims = сategoryDispute.GroupClaims, StatusMessage = StatusMessage, CreatedOnUtc = сategoryDispute.CreatedOnUtc, UpdatedOnUtc = сategoryDispute.UpdatedOnUtc };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, GroupClaims = item.GroupClaims, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc };
             return View(model);
         }
         #endregion
@@ -129,10 +129,10 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 //добавляем новый регион
-                var сategoryDispute = await сategoryDisputeRepository.AddAsync(new CategoryDispute { Name = model.Name, Description = model.Description });
-                if (сategoryDispute != null)
+                var item = await сategoryDisputeRepository.AddAsync(new CategoryDispute { Name = model.Name, Description = model.Description });
+                if (item != null)
                 {
-                    StatusMessage = $"Добавлен {сategoryDispute} с Id={сategoryDispute.Id}, Name={сategoryDispute.Name}.";
+                    StatusMessage = $"Добавлен {item} с Id={item.Id}, Name={item.Name}.";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -144,13 +144,13 @@ namespace Svr.Web.Controllers
         // GET: CategoryDisputes/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
-            var сategoryDispute = await сategoryDisputeRepository.GetByIdAsync(id);
-            if (сategoryDispute == null)
+            var item = await сategoryDisputeRepository.GetByIdAsync(id);
+            if (item == null)
             {
                 StatusMessage = $"Ошибка: Не удалось найти категорию споров с ID = {id}.";
                 return RedirectToAction(nameof(Index));
             }
-            var model = new ItemViewModel { Id = сategoryDispute.Id, Name = сategoryDispute.Name, Description = сategoryDispute.Description, StatusMessage = StatusMessage, CreatedOnUtc = сategoryDispute.CreatedOnUtc };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
             return View(model);
         }
 
@@ -190,13 +190,13 @@ namespace Svr.Web.Controllers
         // GET: CategoryDisputes/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            var сategoryDispute = await сategoryDisputeRepository.GetByIdAsync(id);
-            if (сategoryDispute == null)
+            var item = await сategoryDisputeRepository.GetByIdAsync(id);
+            if (item == null)
             {
                 StatusMessage = $"Ошибка: Не удалось найти категорию диспутов с ID = {id}.";
                 return RedirectToAction(nameof(Index));
             }
-            var model = new ItemViewModel { Id = сategoryDispute.Id, Name = сategoryDispute.Name, Description = сategoryDispute.Description };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description };
             return View(model);
         }
 

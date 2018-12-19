@@ -46,7 +46,7 @@ namespace Svr.Web.Controllers
         #endregion
         #region Index
         // GET: GroupClaims
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc,string owner=null, string searchString=null, int page=1,int itemsPage = 10)
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
             long? _owner = null;
             if (!String.IsNullOrEmpty(owner))
@@ -56,13 +56,13 @@ namespace Svr.Web.Controllers
             var filterSpecification = new GroupClaimSpecification(_owner);
             var list = groupClaimRepository.List(filterSpecification);
             //фильтрация
-            if (owner!=null)
+            if (owner != null)
             {
                 list = list.Where(d => d.CategoryDisputeId == _owner);
             }
             if (!String.IsNullOrEmpty(searchString))
             {
-                list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper())|| d.Code.ToUpper().Contains(searchString.ToUpper()));
+                list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
             switch (sortOrder)
@@ -112,13 +112,13 @@ namespace Svr.Web.Controllers
                 GroupClaimItems = itemsOnPage.Select(i => new ItemViewModel()
                 {
                     Id = i.Id,
-                    Code=i.Code,
+                    Code = i.Code,
                     Name = i.Name,
                     Description = i.Description,
                     CreatedOnUtc = i.CreatedOnUtc,
                     UpdatedOnUtc = i.UpdatedOnUtc,
-                    CategoryDispute=i.CategoryDispute
-                    
+                    CategoryDispute = i.CategoryDispute
+
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
@@ -129,135 +129,131 @@ namespace Svr.Web.Controllers
             return View(groupClaimIndexModel);
         }
         #endregion
-        // GET: GroupClaims/Details/5
-        //public async Task<IActionResult> Details(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var groupClaim = await _context.GroupClaims
-        //        .Include(g => g.CategoryDispute)
-        //        .SingleOrDefaultAsync(m => m.Id == id);
-        //    if (groupClaim == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(groupClaim);
-        //}
-
-        //// GET: GroupClaims/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["CategoryDisputeId"] = new SelectList(_context.CategoryDisputes, "Id", "Name");
-        //    return View();
-        //}
-
-        //// POST: GroupClaims/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("CategoryDisputeId,Code,Description,Name,Id,CreatedOnUtc,UpdatedOnUtc")] GroupClaim groupClaim)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(groupClaim);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["CategoryDisputeId"] = new SelectList(_context.CategoryDisputes, "Id", "Name", groupClaim.CategoryDisputeId);
-        //    return View(groupClaim);
-        //}
-
-        //// GET: GroupClaims/Edit/5
-        //public async Task<IActionResult> Edit(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var groupClaim = await _context.GroupClaims.SingleOrDefaultAsync(m => m.Id == id);
-        //    if (groupClaim == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["CategoryDisputeId"] = new SelectList(_context.CategoryDisputes, "Id", "Name", groupClaim.CategoryDisputeId);
-        //    return View(groupClaim);
-        //}
-
-        //// POST: GroupClaims/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(long id, [Bind("CategoryDisputeId,Code,Description,Name,Id,CreatedOnUtc,UpdatedOnUtc")] GroupClaim groupClaim)
-        //{
-        //    if (id != groupClaim.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(groupClaim);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!GroupClaimExists(groupClaim.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["CategoryDisputeId"] = new SelectList(_context.CategoryDisputes, "Id", "Name", groupClaim.CategoryDisputeId);
-        //    return View(groupClaim);
-        //}
-
-        //// GET: GroupClaims/Delete/5
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var groupClaim = await _context.GroupClaims
-        //        .Include(g => g.CategoryDispute)
-        //        .SingleOrDefaultAsync(m => m.Id == id);
-        //    if (groupClaim == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(groupClaim);
-        //}
-
-        //// POST: GroupClaims/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(long id)
-        //{
-        //    var groupClaim = await _context.GroupClaims.SingleOrDefaultAsync(m => m.Id == id);
-        //    _context.GroupClaims.Remove(groupClaim);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool GroupClaimExists(long id)
-        //{
-        //    return _context.GroupClaims.Any(e => e.Id == id);
-        //}
+        #region Details
+        //GET: GroupClaims/Details/5
+        public async Task<IActionResult> Details(long? id)
+        {
+            var item = await groupClaimRepository.GetByIdWithItemsAsync(id);
+            if (item == null)
+            {
+                StatusMessage = $"Не удалось загрузить район с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
+            }
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, CategoryDispute = item.CategoryDispute, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc };
+            return View(model);
+        }
+        #endregion
+        #region Create
+        // GET: GroupClaims/Create
+        public IActionResult Create()
+        {
+            SelectList categoryDisputes = new SelectList(categoryDisputeRepository.ListAll(), "Id", "Name", 1);
+            ViewBag.CategoryDisputes = categoryDisputes;
+            return View();
+        }
+        // POST: GroupClaims/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // добавляем новый Район
+                var item = await groupClaimRepository.AddAsync(new GroupClaim { Code = model.Code, Name = model.Name, Description = model.Description, CategoryDisputeId = model.CategoryDisputeId });
+                if (item != null)
+                {
+                    StatusMessage = $"Добавлен район с Id={item.Id}, код={item.Code}, имя={item.Name}.";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            SelectList categoryDisputes = new SelectList(categoryDisputeRepository.ListAll(), "Id", "Name", 1);
+            ViewBag.CategoryDisputes = categoryDisputes;
+            return View(model);
+        }
+        #endregion
+        #region Edit
+        // GET: GroupClaims/Edit/5
+        public async Task<IActionResult> Edit(long? id)
+        {
+            var item = await groupClaimRepository.GetByIdAsync(id);
+            if (item == null)
+            {
+                StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
+            }
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
+            SelectList categoryDisputes = new SelectList(categoryDisputeRepository.ListAll(), "Id", "Name", 1);
+            ViewBag.CategoryDisputes = categoryDisputes;
+            return View(model);
+        }
+        // POST: GroupClaims/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await groupClaimRepository.UpdateAsync(new GroupClaim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId });
+                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    if (!(await groupClaimRepository.EntityExistsAsync(model.Id)))
+                    {
+                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        StatusMessage = $"Непредвиденная ошибка при обновлении района с ID {model.Id}. {ex.Message}";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit));
+            }
+            return View(model);
+        }
+        #endregion
+        #region Delete
+        // GET: GroupClaims/Delete/5
+        public async Task<IActionResult> Delete(long? id)
+        {
+            var item = await groupClaimRepository.GetByIdAsync(id);
+            if (item == null)
+            {
+                StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                return RedirectToAction(nameof(Index));
+            }
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
+            return View(model);
+        }
+        // POST: GroupClaims/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
+        {
+            try
+            {
+                await groupClaimRepository.DeleteAsync(new GroupClaim { Id = model.Id, Name = model.Name, Code = model.Code, });
+                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при удалении группы исков с Id={model.Id}, Name = {model.Name}, Code = {model.Code} - {ex.Message}.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+        #endregion
     }
 }
