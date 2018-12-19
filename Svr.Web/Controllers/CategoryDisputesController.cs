@@ -42,36 +42,45 @@ namespace Svr.Web.Controllers
         #region Index
         // GET: CategoryDisputes
         [HttpGet]
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string currentFilter = null, string searchString = null, int page = 1)
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string currentFilter = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var itemsPage = 10;
-            //if (HttpContext.Request.Method == "GET")
-            //{
-            searchString = currentFilter;
-            //}
-            //else
-            //{
-            //    page = 1;
-            //}
-            IEnumerable<CategoryDispute> categoryDisputes = await сategoryDisputeRepository.ListAllAsync();
+            IEnumerable<CategoryDispute> list = await сategoryDisputeRepository.ListAllAsync();
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
-                categoryDisputes = categoryDisputes.Where(p => p.Name.ToUpper().Contains(searchString.ToUpper()));
+                list = list.Where(p => p.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             //сортировка
             switch (sortOrder)
             {
                 case SortState.NameDesc:
-                    categoryDisputes = categoryDisputes.OrderByDescending(p => p.Name);
+                    list = list.OrderByDescending(p => p.Name);
+                    break;
+                case SortState.DescriptionAsc:
+                    list = list.OrderBy(p => p.Description);
+                    break;
+                case SortState.DescriptionDesc:
+                    list = list.OrderByDescending(p => p.Description);
+                    break;
+                case SortState.CreatedOnUtcAsc:
+                    list = list.OrderBy(p => p.CreatedOnUtc);
+                    break;
+                case SortState.CreatedOnUtcDesc:
+                    list = list.OrderByDescending(p => p.CreatedOnUtc);
+                    break;
+                case SortState.UpdatedOnUtcAsc:
+                    list = list.OrderBy(p => p.UpdatedOnUtc);
+                    break;
+                case SortState.UpdatedOnUtcDesc:
+                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
                     break;
                 default:
-                    categoryDisputes = categoryDisputes.OrderBy(p => p.Name);
+                    list = list.OrderBy(p => p.Name);
                     break;
             }
             //пагинация
-            var totalItems = categoryDisputes.Count();
-            var itemsOnPage = categoryDisputes.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var totalItems = list.Count();
+            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
             var categoryDisputeIndexModel = new IndexViewModel()
             {
                 CategoryDisputeItems = itemsOnPage.Select(i => new ItemViewModel()
@@ -79,7 +88,6 @@ namespace Svr.Web.Controllers
                     Id = i.Id,
                     Name = i.Name,
                     Description = i.Description,
-                    //Districts=i.Districts,
                     CreatedOnUtc = i.CreatedOnUtc,
                     UpdatedOnUtc = i.UpdatedOnUtc
                 }),

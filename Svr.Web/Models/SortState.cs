@@ -11,9 +11,14 @@ namespace Svr.Web.Models
         NameDesc,   // по имени по убыванию
         CodeAsc,    // по коду по возрастанию
         CodeDesc,    // по коду по убыванию
-        RegionAsc,    // по региону по возрастанию
-        RegionDesc,    // по региону по убыванию
-        CategoryDisputeAsc,    // по категории диспутов по возрастанию
-        CategoryDisputeDesc    // по категории диспутов по убыванию
+        DescriptionAsc,    // по возрастанию
+        DescriptionDesc,    // по убыванию
+        CreatedOnUtcAsc,
+        CreatedOnUtcDesc,
+        UpdatedOnUtcAsc,
+        UpdatedOnUtcDesc,
+        OwnerAsc,    // по владельцу по возрастанию
+        OwnerDesc    // по владельцу по убыванию
+
     }
 }

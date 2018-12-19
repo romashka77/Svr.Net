@@ -2,5 +2,5 @@
 
 @addTagHelper "*, Svr.Web"
 <page-link page-model="Model.PageViewModel" page-action="Index"
-           page-url-currentfilter="@(Model.FilterViewModel.SearchString)"
-           page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>
+           page-url-searchString="@(Model.FilterViewModel.SearchString)"
+           page-url-sortOrder="@(Model.SortViewModel.Current)"></page-link>

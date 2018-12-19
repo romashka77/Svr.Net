@@ -45,45 +45,67 @@ namespace Svr.Web.Controllers
         #endregion
         #region Index
         // GET: Districts
-        public async Task<IActionResult> Index(long? region, string name, int page, SortState sortOrder = SortState.NameAsc)
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var itemsPage = 10;
-            var filterSpecification = new DistrictSpecification(region);
-            var districts = districtRepository.List(filterSpecification);
-            //фильтрация
-            if (region != null && region != 0)
+            long? _owner = null;
+            if (!String.IsNullOrEmpty(owner))
             {
-                districts = districts.Where(d => d.RegionId == region);
+                _owner = Int64.Parse(owner);
             }
-            if (!String.IsNullOrEmpty(name))
+            var filterSpecification = new DistrictSpecification(_owner);
+            IEnumerable<District> list = districtRepository.List(filterSpecification);
+            //фильтрация
+            if (_owner != null)
             {
-                districts = districts.Where(d => d.Name.ToUpper().Contains(name.ToUpper()));
+                list = list.Where(d => d.RegionId == _owner);
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
             switch (sortOrder)
             {
                 case SortState.NameDesc:
-                    districts = districts.OrderByDescending(s => s.Name);
+                    list = list.OrderByDescending(p => p.Name);
                     break;
                 case SortState.CodeAsc:
-                    districts = districts.OrderBy(s => s.Code);
+                    list = list.OrderBy(p => p.Code);
                     break;
                 case SortState.CodeDesc:
-                    districts = districts.OrderByDescending(s => s.Code);
+                    list = list.OrderByDescending(p => p.Code);
                     break;
-                case SortState.RegionAsc:
-                    districts = districts.OrderBy(s => s.Region.Name);
+                case SortState.DescriptionAsc:
+                    list = list.OrderBy(p => p.Description);
                     break;
-                case SortState.RegionDesc:
-                    districts = districts.OrderByDescending(s => s.Region.Name);
+                case SortState.DescriptionDesc:
+                    list = list.OrderByDescending(p => p.Description);
+                    break;
+                case SortState.CreatedOnUtcAsc:
+                    list = list.OrderBy(p => p.CreatedOnUtc);
+                    break;
+                case SortState.CreatedOnUtcDesc:
+                    list = list.OrderByDescending(p => p.CreatedOnUtc);
+                    break;
+                case SortState.UpdatedOnUtcAsc:
+                    list = list.OrderBy(p => p.UpdatedOnUtc);
+                    break;
+                case SortState.UpdatedOnUtcDesc:
+                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
+                    break;
+                case SortState.OwnerAsc:
+                    list = list.OrderBy(s => s.Region.Name);
+                    break;
+                case SortState.OwnerDesc:
+                    list = list.OrderByDescending(s => s.Region.Name);
                     break;
                 default:
-                    districts = districts.OrderBy(s => s.Name);
+                    list = list.OrderBy(s => s.Name);
                     break;
             }
             // пагинация
-            var count = districts.Count();
-            var itemsOnPage = districts.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = list.Count();
+            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
             var districtIndexModel = new IndexViewModel()
             {
                 DistrictItems = itemsOnPage.Select(i => new ItemViewModel()
@@ -93,11 +115,12 @@ namespace Svr.Web.Controllers
                     Name = i.Name,
                     Description = i.Description,
                     CreatedOnUtc = i.CreatedOnUtc,
-                    UpdatedOnUtc = i.UpdatedOnUtc
+                    UpdatedOnUtc = i.UpdatedOnUtc,
+                    Region=i.Region
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(regionRepository.ListAll().ToList(), region, name),
+                FilterViewModel = new FilterViewModel(searchString, owner, regionRepository.ListAll().ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
 
                 StatusMessage = StatusMessage
             };

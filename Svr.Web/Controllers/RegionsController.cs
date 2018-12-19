@@ -46,43 +46,51 @@ namespace Svr.Web.Controllers
         #endregion
         #region Index
         [HttpGet]
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string currentFilter = null, string searchString = null, int page = 1)
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            //logger.LogInformation("Вызван RegionsController.Index.");
-            var itemsPage = 10;
-            //if (HttpContext.Request.Method == "GET")
-            //{
-            searchString = currentFilter;
-            //}
-            //else
-            //{
-            //    page = 1;
-            //}
-            IEnumerable<Region> regions = await regionRepository.ListAllAsync();
+            IEnumerable<Region> list = await regionRepository.ListAllAsync();
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
-                regions = regions.Where(p => p.Name.ToUpper().Contains(searchString.ToUpper()) || p.Code.ToUpper().Contains(searchString.ToUpper()));
+                list = list.Where(p => p.Name.ToUpper().Contains(searchString.ToUpper()) || p.Code.ToUpper().Contains(searchString.ToUpper()));
             }
             //сортировка
             switch (sortOrder)
             {
                 case SortState.NameDesc:
-                    regions = regions.OrderByDescending(p => p.Name);
+                    list = list.OrderByDescending(p => p.Name);
                     break;
                 case SortState.CodeAsc:
-                    regions = regions.OrderBy(p => p.Code);
+                    list = list.OrderBy(p => p.Code);
                     break;
                 case SortState.CodeDesc:
-                    regions = regions.OrderByDescending(p => p.Code);
+                    list = list.OrderByDescending(p => p.Code);
+                    break;
+                case SortState.DescriptionAsc:
+                    list = list.OrderBy(p => p.Description);
+                    break;
+                case SortState.DescriptionDesc:
+                    list = list.OrderByDescending(p => p.Description);
+                    break;
+                case SortState.CreatedOnUtcAsc:
+                    list = list.OrderBy(p => p.CreatedOnUtc);
+                    break;
+                case SortState.CreatedOnUtcDesc:
+                    list = list.OrderByDescending(p => p.CreatedOnUtc);
+                    break;
+                case SortState.UpdatedOnUtcAsc:
+                    list = list.OrderBy(p => p.UpdatedOnUtc);
+                    break;
+                case SortState.UpdatedOnUtcDesc:
+                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
                     break;
                 default:
-                    regions = regions.OrderBy(p => p.Name);
+                    list = list.OrderBy(p => p.Name);
                     break;
             }
             //пагинация
-            var totalItems = regions.Count();
-            var itemsOnPage = regions.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var totalItems = list.Count();
+            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
             var regionIndexModel = new IndexViewModel()
             {
                 RegionItems = itemsOnPage.Select(i => new ItemViewModel()

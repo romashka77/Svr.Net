@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,6 +8,10 @@ using Svr.Core.Specifications;
 using Svr.Infrastructure.Data;
 using Svr.Web.Models;
 using Svr.Web.Models.GroupClaimsViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
@@ -28,7 +28,7 @@ namespace Svr.Web.Controllers
         public GroupClaimsController(IGroupClaimRepository groupClaimRepository, ICategoryDisputeRepository categoryDisputeRepository, ILogger<GroupClaimsController> logger)
         {
             this.logger = logger;
-            this.groupClaimRepository= groupClaimRepository;
+            this.groupClaimRepository = groupClaimRepository;
             this.categoryDisputeRepository = categoryDisputeRepository;
         }
         #endregion
@@ -46,58 +46,83 @@ namespace Svr.Web.Controllers
         #endregion
         #region Index
         // GET: GroupClaims
-        public async Task<IActionResult> Index(long? categoryDispute, string name, int page, SortState sortOrder = SortState.NameAsc)
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc,string owner=null, string searchString=null, int page=1,int itemsPage = 10)
         {
-            var itemsPage = 10;
-            var filterSpecification = new GroupClaimSpecification(categoryDispute);
-            var groupClaims = groupClaimRepository.List(filterSpecification);
-            //фильтрация
-            if (categoryDispute != null && categoryDispute != 0)
+            long? _owner = null;
+            if (!String.IsNullOrEmpty(owner))
             {
-                groupClaims = groupClaims.Where(d => d.CategoryDisputeId == categoryDispute);
+                _owner = Int64.Parse(owner);
             }
-            if (!String.IsNullOrEmpty(name))
+            var filterSpecification = new GroupClaimSpecification(_owner);
+            var list = groupClaimRepository.List(filterSpecification);
+            //фильтрация
+            if (owner!=null)
             {
-                groupClaims = groupClaims.Where(d => d.Name.ToUpper().Contains(name.ToUpper()));
+                list = list.Where(d => d.CategoryDisputeId == _owner);
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper())|| d.Code.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
             switch (sortOrder)
             {
                 case SortState.NameDesc:
-                    groupClaims = groupClaims.OrderByDescending(s => s.Name);
+                    list = list.OrderByDescending(p => p.Name);
                     break;
                 case SortState.CodeAsc:
-                    groupClaims = groupClaims.OrderBy(s => s.Code);
+                    list = list.OrderBy(p => p.Code);
                     break;
                 case SortState.CodeDesc:
-                    groupClaims = groupClaims.OrderByDescending(s => s.Code);
+                    list = list.OrderByDescending(p => p.Code);
                     break;
-                case SortState.CategoryDisputeAsc:
-                    groupClaims = groupClaims.OrderBy(s => s.CategoryDispute.Name);
+                case SortState.DescriptionAsc:
+                    list = list.OrderBy(p => p.Description);
                     break;
-                case SortState.CategoryDisputeDesc:
-                    groupClaims = groupClaims.OrderByDescending(s => s.CategoryDispute.Name);
+                case SortState.DescriptionDesc:
+                    list = list.OrderByDescending(p => p.Description);
+                    break;
+                case SortState.CreatedOnUtcAsc:
+                    list = list.OrderBy(p => p.CreatedOnUtc);
+                    break;
+                case SortState.CreatedOnUtcDesc:
+                    list = list.OrderByDescending(p => p.CreatedOnUtc);
+                    break;
+                case SortState.UpdatedOnUtcAsc:
+                    list = list.OrderBy(p => p.UpdatedOnUtc);
+                    break;
+                case SortState.UpdatedOnUtcDesc:
+                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
+                    break;
+                case SortState.OwnerAsc:
+                    list = list.OrderBy(s => s.CategoryDispute.Name);
+                    break;
+                case SortState.OwnerDesc:
+                    list = list.OrderByDescending(s => s.CategoryDispute.Name);
                     break;
                 default:
-                    groupClaims = groupClaims.OrderBy(s => s.Name);
+                    list = list.OrderBy(s => s.Name);
                     break;
             }
             // пагинация
-            var count = groupClaims.Count();
-            var itemsOnPage = groupClaims.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = list.Count();
+            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
             var groupClaimIndexModel = new IndexViewModel()
             {
                 GroupClaimItems = itemsOnPage.Select(i => new ItemViewModel()
                 {
                     Id = i.Id,
+                    Code=i.Code,
                     Name = i.Name,
                     Description = i.Description,
                     CreatedOnUtc = i.CreatedOnUtc,
-                    UpdatedOnUtc = i.UpdatedOnUtc
+                    UpdatedOnUtc = i.UpdatedOnUtc,
+                    CategoryDispute=i.CategoryDispute
+                    
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(categoryDisputeRepository.ListAll().ToList(), categoryDispute, name),
+                FilterViewModel = new FilterViewModel(searchString, owner, categoryDisputeRepository.ListAll().ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
 
                 StatusMessage = StatusMessage
             };

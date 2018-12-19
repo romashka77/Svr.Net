@@ -2,6 +2,7 @@
 
 @addTagHelper "*, Svr.Web"
 <page-link page-model="Model.PageViewModel" page-action="Index"
-           page-url-name="@(Model.FilterViewModel.SelectedName)"
-           page-url-region="@(Model.FilterViewModel.SelectedCategoryDispute)"
-           page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>
+           page-url-searchString="@(Model.FilterViewModel.SearchString)"
+           page-url-owner="@(Model.FilterViewModel.SelectedOwner)"
+           page-url-sortOrder="@(Model.SortViewModel.Current)">
+</page-link>
