@@ -3,7 +3,7 @@
 
 @Html.Partial("_filtration", Model.FilterViewModel)
 
-@if (Model.RegionItems.Any())
+@if (Model.ItemViewModels.Any())
 {
     @Html.Partial("_sort", Model)
     @Html.Partial("_pagination", Model)
@@ -13,7 +13,7 @@
         page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>*@
 
 
-    @foreach (var item in Model.RegionItems)
+    @foreach (var item in Model.ItemViewModels)
     {
 
         <div>

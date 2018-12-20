@@ -20,7 +20,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(d => d.CategoryDispute).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(c => c.SubjectClaims).Include(d => d.CategoryDispute).FirstOrDefault(r => r.Id == id); 
         }
         public virtual Task<GroupClaim> GetByIdWithItemsAsync(long? id)
         {
@@ -28,7 +28,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.CategoryDispute).FirstOrDefaultAsync(r => r.Id == id);
+            return Entities.Include(r => r.CategoryDispute).Include(c => c.SubjectClaims).FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }

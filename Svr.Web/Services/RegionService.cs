@@ -80,9 +80,9 @@ namespace Svr.Web.Services
             //пагинация
             var totalItems = root.Count();
             var itemsOnPage = root.Skip((pageIndex - 1) * itemsPage).Take(itemsPage).ToList();
-            var vm = new IndexViewModel()
+            var indexModel = new IndexViewModel()
             {
-                RegionItems = itemsOnPage.Select(i => new ItemViewModel()
+                ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
                 {
                     Id = i.Id,
                     Code = i.Code,
@@ -96,7 +96,7 @@ namespace Svr.Web.Services
                 SortViewModel = new SortViewModel(sortOrder),
                 FilterViewModel = new FilterViewModel(searchString)
             };
-            return vm;
+            return indexModel;
         }
 
         public Region GetSingleBySpec(ISpecification<Region> spec) => _itemRepository.GetSingleBySpec(spec);

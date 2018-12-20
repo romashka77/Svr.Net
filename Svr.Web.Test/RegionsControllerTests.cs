@@ -67,7 +67,7 @@ namespace Svr.Web.Test
             //Передается ли в представление в качестве модели объект RegionIndexViewModel
             var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
             //количество объектов в модели, которая передается в представление
-            Assert.Equal(4, model.RegionItems.Count());
+            Assert.Equal(4, model.ItemViewModels.Count());
         }
 
         private async Task<List<Region>> GetTestRegions()

@@ -2,15 +2,15 @@
 
 @Html.Partial("_filtration", Model.FilterViewModel)
 
-@if (Model.DistrictItems.Any())
+@if (Model.ItemViewModels.Any())
 {
     @Html.Partial("_sort", Model)
     @Html.Partial("_pagination", Model)
-    @foreach (var item in Model.DistrictItems)
+    @foreach (var item in Model.ItemViewModels)
     {
         <div>
             <hr />
-            <h4>@item.ToString()</h4>
+            <h4>@item</h4>
 
             <dl class="dl-horizontal">
                 <dt>

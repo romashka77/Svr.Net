@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Svr.Web.Models.DistrictsViewModels
+namespace Svr.Web.Models.SubjectClaimsViewModels
 {
     public class IndexViewModel : StatusMessageViewModel
     {

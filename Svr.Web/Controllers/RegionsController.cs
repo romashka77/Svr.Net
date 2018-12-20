@@ -91,9 +91,9 @@ namespace Svr.Web.Controllers
             //пагинация
             var totalItems = list.Count();
             var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
-            var regionIndexModel = new IndexViewModel()
+            var indexModel = new IndexViewModel()
             {
-                RegionItems = itemsOnPage.Select(i => new ItemViewModel()
+                ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
                 {
                     Id = i.Id,
                     Code = i.Code,
@@ -108,7 +108,7 @@ namespace Svr.Web.Controllers
                 FilterViewModel = new FilterViewModel(searchString),
                 StatusMessage = StatusMessage
             };
-            return View(regionIndexModel);
+            return View(indexModel);
         }
         #endregion
         #region Details
@@ -186,16 +186,13 @@ namespace Svr.Web.Controllers
                     if (!(await regionRepository.EntityExistsAsync(model.Id)))
                     {
                         StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
-                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
                         StatusMessage = $"Непредвиденная ошибка при обновлении региона с ID {model.Id}. {ex.Message}";
-                        return RedirectToAction(nameof(Index));
                     }
                 }
-                //return RedirectToAction(nameof(Index));
-                return RedirectToAction(nameof(Edit));
+                return RedirectToAction(nameof(Index));
             }
             return View(model);
         }

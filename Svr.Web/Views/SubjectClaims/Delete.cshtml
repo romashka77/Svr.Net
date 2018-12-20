@@ -1,16 +1,14 @@
-﻿@model Svr.Web.Models.DistrictsViewModels.ItemViewModel
+﻿@model Svr.Web.Models.SubjectClaimsViewModels.ItemViewModel
+
 @{
-    ViewData["Title"] = $"Подробности {Model.Name}";
+    ViewData["Title"] = $"Удалить {Model}";
 }
 
 <h2>@ViewData["Title"]</h2>
 
+<h3>Вы уверены, что хотите удалить?</h3>
 <div>
     <h4>@Model</h4>
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
-        <a asp-action="Index" class="btn btn-default">Назад</a>
-    </div>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -43,16 +41,13 @@
         <dd>
             @Html.DisplayFor(model => model.UpdatedOnUtc)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Region)
-        </dt>
-        <dd>
-            <a asp-controller="Regions" asp-action="Details" asp-route-id="@Model.RegionId">@Model.Region.Name</a>
-            @*@Html.RouteLink($"{Model.Region.Name} ({Model.Region.Description})", new { action = "Details", controller = "Regions", id = Model.RegionId })*@
-        </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
-    <a asp-action="Index" class="btn btn-default">Назад</a>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Name" />
+        <input type="hidden" asp-for="Code" />
+        <input type="submit" value="Удалить" class="btn btn-default" />
+        <a asp-action="Index" class="btn btn-default">Назад</a>
+    </form>
 </div>

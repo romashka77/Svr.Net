@@ -9,7 +9,7 @@ namespace Svr.Web.Models.RegionsViewModels
 {
     public class IndexViewModel: StatusMessageViewModel
     {
-        public IEnumerable<ItemViewModel> RegionItems { get; set; }
+        public IEnumerable<ItemViewModel> ItemViewModels { get; set; }
         public PageViewModel PageViewModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }
         public SortViewModel SortViewModel { get; set; }

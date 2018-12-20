@@ -81,9 +81,9 @@ namespace Svr.Web.Controllers
             //пагинация
             var totalItems = list.Count();
             var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
-            var categoryDisputeIndexModel = new IndexViewModel()
+            var indexModel = new IndexViewModel()
             {
-                CategoryDisputeItems = itemsOnPage.Select(i => new ItemViewModel()
+                ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
                 {
                     Id = i.Id,
                     Name = i.Name,
@@ -96,7 +96,7 @@ namespace Svr.Web.Controllers
                 FilterViewModel = new FilterViewModel(searchString),
                 StatusMessage = StatusMessage
             };
-            return View(categoryDisputeIndexModel);
+            return View(indexModel);
         }
         #endregion
         #region Details
@@ -173,15 +173,13 @@ namespace Svr.Web.Controllers
                     if (!(await сategoryDisputeRepository.EntityExistsAsync(model.Id)))
                     {
                         StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
-                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
                         StatusMessage = $"Непредвиденная ошибка при обновлении категории споров с ID {model.Id}. {ex.Message}";
-                        return RedirectToAction(nameof(Index));
                     }
                 }
-                return RedirectToAction(nameof(Edit));
+                return RedirectToAction(nameof(Index));
             }
             return View(model);
         }

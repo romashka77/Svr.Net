@@ -1,5 +1,4 @@
-﻿@using Svr.Core.Entities
-@model Svr.Web.Models.GroupClaimsViewModels.ItemViewModel
+﻿@model Svr.Web.Models.SubjectClaimsViewModels.ItemViewModel
 
 @{
     ViewData["Title"] = $"Подробности {Model.Name}";
@@ -46,24 +45,11 @@
             @Html.DisplayFor(model => model.UpdatedOnUtc)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CategoryDispute)
+            @Html.DisplayNameFor(model => model.GroupClaim)
         </dt>
         <dd>
-            <a asp-controller="CategoryDisputes" asp-action="Details" asp-route-id="@Model.CategoryDisputeId">@Model.CategoryDispute.Name</a>
-            @*@Html.DisplayFor(model => model.CategoryDispute.Name)*@
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.SubjectClaims)
-        </dt>
-        <dd>
-            <ul>
-                @foreach (SubjectClaim subjectClaim in Model.SubjectClaims)
-                {
-                    <li>
-                        <a asp-controller="SubjectClaims" asp-action="Details" asp-route-id="@subjectClaim.Id">@subjectClaim.Code @subjectClaim.Name</a>
-                    </li>
-                }
-            </ul>
+            <a asp-controller="GroupClaims" asp-action="Details" asp-route-id="@Model.GroupClaimId">@Model.GroupClaim.Name</a>
+            @*@Html.DisplayFor(model => model.GroupClaim.Code)*@
         </dd>
     </dl>
 </div>

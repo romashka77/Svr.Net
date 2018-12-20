@@ -2,11 +2,11 @@
 
 @Html.Partial("_filtration", Model.FilterViewModel)
 
-@if (Model.GroupClaimItems.Any())
+@if (Model.ItemViewModels.Any())
 {
     @Html.Partial("_sort", Model)
     @Html.Partial("_pagination", Model)
-    @foreach (var item in Model.GroupClaimItems)
+    @foreach (var item in Model.ItemViewModels)
     {
         <div>
             <hr />

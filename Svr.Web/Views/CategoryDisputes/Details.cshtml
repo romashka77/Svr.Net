@@ -46,7 +46,7 @@
                 @foreach (GroupClaim groupClaim in Model.GroupClaims)
                 {
                     <li>
-                        <a asp-controller="GroupClaims" asp-action="Details" asp-route-id="@groupClaim.Id">@groupClaim.Name</a>
+                        <a asp-controller="GroupClaims" asp-action="Details" asp-route-id="@groupClaim.Id">@groupClaim.Code @groupClaim.Name</a>
                     </li>
                 }
             </ul>

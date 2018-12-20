@@ -43,6 +43,7 @@ namespace Svr.Web
 
             services.AddScoped<ICategoryDisputeRepository, CategoryDisputeRepositiry>();
             services.AddScoped<IGroupClaimRepository, GroupClaimRepository>();
+            services.AddScoped<ISubjectClaimRepository, SubjectClaimRepository>();
 
 
             services.AddScoped<IRegionService, RegionService>();

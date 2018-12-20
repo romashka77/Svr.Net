@@ -9,7 +9,7 @@ namespace Svr.Web.Models.GroupClaimsViewModels
 {
     public class IndexViewModel : StatusMessageViewModel
     {
-        public IEnumerable<ItemViewModel> GroupClaimItems { get; set; }
+        public IEnumerable<ItemViewModel> ItemViewModels { get; set; }
         public PageViewModel PageViewModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }
         public SortViewModel SortViewModel { get; set; }
