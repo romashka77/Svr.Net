@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Svr.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
 using Svr.Core.Entities;
-using System.Threading.Tasks;
+using Svr.Core.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
 {
@@ -26,7 +26,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Find(id);
+            return Entities.SingleOrDefault(m => m.Id == id);
         }
 
         public virtual T GetSingleBySpec(ISpecification<T> spec)
@@ -45,7 +45,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return await Entities.FindAsync(id);
+            return await Entities.SingleOrDefaultAsync(m => m.Id == id);
         }
 
         public virtual IEnumerable<T> ListAll()
