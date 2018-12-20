@@ -55,6 +55,9 @@ namespace Svr.Web
 
             app.UseMvc(routes =>
             {
+                //routes.MapRoute(
+                //    name: "defaultApi",
+                //    template: "api/{controller}/{id?}");
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
+    [Route("api/[controller]")]
     public class RegionsController : Controller
     {
         private ILogger<RegionsController> logger;
@@ -44,8 +45,12 @@ namespace Svr.Web.Controllers
             base.Dispose(disposing);
         }
         #endregion
-        #region Index
         [HttpGet]
+        public IActionResult Get()
+        {
+            return null;
+        }
+        #region Index
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string searchString = null, int page = 1, int itemsPage = 10)
         {
             IEnumerable<Region> list = await regionRepository.ListAllAsync();
