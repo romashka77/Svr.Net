@@ -46,8 +46,11 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
+        <div id="test">
+        </div>
         <footer>
-            <p>&copy; 2018 - Svr.Web</p>
+            @RenderSection("Footer", required: false)
+            <p>&copy; @DateTime.Now.Year – ОПФР по Тамбовской области(Р.А.Макаров, тел:(4752)79-45-10)</p>
         </footer>
     </div>
 
@@ -71,7 +74,9 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-
+    
+    <script type="text/javascript" src="@Url.Content("~/assets/bundle.js")"></script>
+    
     @RenderSection("Scripts", required: false)
 </body>
 </html>

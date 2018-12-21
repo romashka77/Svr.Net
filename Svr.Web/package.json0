@@ -1,0 +1,43 @@
+{
+  "name": "svr.net",
+  "version": "1.0.0",
+  "description": "jurist",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
+  "author": "R.A.Makarov",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "aspnet-webpack": "^2.0.3",
+    "css-loader": "^0.28.7",
+    "file-loader": "^1.1.6",
+    "style-loader": "^0.19.1",
+    "webpack": "^3.11.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    //"isomorphic-fetch": "^2.2.1",
+    //"query-string": "^5.0.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+    //,
+    //"react-redux": "^5.0.6",
+    //"react-router-dom": "^4.2.2",
+    //"redux": "^3.7.2",
+    //"redux-thunk": "^2.2.0"
+  }
+}
+//ѕакеты babel-* нам необходимы, во-первых, чтобы использовать jsx синтаксис при написании React компонентов, вместо унылых вызовов js функций (ниже, когда будем писать нашу фронт часть, мы разберемс€ что такое jsx синтаксис), во-вторых, чтобы использовать современный, радующий глаз, js синтаксис и не волноватьс€ по поводу совместимости его с старыми (в разумных пределах) браузерами.
+//ѕакет webpack Ц основной, неверо€тно мощный инструмент сборки нашего веб-приложени€.
+//ѕакеты react/react-dom дл€ разработки на React.
+//ѕакет react-router-dom дл€ клиентского роутинга в нашем SPA приложении.
+//redux/react-redux/redux-thunk Ц пакеты дл€ организации архитектуры нашей фронт части.
+//Isomorphic-fetch, query-string Ц просто удобные пакеты упрощающие работу с query строкой браузера и запросами к серверу.
