@@ -11,6 +11,7 @@ namespace Svr.Infrastructure.Data
         private static Region region;
         private static CategoryDispute categoryDispute;
         private static GroupClaim groupClaim;
+        private static DirName dirName;
 
         public static async Task SeedAsync(DataContext dataContext/*, ILoggerFactory loggerFactory, int? retry = 0*/)
         {
@@ -34,17 +35,31 @@ namespace Svr.Infrastructure.Data
                     dataContext.CategoryDisputes.AddRange(GetPreconfiguredCategoryDisputeOut(dataContext));
                     await dataContext.SaveChangesAsync();
                 }
-                if (!dataContext.Performers.Any())
+                //if (!dataContext.Performers.Any())
+                //{
+                //    dataContext.Performers.AddRange(GetPreconfiguredPerformers());
+                //    await dataContext.SaveChangesAsync();
+                //}
+                if (!dataContext.DirName.Any())
                 {
-                    dataContext.Performers.AddRange(GetPreconfiguredPerformers());
+                    dataContext.DirName.AddRange(GetPreconfiguredDirNamePerformers(dataContext));
+                    await dataContext.SaveChangesAsync();
+                    dataContext.DirName.AddRange(GetPreconfiguredDirNameOPF(dataContext));
+                    await dataContext.SaveChangesAsync();
+                    dataContext.DirName.AddRange(GetPreconfiguredDirNameCourt(dataContext));
+                    await dataContext.SaveChangesAsync();
+                    dataContext.DirName.AddRange(GetPreconfiguredDirNameTypeApplicant(dataContext));
                     await dataContext.SaveChangesAsync();
                 }
+
+
             }
             catch (Exception ex)
             {
                 throw new Exception($"Ошибка при заполнении справочников: {ex.Message}");
                 //if (retryForAvailability < 10)
                 {
+                    throw;
                     //retryForAvailability++;
                     //var log = loggerFactory.CreateLogger<DataContextSeed>();
                     //log.LogError(ex.Message);
@@ -263,47 +278,217 @@ namespace Svr.Infrastructure.Data
 
             return new List<CategoryDispute>() { categoryDispute };
         }
-
-        private static IEnumerable<Performer> GetPreconfiguredPerformers()
+        private static IEnumerable<DirName> GetPreconfiguredDirNameTypeApplicant(DataContext dataContext)
         {
-            return new List<Performer>()
+            dirName = new DirName { Name = "Тип контрагента" };
+            dataContext.DirName.Add(dirName);
+            dataContext.Dir.AddRange(GetPreconfiguredTypeApplicant());
+
+            var resault = new List<DirName> { };
+            resault.Add(dirName);
+            return resault;
+        }
+        private static IEnumerable<DirName> GetPreconfiguredDirNameOPF(DataContext dataContext)
+        {
+            dirName = new DirName { Name = "ОПФ" };
+            dataContext.DirName.Add(dirName);
+            dataContext.Dir.AddRange(GetPreconfiguredOPF());
+
+            var resault = new List<DirName> { };
+            resault.Add(dirName);
+            return resault;
+        }
+
+        private static IEnumerable<DirName> GetPreconfiguredDirNameCourt(DataContext dataContext)
+        {
+            dirName = new DirName { Name = "Суд" };
+            dataContext.DirName.Add(dirName);
+            dataContext.Dir.AddRange(GetPreconfiguredCourt());
+
+            var resault = new List<DirName> { };
+            resault.Add(dirName);
+            return resault;
+        }
+        private static IEnumerable<Dir> GetPreconfiguredCourt()
+        {
+            return new List<Dir>()
             {
-                new Performer {Name="Белякина Маргарита Александровна" },
-                new Performer {Name="Волосевич Юлия Сергеевна" },
-                new Performer {Name="Арзамасцева Елена Геннадьевна" },
-                new Performer {Name="Галузинская Екатерина Владимировна" },
-                new Performer {Name="Горшкова Ирина Геннадьевна" },
-                new Performer {Name="Грабко Александр Сергеевич" },
-                new Performer {Name="Гунько Анастасия Игоревна" },
-                new Performer {Name="Данилова Виктория Викторовна" },
-                new Performer {Name="Завражнева Ольга Анатольевна" },
-                new Performer {Name="Киянова Татьяна Ивановна" },
-                new Performer {Name="Колотуша Марта Анатольевна" },
-                new Performer {Name="Корнеева Елена Владимировна" },
-                new Performer {Name="Корнишина Лариса Анатольевна" },
-                new Performer {Name="Коханов Дмитрий Павлович" },
-                new Performer {Name="Курьянова Елена Николаевна" },
-                new Performer {Name="Лихачева Елена Николаевна" },
-                new Performer {Name="Ломовцева Татьяна Александровна" },
-                new Performer {Name="Николаев Алексей Евгеньевич" },
-                new Performer {Name="Панова Ольга Анатольевна" },
-                new Performer {Name="Платицына Елена Геннадьевна" },
-                new Performer {Name="Решетова Ирина Николаевна" },
-                new Performer {Name="Рыбкина Ольга Анатольевна" },
-                new Performer {Name="Рыжкова Юлия Владимировна" },
-                new Performer {Name="Сапрыкина Анастасия Александровна" },
-                new Performer {Name="Сиднева Галина Васильевна" },
-                new Performer {Name="Суворин Андрей Владимирович" },
-                new Performer {Name="Сычева Светлана Алексеевна" },
-                new Performer {Name="Тарнопольская Елена Сергеевна" },
-                new Performer {Name="Топорков Илья Николаевич" },
-                new Performer {Name="Труба Антонина Александровна" },
-                new Performer {Name="Фатахутдинов Денис Фаилевич" },
-                new Performer {Name="Черкасова Мария Сергеевна" },
-                new Performer {Name="Четверикова Елена Витальевна" },
-                new Performer {Name="Чубарова Юлия Юрьевна" },
-                new Performer {Name="Шишкова Елена Алексеевна" },
-                new Performer {Name="Яблочкина Татьяна Юрьевна" }
+                new Dir {Name="Арбитражный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Бондарсвкий районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Гавриловский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Жердевский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Знаменский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Инжавинский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Кирсановский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Котовский городской суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Ленинский районный суд г. Тамбова Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд г. Котовска Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд г. Мичуринска Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Кирсановского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Ленинского района г. Тамбова Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Мичуринского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Моршанского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Октябрьского района г. Тамбова Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд по г. Уварово и Уваровскому району Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Рассказовского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Советского района г. Тамбова Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Сосновкого района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд судебного участка Пичаевского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой суд Тамбовского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка  Мучкапского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Бондарского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Гавриловского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Жердевского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Знаменского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Инжавинского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Мордовского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Никифоровского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Первомайского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Петровского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Пичаевского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Ржаксинского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Сампурского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Староюрьевского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Токаревского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мировой судья судебного участка Уметского района Тамбовской области", DirName=dirName },
+                new Dir {Name="Мичуринский городской суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Мичуринский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Мордовский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Моршанский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Мучкапский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Никифоровский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Октябрьский районный суд г. Тамбова Тамбовской области", DirName=dirName },
+                new Dir {Name="Первомайский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Петровский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Пичаевский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Рассказовский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Ржаксинский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Сампурский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Советский районный суд г. Тамбова Тамбовской области", DirName=dirName },
+                new Dir {Name="Сосновский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Староюрьевский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Тамбовский областной суд", DirName=dirName },
+                new Dir {Name="Тамбовский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Токаревский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Уваровский районный суд Тамбовской области", DirName=dirName },
+                new Dir {Name="Уметский районный суд Тамбовской области", DirName=dirName }
+            };
+        }
+
+        private static IEnumerable<Dir> GetPreconfiguredTypeApplicant()
+        {
+            return new List<Dir>()
+            {
+                new Dir {Name="Физическое лицо", DirName=dirName },
+                new Dir {Name="Юридическое лицо", DirName=dirName }
+            };
+        }
+        private static IEnumerable<Dir> GetPreconfiguredOPF()
+        {
+            return new List<Dir>()
+            {
+                new Dir {Name="ЗАО", DirName=dirName },
+                new Dir {Name="ООО", DirName=dirName },
+                new Dir {Name="ОАО", DirName=dirName },
+                new Dir {Name="АО", DirName=dirName },
+                new Dir {Name="МУП", DirName=dirName },
+                new Dir {Name="НАО", DirName=dirName },
+                new Dir {Name="ОДО", DirName=dirName },
+                new Dir {Name="ПАО", DirName=dirName },
+                new Dir {Name="ФГУП", DirName=dirName },
+                new Dir {Name="ДУП", DirName=dirName },
+                new Dir {Name="ПТ", DirName=dirName },
+                new Dir {Name="ПК", DirName=dirName },
+                new Dir {Name="ТВ", DirName=dirName },
+                new Dir {Name="ГУП", DirName=dirName },
+                new Dir {Name="АНО", DirName=dirName },
+                new Dir {Name="ГЖИ", DirName=dirName },
+                new Dir {Name="ГК", DirName=dirName },
+                new Dir {Name="ГОУ", DirName=dirName },
+                new Dir {Name="ГУ", DirName=dirName },
+                new Dir {Name="МДОУ", DirName=dirName },
+                new Dir {Name="МОУ", DirName=dirName },
+                new Dir {Name="ОГБУ", DirName=dirName },
+                new Dir {Name="СО", DirName=dirName },
+                new Dir {Name="ТОС", DirName=dirName },
+                new Dir {Name="ТСЖ", DirName=dirName },
+                new Dir {Name="ФГБУ", DirName=dirName },
+                new Dir {Name="ФГУ", DirName=dirName },
+                new Dir {Name="АБ", DirName=dirName },
+                new Dir {Name="АС", DirName=dirName },
+                new Dir {Name="АКХ", DirName=dirName },
+                new Dir {Name="АФХ", DirName=dirName },
+                new Dir {Name="ГК", DirName=dirName },
+                new Dir {Name="КО", DirName=dirName },
+                new Dir {Name="КА", DirName=dirName },
+                new Dir {Name="МУ", DirName=dirName },
+                new Dir {Name="НП", DirName=dirName },
+                new Dir {Name="ОО", DirName=dirName },
+                new Dir {Name="ОД", DirName=dirName },
+                new Dir {Name="ОФ", DirName=dirName },
+                new Dir {Name="ОВС", DirName=dirName },
+                new Dir {Name="ОМН РФ", DirName=dirName },
+                new Dir {Name="ООС", DirName=dirName },
+                new Dir {Name="ПП", DirName=dirName },
+                new Dir {Name="ПК", DirName=dirName },
+                new Dir {Name="Профсоюз", DirName=dirName },
+                new Dir {Name="РО", DirName=dirName },
+                new Dir {Name="СОДНО", DirName=dirName },
+                new Dir {Name="Фонд", DirName=dirName },
+                new Dir {Name="ЧУ", DirName=dirName },
+                new Dir {Name="Государственный орган", DirName=dirName }
+            };
+        }
+        private static IEnumerable<DirName> GetPreconfiguredDirNamePerformers(DataContext dataContext)
+        {
+            dirName = new DirName { Name = "Исполнители" };
+            dataContext.DirName.Add(dirName);
+            dataContext.Dir.AddRange(GetPreconfiguredPerformers());
+            var resault = new List<DirName> { };
+            resault.Add(dirName);
+            return resault;
+        }
+
+        private static IEnumerable<Dir> GetPreconfiguredPerformers()
+        {
+            return new List<Dir>()
+            {
+                new Dir {Name="Белякина Маргарита Александровна", DirName=dirName },
+                new Dir {Name="Волосевич Юлия Сергеевна", DirName=dirName },
+                new Dir {Name="Арзамасцева Елена Геннадьевна", DirName=dirName },
+                new Dir {Name="Галузинская Екатерина Владимировна", DirName=dirName },
+                new Dir {Name="Горшкова Ирина Геннадьевна", DirName=dirName },
+                new Dir {Name="Грабко Александр Сергеевич", DirName=dirName },
+                new Dir {Name="Гунько Анастасия Игоревна", DirName=dirName },
+                new Dir {Name="Данилова Виктория Викторовна", DirName=dirName },
+                new Dir {Name="Завражнева Ольга Анатольевна", DirName=dirName },
+                new Dir {Name="Киянова Татьяна Ивановна", DirName=dirName },
+                new Dir {Name="Колотуша Марта Анатольевна", DirName=dirName },
+                new Dir {Name="Корнеева Елена Владимировна", DirName=dirName },
+                new Dir {Name="Корнишина Лариса Анатольевна", DirName=dirName },
+                new Dir {Name="Коханов Дмитрий Павлович", DirName=dirName },
+                new Dir {Name="Курьянова Елена Николаевна", DirName=dirName },
+                new Dir {Name="Лихачева Елена Николаевна", DirName=dirName },
+                new Dir {Name="Ломовцева Татьяна Александровна", DirName=dirName },
+                new Dir {Name="Николаев Алексей Евгеньевич", DirName=dirName },
+                new Dir {Name="Панова Ольга Анатольевна", DirName=dirName },
+                new Dir {Name="Платицына Елена Геннадьевна", DirName=dirName },
+                new Dir {Name="Решетова Ирина Николаевна", DirName=dirName },
+                new Dir {Name="Рыбкина Ольга Анатольевна", DirName=dirName },
+                new Dir {Name="Рыжкова Юлия Владимировна", DirName=dirName },
+                new Dir {Name="Сапрыкина Анастасия Александровна", DirName=dirName },
+                new Dir {Name="Сиднева Галина Васильевна", DirName=dirName },
+                new Dir {Name="Суворин Андрей Владимирович", DirName=dirName },
+                new Dir {Name="Сычева Светлана Алексеевна", DirName=dirName },
+                new Dir {Name="Тарнопольская Елена Сергеевна", DirName=dirName },
+                new Dir {Name="Топорков Илья Николаевич", DirName=dirName },
+                new Dir {Name="Труба Антонина Александровна", DirName=dirName },
+                new Dir {Name="Фатахутдинов Денис Фаилевич", DirName=dirName },
+                new Dir {Name="Черкасова Мария Сергеевна", DirName=dirName },
+                new Dir {Name="Четверикова Елена Витальевна", DirName=dirName },
+                new Dir {Name="Чубарова Юлия Юрьевна", DirName=dirName },
+                new Dir {Name="Шишкова Елена Алексеевна", DirName=dirName },
+                new Dir {Name="Яблочкина Татьяна Юрьевна", DirName=dirName }
             };
         }
 

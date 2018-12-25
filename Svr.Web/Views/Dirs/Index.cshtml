@@ -1,0 +1,14 @@
+﻿@model Svr.Web.Models.DirViewModels.IndexViewModel
+
+@{
+    ViewData["Title"] = "Список районов";
+}
+
+<h4>@ViewData["Title"]</h4>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<p>
+    <a asp-action="Create" asp-controller="Dirs" class="btn btn-default">Добавить</a>
+</p>
+
+@Html.Partial("List", Model)
+

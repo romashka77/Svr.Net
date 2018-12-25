@@ -22,6 +22,10 @@ namespace Svr.Infrastructure.Data
         public DbSet<GroupClaim> GroupClaims { get; set; }
         public DbSet<SubjectClaim> SubjectClaims { get; set; }
 
+        public DbSet<DirName> DirName { get; set; }
+        public DbSet<Dir> Dir { get; set; }
+
+
         public DbSet<Performer> Performers { get; set; }
 
 

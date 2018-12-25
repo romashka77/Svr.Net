@@ -46,6 +46,9 @@ namespace Svr.Web
             services.AddScoped<ISubjectClaimRepository, SubjectClaimRepository>();
 
 
+            services.AddScoped<IDirNameRepository, DirNameRepository>();
+            services.AddScoped<IDirRepository, DirRepository>();
+
             services.AddScoped<IRegionService, RegionService>();
 
 

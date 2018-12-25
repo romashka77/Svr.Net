@@ -45,6 +45,8 @@
   <ItemGroup>
     <Folder Include="Models\GroupClaimsViewModels\" />
     <Folder Include="Models\SubjectClaimsViewModels\" />
+    <Folder Include="Models\DirNameViewModels\" />
+    <Folder Include="Models\DirViewModels\" />
   </ItemGroup>
 
 </Project>

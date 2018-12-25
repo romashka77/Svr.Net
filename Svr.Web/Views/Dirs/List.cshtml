@@ -1,0 +1,55 @@
+﻿@model Svr.Web.Models.DirViewModels.IndexViewModel
+
+@Html.Partial("_filtration", Model.FilterViewModel)
+
+@if (Model.ItemViewModels.Any())
+{
+    @Html.Partial("_sort", Model)
+    @Html.Partial("_pagination", Model)
+    @foreach (var item in Model.ItemViewModels)
+    {
+        <div>
+            <hr />
+            <h4>@item</h4>
+
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.DirName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.DirName.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.CreatedOnUtc)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.CreatedOnUtc)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.UpdatedOnUtc)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.UpdatedOnUtc)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-controller="Dirs" asp-route-id="@item.Id" class="btn btn-default">Редактировать</a>
+            <a asp-action="Details" asp-controller="Dirs" asp-route-id="@item.Id" class="btn btn-default">Подробнее</a>
+            <a asp-action="Delete" asp-controller="Dirs" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
+        </div>
+    }
+    @Html.Partial("_pagination", Model)
+}
+else
+{
+    <div class="esh-catalog-items row">
+        НЕТ РЕЗУЛЬТАТОВ, СООТВЕТСТВУЮЩИХ ВАШЕМУ ПОИСКУ
+    </div>
+}
