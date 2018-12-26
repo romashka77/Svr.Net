@@ -9,26 +9,26 @@ using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
 {
-    public class DirRepository : EfRepository<Dir>, IDirRepository
+    public class ApplicantRepository : EfRepository<Applicant>, IApplicantRepository
     {
-        public DirRepository(DataContext context) : base(context)
+        public ApplicantRepository(DataContext context) : base(context)
         {
         }
-        public virtual Dir GetByIdWithItems(long? id)
+        public virtual Applicant GetByIdWithItems(long? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(d => d.DirName).Include(d => d.Applicants).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(d => d.TypeApplicant).FirstOrDefault(r => r.Id == id);
         }
-        public virtual Task<Dir> GetByIdWithItemsAsync(long? id)
+        public virtual Task<Applicant> GetByIdWithItemsAsync(long? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.DirName).Include(d => d.Applicants).FirstOrDefaultAsync(r => r.Id == id);
+            return Entities.Include(d => d.TypeApplicant).FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }

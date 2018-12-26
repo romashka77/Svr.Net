@@ -12,6 +12,7 @@ namespace Svr.Infrastructure.Data
         private static CategoryDispute categoryDispute;
         private static GroupClaim groupClaim;
         private static DirName dirName;
+        private static Dir dir;
 
         public static async Task SeedAsync(DataContext dataContext/*, ILoggerFactory loggerFactory, int? retry = 0*/)
         {
@@ -282,7 +283,7 @@ namespace Svr.Infrastructure.Data
         {
             dirName = new DirName { Name = "Тип контрагента" };
             dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredTypeApplicant());
+            dataContext.Dir.AddRange(GetPreconfiguredTypeApplicant(dataContext));
 
             var resault = new List<DirName> { };
             resault.Add(dirName);
@@ -375,13 +376,27 @@ namespace Svr.Infrastructure.Data
             };
         }
 
-        private static IEnumerable<Dir> GetPreconfiguredTypeApplicant()
+        private static IEnumerable<Dir> GetPreconfiguredTypeApplicant(DataContext dataContext)
         {
-            return new List<Dir>()
-            {
-                new Dir {Name="Физическое лицо", DirName=dirName },
-                new Dir {Name="Юридическое лицо", DirName=dirName }
-            };
+           var result = new List<Dir>();
+
+            dir = new Dir { Name = "Физическое лицо", DirName = dirName };
+            result.Add(dir);
+            dataContext.Dir.Add(dir);
+            dataContext.Applicant.AddRange(new List<Applicant>() { new Applicant { Name = "test", Description = "test", TypeApplicant = dir }, new Applicant { Name = "test1", Description = "test1", TypeApplicant = dir }
+            });
+
+            dir = new Dir { Name = "Юридическое лицо", DirName = dirName };
+            dataContext.Dir.Add(dir);
+            result.Add(dir);
+            dataContext.Applicant.AddRange(new List<Applicant>() { new Applicant { Name = "test2", Description = "test2", TypeApplicant = dir }, new Applicant { Name = "test3", Description = "test3", TypeApplicant = dir }
+            });
+
+            return result;
+            //{
+            //    new Dir {Name="Физическое лицо", DirName=dirName },
+            //    new Dir {Name="Юридическое лицо", DirName=dirName }
+            //};
         }
         private static IEnumerable<Dir> GetPreconfiguredOPF()
         {

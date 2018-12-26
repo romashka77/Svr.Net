@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Svr.Core.Entities
 {
+    /// <summary>
+    /// Сторона процесса
+    /// </summary>
     public class Applicant: BaseEntityDescription
     {
         /// <summary>
@@ -13,7 +16,7 @@ namespace Svr.Core.Entities
         [Required(ErrorMessage = ErrorStringEmpty)]
         public long TypeApplicantID { get; set; }
         [Display(Name = "Тип контрагента")]
-        public virtual Dir Dir { get; set; }
+        public virtual Dir TypeApplicant { get; set; }
 
         [Display(Name = "Полное наименование", Prompt = "Введите полное наименование")]
         string FullName { get; set; }
