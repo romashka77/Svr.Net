@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
-using Svr.Infrastructure.Data;
 using Svr.Web.Models;
-using Svr.Web.Models.DirViewModels;
+using Svr.Web.Models.ApplicantViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +15,21 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
-    public class DirsController : Controller
+    public class ApplicantsController : Controller
     {
-        private IDirRepository repository;
-        private IDirNameRepository repositoryDirName;
-        private ILogger<DirsController> logger;
+        private IApplicantRepository repository;
+        private IDirRepository dirRepository;
+        private ILogger<ApplicantsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
 
         #region Конструктор
-        public DirsController(IDirRepository repository, IDirNameRepository repositoryDirName, ILogger<DirsController> logger)
+        public ApplicantsController(IApplicantRepository repository, IDirRepository dirRepository, ILogger<ApplicantsController> logger)
         {
             this.logger = logger;
             this.repository = repository;
-            this.repositoryDirName = repositoryDirName;
+            this.dirRepository = dirRepository;
         }
         #endregion
         #region Деструктор
@@ -38,28 +38,27 @@ namespace Svr.Web.Controllers
             if (disposing)
             {
                 repository = null;
-                repositoryDirName = null;
+                dirRepository = null;
                 logger = null;
             }
             base.Dispose(disposing);
         }
         #endregion
         #region Index
-        // GET: Dirs
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
+        // GET: Applicants
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string parentowner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
             long? _owner = null;
             if (!String.IsNullOrEmpty(owner))
             {
                 _owner = Int64.Parse(owner);
             }
+            var filterSpecification = new ApplicantSpecification(_owner);
+            IEnumerable<Applicant> list = repository.List(filterSpecification);
             //фильтрация
-            var filterSpecification = new DirSpecification(_owner);
-            IEnumerable<Dir> list = repository.List(filterSpecification);
-            
             //if (_owner != null)
             //{
-            //    list = list.Where(d => d.DirNameId == _owner);
+            //    list = list.Where(d => d.TypeApplicantId == _owner);
             //}
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -84,10 +83,10 @@ namespace Svr.Web.Controllers
                     list = list.OrderByDescending(p => p.UpdatedOnUtc);
                     break;
                 case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.DirName.Name);
+                    list = list.OrderBy(s => s.TypeApplicant.Name);
                     break;
                 case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.DirName.Name);
+                    list = list.OrderByDescending(s => s.TypeApplicant.Name);
                     break;
                 default:
                     list = list.OrderBy(s => s.Name);
@@ -104,18 +103,19 @@ namespace Svr.Web.Controllers
                     Name = i.Name,
                     CreatedOnUtc = i.CreatedOnUtc,
                     UpdatedOnUtc = i.UpdatedOnUtc,
-                    DirName = i.DirName
+                    TypeApplicant = i.TypeApplicant,
+                    Opf = i.Opf
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, repositoryDirName.ListAll().ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
+                FilterViewModel = new FilterViewModel(searchString, owner, await GetOwners(owner)),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
         }
         #endregion
         #region Details
-        // GET: Dirs/Details/5
+        // GET: Applicants/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             var item = await repository.GetByIdWithItemsAsync(id);
@@ -123,24 +123,21 @@ namespace Svr.Web.Controllers
             {
                 StatusMessage = $"Не удалось загрузить значение с ID = {id} из справочника.";
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Name = item.Name, DirNameId = item.DirNameId, DirName = item.DirName, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, Applicants = item.Applicants };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, FullName = item.FullName, TypeApplicant = item.TypeApplicant, TypeApplicantId = item.TypeApplicantId, Opf = item.Opf, Address = item.Address, AddressBank = item.AddressBank, Inn = item.Inn, OpfId = item.OpfId, Born = item.Born };
             return View(model);
         }
         #endregion
         #region Create
-        // GET: Dirs/Create
-        public IActionResult Create()
+        // GET: Applicants/Create
+        public async Task<ActionResult> Create()
         {
-            SelectList dirName = new SelectList(repositoryDirName.ListAll(), "Id", "Name", 1);
-            ViewBag.DirNames = dirName;
+            //SelectList dirName = new SelectList(dirRepository.ListAll(), "Id", "Name", 1);
+            ViewBag.Dir = await GetOwners();
             return View();
         }
 
-        // POST: Dirs/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Applicants/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ItemViewModel model)
@@ -148,7 +145,7 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 // добавляем новый Район
-                var item = await repository.AddAsync(new Dir { Name = model.Name, DirNameId = model.DirNameId });
+                var item = await repository.AddAsync(new Applicant { Name = model.Name, TypeApplicantId = model.TypeApplicantId, Description = model.Description, FullName = model.FullName, OpfId = model.OpfId, Inn = model.Inn, Address = model.Address, AddressBank = model.AddressBank, Born = model.Born });
                 if (item != null)
                 {
                     StatusMessage = $"Добавлен элемент с Id={item.Id}, имя={item.Name}.";
@@ -156,31 +153,27 @@ namespace Svr.Web.Controllers
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
-            SelectList dirName = new SelectList(repositoryDirName.ListAll(), "Id", "Name", 1);
-            ViewBag.DirNames = dirName;
+            ViewBag.Dir = await GetOwners(model.TypeApplicantId.ToString());
             return View(model);
         }
         #endregion
         #region Edit
-        // GET: Dirs/Edit/5
+        // GET: Applicants/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
-            var item = await repository.GetByIdAsync(id);
+            var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
                 StatusMessage = $"Ошибка: Не удалось найти элемент с ID = {id}.";
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Name = item.Name, DirNameId = item.DirNameId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
-            SelectList dirName = new SelectList(repositoryDirName.ListAll(), "Id", "Name", 1);
-            ViewBag.DirNames = dirName;
+
+            var model = new ItemViewModel { Id = item.Id, CreatedOnUtc = item.CreatedOnUtc, Name = item.Name, TypeApplicantId = item.TypeApplicantId, Description = item.Description, FullName = item.FullName, OpfId = item.OpfId, Address = item.Address, AddressBank = item.AddressBank, Born = item.Born, Inn = item.Inn };
+            ViewBag.Dir = await GetOwners(item.TypeApplicantId.ToString());
             return View(model);
         }
 
-        // POST: Dirs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Applicants/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ItemViewModel model)
@@ -189,7 +182,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await repository.UpdateAsync(new Dir { Id = model.Id, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, DirNameId = model.DirNameId });
+                    await repository.UpdateAsync(new Applicant { Id = model.Id, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, TypeApplicantId = model.TypeApplicantId, Description = model.Description, FullName = model.FullName, OpfId = model.OpfId, Address = model.Address, AddressBank = model.AddressBank, Born = model.Born, Inn = model.Inn });
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -203,15 +196,18 @@ namespace Svr.Web.Controllers
                         StatusMessage = $"Непредвиденная ошибка при обновлении элемента с ID {model.Id}. {ex.Message}";
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            SelectList dirName = new SelectList(repositoryDirName.ListAll(), "Id", "Name", 1);
-            ViewBag.DirNames = dirName;
+            StatusMessage = $"{model} c ID = {model.Id} проверте правильность заполнения полей";
+            ModelState.AddModelError(string.Empty, StatusMessage);
+            ViewBag.Dir = await GetOwners(model.TypeApplicantId.ToString());
+            //return RedirectToAction($"{nameof(Edit)}/{model.Id}");
             return View(model);
         }
         #endregion
         #region Delete
-        // GET: Dirs/Delete/5
+        // GET: Applicants/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             var item = await repository.GetByIdAsync(id);
@@ -220,18 +216,17 @@ namespace Svr.Web.Controllers
                 StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
                 return RedirectToAction(nameof(Index));
             }
-            var model = new ItemViewModel { Id = item.Id, Name = item.Name, DirNameId = item.DirNameId, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, TypeApplicantId = item.TypeApplicantId, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
             return View(model);
         }
-
-        // POST: Dirs/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: Applicants/Delete/5
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
             {
-                await repository.DeleteAsync(new Dir { Id = model.Id, Name = model.Name });
+                await repository.DeleteAsync(new Applicant { Id = model.Id, Name = model.Name });
                 StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
                 return RedirectToAction(nameof(Index));
             }
@@ -242,6 +237,10 @@ namespace Svr.Web.Controllers
             }
         }
         #endregion
-        
+        private async Task<IEnumerable<SelectListItem>> GetOwners(string owner = null)
+        {
+            return (await dirRepository.ListAsync(new DirSpecification("Тип контрагента"))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
+            //return dirRepository.List(new DirSpecification(dirNameId)).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
+        }
     }
 }

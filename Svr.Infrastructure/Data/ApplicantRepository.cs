@@ -20,7 +20,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(d => d.TypeApplicant).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).FirstOrDefault(r => r.Id == id);
         }
         public virtual Task<Applicant> GetByIdWithItemsAsync(long? id)
         {
@@ -28,7 +28,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(d => d.TypeApplicant).FirstOrDefaultAsync(r => r.Id == id);
+            return Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }

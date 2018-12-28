@@ -11,7 +11,7 @@ namespace Svr.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Dir> builder)
         {
-            builder.HasOne(d => d.DirName).WithMany(r => r.Dirs).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(d => d.DirName).WithMany(r => r.Dirs).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

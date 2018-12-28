@@ -1,5 +1,5 @@
 ﻿@using Svr.Core.Entities
-@model Svr.Web.Models.DirViewModels.ItemViewModel
+@model Svr.Web.Models.ApplicantViewModels.ItemViewModel
 @{
     ViewData["Title"] = $"Подробности {Model.Name}";
 }
@@ -21,6 +21,12 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.CreatedOnUtc)
         </dt>
         <dd>
@@ -33,27 +39,12 @@
             @Html.DisplayFor(model => model.UpdatedOnUtc)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DirName)
+            @Html.DisplayNameFor(model => model.TypeApplicant)
         </dt>
         <dd>
-            <a asp-controller="DirNames" asp-action="Details" asp-route-id="@Model.DirNameId">@Model.DirName.Name</a>
+            <a asp-controller="Dirs" asp-action="Details" asp-route-id="@Model.TypeApplicantId">@Model.TypeApplicant.Name</a>
             @*@Html.RouteLink($"{Model.Region.Name} ({Model.Region.Description})", new { action = "Details", controller = "Regions", id = Model.RegionId })*@
         </dd>
-        @if (Model.Applicants.Count > 0)
-        {
-            <dt>@Html.DisplayNameFor(model => model.Applicants)</dt>
-            <dd>
-                @*@Html.Partial("~/Views/Districts/List.cshtml", Model.Districts)*@
-                <ul>
-                    @foreach (Applicant item in Model.Applicants)
-                    {
-                        <li>
-                            <a asp-controller="Applicants" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-                        </li>
-                    }
-                </ul>
-            </dd>
-        }
     </dl>
 </div>
 <div>

@@ -12,5 +12,9 @@ namespace Svr.Core.Specifications
         {
             AddInclude(d => d.DirName);
         }
+        public DirSpecification(string dirName) : base(i => (string.IsNullOrEmpty(dirName) || i.DirName.Name == dirName))
+        {
+            AddInclude(d => d.DirName);
+        }
     }
 }

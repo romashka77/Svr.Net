@@ -51,10 +51,14 @@ namespace Svr.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new GroupClaimConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectClaimConfiguration());
 
-            modelBuilder.ApplyConfiguration(new PerformerConfiguration());
+
+            modelBuilder.ApplyConfiguration(new DirNameConfiguration());
+            modelBuilder.ApplyConfiguration(new DirConfiguration());
+            modelBuilder.ApplyConfiguration(new ApplicantConfiguration());
+
+        modelBuilder.ApplyConfiguration(new PerformerConfiguration());
 
             modelBuilder.ApplyConfiguration(new ManConfiguration());
-
             base.OnModelCreating(modelBuilder);
         }
 
