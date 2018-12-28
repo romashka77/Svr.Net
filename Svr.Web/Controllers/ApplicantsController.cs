@@ -108,7 +108,7 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, await GetOwners(owner)),
+                FilterViewModel = new FilterViewModel(searchString, owner, await GetTypeApplicants(owner)),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
@@ -124,7 +124,7 @@ namespace Svr.Web.Controllers
                 StatusMessage = $"Не удалось загрузить значение с ID = {id} из справочника.";
                 return RedirectToAction(nameof(Index));
             }
-            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, FullName = item.FullName, TypeApplicant = item.TypeApplicant, TypeApplicantId = item.TypeApplicantId, Opf = item.Opf, Address = item.Address, AddressBank = item.AddressBank, Inn = item.Inn, OpfId = item.OpfId, Born = item.Born };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, FullName = item.FullName, TypeApplicant = item.TypeApplicant, TypeApplicantId = item.TypeApplicantId, Opf = item.Opf, Address = item.Address, AddressBank = item.AddressBank, Inn = item.Inn, OpfId = item.OpfId, Born = item.Born, IsMan= item.TypeApplicant.Name == "Физическое лицо" };
             return View(model);
         }
         #endregion
@@ -133,7 +133,8 @@ namespace Svr.Web.Controllers
         public async Task<ActionResult> Create()
         {
             //SelectList dirName = new SelectList(dirRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.Dir = await GetOwners();
+            ViewBag.TypeApplicants = await GetTypeApplicants();
+            ViewBag.Opfs = await GetOpfs();
             return View();
         }
 
@@ -149,11 +150,13 @@ namespace Svr.Web.Controllers
                 if (item != null)
                 {
                     StatusMessage = $"Добавлен элемент с Id={item.Id}, имя={item.Name}.";
-                    return RedirectToAction(nameof(Index));
+                    //return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Edit));
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
-            ViewBag.Dir = await GetOwners(model.TypeApplicantId.ToString());
+            ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
+            ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
             return View(model);
         }
         #endregion
@@ -168,8 +171,12 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var model = new ItemViewModel { Id = item.Id, CreatedOnUtc = item.CreatedOnUtc, Name = item.Name, TypeApplicantId = item.TypeApplicantId, Description = item.Description, FullName = item.FullName, OpfId = item.OpfId, Address = item.Address, AddressBank = item.AddressBank, Born = item.Born, Inn = item.Inn };
-            ViewBag.Dir = await GetOwners(item.TypeApplicantId.ToString());
+            var model = new ItemViewModel { Id = item.Id, CreatedOnUtc = item.CreatedOnUtc, Name = item.Name, TypeApplicantId = item.TypeApplicantId, Description = item.Description, FullName = item.FullName, OpfId = item.OpfId, Address = item.Address, AddressBank = item.AddressBank, Born = item.Born, Inn = item.Inn, IsMan= item.TypeApplicant.Name== "Физическое лицо" };
+            ViewBag.TypeApplicants = await GetTypeApplicants(item.TypeApplicantId.ToString());
+            if (!model.IsMan)
+            {
+                ViewBag.Opfs = await GetOpfs(item.OpfId.ToString());
+            }
             return View(model);
         }
 
@@ -195,13 +202,25 @@ namespace Svr.Web.Controllers
                     {
                         StatusMessage = $"Непредвиденная ошибка при обновлении элемента с ID {model.Id}. {ex.Message}";
                     }
+                    return RedirectToAction(nameof(Index));
                 }
                 //return RedirectToAction(nameof(Index));
+
+                model.IsMan = (await repository.GetByIdWithItemsAsync(model.Id)).TypeApplicant.Name == "Физическое лицо";
+                ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
+                if (!model.IsMan)
+                {
+                    ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
+                }
                 return View(model);
             }
             StatusMessage = $"{model} c ID = {model.Id} проверте правильность заполнения полей";
             ModelState.AddModelError(string.Empty, StatusMessage);
-            ViewBag.Dir = await GetOwners(model.TypeApplicantId.ToString());
+            ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
+            if (!model.IsMan)
+            {
+                ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
+            }
             //return RedirectToAction($"{nameof(Edit)}/{model.Id}");
             return View(model);
         }
@@ -237,9 +256,14 @@ namespace Svr.Web.Controllers
             }
         }
         #endregion
-        private async Task<IEnumerable<SelectListItem>> GetOwners(string owner = null)
+        private async Task<IEnumerable<SelectListItem>> GetTypeApplicants(string owner = null)
         {
             return (await dirRepository.ListAsync(new DirSpecification("Тип контрагента"))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
+            //return dirRepository.List(new DirSpecification(dirNameId)).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
+        }
+        private async Task<IEnumerable<SelectListItem>> GetOpfs(string owner = null)
+        {
+            return (await dirRepository.ListAsync(new DirSpecification("ОПФ"))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
             //return dirRepository.List(new DirSpecification(dirNameId)).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
         }
     }

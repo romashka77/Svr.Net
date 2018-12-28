@@ -43,7 +43,48 @@
         </dt>
         <dd>
             <a asp-controller="Dirs" asp-action="Details" asp-route-id="@Model.TypeApplicantId">@Model.TypeApplicant.Name</a>
-            @*@Html.RouteLink($"{Model.Region.Name} ({Model.Region.Description})", new { action = "Details", controller = "Regions", id = Model.RegionId })*@
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        @if (Model.IsMan)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Born)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Born)
+            </dd>
+            <dt>
+                @Html.Label("Место рождения")
+            </dt>
+        }
+        else
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.AddressBank)
+            </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Inn)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Inn)
+            </dd>
+            @if (@Model.Opf != null)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.Opf)
+                </dt>
+                <dd>
+                    <a asp-controller="Dirs" asp-action="Details" asp-route-id="@Model.OpfId">@Model.Opf.Name</a>
+                </dd>
+            }
+        }
+        <dd>
+            @Html.DisplayFor(model => model.AddressBank)
         </dd>
     </dl>
 </div>
