@@ -146,17 +146,27 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 // добавляем новый Район
-                var item = await repository.AddAsync(new Applicant { Name = model.Name, TypeApplicantId = model.TypeApplicantId, Description = model.Description, FullName = model.FullName, OpfId = model.OpfId, Inn = model.Inn, Address = model.Address, AddressBank = model.AddressBank, Born = model.Born });
+                var item = await repository.AddAsync(new Applicant { Name = model.Name, TypeApplicantId = model.TypeApplicantId, /*Description = model.Description, FullName = model.FullName, OpfId = model.OpfId, Inn = model.Inn, Address = model.Address, AddressBank = model.AddressBank, Born = model.Born */});
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлен элемент с Id={item.Id}, имя={item.Name}.";
+                    //StatusMessage = $"Добавлен элемент с Id={item.Id}, имя={item.Name}.";
                     //return RedirectToAction(nameof(Index));
-                    return RedirectToAction(nameof(Edit));
+                    //model.IsMan = item.TypeApplicant.Name == "Физическое лицо";
+                    //ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
+                    //if (!model.IsMan)
+                    //{
+                    //    ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
+                    //}
+                    return RedirectToAction( nameof(Edit), new {id = item.Id });
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
             ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
-            ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
+            if (!model.IsMan)
+            {
+                ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
+            }
+            //ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
             return View(model);
         }
         #endregion

@@ -15,7 +15,6 @@ namespace Svr.Core.Entities
         [ForeignKey("TypeApplicant"), Column(Order = 0)]
         public long? TypeApplicantId { get; set; }
         [ForeignKey("Opf"), Column(Order = 1)]
-        [Display(Name = "ОПФ")]
         public long? OpfId { get; set; }
 
         [Display(Name = "Дата рождения")]
@@ -34,6 +33,7 @@ namespace Svr.Core.Entities
 
         [Display(Name = "Тип контрагента")]
         public virtual Dir TypeApplicant { get; set; }
+        [Display(Name = "ОПФ")]
         public virtual Dir Opf { get; set; }
 
 
