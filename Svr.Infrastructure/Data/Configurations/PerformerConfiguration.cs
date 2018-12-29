@@ -11,7 +11,7 @@ namespace Svr.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Performer> builder)
         {
-            //builder.Property(d => d.Name).IsRequired().HasMaxLength(100).IsConcurrencyToken();
+            builder. HasMany(d => d.DistrictPerformers).WithMany(r => r.Per).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

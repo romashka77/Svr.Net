@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Svr.Core.Entities
 {
@@ -18,12 +15,18 @@ namespace Svr.Core.Entities
         public long RegionId { get; set; }
         //[ForeignKey("RegionId")]
         [Display(Name = "Регион")]
-        public virtual Region Region { get; set; }  // навигационное свойство
-        public override string ToString() => "Район";
+        public virtual Region Region { get; set; } 
+        
         /// <summary>
-        /// Люди из района
+        /// Колекция исполнителей
         /// </summary>
-        //public virtual ICollection<Man> Men { get; set; }
+        [Display(Name = "Исполнители")]
+        public virtual ICollection<DistrictPerformer> DistrictPerformers { get; set; }
 
+        public District()
+        {
+            DistrictPerformers = new List<DistrictPerformer>();
+        }
+        public override string ToString() => "Район";
     }
 }

@@ -43,8 +43,9 @@ namespace Svr.Infrastructure.Data
                 //}
                 if (!dataContext.DirName.Any())
                 {
-                    dataContext.DirName.AddRange(GetPreconfiguredDirNamePerformers(dataContext));
-                    await dataContext.SaveChangesAsync();
+                    //dataContext.DirName.AddRange(GetPreconfiguredDirNamePerformers(dataContext));
+                    //await dataContext.SaveChangesAsync();
+
                     dataContext.DirName.AddRange(GetPreconfiguredDirNameOPF(dataContext));
                     await dataContext.SaveChangesAsync();
                     dataContext.DirName.AddRange(GetPreconfiguredDirNameCourt(dataContext));

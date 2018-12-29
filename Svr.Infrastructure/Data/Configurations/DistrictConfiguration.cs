@@ -11,7 +11,6 @@ namespace Svr.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<District> builder)
         {
-            //builder.Property(d => d.Name).IsRequired().HasMaxLength(100).IsConcurrencyToken();
             builder.HasOne(d => d.Region).WithMany(r => r.Districts).OnDelete(DeleteBehavior.Cascade);
         }
     }

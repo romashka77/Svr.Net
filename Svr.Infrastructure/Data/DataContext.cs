@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
 using Svr.Core.Entities;
 using Svr.Infrastructure.Data.Configurations;
 using Svr.Infrastructure.Data.Extentions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
 {
@@ -32,7 +28,7 @@ namespace Svr.Infrastructure.Data
         //public DbSet<Directory> Directories { get; set; }
 
         public DbSet<Man> Men { get; set; }
-        
+
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -45,7 +41,20 @@ namespace Svr.Infrastructure.Data
             //Fluent API, https://metanit.com/sharp/entityframeworkcore/2.3.php
             modelBuilder.HasDefaultSchema(this.schema);
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
+            modelBuilder.ApplyConfiguration(new DistrictPerformerConfiguration());
+
             modelBuilder.ApplyConfiguration(new DistrictConfiguration());
+
+            modelBuilder.Entity<DistrictPerformer>().HasMany(p =>p.Districts).WithMany(t => t.Districts)
+                .Map(mc =>
+                {
+                    mc.ToTable("DistricJoinPerformer");
+                    mc.MapLeftKey("DistrictId");
+                    mc.MapRightKey("PerformerId");
+                });
+
+            modelBuilder.ApplyConfiguration(new PerformerConfiguration());
+
 
             modelBuilder.ApplyConfiguration(new CategoryDisputeConfiguration());
             modelBuilder.ApplyConfiguration(new GroupClaimConfiguration());
@@ -56,7 +65,7 @@ namespace Svr.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new DirConfiguration());
             modelBuilder.ApplyConfiguration(new ApplicantConfiguration());
 
-        modelBuilder.ApplyConfiguration(new PerformerConfiguration());
+            
 
             modelBuilder.ApplyConfiguration(new ManConfiguration());
             base.OnModelCreating(modelBuilder);
