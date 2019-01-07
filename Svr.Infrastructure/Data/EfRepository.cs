@@ -175,14 +175,13 @@ namespace Svr.Infrastructure.Data
         }
         public virtual bool EntityExists(long id) => Entities.Any(e => e.Id == id);
         public virtual async Task<bool> EntityExistsAsync(long id) => await Entities.AnyAsync(e => e.Id == id);
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Получить таблицу
         /// </summary>
-        public virtual IQueryable<T> Table { get { return Entities; } }
+        public virtual IQueryable<T> Table() { return Entities; }
+        #endregion
 
+        #region Properties
         /// <summary>
         /// Возвращает таблицу с включенной функцией "без отслеживания" (функция EF) используйте ее только при загрузке записей только для операций только для чтения
         /// </summary>

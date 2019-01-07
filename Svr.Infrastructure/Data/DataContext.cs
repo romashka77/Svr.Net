@@ -23,7 +23,7 @@ namespace Svr.Infrastructure.Data
         public DbSet<Applicant> Applicant { get; set; }
 
         public DbSet<Performer> Performers { get; set; }
-
+        public DbSet<DistrictPerformer> DistrictPerformers { get; set; }
 
         //public DbSet<Directory> Directories { get; set; }
 
@@ -44,28 +44,16 @@ namespace Svr.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new DistrictPerformerConfiguration());
 
             modelBuilder.ApplyConfiguration(new DistrictConfiguration());
-
-            modelBuilder.Entity<DistrictPerformer>().HasMany(p =>p.Districts).WithMany(t => t.Districts)
-                .Map(mc =>
-                {
-                    mc.ToTable("DistricJoinPerformer");
-                    mc.MapLeftKey("DistrictId");
-                    mc.MapRightKey("PerformerId");
-                });
-
+            modelBuilder.ApplyConfiguration(new DistrictPerformerConfiguration());
             modelBuilder.ApplyConfiguration(new PerformerConfiguration());
-
 
             modelBuilder.ApplyConfiguration(new CategoryDisputeConfiguration());
             modelBuilder.ApplyConfiguration(new GroupClaimConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectClaimConfiguration());
 
-
             modelBuilder.ApplyConfiguration(new DirNameConfiguration());
             modelBuilder.ApplyConfiguration(new DirConfiguration());
             modelBuilder.ApplyConfiguration(new ApplicantConfiguration());
-
-            
 
             modelBuilder.ApplyConfiguration(new ManConfiguration());
             base.OnModelCreating(modelBuilder);

@@ -110,6 +110,11 @@ namespace Svr.Web.Services
 
         public Task<List<Region>> ListAsync(ISpecification<Region> spec) => _itemRepository.ListAsync(spec);
 
+        public IQueryable<Region> Table()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(Region entity) => _itemRepository.Update(entity);
 
         public Task UpdateAsync(Region entity) => _itemRepository.UpdateAsync(entity);

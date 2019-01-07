@@ -17,18 +17,22 @@ namespace Svr.Web.Controllers
 {
     public class DistrictsController : Controller
     {
-        private IDistrictRepository districtRepository;
+        private IDistrictRepository repository;
         private IRegionRepository regionRepository;
+        private IDistrictPerformerRepository districtPerformerRepository;
+        private IPerformerRepository performerRepository;
         private ILogger<DistrictsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public DistrictsController(IDistrictRepository districtRepository, IRegionRepository regionRepository, ILogger<DistrictsController> logger)
+        public DistrictsController(IDistrictRepository repository, IRegionRepository regionRepository, IPerformerRepository performerRepository, IDistrictPerformerRepository districtPerformerRepository, ILogger<DistrictsController> logger)
         {
             this.logger = logger;
-            this.districtRepository = districtRepository;
+            this.repository = repository;
             this.regionRepository = regionRepository;
+            this.performerRepository = performerRepository;
+            this.districtPerformerRepository = districtPerformerRepository;
         }
         #endregion
         #region Деструктор
@@ -36,8 +40,10 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                districtRepository = null;
+                repository = null;
                 regionRepository = null;
+                performerRepository = null;
+                districtPerformerRepository = null;
                 logger = null;
             }
             base.Dispose(disposing);
@@ -53,7 +59,7 @@ namespace Svr.Web.Controllers
                 _owner = Int64.Parse(owner);
             }
             var filterSpecification = new DistrictSpecification(_owner);
-            IEnumerable<District> list = districtRepository.List(filterSpecification);
+            IEnumerable<District> list = repository.List(filterSpecification);
             //фильтрация
             if (_owner != null)
             {
@@ -116,7 +122,7 @@ namespace Svr.Web.Controllers
                     Description = i.Description,
                     CreatedOnUtc = i.CreatedOnUtc,
                     UpdatedOnUtc = i.UpdatedOnUtc,
-                    Region=i.Region
+                    Region = i.Region
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
@@ -131,14 +137,19 @@ namespace Svr.Web.Controllers
         // GET: Districts/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            var item = await districtRepository.GetByIdWithItemsAsync(id);
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+            District item = await repository.Table().Include(e => e.Region).Include(e => e.DistrictPerformers).ThenInclude(e => e.Performer).SingleOrDefaultAsync(m => m.Id == id);
+            //var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
                 StatusMessage = $"Не удалось загрузить район с ID = {id}.";
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, Region = item.Region, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc };
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, Region = item.Region, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, DistrictPerformers = item.DistrictPerformers };
             return View(model);
         }
         #endregion
@@ -161,7 +172,7 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 // добавляем новый Район
-                var item = await districtRepository.AddAsync(new District { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.RegionId });
+                var item = await repository.AddAsync(new District { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.RegionId });
                 if (item != null)
                 {
                     StatusMessage = $"Добавлен район с Id={item.Id}, код={item.Code}, имя={item.Name}.";
@@ -178,16 +189,23 @@ namespace Svr.Web.Controllers
         // get: districts/edit/5
         public async Task<ActionResult> Edit(long? id)
         {
-            var item = await districtRepository.GetByIdAsync(id);
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+            //District item = await repository.GetByIdAsync(id);
+            District item = await repository.Table().Include(e => e.DistrictPerformers).SingleOrDefaultAsync(m => m.Id == id);
             if (item == null)
             {
                 StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
-            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictPerformers = item.DistrictPerformers };
+            SelectList regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
             ViewBag.Regions = regions;
+
+            ViewBag.Performers = await performerRepository.ListAllAsync();
             return View(model);
         }
         // POST: Districts/Edit/5
@@ -195,18 +213,30 @@ namespace Svr.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ItemViewModel model)
+        public async Task<IActionResult> Edit(ItemViewModel model, long[] selectedPerformers)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await districtRepository.UpdateAsync(new District { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, RegionId = model.RegionId });
+                    var filterSpecification = new DistrictPerformerSpecification(model.Id);
+                    await districtPerformerRepository.ClearAsync(filterSpecification);
+
+                    if (selectedPerformers != null)
+                    {
+                        foreach (var p in selectedPerformers)
+                        {
+                            await districtPerformerRepository.AddAsync(new DistrictPerformer { DistrictId = model.Id, PerformerId = p });
+                        }
+                    }
+                    
+                    await repository.UpdateAsync(new District { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, RegionId = model.RegionId });
+
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!(await districtRepository.EntityExistsAsync(model.Id)))
+                    if (!(await repository.EntityExistsAsync(model.Id)))
                     {
                         StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
                     }
@@ -226,7 +256,7 @@ namespace Svr.Web.Controllers
         // GET: Districts/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            var item = await districtRepository.GetByIdAsync(id);
+            var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
                 StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
@@ -242,7 +272,7 @@ namespace Svr.Web.Controllers
         {
             try
             {
-                await districtRepository.DeleteAsync(new District { Id = model.Id, Name = model.Name, Code = model.Code, });
+                await repository.DeleteAsync(new District { Id = model.Id, Name = model.Name, Code = model.Code, });
                 StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
                 return RedirectToAction(nameof(Index));
             }

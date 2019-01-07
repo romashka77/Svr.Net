@@ -36,11 +36,6 @@ namespace Svr.Infrastructure.Data
                     dataContext.CategoryDisputes.AddRange(GetPreconfiguredCategoryDisputeOut(dataContext));
                     await dataContext.SaveChangesAsync();
                 }
-                //if (!dataContext.Performers.Any())
-                //{
-                //    dataContext.Performers.AddRange(GetPreconfiguredPerformers());
-                //    await dataContext.SaveChangesAsync();
-                //}
                 if (!dataContext.DirName.Any())
                 {
                     //dataContext.DirName.AddRange(GetPreconfiguredDirNamePerformers(dataContext));
@@ -53,7 +48,14 @@ namespace Svr.Infrastructure.Data
                     dataContext.DirName.AddRange(GetPreconfiguredDirNameTypeApplicant(dataContext));
                     await dataContext.SaveChangesAsync();
                 }
-
+                if (!dataContext.Performers.Any())
+                {
+                    dataContext.Performers.AddRange(GetPreconfiguredPerformers());
+                    await dataContext.SaveChangesAsync();
+                }
+                dataContext.DistrictPerformers.Add(new DistrictPerformer { DistrictId = 1, PerformerId = 1 });
+                dataContext.DistrictPerformers.Add(new DistrictPerformer { DistrictId = 1, PerformerId = 2 });
+                await dataContext.SaveChangesAsync();
 
             }
             catch (Exception ex)
@@ -455,56 +457,47 @@ namespace Svr.Infrastructure.Data
                 new Dir {Name="Государственный орган", DirName=dirName }
             };
         }
-        private static IEnumerable<DirName> GetPreconfiguredDirNamePerformers(DataContext dataContext)
-        {
-            dirName = new DirName { Name = "Исполнители" };
-            dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredPerformers());
-            var resault = new List<DirName> { };
-            resault.Add(dirName);
-            return resault;
-        }
 
-        private static IEnumerable<Dir> GetPreconfiguredPerformers()
+        private static IEnumerable<Performer> GetPreconfiguredPerformers()
         {
-            return new List<Dir>()
+            return new List<Performer>()
             {
-                new Dir {Name="Белякина Маргарита Александровна", DirName=dirName },
-                new Dir {Name="Волосевич Юлия Сергеевна", DirName=dirName },
-                new Dir {Name="Арзамасцева Елена Геннадьевна", DirName=dirName },
-                new Dir {Name="Галузинская Екатерина Владимировна", DirName=dirName },
-                new Dir {Name="Горшкова Ирина Геннадьевна", DirName=dirName },
-                new Dir {Name="Грабко Александр Сергеевич", DirName=dirName },
-                new Dir {Name="Гунько Анастасия Игоревна", DirName=dirName },
-                new Dir {Name="Данилова Виктория Викторовна", DirName=dirName },
-                new Dir {Name="Завражнева Ольга Анатольевна", DirName=dirName },
-                new Dir {Name="Киянова Татьяна Ивановна", DirName=dirName },
-                new Dir {Name="Колотуша Марта Анатольевна", DirName=dirName },
-                new Dir {Name="Корнеева Елена Владимировна", DirName=dirName },
-                new Dir {Name="Корнишина Лариса Анатольевна", DirName=dirName },
-                new Dir {Name="Коханов Дмитрий Павлович", DirName=dirName },
-                new Dir {Name="Курьянова Елена Николаевна", DirName=dirName },
-                new Dir {Name="Лихачева Елена Николаевна", DirName=dirName },
-                new Dir {Name="Ломовцева Татьяна Александровна", DirName=dirName },
-                new Dir {Name="Николаев Алексей Евгеньевич", DirName=dirName },
-                new Dir {Name="Панова Ольга Анатольевна", DirName=dirName },
-                new Dir {Name="Платицына Елена Геннадьевна", DirName=dirName },
-                new Dir {Name="Решетова Ирина Николаевна", DirName=dirName },
-                new Dir {Name="Рыбкина Ольга Анатольевна", DirName=dirName },
-                new Dir {Name="Рыжкова Юлия Владимировна", DirName=dirName },
-                new Dir {Name="Сапрыкина Анастасия Александровна", DirName=dirName },
-                new Dir {Name="Сиднева Галина Васильевна", DirName=dirName },
-                new Dir {Name="Суворин Андрей Владимирович", DirName=dirName },
-                new Dir {Name="Сычева Светлана Алексеевна", DirName=dirName },
-                new Dir {Name="Тарнопольская Елена Сергеевна", DirName=dirName },
-                new Dir {Name="Топорков Илья Николаевич", DirName=dirName },
-                new Dir {Name="Труба Антонина Александровна", DirName=dirName },
-                new Dir {Name="Фатахутдинов Денис Фаилевич", DirName=dirName },
-                new Dir {Name="Черкасова Мария Сергеевна", DirName=dirName },
-                new Dir {Name="Четверикова Елена Витальевна", DirName=dirName },
-                new Dir {Name="Чубарова Юлия Юрьевна", DirName=dirName },
-                new Dir {Name="Шишкова Елена Алексеевна", DirName=dirName },
-                new Dir {Name="Яблочкина Татьяна Юрьевна", DirName=dirName }
+                new Performer {Name="Белякина Маргарита Александровна" },
+                new Performer {Name="Волосевич Юлия Сергеевна"},
+                new Performer {Name="Арзамасцева Елена Геннадьевна"},
+                new Performer {Name="Галузинская Екатерина Владимировна"},
+                new Performer {Name="Горшкова Ирина Геннадьевна"},
+                new Performer {Name="Грабко Александр Сергеевич"},
+                new Performer {Name="Гунько Анастасия Игоревна"},
+                new Performer {Name="Данилова Виктория Викторовна"},
+                new Performer {Name="Завражнева Ольга Анатольевна"},
+                new Performer {Name="Киянова Татьяна Ивановна"},
+                new Performer{Name="Колотуша Марта Анатольевна"},
+                new Performer{Name="Корнеева Елена Владимировна"},
+                new Performer{Name="Корнишина Лариса Анатольевна"},
+                new Performer{Name="Коханов Дмитрий Павлович"},
+                new Performer{Name="Курьянова Елена Николаевна"},
+                new Performer{Name="Лихачева Елена Николаевна"},
+                new Performer{Name="Ломовцева Татьяна Александровна"},
+                new Performer{Name="Николаев Алексей Евгеньевич"},
+                new Performer{Name="Панова Ольга Анатольевна"},
+                new Performer{Name="Платицына Елена Геннадьевна"},
+                new Performer{Name="Решетова Ирина Николаевна"},
+                new Performer{Name="Рыбкина Ольга Анатольевна"},
+                new Performer{Name="Рыжкова Юлия Владимировна"},
+                new Performer{Name="Сапрыкина Анастасия Александровна"},
+                new Performer{Name="Сиднева Галина Васильевна"},
+                new Performer{Name="Суворин Андрей Владимирович"},
+                new Performer{Name="Сычева Светлана Алексеевна"},
+                new Performer{Name="Тарнопольская Елена Сергеевна"},
+                new Performer{Name="Топорков Илья Николаевич"},
+                new Performer{Name="Труба Антонина Александровна"},
+                new Performer{Name="Фатахутдинов Денис Фаилевич"},
+                new Performer{Name="Черкасова Мария Сергеевна"},
+                new Performer{Name="Четверикова Елена Витальевна"},
+                new Performer{Name="Чубарова Юлия Юрьевна"},
+                new Performer{Name="Шишкова Елена Алексеевна"},
+                new Performer{Name="Яблочкина Татьяна Юрьевна"}
             };
         }
 

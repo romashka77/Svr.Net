@@ -40,6 +40,8 @@ namespace Svr.Web
 
             services.AddScoped<IRegionRepository, RegionRepository>();
             services.AddScoped<IDistrictRepository, DistrictRepository>();
+            services.AddScoped<IPerformerRepository, PerformerRepository>();
+            services.AddScoped <IDistrictPerformerRepository, DistrictPerformerRepository>();
 
             services.AddScoped<ICategoryDisputeRepository, CategoryDisputeRepositiry>();
             services.AddScoped<IGroupClaimRepository, GroupClaimRepository>();

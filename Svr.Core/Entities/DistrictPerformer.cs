@@ -9,7 +9,7 @@ namespace Svr.Core.Entities
     /// </summary>
     public class DistrictPerformer
     {
-        public int PerformerId { get; set; }
+        public long PerformerId { get; set; }
         public virtual Performer Performer { get; set; }
 
         public long DistrictId { get; set; }
