@@ -22,10 +22,16 @@ namespace Svr.Core.Entities
         /// </summary>
         [Display(Name = "Исполнители")]
         public virtual ICollection<DistrictPerformer> DistrictPerformers { get; set; }
-
+        /// <summary>
+        /// Колекция исков
+        /// </summary>
+        [Display(Name = "Иски")]
+        public virtual ICollection<Claim> Claims { get; set; }
+        
         public District()
         {
             DistrictPerformers = new List<DistrictPerformer>();
+            Claims = new List<Claim>();
         }
         public override string ToString() => "Район";
     }

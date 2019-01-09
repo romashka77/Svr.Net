@@ -1,0 +1,131 @@
+﻿@model IEnumerable<Svr.Core.Entities.Claim>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateReg)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateIn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sum)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedOnUtc)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UpdatedOnUtc)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryDispute)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupClaim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Performer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Person3rd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Plaintiff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Region)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Respondent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Сourt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateReg)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateIn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOnUtc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedOnUtc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryDispute.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupClaim.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performer.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person3rd.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Plaintiff.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Region.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Respondent.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Сourt.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

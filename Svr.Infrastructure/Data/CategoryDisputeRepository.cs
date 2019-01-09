@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
 {
-    public class CategoryDisputeRepositiry : EfRepository<CategoryDispute>, ICategoryDisputeRepository
+    public class CategoryDisputeRepository : EfRepository<CategoryDispute>, ICategoryDisputeRepository
     {
-        public CategoryDisputeRepositiry(DataContext dbContext) : base(dbContext)
+        public CategoryDisputeRepository(DataContext dbContext) : base(dbContext)
         {
 
         }

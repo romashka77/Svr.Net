@@ -54,7 +54,7 @@ namespace Svr.Web.Controllers
                 _owner = Int64.Parse(owner);
             }
             var filterSpecification = new ApplicantSpecification(_owner);
-            IEnumerable<Applicant> list = repository.List(filterSpecification);
+            IEnumerable<Applicant> list = await repository.ListAsync(filterSpecification);
             //фильтрация
             //if (_owner != null)
             //{

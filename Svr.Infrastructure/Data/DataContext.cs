@@ -25,9 +25,11 @@ namespace Svr.Infrastructure.Data
         public DbSet<Performer> Performers { get; set; }
         public DbSet<DistrictPerformer> DistrictPerformers { get; set; }
 
-        //public DbSet<Directory> Directories { get; set; }
+        public DbSet<Claim> Claims { get; set; }
 
-        public DbSet<Man> Men { get; set; }
+
+
+        //public DbSet<Man> Men { get; set; }
 
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
@@ -55,7 +57,9 @@ namespace Svr.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new DirConfiguration());
             modelBuilder.ApplyConfiguration(new ApplicantConfiguration());
 
-            modelBuilder.ApplyConfiguration(new ManConfiguration());
+            modelBuilder.ApplyConfiguration(new ClaimConfiguration());
+
+            //modelBuilder.ApplyConfiguration(new ManConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 

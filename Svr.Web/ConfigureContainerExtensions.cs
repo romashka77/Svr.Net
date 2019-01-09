@@ -43,13 +43,17 @@ namespace Svr.Web
             services.AddScoped<IPerformerRepository, PerformerRepository>();
             services.AddScoped <IDistrictPerformerRepository, DistrictPerformerRepository>();
 
-            services.AddScoped<ICategoryDisputeRepository, CategoryDisputeRepositiry>();
+            services.AddScoped<ICategoryDisputeRepository, CategoryDisputeRepository>();
             services.AddScoped<IGroupClaimRepository, GroupClaimRepository>();
             services.AddScoped<ISubjectClaimRepository, SubjectClaimRepository>();
 
             services.AddScoped<IDirNameRepository, DirNameRepository>();
             services.AddScoped<IDirRepository, DirRepository>();
             services.AddScoped<IApplicantRepository, ApplicantRepository>();
+
+            services.AddScoped<IClaimRepository, ClaimRepository>();
+
+
 
             services.AddScoped<IRegionService, RegionService>();
 

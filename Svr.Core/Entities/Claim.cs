@@ -42,12 +42,24 @@ namespace Svr.Core.Entities
         public long PerformerId { get; set; }
         public virtual Performer Performer { get; set; }
 
-
         [Display(Name = "Сумма иска")]
         public decimal Sum { get; set; }
 
+        public long PlaintiffId { get; set; }
+        [Display(Name = "Истец")]
+        [ForeignKey("PlaintiffId")]
+        public Applicant Plaintiff { get; set; }
 
+        public long RespondentId { get; set; }
+        [Display(Name = "Ответчик")]
+        [ForeignKey("RespondentId")]
+        public Applicant Respondent { get; set; }
 
-
+        public long Person3rdId { get; set; }
+        [Display(Name = "3-е лицо")]
+        [ForeignKey("Person3rdId")]
+        public Applicant Person3rd { get; set; }
+        //-----------
+        public override string ToString() => "Иск";
     }
 }

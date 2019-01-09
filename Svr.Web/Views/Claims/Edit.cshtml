@@ -1,0 +1,114 @@
+﻿@model Svr.Core.Entities.Claim
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>Claim</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RegionId" class="control-label"></label>
+                <select asp-for="RegionId" class="form-control" asp-items="ViewBag.RegionId"></select>
+                <span asp-validation-for="RegionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DistrictId" class="control-label"></label>
+                <select asp-for="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
+                <span asp-validation-for="DistrictId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateReg" class="control-label"></label>
+                <input asp-for="DateReg" class="form-control" />
+                <span asp-validation-for="DateReg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateIn" class="control-label"></label>
+                <input asp-for="DateIn" class="form-control" />
+                <span asp-validation-for="DateIn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryDisputeId" class="control-label"></label>
+                <select asp-for="CategoryDisputeId" class="form-control" asp-items="ViewBag.CategoryDisputeId"></select>
+                <span asp-validation-for="CategoryDisputeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GroupClaimId" class="control-label"></label>
+                <select asp-for="GroupClaimId" class="form-control" asp-items="ViewBag.GroupClaimId"></select>
+                <span asp-validation-for="GroupClaimId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="СourtId" class="control-label"></label>
+                <select asp-for="СourtId" class="form-control" asp-items="ViewBag.СourtId"></select>
+                <span asp-validation-for="СourtId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PerformerId" class="control-label"></label>
+                <select asp-for="PerformerId" class="form-control" asp-items="ViewBag.PerformerId"></select>
+                <span asp-validation-for="PerformerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sum" class="control-label"></label>
+                <input asp-for="Sum" class="form-control" />
+                <span asp-validation-for="Sum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlaintiffId" class="control-label"></label>
+                <select asp-for="PlaintiffId" class="form-control" asp-items="ViewBag.PlaintiffId"></select>
+                <span asp-validation-for="PlaintiffId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RespondentId" class="control-label"></label>
+                <select asp-for="RespondentId" class="form-control" asp-items="ViewBag.RespondentId"></select>
+                <span asp-validation-for="RespondentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Person3rdId" class="control-label"></label>
+                <select asp-for="Person3rdId" class="form-control" asp-items="ViewBag.Person3rdId"></select>
+                <span asp-validation-for="Person3rdId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="CreatedOnUtc" class="control-label"></label>
+                <input asp-for="CreatedOnUtc" class="form-control" />
+                <span asp-validation-for="CreatedOnUtc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdatedOnUtc" class="control-label"></label>
+                <input asp-for="UpdatedOnUtc" class="form-control" />
+                <span asp-validation-for="UpdatedOnUtc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

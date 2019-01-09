@@ -55,12 +55,8 @@ namespace Svr.Web.Controllers
             }
             //фильтрация
             var filterSpecification = new DirSpecification(_owner);
-            IEnumerable<Dir> list = repository.List(filterSpecification);
-            
-            //if (_owner != null)
-            //{
-            //    list = list.Where(d => d.DirNameId == _owner);
-            //}
+            IEnumerable<Dir> list = await repository.ListAsync(filterSpecification);
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));
@@ -131,10 +127,9 @@ namespace Svr.Web.Controllers
         #endregion
         #region Create
         // GET: Dirs/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SelectList dirName = new SelectList(repositoryDirName.ListAll(), "Id", "Name", 1);
-            ViewBag.DirNames = dirName;
+            ViewBag.DirNames = new SelectList(await repositoryDirName.ListAllAsync(), "Id", "Name", 1);
             return View();
         }
 
@@ -156,8 +151,7 @@ namespace Svr.Web.Controllers
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
-            SelectList dirName = new SelectList(repositoryDirName.ListAll(), "Id", "Name", 1);
-            ViewBag.DirNames = dirName;
+            ViewBag.DirNames = new SelectList(await repositoryDirName.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
         #endregion
@@ -173,8 +167,7 @@ namespace Svr.Web.Controllers
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, DirNameId = item.DirNameId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
-            SelectList dirName = new SelectList(repositoryDirName.ListAll(), "Id", "Name", 1);
-            ViewBag.DirNames = dirName;
+            ViewBag.DirNames = new SelectList(await repositoryDirName.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
 
@@ -205,8 +198,7 @@ namespace Svr.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            SelectList dirName = new SelectList(repositoryDirName.ListAll(), "Id", "Name", 1);
-            ViewBag.DirNames = dirName;
+            ViewBag.DirNames = new SelectList(await repositoryDirName.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
         #endregion
@@ -242,6 +234,6 @@ namespace Svr.Web.Controllers
             }
         }
         #endregion
-        
+
     }
 }

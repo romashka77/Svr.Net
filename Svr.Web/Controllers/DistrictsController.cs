@@ -59,7 +59,7 @@ namespace Svr.Web.Controllers
                 _owner = Int64.Parse(owner);
             }
             var filterSpecification = new DistrictSpecification(_owner);
-            var list = repository.List(filterSpecification);
+            IEnumerable<District> list = await repository.ListAsync(filterSpecification);
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -133,7 +133,7 @@ namespace Svr.Web.Controllers
         // GET: Districts/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            var item = await repository.GetByIdWithItemsAsync(id); 
+            var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
                 StatusMessage = $"Не удалось загрузить район с ID = {id}.";
@@ -146,10 +146,9 @@ namespace Svr.Web.Controllers
         #endregion
         #region Create
         // GET: Districts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.Regions = regions;
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
             return View();
         }
 
@@ -171,8 +170,7 @@ namespace Svr.Web.Controllers
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
-            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.Regions = regions;
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
         #endregion
@@ -214,7 +212,7 @@ namespace Svr.Web.Controllers
                             await districtPerformerRepository.AddAsync(new DistrictPerformer { DistrictId = model.Id, PerformerId = p });
                         }
                     }
-                    
+
                     await repository.UpdateAsync(new District { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, RegionId = model.RegionId });
 
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";

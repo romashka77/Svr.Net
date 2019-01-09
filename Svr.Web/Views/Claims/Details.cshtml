@@ -1,0 +1,120 @@
+﻿@model Svr.Core.Entities.Claim
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Claim</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DateReg)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateReg)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateIn)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateIn)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Sum)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Sum)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedOnUtc)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedOnUtc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedOnUtc)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedOnUtc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryDispute)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CategoryDispute.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.District)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.District.Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupClaim)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GroupClaim.Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Performer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Performer.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Person3rd)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Person3rd.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Plaintiff)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Plaintiff.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Region)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Region.Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Respondent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Respondent.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Сourt)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Сourt.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -60,7 +60,7 @@ namespace Svr.Web.Controllers
                 _owner = Int64.Parse(owner);
             }
             var filterSpecification = new PerformerSpecification(_owner);
-            var list = repository.List(filterSpecification);
+            IEnumerable<Performer> list = await repository.ListAsync(filterSpecification);
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -140,10 +140,9 @@ namespace Svr.Web.Controllers
         #endregion
         #region Create
         // GET: Performers/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.Regions = regions;
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
             return View();
         }
 
@@ -166,8 +165,7 @@ namespace Svr.Web.Controllers
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
-            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.Regions = regions;
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
         #endregion
@@ -239,29 +237,32 @@ namespace Svr.Web.Controllers
         // GET: Performers/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            if (id == null)
+            var item = await repository.GetByIdAsync(id);
+            if (item == null)
             {
-                return NotFound();
+                StatusMessage = $"Ошибка: Не удалось найти исполнителя с ID = {id}.";
+                return RedirectToAction(nameof(Index));
             }
-
-            //var performer = await _context.Performers.SingleOrDefaultAsync(m => m.Id == id);
-            //if (performer == null)
-            {
-                return NotFound();
-            }
-
-            return View(null);
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
+            return View(model);
         }
 
         // POST: Performers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+        public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
-            //var performer = await _context.Performers.SingleOrDefaultAsync(m => m.Id == id);
-            //_context.Performers.Remove(performer);
-            //await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await repository.DeleteAsync(new Performer { Id = model.Id, Name = model.Name });
+                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при удалении исполнителя с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
 

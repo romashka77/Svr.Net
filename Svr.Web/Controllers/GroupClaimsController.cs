@@ -17,7 +17,7 @@ namespace Svr.Web.Controllers
 {
     public class GroupClaimsController : Controller
     {
-        private IGroupClaimRepository groupClaimRepository;
+        private IGroupClaimRepository repository;
         private ICategoryDisputeRepository categoryDisputeRepository;
         private ILogger<GroupClaimsController> logger;
 
@@ -25,10 +25,10 @@ namespace Svr.Web.Controllers
         public string StatusMessage { get; set; }
 
         #region Конструктор
-        public GroupClaimsController(IGroupClaimRepository groupClaimRepository, ICategoryDisputeRepository categoryDisputeRepository, ILogger<GroupClaimsController> logger)
+        public GroupClaimsController(IGroupClaimRepository repository, ICategoryDisputeRepository categoryDisputeRepository, ILogger<GroupClaimsController> logger)
         {
             this.logger = logger;
-            this.groupClaimRepository = groupClaimRepository;
+            this.repository = repository;
             this.categoryDisputeRepository = categoryDisputeRepository;
         }
         #endregion
@@ -37,7 +37,7 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                groupClaimRepository = null;
+                repository = null;
                 categoryDisputeRepository = null;
                 logger = null;
             }
@@ -54,7 +54,7 @@ namespace Svr.Web.Controllers
                 _owner = Int64.Parse(owner);
             }
             var filterSpecification = new GroupClaimSpecification(_owner);
-            var list = groupClaimRepository.List(filterSpecification);
+            IEnumerable<GroupClaim> list = await repository.ListAsync(filterSpecification);
             //фильтрация
             if (owner != null)
             {
@@ -133,23 +133,22 @@ namespace Svr.Web.Controllers
         //GET: GroupClaims/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            var item = await groupClaimRepository.GetByIdWithItemsAsync(id);
+            var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
                 StatusMessage = $"Не удалось загрузить район с ID = {id}.";
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, CategoryDispute = item.CategoryDispute, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc,SubjectClaims = item.SubjectClaims };
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, CategoryDispute = item.CategoryDispute, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, SubjectClaims = item.SubjectClaims };
             return View(model);
         }
         #endregion
         #region Create
         // GET: GroupClaims/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SelectList categoryDisputes = new SelectList(categoryDisputeRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.CategoryDisputes = categoryDisputes;
+            ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", 1);
             return View();
         }
         // POST: GroupClaims/Create
@@ -161,7 +160,7 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var item = await groupClaimRepository.AddAsync(new GroupClaim { Code = model.Code, Name = model.Name, Description = model.Description, CategoryDisputeId = model.CategoryDisputeId });
+                var item = await repository.AddAsync(new GroupClaim { Code = model.Code, Name = model.Name, Description = model.Description, CategoryDisputeId = model.CategoryDisputeId });
                 if (item != null)
                 {
                     StatusMessage = $"Добавлена группа исков с Id={item.Id}, код={item.Code}, имя={item.Name}.";
@@ -169,8 +168,7 @@ namespace Svr.Web.Controllers
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
-            SelectList categoryDisputes = new SelectList(categoryDisputeRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.CategoryDisputes = categoryDisputes;
+            ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
         #endregion
@@ -178,7 +176,7 @@ namespace Svr.Web.Controllers
         // GET: GroupClaims/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
-            var item = await groupClaimRepository.GetByIdAsync(id);
+            var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
                 StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
@@ -186,8 +184,7 @@ namespace Svr.Web.Controllers
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
-            SelectList categoryDisputes = new SelectList(categoryDisputeRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.CategoryDisputes = categoryDisputes;
+            ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
         // POST: GroupClaims/Edit/5
@@ -201,12 +198,12 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await groupClaimRepository.UpdateAsync(new GroupClaim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId });
+                    await repository.UpdateAsync(new GroupClaim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId });
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!(await groupClaimRepository.EntityExistsAsync(model.Id)))
+                    if (!(await repository.EntityExistsAsync(model.Id)))
                     {
                         StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
                     }
@@ -217,8 +214,7 @@ namespace Svr.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            SelectList categoryDisputes = new SelectList(categoryDisputeRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.CategoryDisputes = categoryDisputes;
+            ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
         #endregion
@@ -226,7 +222,7 @@ namespace Svr.Web.Controllers
         // GET: GroupClaims/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            var item = await groupClaimRepository.GetByIdAsync(id);
+            var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
                 StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
@@ -242,7 +238,7 @@ namespace Svr.Web.Controllers
         {
             try
             {
-                await groupClaimRepository.DeleteAsync(new GroupClaim { Id = model.Id, Name = model.Name, Code = model.Code, });
+                await repository.DeleteAsync(new GroupClaim { Id = model.Id, Name = model.Name, Code = model.Code, });
                 StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
                 return RedirectToAction(nameof(Index));
             }
