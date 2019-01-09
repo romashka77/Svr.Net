@@ -17,6 +17,8 @@ namespace Svr.Web.Models
         CreatedOnUtcDesc,
         UpdatedOnUtcAsc,
         UpdatedOnUtcDesc,
+        LordAsc,    // по владельцу по возрастанию
+        LordDesc,    // по владельцу по убыванию
         OwnerAsc,    // по владельцу по возрастанию
         OwnerDesc    // по владельцу по убыванию
 

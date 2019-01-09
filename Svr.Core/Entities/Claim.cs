@@ -25,37 +25,37 @@ namespace Svr.Core.Entities
         [DataType(DataType.Date)]
         public DateTime? DateIn { get; set; }
 
-        public long CategoryDisputeId { get; set; }
+        public long? CategoryDisputeId { get; set; }
         [Display(Name = "Категория споров")]
         public virtual CategoryDispute CategoryDispute { get; set; }
 
-        public long GroupClaimId { get; set; }
+        public long? GroupClaimId { get; set; }
         [Display(Name = "Группа исков")]
         public virtual GroupClaim GroupClaim { get; set; }
 
-        public long СourtId { get; set; }
+        public long? СourtId { get; set; }
         [Display(Name = "Суд")]
         [ForeignKey("СourtId")]
         public virtual Dir Сourt { get; set; }
 
         [Display(Name = "Исполнитель")]
-        public long PerformerId { get; set; }
+        public long? PerformerId { get; set; }
         public virtual Performer Performer { get; set; }
 
         [Display(Name = "Сумма иска")]
-        public decimal Sum { get; set; }
+        public decimal? Sum { get; set; }
 
-        public long PlaintiffId { get; set; }
+        public long? PlaintiffId { get; set; }
         [Display(Name = "Истец")]
         [ForeignKey("PlaintiffId")]
         public Applicant Plaintiff { get; set; }
 
-        public long RespondentId { get; set; }
+        public long? RespondentId { get; set; }
         [Display(Name = "Ответчик")]
         [ForeignKey("RespondentId")]
         public Applicant Respondent { get; set; }
 
-        public long Person3rdId { get; set; }
+        public long? Person3rdId { get; set; }
         [Display(Name = "3-е лицо")]
         [ForeignKey("Person3rdId")]
         public Applicant Person3rd { get; set; }

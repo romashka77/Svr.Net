@@ -19,15 +19,17 @@ namespace Svr.Web.Controllers
     {
         private IClaimRepository repository;
         private IDistrictRepository districtRepository;
+        private IRegionRepository regionRepository;
         private ILogger<ClaimsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ClaimsController(IClaimRepository repository, IDistrictRepository districtRepository, ILogger<ClaimsController> logger)
+        public ClaimsController(IClaimRepository repository, IRegionRepository regionRepository, IDistrictRepository districtRepository, ILogger<ClaimsController> logger)
         {
             this.logger = logger;
             this.repository = repository;
+            this.regionRepository = regionRepository;
             this.districtRepository = districtRepository;
         }
         #endregion
@@ -38,6 +40,7 @@ namespace Svr.Web.Controllers
             {
                 repository = null;
                 districtRepository = null;
+                regionRepository = null;
                 logger = null;
             }
             base.Dispose(disposing);
@@ -46,7 +49,7 @@ namespace Svr.Web.Controllers
 
         #region Index
         // GET: Claims
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
             long? _owner = null;
             if (!String.IsNullOrEmpty(owner))
@@ -103,6 +106,13 @@ namespace Svr.Web.Controllers
             // пагинация
             var count = list.Count();
             var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+
+            long? _lord = null;
+            if (!String.IsNullOrEmpty(lord))
+            {
+                _lord = Int64.Parse(lord);
+            }
+
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -118,7 +128,7 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, districtRepository.ListAll().ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
+                FilterViewModel = new FilterViewModel(searchString, owner, (await districtRepository.ListAsync(new DistrictSpecification(_lord))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord, (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) })),
 
                 StatusMessage = StatusMessage
             };
@@ -145,9 +155,15 @@ namespace Svr.Web.Controllers
         #endregion
         #region Create
         // GET: Claims/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string lord = null, string owner = null)
         {
-            ViewBag.Districts = new SelectList(await districtRepository.ListAllAsync(), "Id", "Name", 1);
+            long? _lord = null;
+            if (!String.IsNullOrEmpty(lord))
+            {
+                _lord = Int64.Parse(lord);
+            }
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(),"Id", "Name", lord);
+            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(_lord)), "Id", "Name", owner);
             return View();
 
             //ViewData["CategoryDisputeId"] = new SelectList(_context.CategoryDisputes, "Id", "Name");
@@ -171,15 +187,16 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 // добавляем новый Район
-                var item = await repository.AddAsync(new Claim { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId });
+                var item = await repository.AddAsync(new Claim { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.District.RegionId, DistrictId = model.DistrictId });
                 if (item != null)
                 {
                     StatusMessage = $"Добавлен район с Id={item.Id}, код={item.Code}, имя={item.Name}.";
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Edit), new { id = item.Id });
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
-            ViewBag.Districts = new SelectList(await districtRepository.ListAllAsync(), "Id", "Name", 1);
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
+            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
             return View(model);
         }
         #endregion
@@ -195,7 +212,8 @@ namespace Svr.Web.Controllers
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId };
-            ViewBag.Districts = new SelectList(await districtRepository.ListAllAsync(), "Id", "Name", 1);
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
+            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
             return View(model);
         }
 
@@ -226,7 +244,8 @@ namespace Svr.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Districts = new SelectList(await districtRepository.ListAllAsync(), "Id", "Name", 1);
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
+            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
             return View(model);
         }
         #endregion

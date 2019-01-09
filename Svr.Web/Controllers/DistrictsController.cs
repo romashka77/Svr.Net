@@ -58,6 +58,7 @@ namespace Svr.Web.Controllers
             {
                 _owner = Int64.Parse(owner);
             }
+
             var filterSpecification = new DistrictSpecification(_owner);
             IEnumerable<District> list = await repository.ListAsync(filterSpecification);
             //фильтрация

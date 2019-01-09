@@ -12,6 +12,7 @@ namespace Svr.Web.Models
         public SortState DescriptionSort { get; private set; }    // значение для сортировки по описанию
         public SortState CreatedOnUtcSort { get; private set; }    // значение для сортировки по дате
         public SortState UpdatedOnUtcSort { get; private set; }    // значение для сортировки по дате
+        public SortState LordSort { get; private set; }    // значение для сортировки по владельцу
         public SortState OwnerSort { get; private set; }    // значение для сортировки по владельцу
         public SortState Current { get; private set; }     // текущее значение сортировки
         public bool Up { get; private set; }  // Сортировка по возрастанию или убыванию
@@ -24,10 +25,11 @@ namespace Svr.Web.Models
             DescriptionSort = SortState.DescriptionAsc;
             CreatedOnUtcSort = SortState.CreatedOnUtcAsc;
             UpdatedOnUtcSort = SortState.UpdatedOnUtcAsc;
+            LordSort = SortState.LordAsc;
             OwnerSort = SortState.OwnerAsc;
             Up = true;
 
-            if (sortOrder == SortState.CodeDesc || sortOrder == SortState.NameDesc || sortOrder == SortState.DescriptionDesc || sortOrder == SortState.CreatedOnUtcDesc || sortOrder == SortState.UpdatedOnUtcDesc || sortOrder == SortState.OwnerDesc)
+            if (sortOrder == SortState.CodeDesc || sortOrder == SortState.NameDesc || sortOrder == SortState.DescriptionDesc || sortOrder == SortState.CreatedOnUtcDesc || sortOrder == SortState.UpdatedOnUtcDesc || sortOrder == SortState.OwnerDesc || sortOrder == SortState.LordDesc)
             {
                 Up = false;
             }
@@ -67,6 +69,12 @@ namespace Svr.Web.Models
                 case SortState.OwnerDesc:
                     Current = OwnerSort = SortState.OwnerAsc;
                     break;
+                case SortState.LordAsc:
+                    Current = LordSort = SortState.LordDesc;
+                    break;
+                case SortState.LordDesc:
+                    Current = LordSort = SortState.LordAsc;
+                    break;
                 default:
                     Current = NameSort = SortState.NameDesc;
                     break;
@@ -77,6 +85,7 @@ namespace Svr.Web.Models
             CreatedOnUtcSort = sortOrder == SortState.CreatedOnUtcAsc ? SortState.CreatedOnUtcDesc : SortState.CreatedOnUtcAsc;
             UpdatedOnUtcSort = sortOrder == SortState.UpdatedOnUtcAsc ? SortState.UpdatedOnUtcDesc : SortState.UpdatedOnUtcAsc;
             OwnerSort = sortOrder == SortState.OwnerAsc ? SortState.OwnerDesc : SortState.OwnerAsc;
+            LordSort = sortOrder == SortState.LordAsc ? SortState.LordDesc : SortState.LordAsc;
             Current = sortOrder;
         }
     }

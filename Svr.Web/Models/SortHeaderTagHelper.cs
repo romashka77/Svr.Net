@@ -15,6 +15,7 @@ namespace Svr.Web.Models
         //public string CurrentFilterName { get; set; }// фильтрация
         public string SearchString { get; set; }// фильтрация
         public string CurrentFilterOwner { get; set; }
+        public string CurrentFilterLord { get; set; }
 
         public SortState Property { get; set; } // значение текущего свойства, для которого создается тег
         public SortState Current { get; set; }  // значение активного свойства, выбранного для сортировки
@@ -36,7 +37,7 @@ namespace Svr.Web.Models
         {
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
             output.TagName = "a";
-            string url = urlHelper.Action(Action, new { sortOrder = Property, searchString = SearchString, owner = CurrentFilterOwner, });
+            string url = urlHelper.Action(Action, new { sortOrder = Property, searchString = SearchString, owner = CurrentFilterOwner, lord = CurrentFilterLord, });
             output.Attributes.SetAttribute("href", url);
             // если текущее свойство имеет значение CurrentSort
             if (((Current == SortState.CodeAsc) && (Property == SortState.CodeDesc)) || ((Current == SortState.CodeDesc) && (Property == SortState.CodeAsc)) ||
@@ -44,7 +45,8 @@ namespace Svr.Web.Models
                 ((Current == SortState.DescriptionAsc) && (Property == SortState.DescriptionDesc)) || ((Current == SortState.DescriptionDesc) && (Property == SortState.DescriptionAsc)) ||
                 ((Current == SortState.CreatedOnUtcAsc) && (Property == SortState.CreatedOnUtcDesc)) || ((Current == SortState.CreatedOnUtcDesc) && (Property == SortState.CreatedOnUtcAsc)) ||
                 ((Current == SortState.UpdatedOnUtcAsc) && (Property == SortState.UpdatedOnUtcDesc)) || ((Current == SortState.UpdatedOnUtcDesc) && (Property == SortState.UpdatedOnUtcAsc)) ||
-                ((Current == SortState.OwnerAsc) && (Property == SortState.OwnerDesc)) || ((Current == SortState.OwnerDesc) && (Property == SortState.OwnerAsc))
+                ((Current == SortState.OwnerAsc) && (Property == SortState.OwnerDesc)) || ((Current == SortState.OwnerDesc) && (Property == SortState.OwnerAsc))||
+                ((Current == SortState.LordAsc) && (Property == SortState.LordDesc)) || ((Current == SortState.LordDesc) && (Property == SortState.LordAsc))
                 )
             {
                 TagBuilder tag = new TagBuilder("i");

@@ -1,33 +1,19 @@
-﻿@model Svr.Core.Entities.Claim
-
+﻿@using Svr.Core.Entities
+@model Svr.Web.Models.ClaimsViewModels.ItemViewModel
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = $"Подробности {Model.Name}";
 }
 
-<h2>Details</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div>
-    <h4>Claim</h4>
+    <h4>@Model</h4>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
+        <a asp-action="Index" class="btn btn-default">Назад</a>
+    </div>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.DateReg)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateReg)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.DateIn)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateIn)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Sum)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Sum)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Code)
         </dt>
@@ -35,16 +21,16 @@
             @Html.DisplayFor(model => model.Code)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.CreatedOnUtc)
@@ -59,62 +45,20 @@
             @Html.DisplayFor(model => model.UpdatedOnUtc)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CategoryDispute)
+            @Html.DisplayNameFor(model => model.Region)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CategoryDispute.Name)
+            <a asp-controller="Regions" asp-action="Details" asp-route-id="@Model.RegionId">@Model.Region.Name</a>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.District)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.District.Code)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.GroupClaim)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.GroupClaim.Code)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Performer)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Performer.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Person3rd)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Person3rd.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Plaintiff)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Plaintiff.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Region)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Region.Code)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Respondent)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Respondent.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Сourt)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Сourt.Name)
+            <a asp-controller="Districts" asp-action="Details" asp-route-id="@Model.DistrictId">@Model.District.Name</a>
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
+    <a asp-action="Index" class="btn btn-default">Назад</a>
 </div>

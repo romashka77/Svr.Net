@@ -1,102 +1,63 @@
-﻿@model Svr.Core.Entities.Claim
+﻿@model Svr.Web.Models.ClaimsViewModels.ItemViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Регистрация нового иска";
 }
 
-<h2>Create</h2>
-
-<h4>Claim</h4>
+<h2>@ViewData["Title"]</h2>
+<h4>@Model</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="RegionId" class="control-label"></label>
-                <select asp-for="RegionId" class ="form-control" asp-items="ViewBag.RegionId"></select>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="DistrictId" class="control-label"></label>
-                <select asp-for="DistrictId" class ="form-control" asp-items="ViewBag.DistrictId"></select>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="DateReg" class="control-label"></label>
-                <input asp-for="DateReg" class="form-control" />
-                <span asp-validation-for="DateReg" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Region, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.RegionId, ViewBag.Regions as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.RegionId, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="DateIn" class="control-label"></label>
-                <input asp-for="DateIn" class="form-control" />
-                <span asp-validation-for="DateIn" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.District, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DistrictId, ViewBag.Districts as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="CategoryDisputeId" class="control-label"></label>
-                <select asp-for="CategoryDisputeId" class ="form-control" asp-items="ViewBag.CategoryDisputeId"></select>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="GroupClaimId" class="control-label"></label>
-                <select asp-for="GroupClaimId" class ="form-control" asp-items="ViewBag.GroupClaimId"></select>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить" class="btn btn-default" />
             </div>
-            <div class="form-group">
-                <label asp-for="СourtId" class="control-label"></label>
-                <select asp-for="СourtId" class ="form-control" asp-items="ViewBag.СourtId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="PerformerId" class="control-label"></label>
-                <select asp-for="PerformerId" class ="form-control" asp-items="ViewBag.PerformerId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sum" class="control-label"></label>
-                <input asp-for="Sum" class="form-control" />
-                <span asp-validation-for="Sum" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PlaintiffId" class="control-label"></label>
-                <select asp-for="PlaintiffId" class ="form-control" asp-items="ViewBag.PlaintiffId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="RespondentId" class="control-label"></label>
-                <select asp-for="RespondentId" class ="form-control" asp-items="ViewBag.RespondentId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Person3rdId" class="control-label"></label>
-                <select asp-for="Person3rdId" class ="form-control" asp-items="ViewBag.Person3rdId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedOnUtc" class="control-label"></label>
-                <input asp-for="CreatedOnUtc" class="form-control" />
-                <span asp-validation-for="CreatedOnUtc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedOnUtc" class="control-label"></label>
-                <input asp-for="UpdatedOnUtc" class="form-control" />
-                <span asp-validation-for="UpdatedOnUtc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+}
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-default">Назад</a>
 </div>
 
 @section Scripts {

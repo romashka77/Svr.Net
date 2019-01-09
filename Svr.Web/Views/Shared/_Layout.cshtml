@@ -17,7 +17,7 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -42,7 +42,8 @@
                         <li><a asp-area="" asp-controller="SubjectClaims" asp-action="Index">Предметы исков</a></li>
                         <li><a asp-area="" asp-controller="DirNames" asp-action="Index">Справочники</a></li>
                         <li><a asp-area="" asp-controller="Applicants" asp-action="Index">Стороны процесса</a></li>
-                        <li><a asp-area="" asp-controller="Roles">Роли</a></li>
+                        <li><a asp-area="" asp-controller="Claims" asp-action="Index">Иски</a></li>
+                        <li><a asp-area="" asp-controller="Roles" asp-action="Index">Роли</a></li>
                     }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
