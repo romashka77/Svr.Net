@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Svr.Core.Entities
@@ -18,7 +19,8 @@ namespace Svr.Core.Entities
         public long? OpfId { get; set; }
 
         [Display(Name = "Дата рождения")]
-        public DataType? Born { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? Born { get; set; }
 
         [Display(Name = "Полное наименование", Prompt = "Введите полное наименование")]
         public string FullName { get; set; }

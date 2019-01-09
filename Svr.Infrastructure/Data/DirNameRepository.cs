@@ -25,13 +25,13 @@ namespace Svr.Infrastructure.Data
             return Entities.Include(r => r.Dirs).FirstOrDefault(r => r.Id == id);
         }
 
-        public virtual Task<DirName> GetByIdWithItemsAsync(long? id)
+        public virtual async Task<DirName> GetByIdWithItemsAsync(long? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.Dirs).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(r => r.Dirs).FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }

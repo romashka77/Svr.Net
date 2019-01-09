@@ -21,13 +21,13 @@ namespace Svr.Infrastructure.Data
             }
             return Entities.Include(d => d.GroupClaim).FirstOrDefault(r => r.Id == id);
         }
-        public virtual Task<SubjectClaim> GetByIdWithItemsAsync(long? id)
+        public virtual async Task<SubjectClaim> GetByIdWithItemsAsync(long? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.GroupClaim).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(r => r.GroupClaim).FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }

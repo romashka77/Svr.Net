@@ -35,11 +35,15 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     <li><a asp-area="" asp-controller="Regions" asp-action="Index">Регионы</a></li>
                     <li><a asp-area="" asp-controller="Districts" asp-action="Index">Районы</a></li>
-                    <li><a asp-area="" asp-controller="CategoryDisputes" asp-action="Index">Категории споров</a></li>
-                    <li><a asp-area="" asp-controller="GroupClaims" asp-action="Index">Группы исков</a></li>
-                    <li><a asp-area="" asp-controller="SubjectClaims" asp-action="Index">Предметы исков</a></li>
-                    <li><a asp-area="" asp-controller="DirNames" asp-action="Index">Справочники</a></li>
-                    <li><a asp-area="" asp-controller="Applicants" asp-action="Index">Стороны процесса</a></li>
+                    @if (User.IsInRole("Администратор") || User.IsInRole("Администратор ОПФР") || User.IsInRole("Администратор УПФР"))
+                    {
+                        <li><a asp-area="" asp-controller="CategoryDisputes" asp-action="Index">Категории споров</a></li>
+                        <li><a asp-area="" asp-controller="GroupClaims" asp-action="Index">Группы исков</a></li>
+                        <li><a asp-area="" asp-controller="SubjectClaims" asp-action="Index">Предметы исков</a></li>
+                        <li><a asp-area="" asp-controller="DirNames" asp-action="Index">Справочники</a></li>
+                        <li><a asp-area="" asp-controller="Applicants" asp-action="Index">Стороны процесса</a></li>
+                        <li><a asp-area="" asp-controller="Roles">Роли</a></li>
+                    }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -76,9 +80,9 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-    
+
     <script type="text/javascript" src="@Url.Content("~/assets/bundle.js")"></script>
-    
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

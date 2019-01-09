@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
 {
@@ -21,15 +19,15 @@ namespace Svr.Infrastructure.Data
                 throw new ArgumentNullException(nameof(id));
             }
             //return Entities.Include(r => r.Districts).FirstOrDefault(r => r.Id == id);
-            return Entities.Include(d => d.Region).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(d => d.Region).Include(d => d.DistrictPerformers).ThenInclude(e => e.Performer).SingleOrDefault(m => m.Id == id);
         }
-        public virtual Task<District> GetByIdWithItemsAsync(long? id)
+        public virtual async Task<District> GetByIdWithItemsAsync(long? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.Region).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(d => d.Region).Include(d => d.DistrictPerformers).ThenInclude(e => e.Performer).SingleOrDefaultAsync(m => m.Id == id);
         }
     }
 }

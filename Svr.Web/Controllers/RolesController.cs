@@ -11,7 +11,7 @@ using Svr.Web.Models.RoleViewModels;
 
 namespace Svr.Web.Controllers
 {
-    [Authorize(Roles = "Администратор")]
+    [Authorize(Roles = "Администратор, Администратор ОПФР, Администратор УПФР")]
     public class RolesController : Controller
     {
         RoleManager<IdentityRole> roleManager;
@@ -23,7 +23,9 @@ namespace Svr.Web.Controllers
         }
         public IActionResult Index() => View(roleManager.Roles.ToList());
 
+        [Authorize(Roles = "Администратор")]
         public IActionResult Create() => View();
+        [Authorize(Roles = "Администратор")]
         [HttpPost]
         public async Task<IActionResult> Create(string name)
         {
@@ -44,8 +46,9 @@ namespace Svr.Web.Controllers
             }
             return View(name);
         }
-
+        
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Delete(string id)
         {
             IdentityRole role = await roleManager.FindByIdAsync(id);

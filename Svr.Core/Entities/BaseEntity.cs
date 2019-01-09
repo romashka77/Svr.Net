@@ -18,11 +18,13 @@ namespace Svr.Core.Entities
         /// <summary>
         /// Дата и время создания
         /// </summary>
+        [DataType(DataType.Date)]
         [Display(Name = "Дата создания")]
         public DateTime CreatedOnUtc { get; set; }
         /// <summary>
         /// Дата и время обновления
         /// </summary>
+        [DataType(DataType.Date)]
         [Display(Name = "Дата изменения")]
         public DateTime UpdatedOnUtc { get; set; }
         //[NotMapped]//чтобы не создавался столбец в таблице.

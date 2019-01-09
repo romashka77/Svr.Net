@@ -21,15 +21,15 @@ namespace Svr.Infrastructure.Data
                 throw new ArgumentNullException(nameof(id));
             }
             //return Entities.Include(r => r.Districts).FirstOrDefault(r => r.Id == id);
-            return Entities.Include(d => d.DistrictPerformers).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(d =>d.Region).Include(d => d.DistrictPerformers).ThenInclude(e => e.District).SingleOrDefault(m => m.Id == id);
         }
-        public virtual Task<Performer> GetByIdWithItemsAsync(long? id)
+        public virtual async Task<Performer> GetByIdWithItemsAsync(long? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.DistrictPerformers).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(d => d.Region).Include(d => d.DistrictPerformers).ThenInclude(e => e.District).SingleOrDefaultAsync(m => m.Id == id);
         }
     }
 }

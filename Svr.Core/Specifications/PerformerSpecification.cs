@@ -8,9 +8,10 @@ namespace Svr.Core.Specifications
 {
     public class PerformerSpecification : BaseSpecification<Performer>
     {
-        public PerformerSpecification(long? id) : base(i => (!id.HasValue/* || i.DistrictPerformers.Where(d =>d.)*/))
+        public PerformerSpecification(long? id) : base(i => (!id.HasValue || i.Region.Id == id))
         {
-
+            AddInclude(d => d.Region);
+            AddInclude(d => d.DistrictPerformers);
         }
     }
 }

@@ -59,12 +59,8 @@ namespace Svr.Web.Controllers
                 _owner = Int64.Parse(owner);
             }
             var filterSpecification = new DistrictSpecification(_owner);
-            IEnumerable<District> list = repository.List(filterSpecification);
+            var list = repository.List(filterSpecification);
             //фильтрация
-            if (_owner != null)
-            {
-                list = list.Where(d => d.RegionId == _owner);
-            }
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));
@@ -137,12 +133,7 @@ namespace Svr.Web.Controllers
         // GET: Districts/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-            District item = await repository.Table().Include(e => e.Region).Include(e => e.DistrictPerformers).ThenInclude(e => e.Performer).SingleOrDefaultAsync(m => m.Id == id);
-            //var item = await repository.GetByIdWithItemsAsync(id);
+            var item = await repository.GetByIdWithItemsAsync(id); 
             if (item == null)
             {
                 StatusMessage = $"Не удалось загрузить район с ID = {id}.";
@@ -189,12 +180,8 @@ namespace Svr.Web.Controllers
         // get: districts/edit/5
         public async Task<ActionResult> Edit(long? id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-            //District item = await repository.GetByIdAsync(id);
-            District item = await repository.Table().Include(e => e.DistrictPerformers).SingleOrDefaultAsync(m => m.Id == id);
+            //District item = await repository.Table().Include(e => e.DistrictPerformers).SingleOrDefaultAsync(m => m.Id == id);
+            var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
                 StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
@@ -202,10 +189,8 @@ namespace Svr.Web.Controllers
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictPerformers = item.DistrictPerformers };
-            SelectList regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
-            ViewBag.Regions = regions;
-
-            ViewBag.Performers = await performerRepository.ListAllAsync();
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
+            ViewBag.Performers = await performerRepository.ListAsync(new PerformerSpecification(model.RegionId));
             return View(model);
         }
         // POST: Districts/Edit/5
@@ -247,8 +232,8 @@ namespace Svr.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            SelectList regions = new SelectList(regionRepository.ListAll(), "Id", "Name", 1);
-            ViewBag.Regions = regions;
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
+            ViewBag.Performers = await performerRepository.ListAsync(new PerformerSpecification(model.RegionId));
             return View(model);
         }
         #endregion

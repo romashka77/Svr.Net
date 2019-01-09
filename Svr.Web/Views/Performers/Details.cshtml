@@ -1,13 +1,17 @@
-﻿@model Svr.Core.Entities.Performer
-
+﻿@using Svr.Core.Entities
+@model Svr.Web.Models.PerformersViewModels.ItemViewModel
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = $"Подробности {Model.Name}";
 }
 
-<h2>Details</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div>
-    <h4>Performer</h4>
+    <h4>@Model</h4>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
+        <a asp-action="Index" class="btn btn-default">Назад</a>
+    </div>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -15,6 +19,12 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.CreatedOnUtc)
@@ -28,9 +38,28 @@
         <dd>
             @Html.DisplayFor(model => model.UpdatedOnUtc)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Region)
+        </dt>
+        <dd>
+            <a asp-controller="Regions" asp-action="Details" asp-route-id="@Model.RegionId">@Model.Region.Name</a>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DistrictPerformers)
+        </dt>
+        <dd>
+            <ul>
+                @foreach (DistrictPerformer item in Model.DistrictPerformers)
+                {
+                    <li>
+                        <a asp-controller="Districts" asp-action="Details" asp-route-id="@item.DistrictId">@item.District.Name</a>
+                    </li>
+                }
+            </ul>
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
+    <a asp-action="Index" class="btn btn-default">Назад</a>
 </div>

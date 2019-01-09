@@ -53,10 +53,12 @@ namespace Svr.Infrastructure.Data
                     dataContext.Performers.AddRange(GetPreconfiguredPerformers());
                     await dataContext.SaveChangesAsync();
                 }
-                dataContext.DistrictPerformers.Add(new DistrictPerformer { DistrictId = 1, PerformerId = 1 });
-                dataContext.DistrictPerformers.Add(new DistrictPerformer { DistrictId = 1, PerformerId = 2 });
-                await dataContext.SaveChangesAsync();
-
+                if (!dataContext.DistrictPerformers.Any())
+                {
+                    dataContext.DistrictPerformers.Add(new DistrictPerformer { DistrictId = 1, PerformerId = 1 });
+                    dataContext.DistrictPerformers.Add(new DistrictPerformer { DistrictId = 1, PerformerId = 2 });
+                    await dataContext.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -462,49 +464,49 @@ namespace Svr.Infrastructure.Data
         {
             return new List<Performer>()
             {
-                new Performer {Name="Белякина Маргарита Александровна" },
-                new Performer {Name="Волосевич Юлия Сергеевна"},
-                new Performer {Name="Арзамасцева Елена Геннадьевна"},
-                new Performer {Name="Галузинская Екатерина Владимировна"},
-                new Performer {Name="Горшкова Ирина Геннадьевна"},
-                new Performer {Name="Грабко Александр Сергеевич"},
-                new Performer {Name="Гунько Анастасия Игоревна"},
-                new Performer {Name="Данилова Виктория Викторовна"},
-                new Performer {Name="Завражнева Ольга Анатольевна"},
-                new Performer {Name="Киянова Татьяна Ивановна"},
-                new Performer{Name="Колотуша Марта Анатольевна"},
-                new Performer{Name="Корнеева Елена Владимировна"},
-                new Performer{Name="Корнишина Лариса Анатольевна"},
-                new Performer{Name="Коханов Дмитрий Павлович"},
-                new Performer{Name="Курьянова Елена Николаевна"},
-                new Performer{Name="Лихачева Елена Николаевна"},
-                new Performer{Name="Ломовцева Татьяна Александровна"},
-                new Performer{Name="Николаев Алексей Евгеньевич"},
-                new Performer{Name="Панова Ольга Анатольевна"},
-                new Performer{Name="Платицына Елена Геннадьевна"},
-                new Performer{Name="Решетова Ирина Николаевна"},
-                new Performer{Name="Рыбкина Ольга Анатольевна"},
-                new Performer{Name="Рыжкова Юлия Владимировна"},
-                new Performer{Name="Сапрыкина Анастасия Александровна"},
-                new Performer{Name="Сиднева Галина Васильевна"},
-                new Performer{Name="Суворин Андрей Владимирович"},
-                new Performer{Name="Сычева Светлана Алексеевна"},
-                new Performer{Name="Тарнопольская Елена Сергеевна"},
-                new Performer{Name="Топорков Илья Николаевич"},
-                new Performer{Name="Труба Антонина Александровна"},
-                new Performer{Name="Фатахутдинов Денис Фаилевич"},
-                new Performer{Name="Черкасова Мария Сергеевна"},
-                new Performer{Name="Четверикова Елена Витальевна"},
-                new Performer{Name="Чубарова Юлия Юрьевна"},
-                new Performer{Name="Шишкова Елена Алексеевна"},
-                new Performer{Name="Яблочкина Татьяна Юрьевна"}
+                new Performer {Name="Белякина Маргарита Александровна" , Region = region },
+                new Performer {Name="Волосевич Юлия Сергеевна", Region = region },
+                new Performer {Name="Арзамасцева Елена Геннадьевна", Region = region },
+                new Performer {Name="Галузинская Екатерина Владимировна", Region = region },
+                new Performer {Name="Горшкова Ирина Геннадьевна", Region = region },
+                new Performer {Name="Грабко Александр Сергеевич", Region = region },
+                new Performer {Name="Гунько Анастасия Игоревна", Region = region },
+                new Performer {Name="Данилова Виктория Викторовна", Region = region },
+                new Performer {Name="Завражнева Ольга Анатольевна", Region = region },
+                new Performer {Name="Киянова Татьяна Ивановна", Region = region },
+                new Performer{Name="Колотуша Марта Анатольевна", Region = region },
+                new Performer{Name="Корнеева Елена Владимировна", Region = region },
+                new Performer{Name="Корнишина Лариса Анатольевна", Region = region },
+                new Performer{Name="Коханов Дмитрий Павлович", Region = region },
+                new Performer{Name="Курьянова Елена Николаевна", Region = region },
+                new Performer{Name="Лихачева Елена Николаевна", Region = region },
+                new Performer{Name="Ломовцева Татьяна Александровна", Region = region },
+                new Performer{Name="Николаев Алексей Евгеньевич", Region = region },
+                new Performer{Name="Панова Ольга Анатольевна", Region = region },
+                new Performer{Name="Платицына Елена Геннадьевна", Region = region },
+                new Performer{Name="Решетова Ирина Николаевна", Region = region },
+                new Performer{Name="Рыбкина Ольга Анатольевна", Region = region },
+                new Performer{Name="Рыжкова Юлия Владимировна", Region = region },
+                new Performer{Name="Сапрыкина Анастасия Александровна", Region = region },
+                new Performer{Name="Сиднева Галина Васильевна", Region = region },
+                new Performer{Name="Суворин Андрей Владимирович", Region = region },
+                new Performer{Name="Сычева Светлана Алексеевна", Region = region },
+                new Performer{Name="Тарнопольская Елена Сергеевна", Region = region },
+                new Performer{Name="Топорков Илья Николаевич", Region = region },
+                new Performer{Name="Труба Антонина Александровна", Region = region },
+                new Performer{Name="Фатахутдинов Денис Фаилевич", Region = region },
+                new Performer{Name="Черкасова Мария Сергеевна", Region = region },
+                new Performer{Name="Четверикова Елена Витальевна", Region = region },
+                new Performer{Name="Чубарова Юлия Юрьевна", Region = region },
+                new Performer{Name="Шишкова Елена Алексеевна", Region = region },
+                new Performer{Name="Яблочкина Татьяна Юрьевна", Region = region }
             };
         }
 
         private static IEnumerable<Region> GetPreconfiguredRegions()
         {
             region = new Region { Code = "079", Name = "Тамбовская область", Description = "Каталог ОПФР по Тамбовской области" };
-            return new List<Region>() { region };
+            return new List<Region>() { region, new Region { Code = "100", Name = "Московская область", Description = "Каталог ОПФР по Московской области" } };
         }
 
         private static IEnumerable<District> GetPreconfiguredDistricts()

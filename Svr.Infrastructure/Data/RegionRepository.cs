@@ -22,16 +22,16 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.Districts).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(r => r.Districts).Include(p => p.Performers).FirstOrDefault(r => r.Id == id);
         }
 
-        public virtual Task<Region> GetByIdWithItemsAsync(long? id)
+        public virtual async Task<Region> GetByIdWithItemsAsync(long? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.Districts).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(r => r.Districts).Include(p =>p.Performers).FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }

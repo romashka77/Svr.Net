@@ -121,7 +121,7 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить регион с ID {id}.");
             }
-            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, Districts = region.Districts, StatusMessage = StatusMessage, CreatedOnUtc = region.CreatedOnUtc, UpdatedOnUtc = region.UpdatedOnUtc };
+            var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, Districts = region.Districts, StatusMessage = StatusMessage, CreatedOnUtc = region.CreatedOnUtc, UpdatedOnUtc = region.UpdatedOnUtc,Performers = region.Performers };
             return View(model);
         }
         #endregion

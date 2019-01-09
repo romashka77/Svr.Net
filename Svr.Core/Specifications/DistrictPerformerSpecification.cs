@@ -9,7 +9,6 @@ namespace Svr.Core.Specifications
     {
         public DistrictPerformerSpecification(long? id) : base(i => (!id.HasValue || i.DistrictId == id))
         {
-            //AddInclude(d => d.District);
         }
 
     }

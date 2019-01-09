@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using Svr.Web.Models.DirNameViewModels;
 
 namespace Svr.Web.Controllers
 {
+    [Authorize(Roles = "Администратор")]
     public class DirNamesController : Controller
     {
         private ILogger<DirNamesController> logger;

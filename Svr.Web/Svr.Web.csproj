@@ -48,6 +48,7 @@
     <Folder Include="Models\DirNameViewModels\" />
     <Folder Include="Models\DirViewModels\" />
     <Folder Include="Models\ApplicantViewModels\" />
+    <Folder Include="Models\PerformersViewModels\" />
     <Folder Include="Views\Applicants\" />
   </ItemGroup>
 

@@ -11,7 +11,7 @@ namespace Svr.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Performer> builder)
         {
-            //builder.HasMany(d => d.DistrictPerformers).WithOne(r => r.Performer).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(d => d.Region).WithMany(r => r.Performers).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

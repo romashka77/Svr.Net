@@ -138,7 +138,7 @@ namespace Svr.Infrastructure.Data
                 await Entities.AddAsync(entity);
                 i++;
             }
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             return i;
         }
 

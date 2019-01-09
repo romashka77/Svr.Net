@@ -41,17 +41,27 @@
         </dd>
         <dt>@Html.DisplayNameFor(model => model.Districts)</dt>
         <dd>
-            @*@Html.Partial("~/Views/Districts/List.cshtml", Model.Districts)*@
             <ul>
                 @foreach (District district in Model.Districts)
                 {
                     <li>
                         <a asp-controller="Districts" asp-action="Details" asp-route-id="@district.Id">@district.Code @district.Name</a>
-                        @*@Html.RouteLink($"{district.Name} ({district.Description})", new { action = "Details", controller = "Districts", id = district.Id })*@
                     </li>
                 }
             </ul>
         </dd>
+        <dt>@Html.DisplayNameFor(model => model.Performers)</dt>
+        <dd>
+            <ul>
+                @foreach (Performer performer in Model.Performers)
+                {
+                    <li>
+                        <a asp-controller="Performers" asp-action="Details" asp-route-id="@performer.Id">@performer.Name</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+
     </dl>
 </div>
 <div>
