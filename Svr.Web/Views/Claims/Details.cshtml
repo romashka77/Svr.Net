@@ -48,13 +48,13 @@
             @Html.DisplayNameFor(model => model.Region)
         </dt>
         <dd>
-            <a asp-controller="Regions" asp-action="Details" asp-route-id="@Model.RegionId">@Model.Region.Name</a>
+            <a asp-controller="Regions" asp-action="Details" asp-route-id="@Model.Region.Id">@Model.Region.Name</a>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.District)
         </dt>
         <dd>
-            <a asp-controller="Districts" asp-action="Details" asp-route-id="@Model.DistrictId">@Model.District.Name</a>
+            <a asp-controller="Districts" asp-action="Details" asp-route-id="@Model.District.Id">@Model.District.Name</a>
         </dd>
     </dl>
 </div>

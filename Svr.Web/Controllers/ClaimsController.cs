@@ -149,7 +149,7 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, Region = item.Region, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, District = item.District };
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, /*RegionId = item.RegionId, */Region = item.Region, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, District = item.District/*, DistrictId = item.DistrictId */};
             return View(model);
         }
         #endregion
@@ -162,7 +162,7 @@ namespace Svr.Web.Controllers
             {
                 _lord = Int64.Parse(lord);
             }
-            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(),"Id", "Name", lord);
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", lord);
             ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(_lord)), "Id", "Name", owner);
             return View();
 
@@ -187,7 +187,7 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 // добавляем новый Район
-                var item = await repository.AddAsync(new Claim { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.District.RegionId, DistrictId = model.DistrictId });
+                var item = await repository.AddAsync(new Claim { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId });
                 if (item != null)
                 {
                     StatusMessage = $"Добавлен район с Id={item.Id}, код={item.Code}, имя={item.Name}.";

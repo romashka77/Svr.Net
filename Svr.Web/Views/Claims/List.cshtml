@@ -58,9 +58,9 @@
             </dl>
         </div>
         <div>
-            <a asp-action="Edit" asp-controller="Districts" asp-route-id="@item.Id" class="btn btn-default">Редактировать</a>
-            <a asp-action="Details" asp-controller="Districts" asp-route-id="@item.Id" class="btn btn-default">Подробнее</a>
-            <a asp-action="Delete" asp-controller="Districts" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
+            <a asp-action="Edit" asp-controller="Claims" asp-route-id="@item.Id" class="btn btn-default">Редактировать</a>
+            <a asp-action="Details" asp-controller="Claims" asp-route-id="@item.Id" class="btn btn-default">Подробнее</a>
+            <a asp-action="Delete" asp-controller="Claims" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
         </div>
     }
     @Html.Partial("_pagination", Model)
