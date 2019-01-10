@@ -20,17 +20,29 @@ namespace Svr.Web.Controllers
         private IClaimRepository repository;
         private IDistrictRepository districtRepository;
         private IRegionRepository regionRepository;
+        private ICategoryDisputeRepository categoryDisputeRepository;
+        private IGroupClaimRepository groupClaimRepository;
+        private ISubjectClaimRepository subjectClaimRepository;
+        private IDirRepository dirRepository;
+        private IPerformerRepository performerRepository;
+
+
         private ILogger<ClaimsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ClaimsController(IClaimRepository repository, IRegionRepository regionRepository, IDistrictRepository districtRepository, ILogger<ClaimsController> logger)
+        public ClaimsController(IClaimRepository repository, IRegionRepository regionRepository, IDistrictRepository districtRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository, IPerformerRepository performerRepository, IDirRepository dirRepository, ILogger<ClaimsController> logger)
         {
             this.logger = logger;
             this.repository = repository;
             this.regionRepository = regionRepository;
             this.districtRepository = districtRepository;
+            this.categoryDisputeRepository = categoryDisputeRepository;
+            this.groupClaimRepository = groupClaimRepository;
+            this.subjectClaimRepository = subjectClaimRepository;
+            this.performerRepository = performerRepository;
+            this.dirRepository = dirRepository;
         }
         #endregion
         #region Деструктор
@@ -41,6 +53,11 @@ namespace Svr.Web.Controllers
                 repository = null;
                 districtRepository = null;
                 regionRepository = null;
+                categoryDisputeRepository = null;
+                groupClaimRepository = null;
+                subjectClaimRepository = null;
+                performerRepository = null;
+                dirRepository = null;
                 logger = null;
             }
             base.Dispose(disposing);
@@ -211,9 +228,10 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId };
-            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
-            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId, DateReg = item.DateReg, DateIn = item.DateIn, CategoryDisputeId = item.CategoryDisputeId, GroupClaimId = item.GroupClaimId, SubjectClaimId = item.SubjectClaimId, СourtId = item.СourtId, PerformerId = item.PerformerId };
+
+            SetViewBag(model);
+
             return View(model);
         }
 
@@ -228,7 +246,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId });
+                    await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId });
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -242,10 +260,10 @@ namespace Svr.Web.Controllers
                         StatusMessage = $"Непредвиденная ошибка при обновлении района с ID {model.Id}. {ex.Message}";
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
             }
-            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
-            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
+            SetViewBag(model);
+
             return View(model);
         }
         #endregion
@@ -281,5 +299,24 @@ namespace Svr.Web.Controllers
             }
         }
         #endregion
+        private async Task SetViewBag(ItemViewModel model)
+        {
+            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
+            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
+
+            ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", model.CategoryDisputeId);
+            ViewBag.GroupClaims = new SelectList(await groupClaimRepository.ListAsync(new GroupClaimSpecification(model.CategoryDisputeId)), "Id", "Name", model.GroupClaimId);
+            ViewBag.SubjectClaims = new SelectList(await subjectClaimRepository.ListAsync(new SubjectClaimSpecification(model.GroupClaimId)), "Id", "Name", model.SubjectClaimId);
+
+            ViewBag.Сourts = new SelectList(await dirRepository.ListAsync(new DirSpecification("Суд")), "Id", "Name", model.СourtId);
+
+            var districtPerformers = (await districtRepository.GetByIdWithItemsAsync(model.DistrictId)).DistrictPerformers;
+            var p = new List<Performer>();
+            foreach (var dp in districtPerformers)
+            {
+                p.Add(dp.Performer);
+            }
+            ViewBag.Performers = new SelectList(p, "Id", "Name", model.PerformerId);
+        }
     }
 }

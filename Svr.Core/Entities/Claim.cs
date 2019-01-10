@@ -33,13 +33,16 @@ namespace Svr.Core.Entities
         [Display(Name = "Группа исков")]
         public virtual GroupClaim GroupClaim { get; set; }
 
+        public long? SubjectClaimId { get; set; }
+        [Display(Name = "Предмет иска")]
+        public virtual SubjectClaim SubjectClaim { get; set; }
+
         public long? СourtId { get; set; }
         [Display(Name = "Суд")]
-        [ForeignKey("СourtId")]
         public virtual Dir Сourt { get; set; }
 
-        [Display(Name = "Исполнитель")]
         public long? PerformerId { get; set; }
+        [Display(Name = "Исполнитель")]
         public virtual Performer Performer { get; set; }
 
         [Display(Name = "Сумма иска")]
