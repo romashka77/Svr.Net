@@ -25,14 +25,14 @@ namespace Svr.Web.Controllers
         private ISubjectClaimRepository subjectClaimRepository;
         private IDirRepository dirRepository;
         private IPerformerRepository performerRepository;
-
+        private IApplicantRepository applicantRepository;
 
         private ILogger<ClaimsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ClaimsController(IClaimRepository repository, IRegionRepository regionRepository, IDistrictRepository districtRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository, IPerformerRepository performerRepository, IDirRepository dirRepository, ILogger<ClaimsController> logger)
+        public ClaimsController(IClaimRepository repository, IRegionRepository regionRepository, IDistrictRepository districtRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository, IPerformerRepository performerRepository, IDirRepository dirRepository, IApplicantRepository applicantRepository, ILogger<ClaimsController> logger)
         {
             this.logger = logger;
             this.repository = repository;
@@ -43,6 +43,7 @@ namespace Svr.Web.Controllers
             this.subjectClaimRepository = subjectClaimRepository;
             this.performerRepository = performerRepository;
             this.dirRepository = dirRepository;
+            this.applicantRepository = applicantRepository;
         }
         #endregion
         #region Деструктор
@@ -57,7 +58,8 @@ namespace Svr.Web.Controllers
                 groupClaimRepository = null;
                 subjectClaimRepository = null;
                 performerRepository = null;
-                dirRepository = null;
+                //      dirRepository = null;
+                applicantRepository = null;
                 logger = null;
             }
             base.Dispose(disposing);
@@ -74,7 +76,7 @@ namespace Svr.Web.Controllers
                 _owner = Int64.Parse(owner);
             }
             var filterSpecification = new ClaimSpecification(_owner);
-            var list = repository.List(filterSpecification);
+            IEnumerable<Claim> list = await repository.ListAsync(filterSpecification);
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -228,9 +230,9 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId, DateReg = item.DateReg, DateIn = item.DateIn, CategoryDisputeId = item.CategoryDisputeId, GroupClaimId = item.GroupClaimId, SubjectClaimId = item.SubjectClaimId, СourtId = item.СourtId, PerformerId = item.PerformerId };
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId, DateReg = item.DateReg, DateIn = item.DateIn, CategoryDisputeId = item.CategoryDisputeId, GroupClaimId = item.GroupClaimId, SubjectClaimId = item.SubjectClaimId, СourtId = item.СourtId, PerformerId = item.PerformerId, Sum = item.Sum, PlaintiffId = item.PlaintiffId, RespondentId = item.RespondentId, Person3rdId = item.Person3rdId };
 
-            SetViewBag(model);
+            await SetViewBag(model);
 
             return View(model);
         }
@@ -246,7 +248,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId });
+                    await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId=model.RespondentId, Person3rdId=model.Person3rdId });
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -262,7 +264,7 @@ namespace Svr.Web.Controllers
                 }
                 //return RedirectToAction(nameof(Index));
             }
-            SetViewBag(model);
+            await SetViewBag(model);
 
             return View(model);
         }
@@ -317,6 +319,7 @@ namespace Svr.Web.Controllers
                 p.Add(dp.Performer);
             }
             ViewBag.Performers = new SelectList(p, "Id", "Name", model.PerformerId);
+            ViewBag.Applicants = new SelectList(await applicantRepository.ListAsync(new ApplicantSpecification(null)), "Id", "Name", model.PlaintiffId);
         }
     }
 }

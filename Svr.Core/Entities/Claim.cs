@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -63,6 +64,16 @@ namespace Svr.Core.Entities
         [ForeignKey("Person3rdId")]
         public Applicant Person3rd { get; set; }
         //-----------
+        /// <summary>
+        /// Колекция инстанций
+        /// </summary>
+        [Display(Name = "Инстанции")]
+        public virtual ICollection<Instance> Instances { get; set; }
+        
         public override string ToString() => "Иск";
+        public Claim()
+        {
+            Instances = new List<Instance>();
+        }
     }
 }
