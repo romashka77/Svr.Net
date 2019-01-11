@@ -26,6 +26,7 @@ namespace Svr.Infrastructure.Data
         public DbSet<DistrictPerformer> DistrictPerformers { get; set; }
 
         public DbSet<Claim> Claims { get; set; }
+        public DbSet<Instance> Instances { get; set; }
 
 
 
@@ -58,6 +59,7 @@ namespace Svr.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new ApplicantConfiguration());
 
             modelBuilder.ApplyConfiguration(new ClaimConfiguration());
+            modelBuilder.ApplyConfiguration(new InstanceConfiguration());
 
             //modelBuilder.ApplyConfiguration(new ManConfiguration());
             base.OnModelCreating(modelBuilder);

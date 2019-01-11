@@ -22,13 +22,13 @@ namespace Svr.Infrastructure.Data
             }
             return Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).FirstOrDefault(r => r.Id == id);
         }
-        public virtual Task<Applicant> GetByIdWithItemsAsync(long? id)
+        public virtual async Task<Applicant> GetByIdWithItemsAsync(long? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }

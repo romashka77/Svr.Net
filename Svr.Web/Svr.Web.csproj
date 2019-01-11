@@ -50,6 +50,7 @@
     <Folder Include="Models\ApplicantViewModels\" />
     <Folder Include="Models\PerformersViewModels\" />
     <Folder Include="Models\ClaimsViewModels\" />
+    <Folder Include="Models\InstanceViewModels\" />
     <Folder Include="Views\Applicants\" />
   </ItemGroup>
 

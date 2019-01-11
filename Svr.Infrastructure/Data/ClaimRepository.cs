@@ -21,12 +21,16 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(d => d.District).ThenInclude(e => e.Region).SingleOrDefault(m => m.Id == id);
+            return Entities.Include(i => i.Instances).Include(d => d.District).ThenInclude(e => e.Region).SingleOrDefault(m => m.Id == id);
         }
 
         public virtual async Task<Claim> GetByIdWithItemsAsync(long? id)
         {
-            return await Entities.Include(d => d.District).ThenInclude(e => e.Region).SingleOrDefaultAsync(m => m.Id == id);
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+            return await Entities.Include(i => i.Instances).Include(d => d.District).ThenInclude(e => e.Region).SingleOrDefaultAsync(m => m.Id == id);
         }
     }
 }

@@ -1,0 +1,222 @@
+﻿@model Svr.Core.Entities.Instance
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Instance</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DateTransfer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateTransfer)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CourtDecision)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CourtDecision)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCourtDecision)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateCourtDecision)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateInCourtDecision)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateInCourtDecision)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SumDenied)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SumDenied)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SumSatisfied)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SumSatisfied)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PaidVoluntarily)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaidVoluntarily)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DutySatisfied)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DutySatisfied)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DutyDenied)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DutyDenied)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ServicesSatisfied)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServicesSatisfied)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ServicesDenied)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServicesDenied)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.СostSatisfied)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.СostSatisfied)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.СostDenied)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.СostDenied)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DutyPaid)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DutyPaid)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateSShortage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateSShortage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateToShortage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateToShortage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.InsurancePartPFRShortage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.InsurancePartPFRShortage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FundedPartPFRShortage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FundedPartPFRShortage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FFOMSShortage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FFOMSShortage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TFOMSShortage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TFOMSShortage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateSFine)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateSFine)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateToFine)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateToFine)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.InsurancePartPFRFine)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.InsurancePartPFRFine)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FundedPartPFRFine)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FundedPartPFRFine)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FFOMSFine)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FFOMSFine)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TFOMSFine)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TFOMSFine)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateSPenalty)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateSPenalty)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateToPenalty)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateToPenalty)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SumPenalty)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SumPenalty)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedOnUtc)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedOnUtc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedOnUtc)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedOnUtc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Claim)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Claim.Code)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

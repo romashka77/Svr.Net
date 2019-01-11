@@ -64,6 +64,14 @@ namespace Svr.Core.Entities
         [ForeignKey("Person3rdId")]
         public Applicant Person3rd { get; set; }
         //-----------
+
+        [Display(Name = "Дата вступления в законную силу")]
+        [DataType(DataType.Date)]
+        public DateTime? DateForce { get; set; }
+
+        [Display(Name = "Итоговое решение суда")]
+        public string FinalDecision { get; set; }
+
         /// <summary>
         /// Колекция инстанций
         /// </summary>

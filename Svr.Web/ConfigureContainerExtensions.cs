@@ -52,7 +52,7 @@ namespace Svr.Web
             services.AddScoped<IApplicantRepository, ApplicantRepository>();
 
             services.AddScoped<IClaimRepository, ClaimRepository>();
-
+            services.AddScoped<IInstanceRepository, InstanceRepository>();
 
 
             services.AddScoped<IRegionService, RegionService>();
