@@ -19,17 +19,19 @@ namespace Svr.Web.Controllers
     {
         private IInstanceRepository repository;
         private IClaimRepository сlaimRepository;
+        private IDirRepository dirRepository;
         private ILogger<InstancesController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
 
         #region Конструктор
-        public InstancesController(IInstanceRepository repository, IClaimRepository сlaimRepository, ILogger<InstancesController> logger)
+        public InstancesController(IInstanceRepository repository, IClaimRepository сlaimRepository, IDirRepository dirRepository, ILogger<InstancesController> logger)
         {
             this.logger = logger;
             this.repository = repository;
             this.сlaimRepository = сlaimRepository;
+            this.dirRepository = dirRepository;
         }
         #endregion
         #region Деструктор
@@ -39,6 +41,7 @@ namespace Svr.Web.Controllers
             {
                 сlaimRepository = null;
                 repository = null;
+                dirRepository = null;
                 logger = null;
             }
             base.Dispose(disposing);
@@ -106,11 +109,13 @@ namespace Svr.Web.Controllers
                     Description = i.Description,
                     CreatedOnUtc = i.CreatedOnUtc,
                     UpdatedOnUtc = i.UpdatedOnUtc,
-                    Claim = i.Claim
+                    Claim = i.Claim,
+                    Number = i.Number
                 }),
+                Claim = (await сlaimRepository.GetByIdAsync(_owner)),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, (await сlaimRepository.ListAsync(new ClaimSpecification(null))).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
+                FilterViewModel = new FilterViewModel(searchString, owner),
 
                 StatusMessage = StatusMessage
             };
@@ -126,7 +131,9 @@ namespace Svr.Web.Controllers
             if (item == null)
             {
                 StatusMessage = $"Не удалось загрузить иск с ID = {id}.";
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
+
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, Claim = item.Claim, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, CourtDecision = item.CourtDecision, DateCourtDecision = item.DateCourtDecision, DateInCourtDecision = item.DateInCourtDecision, DateSFine = item.DateSFine, DateSPenalty = item.DateSPenalty, DateSShortage = item.DateSShortage, DateToFine = item.DateToFine, DateToPenalty = item.DateToPenalty, DateToShortage = item.DateToShortage, DateTransfer = item.DateTransfer, DutyDenied = item.DutyDenied, DutyPaid = item.DutyPaid, DutySatisfied = item.DutySatisfied, FFOMSFine = item.FFOMSFine, FFOMSShortage = item.FFOMSShortage, FundedPartPFRFine = item.InsurancePartPFRFine, FundedPartPFRShortage = item.FundedPartPFRShortage, InsurancePartPFRFine = item.InsurancePartPFRFine, InsurancePartPFRShortage = item.InsurancePartPFRShortage, PaidVoluntarily = item.PaidVoluntarily, ServicesDenied = item.ServicesDenied, ServicesSatisfied = item.ServicesSatisfied, SumDenied = item.SumDenied, SumPenalty = item.SumPenalty, SumSatisfied = item.SumSatisfied, TFOMSFine = item.TFOMSFine, TFOMSShortage = item.TFOMSShortage, СostDenied = item.СostDenied, СostSatisfied = item.СostSatisfied };
@@ -135,9 +142,29 @@ namespace Svr.Web.Controllers
         #endregion
         #region Create
         // GET: Instances/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(long owner)
         {
-            //   ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
+            ViewBag.Number = (await repository.ListAsync(new InstanceSpecification(owner))).Count() + 1;
+            ViewBag.Owner = owner;
+            switch (ViewBag.Number)
+            {
+                case 1:
+                    ViewBag.CourtDecisions = new SelectList(await dirRepository.ListAsync(new DirSpecification("Решения суда 1-ой инстанции")), "Id", "Name", null);
+                    break;
+                case 2:
+                    ViewBag.CourtDecisions = new SelectList(await dirRepository.ListAsync(new DirSpecification("Решения суда 2-ой инстанции")), "Id", "Name", null);
+                    break;
+                case 3:
+                    ViewBag.CourtDecisions = new SelectList(await dirRepository.ListAsync(new DirSpecification("Решения суда 3-ей инстанции")), "Id", "Name", null);
+                    break;
+                case 4:
+                    ViewBag.CourtDecisions = new SelectList(await dirRepository.ListAsync(new DirSpecification("Решения суда 4-ой инстанции")), "Id", "Name", null);
+                    break;
+                default:
+                    ViewBag.CourtDecisions = null;
+                    break;
+            }
+
             return View();
         }
 
@@ -151,18 +178,19 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 // добавляем новый Район
-                var item = await repository.AddAsync(new Instance { Name = model.Name, Description = model.Description, Claim = model.Claim, CourtDecision = model.CourtDecision, DateCourtDecision = model.DateCourtDecision, СostSatisfied = model.СostSatisfied, СostDenied = model.СostDenied, TFOMSShortage = model.TFOMSShortage, TFOMSFine = model.TFOMSFine, DateInCourtDecision = model.DateInCourtDecision, DateSFine = model.DateSFine, DateSPenalty = model.DateSPenalty, DateSShortage = model.DateSShortage, DateToFine = model.DateToFine, DateToPenalty = model.DateToPenalty, DateToShortage = model.DateToShortage, DateTransfer = model.DateTransfer, DutyDenied = model.DutyDenied, DutyPaid = model.DutyPaid, DutySatisfied = model.DutySatisfied, FFOMSFine = model.FFOMSFine, FFOMSShortage = model.FFOMSShortage, FundedPartPFRFine = model.FundedPartPFRFine, FundedPartPFRShortage = model.FundedPartPFRShortage, InsurancePartPFRFine = model.InsurancePartPFRFine, InsurancePartPFRShortage = model.InsurancePartPFRShortage, PaidVoluntarily = model.PaidVoluntarily, ServicesDenied = model.ServicesDenied, ServicesSatisfied = model.ServicesSatisfied, SumDenied = model.SumDenied, SumPenalty = model.SumPenalty, SumSatisfied = model.SumSatisfied });
+                var item = await repository.AddAsync(new Instance { Name = model.Name, ClaimId = model.ClaimId, Description = model.Description, Claim = model.Claim, CourtDecision = model.CourtDecision, DateCourtDecision = model.DateCourtDecision, СostSatisfied = model.СostSatisfied, СostDenied = model.СostDenied, TFOMSShortage = model.TFOMSShortage, TFOMSFine = model.TFOMSFine, DateInCourtDecision = model.DateInCourtDecision, DateSFine = model.DateSFine, DateSPenalty = model.DateSPenalty, DateSShortage = model.DateSShortage, DateToFine = model.DateToFine, DateToPenalty = model.DateToPenalty, DateToShortage = model.DateToShortage, DateTransfer = model.DateTransfer, DutyDenied = model.DutyDenied, DutyPaid = model.DutyPaid, DutySatisfied = model.DutySatisfied, FFOMSFine = model.FFOMSFine, FFOMSShortage = model.FFOMSShortage, FundedPartPFRFine = model.FundedPartPFRFine, FundedPartPFRShortage = model.FundedPartPFRShortage, InsurancePartPFRFine = model.InsurancePartPFRFine, InsurancePartPFRShortage = model.InsurancePartPFRShortage, PaidVoluntarily = model.PaidVoluntarily, ServicesDenied = model.ServicesDenied, ServicesSatisfied = model.ServicesSatisfied, SumDenied = model.SumDenied, SumPenalty = model.SumPenalty, SumSatisfied = model.SumSatisfied, CourtDecisionId = model.CourtDecisionId, Number = model.Number });
                 if (item != null)
                 {
                     StatusMessage = $"Добавлена инстанция с Id={item.Id}, имя={item.Name}.";
-                    return RedirectToAction(nameof(Edit), new { id = item.Id });
+                    return RedirectToAction(nameof(Index), new { owner = item.ClaimId });
                 }
             }
             ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
-            //ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
+            await SetViewBag(model);
             return View(model);
         }
         #endregion
+        #region Edit
         // GET: Instances/Edit/5
         public async Task<ActionResult> Edit(long? id)
         {
@@ -173,7 +201,7 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, TFOMSShortage = item.TFOMSShortage, СostDenied = item.СostDenied, СostSatisfied = item.СostSatisfied, TFOMSFine = item.TFOMSFine, PaidVoluntarily = item.PaidVoluntarily, SumSatisfied = item.SumSatisfied, SumPenalty = item.SumPenalty, SumDenied = item.SumDenied, ServicesSatisfied = item.ServicesSatisfied, ServicesDenied = item.ServicesDenied, CourtDecision = item.CourtDecision, DateCourtDecision = item.DateCourtDecision, DateInCourtDecision = item.DateInCourtDecision, DateSFine = item.DateSFine, DateSPenalty = item.DateSPenalty, DateSShortage = item.DateSShortage, DateToFine = item.DateToFine, DateToPenalty = item.DateToPenalty, DateToShortage = item.DateToShortage, DateTransfer = item.DateTransfer, DutyDenied = item.DutyDenied, DutyPaid = item.DutyPaid, DutySatisfied = item.DutySatisfied, FFOMSFine = item.FFOMSFine, FFOMSShortage = item.FFOMSShortage, FundedPartPFRFine = item.FundedPartPFRFine, FundedPartPFRShortage = item.FundedPartPFRShortage, Claim = item.Claim, InsurancePartPFRFine = item.InsurancePartPFRFine, InsurancePartPFRShortage = item.InsurancePartPFRShortage };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, TFOMSShortage = item.TFOMSShortage, СostDenied = item.СostDenied, СostSatisfied = item.СostSatisfied, TFOMSFine = item.TFOMSFine, PaidVoluntarily = item.PaidVoluntarily, SumSatisfied = item.SumSatisfied, SumPenalty = item.SumPenalty, SumDenied = item.SumDenied, ServicesSatisfied = item.ServicesSatisfied, ServicesDenied = item.ServicesDenied, CourtDecision = item.CourtDecision, DateCourtDecision = item.DateCourtDecision, DateInCourtDecision = item.DateInCourtDecision, DateSFine = item.DateSFine, DateSPenalty = item.DateSPenalty, DateSShortage = item.DateSShortage, DateToFine = item.DateToFine, DateToPenalty = item.DateToPenalty, DateToShortage = item.DateToShortage, DateTransfer = item.DateTransfer, DutyDenied = item.DutyDenied, DutyPaid = item.DutyPaid, DutySatisfied = item.DutySatisfied, FFOMSFine = item.FFOMSFine, FFOMSShortage = item.FFOMSShortage, FundedPartPFRFine = item.FundedPartPFRFine, FundedPartPFRShortage = item.FundedPartPFRShortage, Claim = item.Claim, InsurancePartPFRFine = item.InsurancePartPFRFine, InsurancePartPFRShortage = item.InsurancePartPFRShortage, ClaimId = item.ClaimId, Number = item.Number };
 
             await SetViewBag(model);
 
@@ -185,67 +213,86 @@ namespace Svr.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("ClaimId,DateTransfer,CourtDecision,DateCourtDecision,DateInCourtDecision,SumDenied,SumSatisfied,PaidVoluntarily,DutySatisfied,DutyDenied,ServicesSatisfied,ServicesDenied,СostSatisfied,СostDenied,DutyPaid,DateSShortage,DateToShortage,InsurancePartPFRShortage,FundedPartPFRShortage,FFOMSShortage,TFOMSShortage,DateSFine,DateToFine,InsurancePartPFRFine,FundedPartPFRFine,FFOMSFine,TFOMSFine,DateSPenalty,DateToPenalty,SumPenalty,Description,Name,Id,CreatedOnUtc,UpdatedOnUtc")] Instance instance)
+        public async Task<IActionResult> Edit(ItemViewModel model)
         {
-            if (id != instance.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(instance);
-                    await _context.SaveChangesAsync();
+                    await repository.UpdateAsync(new Instance { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, CourtDecision = model.CourtDecision, DateCourtDecision = model.DateCourtDecision, DateInCourtDecision = model.DateInCourtDecision, DateSFine = model.DateSFine, DateSPenalty = model.DateSPenalty, DateSShortage = model.DateSShortage, DateToFine = model.DateToFine, DateToPenalty = model.DateToPenalty, DateToShortage = model.DateToShortage, DateTransfer = model.DateTransfer, DutyDenied = model.DutyDenied, DutySatisfied = model.DutySatisfied, DutyPaid = model.DutyPaid, FFOMSFine = model.FFOMSFine, FFOMSShortage = model.FFOMSShortage, FundedPartPFRFine = model.FundedPartPFRFine, FundedPartPFRShortage = model.FundedPartPFRShortage, InsurancePartPFRFine = model.InsurancePartPFRFine, InsurancePartPFRShortage = model.InsurancePartPFRShortage, PaidVoluntarily = model.PaidVoluntarily, ServicesDenied = model.ServicesDenied, SumDenied = model.SumDenied, ServicesSatisfied = model.ServicesSatisfied, SumPenalty = model.SumPenalty, SumSatisfied = model.SumSatisfied, TFOMSFine = model.TFOMSFine, TFOMSShortage = model.TFOMSShortage, СostDenied = model.СostDenied, СostSatisfied = model.СostSatisfied, Number = model.Number });
+
+                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!InstanceExists(instance.Id))
+                    if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        return NotFound();
+                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
                     }
                     else
                     {
-                        throw;
+                        StatusMessage = $"Непредвиденная ошибка при обновлении инстанции с ID {model.Id}. {ex.Message}";
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
             }
-            ViewData["ClaimId"] = new SelectList(_context.Claims, "Id", "Code", instance.ClaimId);
-            return View(instance);
-        }
+            await SetViewBag(model);
 
+            return View(model);
+        }
+        #endregion
+        #region Delete
         // GET: Instances/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            if (id == null)
+            var item = await repository.GetByIdAsync(id);
+            if (item == null)
             {
-                return NotFound();
+                StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                return RedirectToAction(nameof(Index));
             }
-
-            var instance = await _context.Instances
-                .Include(i => i.Claim)
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (instance == null)
-            {
-                return NotFound();
-            }
-
-            return View(instance);
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage, ClaimId = item.ClaimId };
+            return View(model);
         }
 
         // POST: Instances/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+        public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
-            var instance = await _context.Instances.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Instances.Remove(instance);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await repository.DeleteAsync(new Instance { Id = model.Id, Name = model.Name });
+                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при удалении инстанции с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
+            }
         }
-
-
+        #endregion
+        private async Task SetViewBag(ItemViewModel model)
+        {
+            switch (model.Number)
+            {
+                case 1:
+                    ViewBag.CourtDecisions = new SelectList(await dirRepository.ListAsync(new DirSpecification("Решения суда 1-ой инстанции")), "Id", "Name", null);
+                    break;
+                case 2:
+                    ViewBag.CourtDecisions = new SelectList(await dirRepository.ListAsync(new DirSpecification("Решения суда 2-ой инстанции")), "Id", "Name", null);
+                    break;
+                case 3:
+                    ViewBag.CourtDecisions = new SelectList(await dirRepository.ListAsync(new DirSpecification("Решения суда 3-ей инстанции")), "Id", "Name", null);
+                    break;
+                case 4:
+                    ViewBag.CourtDecisions = new SelectList(await dirRepository.ListAsync(new DirSpecification("Решения суда 4-ой инстанции")), "Id", "Name", null);
+                    break;
+                default:
+                    ViewBag.CourtDecisions = null;
+                    break;
+            }
+        }
     }
 }

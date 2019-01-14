@@ -1,13 +1,13 @@
 ﻿@model Svr.Web.Models.ClaimsViewModels.IndexViewModel
 
 @{
-    ViewData["Title"] = "Список исков";
+    ViewData["Title"] = "Список исков ";
 }
 
 <h4>@ViewData["Title"]</h4>
 @Html.Partial("_StatusMessage", Model.StatusMessage)
 <p>
-    <a asp-action="Create" asp-controller="Claims" asp-all-route-data='new Dictionary<string, string> { { "lord", @Model.FilterViewModel.SelectedLord }, { "owner", @Model.FilterViewModel.SelectedOwner } }'class="btn btn-default">Добавить</a>
+    <a asp-action="Create" asp-controller="Claims" asp-all-route-data='new Dictionary<string, string> { { "lord", @Model.FilterViewModel.SelectedLord }, { "owner", @Model.FilterViewModel.SelectedOwner } }' class="btn btn-default">Добавить</a>
 </p>
 
 @Html.Partial("List", Model)

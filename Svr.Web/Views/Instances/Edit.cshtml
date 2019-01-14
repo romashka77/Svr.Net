@@ -1,197 +1,288 @@
-﻿@model Svr.Core.Entities.Instance
+﻿@using Svr.Core.Entities
+@model Svr.Web.Models.InstanceViewModels.ItemViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактировать";
 }
 
-<h2>Edit</h2>
-
-<h4>Instance</h4>
+<h2>@ViewData["Title"]</h2>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<h4>@Model</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ClaimId" class="control-label"></label>
-                <select asp-for="ClaimId" class="form-control" asp-items="ViewBag.ClaimId"></select>
-                <span asp-validation-for="ClaimId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateTransfer" class="control-label"></label>
-                <input asp-for="DateTransfer" class="form-control" />
-                <span asp-validation-for="DateTransfer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CourtDecision" class="control-label"></label>
-                <input asp-for="CourtDecision" class="form-control" />
-                <span asp-validation-for="CourtDecision" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateCourtDecision" class="control-label"></label>
-                <input asp-for="DateCourtDecision" class="form-control" />
-                <span asp-validation-for="DateCourtDecision" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateInCourtDecision" class="control-label"></label>
-                <input asp-for="DateInCourtDecision" class="form-control" />
-                <span asp-validation-for="DateInCourtDecision" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SumDenied" class="control-label"></label>
-                <input asp-for="SumDenied" class="form-control" />
-                <span asp-validation-for="SumDenied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SumSatisfied" class="control-label"></label>
-                <input asp-for="SumSatisfied" class="form-control" />
-                <span asp-validation-for="SumSatisfied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaidVoluntarily" class="control-label"></label>
-                <input asp-for="PaidVoluntarily" class="form-control" />
-                <span asp-validation-for="PaidVoluntarily" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DutySatisfied" class="control-label"></label>
-                <input asp-for="DutySatisfied" class="form-control" />
-                <span asp-validation-for="DutySatisfied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DutyDenied" class="control-label"></label>
-                <input asp-for="DutyDenied" class="form-control" />
-                <span asp-validation-for="DutyDenied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServicesSatisfied" class="control-label"></label>
-                <input asp-for="ServicesSatisfied" class="form-control" />
-                <span asp-validation-for="ServicesSatisfied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServicesDenied" class="control-label"></label>
-                <input asp-for="ServicesDenied" class="form-control" />
-                <span asp-validation-for="ServicesDenied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="СostSatisfied" class="control-label"></label>
-                <input asp-for="СostSatisfied" class="form-control" />
-                <span asp-validation-for="СostSatisfied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="СostDenied" class="control-label"></label>
-                <input asp-for="СostDenied" class="form-control" />
-                <span asp-validation-for="СostDenied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DutyPaid" class="control-label"></label>
-                <input asp-for="DutyPaid" class="form-control" />
-                <span asp-validation-for="DutyPaid" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateSShortage" class="control-label"></label>
-                <input asp-for="DateSShortage" class="form-control" />
-                <span asp-validation-for="DateSShortage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateToShortage" class="control-label"></label>
-                <input asp-for="DateToShortage" class="form-control" />
-                <span asp-validation-for="DateToShortage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InsurancePartPFRShortage" class="control-label"></label>
-                <input asp-for="InsurancePartPFRShortage" class="form-control" />
-                <span asp-validation-for="InsurancePartPFRShortage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FundedPartPFRShortage" class="control-label"></label>
-                <input asp-for="FundedPartPFRShortage" class="form-control" />
-                <span asp-validation-for="FundedPartPFRShortage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FFOMSShortage" class="control-label"></label>
-                <input asp-for="FFOMSShortage" class="form-control" />
-                <span asp-validation-for="FFOMSShortage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TFOMSShortage" class="control-label"></label>
-                <input asp-for="TFOMSShortage" class="form-control" />
-                <span asp-validation-for="TFOMSShortage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateSFine" class="control-label"></label>
-                <input asp-for="DateSFine" class="form-control" />
-                <span asp-validation-for="DateSFine" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateToFine" class="control-label"></label>
-                <input asp-for="DateToFine" class="form-control" />
-                <span asp-validation-for="DateToFine" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InsurancePartPFRFine" class="control-label"></label>
-                <input asp-for="InsurancePartPFRFine" class="form-control" />
-                <span asp-validation-for="InsurancePartPFRFine" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FundedPartPFRFine" class="control-label"></label>
-                <input asp-for="FundedPartPFRFine" class="form-control" />
-                <span asp-validation-for="FundedPartPFRFine" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FFOMSFine" class="control-label"></label>
-                <input asp-for="FFOMSFine" class="form-control" />
-                <span asp-validation-for="FFOMSFine" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TFOMSFine" class="control-label"></label>
-                <input asp-for="TFOMSFine" class="form-control" />
-                <span asp-validation-for="TFOMSFine" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateSPenalty" class="control-label"></label>
-                <input asp-for="DateSPenalty" class="form-control" />
-                <span asp-validation-for="DateSPenalty" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateToPenalty" class="control-label"></label>
-                <input asp-for="DateToPenalty" class="form-control" />
-                <span asp-validation-for="DateToPenalty" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SumPenalty" class="control-label"></label>
-                <input asp-for="SumPenalty" class="form-control" />
-                <span asp-validation-for="SumPenalty" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreatedOnUtc" class="control-label"></label>
-                <input asp-for="CreatedOnUtc" class="form-control" />
-                <span asp-validation-for="CreatedOnUtc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedOnUtc" class="control-label"></label>
-                <input asp-for="UpdatedOnUtc" class="form-control" />
-                <span asp-validation-for="UpdatedOnUtc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => Model.Id)
+        @Html.HiddenFor(model => Model.ClaimId)
+        @Html.HiddenFor(model => Model.CreatedOnUtc)
+        @Html.HiddenFor(model => Model.Number)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Дата передачи*@
+            @Html.LabelFor(model => model.DateTransfer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateTransfer, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateTransfer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Решение суда*@
+            @Html.LabelFor(model => model.CourtDecision, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CourtDecision, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CourtDecision, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Дата решения*@
+            @Html.LabelFor(model => model.DateCourtDecision, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateCourtDecision, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateCourtDecision, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Дата получения решения*@
+            @Html.LabelFor(model => model.DateInCourtDecision, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateInCourtDecision, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateInCourtDecision, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Сумма отказано*@
+            @Html.LabelFor(model => model.SumDenied, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SumDenied, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SumDenied, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Сумма удовлетворено*@
+            @Html.LabelFor(model => model.SumSatisfied, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SumSatisfied, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SumSatisfied, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Уплачено добровольно*@
+            @Html.LabelFor(model => model.PaidVoluntarily, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PaidVoluntarily, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PaidVoluntarily, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Гос.пошлина удов.*@
+            @Html.LabelFor(model => model.DutySatisfied, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DutySatisfied, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DutySatisfied, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Гос.пошлина отк.*@
+            @Html.LabelFor(model => model.DutyDenied, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DutyDenied, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DutyDenied, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Услуги пред.удов.*@
+            @Html.LabelFor(model => model.ServicesSatisfied, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ServicesSatisfied, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ServicesSatisfied, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Услуги пред.отк.*@
+            @Html.LabelFor(model => model.ServicesDenied, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ServicesDenied, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ServicesDenied, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Суд.издер.удов.*@
+            @Html.LabelFor(model => model.СostSatisfied, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.СostSatisfied, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.СostSatisfied, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Суд.издер.отк.*@
+            @Html.LabelFor(model => model.СostDenied, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.СostDenied, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.СostDenied, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Упл.гос.пошлина*@
+            @Html.LabelFor(model => model.DutyPaid, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DutyPaid, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DutyPaid, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="shortage">
+            Недостача
+            <div class="form-group">
+                @*Период с*@
+                @Html.LabelFor(model => model.DateSShortage, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DateSShortage, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DateSShortage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Период по*@
+                @Html.LabelFor(model => model.DateToShortage, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DateToShortage, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DateToShortage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Страх.часть ПФР*@
+                @Html.LabelFor(model => model.InsurancePartPFRShortage, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.InsurancePartPFRShortage, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.InsurancePartPFRShortage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Накоп.часть ПФР*@
+                @Html.LabelFor(model => model.FundedPartPFRShortage, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FundedPartPFRShortage, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FundedPartPFRShortage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*В ФФОМС*@
+                @Html.LabelFor(model => model.FFOMSShortage, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FFOMSShortage, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FFOMSShortage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*В ТФОМС*@
+                @Html.LabelFor(model => model.TFOMSShortage, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TFOMSShortage, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TFOMSShortage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="fine">
+            Пени
+            <div class="form-group">
+                @*Период с*@
+                @Html.LabelFor(model => model.DateSFine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DateSFine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DateSFine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Период по*@
+                @Html.LabelFor(model => model.DateToFine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DateToFine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DateToFine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Страх.часть ПФР*@
+                @Html.LabelFor(model => model.InsurancePartPFRFine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.InsurancePartPFRFine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.InsurancePartPFRFine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Накоп.часть ПФР*@
+                @Html.LabelFor(model => model.FundedPartPFRFine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FundedPartPFRFine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FundedPartPFRFine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*В ФФОМС*@
+                @Html.LabelFor(model => model.FFOMSFine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FFOMSFine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FFOMSFine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*В ТФОМС*@
+                @Html.LabelFor(model => model.TFOMSFine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TFOMSFine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TFOMSFine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="penalty">
+            Штраф
+            <div class="form-group">
+                @*Период с*@
+                @Html.LabelFor(model => model.DateSPenalty, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DateSPenalty, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DateSPenalty, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Период по*@
+                @Html.LabelFor(model => model.DateToPenalty, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DateToPenalty, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DateToPenalty, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Сумма штрафа*@
+                @Html.LabelFor(model => model.SumPenalty, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SumPenalty, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SumPenalty, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-route-owner="@Model.ClaimId" class="btn btn-default">Назад</a>
 </div>
 
 @section Scripts {

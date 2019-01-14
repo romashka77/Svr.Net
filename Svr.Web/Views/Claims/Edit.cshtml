@@ -173,389 +173,145 @@
                     </h4>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Instances)
+                        </dt>
+                        <dd>
+                            <a asp-controller="Instances" asp-action="Index" asp-route-owner="@Model.Id" class="btn btn-default">Список инстанций</a>
+                            <hr />
+                            @foreach (var item in Model.Instances)
+                            {
+                                <a asp-controller="Instances" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                                <hr />
+                            }
+                        </dd>
+                    </dl>
                     @*Таблица*@
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <tr>
-                                <th></th>
-                                <th>1-я инстанция</th>
-                                <th>2-я инстанция</th>
-                                <th>3-я инстанция</th>
-                                <th>4-я инстанция</th>
-                            </tr>
-                            <tr>
-                                <th>Дата передачи</th>
-                                <th></th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 27;
-                                            Html.RenderPartial("_attrDateTable", Model);
-                                        }@*.Attrs[2011]);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 28;
-                                            Html.RenderPartial("_attrDateTable", Model);
-                                        }@*.Attrs[2022]);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 29;
-                                            Html.RenderPartial("_attrDateTable", Model);
-                                        }@*.Attrs[2027]);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Решение суда</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 30;
-                                            Html.RenderPartial("_selectListTable", Model);/*.Attrs[1993]);*/
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 31;
-                                        Html.RenderPartial("_selectListTable", Model/*.Attrs[2010]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 32;
-                                        Html.RenderPartial("_selectListTable", Model/*.Attrs[2023]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 33;
-                                        Html.RenderPartial("_selectListTable", Model/*.Attrs[2028]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Дата решения</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 34;
-                                            Html.RenderPartial("_attrDateTable", Model/*.Attrs[1994]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 35;
-                                        Html.RenderPartial("_attrDateTable", Model/*.Attrs[2012]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 36;
-                                        Html.RenderPartial("_attrDateTable", Model/*.Attrs[2025]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 37;
-                                        Html.RenderPartial("_attrDateTable", Model/*.Attrs[2029]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Дата получен.реш.</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 38;
-                                            Html.RenderPartial("_attrDateTable", Model/*.Attrs[1995]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 39;
-                                        Html.RenderPartial("_attrDateTable", Model/*.Attrs[2013]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 40;
-                                        Html.RenderPartial("_attrDateTable", Model/*.Attrs[2024]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 41;
-                                        Html.RenderPartial("_attrDateTable", Model/*.Attrs[2030]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Сумма отказано</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 42;
-                                            Html.RenderPartial("_attrFloatTable", Model/*.Attrs[1997]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 43;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2015]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 44;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2034]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 45;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2035]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Сумма удовл.</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 46;
-                                            Html.RenderPartial("_attrFloatTable", Model/*.Attrs[1996]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 47;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2014]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 48;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2032]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 49;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2033]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Уплачено добр.</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 50;
-                                            Html.RenderPartial("_attrFloatTable", Model/*.Attrs[1998]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 51;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2019]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 52;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2038]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 53;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2039]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Гос.пошлина удов.</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 54;
-                                            Html.RenderPartial("_attrFloatTable", Model/*.Attrs[1999]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 55;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2018]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 56;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2036]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 57;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2037]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Гос.пошлина откз.</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 58;
-                                            Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2511]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 59;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2512]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 60;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2513]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 61;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2514]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Услуги пред.удов.</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 62;
-                                            Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2310]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 63;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2311]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 64;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2312]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 65;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2313]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Услуги пред.откз.</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 66;
-                                            Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2519]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 67;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2520]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 68;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2521]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 69;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2523]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Суд.издер.удов.</th>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 70;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2306]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 71;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2307]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 72;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2308]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 73;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2309]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Суд.издер.откз.</th>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 74;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2515]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 75;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2516]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 76;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2517]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 77;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2518]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Упл.Гос.пошлина</th>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 78;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2314]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 79;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2315]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 80;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2316]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 81;
-                                        Html.RenderPartial("_attrFloatTable", Model/*.Attrs[2317]*/);}*@
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Дата вступ.в законную силу</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 82;
-                                            Html.RenderPartial("_attrDateTable", Model/*.Attrs[2726]*/);
-                                        }*@
-                                </td>
-                                <th>Итоговое реш.суда(Отчеты)</th>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 83;
-                                        Html.RenderPartial("_selectListResultTable", Model/*.Attrs[2438]*/);}*@
-                                </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>Комментарий к решению суда</th>
-                                <td>
-                                    @*@{
-                                            Model.IdAttr = 84;
-                                            Html.RenderPartial("_attrTextTable", Model/*.Attrs[2000]*/);
-                                        }*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 85;
-                                        Html.RenderPartial("_attrTextTable", Model/*.Attrs[2020]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 86;
-                                        Html.RenderPartial("_attrTextTable", Model/*.Attrs[2042]*/);}*@
-                                </td>
-                                <td>
-                                    @*@{
-                                        Model.IdAttr = 87;
-                                        Html.RenderPartial("_attrTextTable", Model/*.Attrs[2040]*/);}*@
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                    @*<div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <tr>
+                                    <th></th>
+                                    <th>1-я инстанция</th>
+                                    <th>2-я инстанция</th>
+                                    <th>3-я инстанция</th>
+                                    <th>4-я инстанция</th>
+                                </tr>
+                                <tr>
+                                    <th>Дата передачи</th>
+                                    <th></th>
+                                    <td>
+                                    </td><td>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Решение суда</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Дата решения</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Дата получен.реш.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Сумма отказано</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Сумма удовл.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Уплачено добр.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Гос.пошлина удов.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Гос.пошлина откз.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Услуги пред.удов.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Услуги пред.откз.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Суд.издер.удов.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Суд.издер.откз.</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Упл.Гос.пошлина</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Дата вступ.в законную силу</th>
+                                    <td></td>
+                                    <th>Итоговое реш.суда(Отчеты)</th>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Комментарий к решению суда</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>*@
                 </div>
             </div>
 

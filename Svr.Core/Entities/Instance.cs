@@ -1,11 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Svr.Core.Entities
 {
     public class Instance : BaseEntityDescription
     {
-        //public long ClaimId { get; set; }
+        [Display(Name = "Номер инстанции")]
+        public byte Number { get; set; }
+
+        public long ClaimId { get; set; }
         [Display(Name = "Иск")]
         public virtual Claim Claim { get; set; }
 
@@ -13,8 +17,10 @@ namespace Svr.Core.Entities
         [DataType(DataType.Date)]
         public DateTime? DateTransfer { get; set; }
 
+        public long? CourtDecisionId { get; set; }
         [Display(Name = "Решение суда")]
-        public string CourtDecision { get; set; }
+        [ForeignKey("CourtDecisionId")]
+        public Dir CourtDecision { get; set; }
 
         [Display(Name = "Дата решения")]
         public DateTime? DateCourtDecision { get; set; }
@@ -88,5 +94,6 @@ namespace Svr.Core.Entities
         [Display(Name = "Сумма штрафа")]
         public decimal? SumPenalty { get; set; }
 
+        public override string ToString() => "Инстанция";
     }
 }
