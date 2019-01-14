@@ -131,8 +131,8 @@ namespace Svr.Web.Controllers
             if (item == null)
             {
                 StatusMessage = $"Не удалось загрузить иск с ID = {id}.";
-                //return RedirectToAction(nameof(Index));
-                return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
+                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
 
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
