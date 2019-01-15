@@ -57,20 +57,33 @@
             <a asp-controller="Districts" asp-action="Details" asp-route-id="@Model.District.Id">@Model.District.Name</a>
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Instances)
+            <a asp-controller="Instances" asp-action="Index" asp-route-owner="@Model.Id">Список инстанций</a>
         </dt>
         <dd>
-            <a asp-controller="Instances" asp-action="Index" asp-route-owner="@Model.Id" class="btn btn-default">Список инстанций</a>
-            <hr />
-            @*@if (Model.Instances.Count < 4)
-            {
-                <a asp-controller="Instances" asp-action="Create" asp-route-owner="@Model.Id">Добавить инстанцию</a>
-                <hr />
-            }*@
             @foreach (var item in Model.Instances)
             {
-                <a asp-controller="Instances" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-                <hr />
+                <a asp-controller="Instances" asp-action="Details" asp-route-id="@item.Id">@item.Number @item.Name</a>
+                <br />
+            }
+        </dd>
+        <dt>
+            <a asp-controller="Meetings" asp-action="Index" asp-route-owner="@Model.Id">График заседаний</a>
+        </dt>
+        <dd>
+            @foreach (var item in Model.Meetings)
+            {
+                <a asp-controller="Meetings" asp-action="Details" asp-route-id="@item.Id">@item.Number @item.Name</a>
+                <br />
+            }
+        </dd>
+        <dt>
+            <a asp-controller="FileEntities" asp-action="Index" asp-route-owner="@Model.Id">Документы по иску</a>
+        </dt>
+        <dd>
+            @foreach (var item in Model.FileEntities)
+            {
+                <a asp-controller="FileEntities" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                <br />
             }
         </dd>
     </dl>

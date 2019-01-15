@@ -52,7 +52,9 @@
     <Folder Include="Models\ClaimsViewModels\" />
     <Folder Include="Models\InstanceViewModels\" />
     <Folder Include="Models\MeetingsViewModels\" />
+    <Folder Include="Models\FileEntityViewModels\" />
     <Folder Include="Views\Applicants\" />
+    <Folder Include="wwwroot\Files\" />
   </ItemGroup>
 
 </Project>

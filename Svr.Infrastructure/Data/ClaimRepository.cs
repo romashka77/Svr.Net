@@ -21,7 +21,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(i => i.Instances).Include(d => d.District).ThenInclude(e => e.Region).SingleOrDefault(m => m.Id == id);
+            return Entities.Include(f => f.FileEntities).Include(m =>m.Meetings).Include(i => i.Instances).Include(d => d.District).ThenInclude(e => e.Region).SingleOrDefault(m => m.Id == id);
         }
 
         public virtual async Task<Claim> GetByIdWithItemsAsync(long? id)
@@ -30,7 +30,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return await Entities.Include(i => i.Instances).Include(d => d.District).ThenInclude(e => e.Region).SingleOrDefaultAsync(m => m.Id == id);
+            return await Entities.Include(f => f.FileEntities).Include(m => m.Meetings).Include(i => i.Instances).Include(d => d.District).ThenInclude(e => e.Region).SingleOrDefaultAsync(m => m.Id == id);
         }
     }
 }

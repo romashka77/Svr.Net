@@ -84,11 +84,18 @@ namespace Svr.Core.Entities
         [Display(Name = "График заседаний")]
         public virtual ICollection<Meeting> Meetings { get; set; }
 
+        /// <summary>
+        /// Колекция файлов
+        /// </summary>
+        [Display(Name = "Документы по иску")]
+        public virtual ICollection<FileEntity> FileEntities { get; set; }
+
         public override string ToString() => "Иск";
         public Claim()
         {
             Instances = new List<Instance>();
             Meetings = new List<Meeting>();
+            FileEntities = new List<FileEntity>();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Svr.Infrastructure.Data
         public DbSet<Claim> Claims { get; set; }
         public DbSet<Instance> Instances { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<FileEntity> FileEntities { get; set; }
 
 
 
@@ -62,6 +63,7 @@ namespace Svr.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new ClaimConfiguration());
             modelBuilder.ApplyConfiguration(new InstanceConfiguration());
             modelBuilder.ApplyConfiguration(new MeetingConfiguration());
+            modelBuilder.ApplyConfiguration(new FileEntityConfiguration());
 
             //modelBuilder.ApplyConfiguration(new ManConfiguration());
             base.OnModelCreating(modelBuilder);

@@ -1,4 +1,4 @@
-﻿@model Svr.Web.Models.InstanceViewModels.IndexViewModel
+﻿@model Svr.Web.Models.MeetingsViewModels.IndexViewModel
 
 @Html.Partial("_filtration", Model.FilterViewModel)
 
@@ -11,7 +11,6 @@
         <div>
             <hr />
             <h4>@item</h4>
-
             <dl class="dl-horizontal">
                 <dt>
                     @Html.DisplayNameFor(modelItem => item.Number)
@@ -49,12 +48,24 @@
                 <dd>
                     @Html.DisplayFor(modelItem => item.UpdatedOnUtc)
                 </dd>
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.Date)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(modelItem => item.Time)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </dd>
             </dl>
         </div>
         <div>
-            <a asp-action="Edit" asp-controller="Instances" asp-route-id="@item.Id" class="btn btn-default">Редактировать</a>
-            <a asp-action="Details" asp-controller="Instances" asp-route-id="@item.Id" class="btn btn-default">Подробнее</a>
-            <a asp-action="Delete" asp-controller="Instances" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
+            <a asp-action="Edit" asp-controller="Meetings" asp-route-id="@item.Id" class="btn btn-default">Редактировать</a>
+            <a asp-action="Details" asp-controller="Meetings" asp-route-id="@item.Id" class="btn btn-default">Подробнее</a>
+            <a asp-action="Delete" asp-controller="Meetings" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
         </div>
     }
     @Html.Partial("_pagination", Model)

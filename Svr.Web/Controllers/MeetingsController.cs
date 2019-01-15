@@ -106,7 +106,9 @@ namespace Svr.Web.Controllers
                     CreatedOnUtc = i.CreatedOnUtc,
                     UpdatedOnUtc = i.UpdatedOnUtc,
                     Claim = i.Claim,
-                    Number = i.Number
+                    Number = i.Number,
+                    Date=i.Date,
+                    Time=i.Time
                 }),
                 Claim = (await сlaimRepository.GetByIdAsync(_owner)),
                 PageViewModel = new PageViewModel(count, page, itemsPage),

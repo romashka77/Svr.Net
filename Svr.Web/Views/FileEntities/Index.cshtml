@@ -1,0 +1,68 @@
+﻿@model Svr.Web.Models.FileEntityViewModels.IndexViewModel
+
+@{
+    ViewData["Title"] = $"Список документов по иску {Model.Claim.Name}";
+}
+
+<h4>@ViewData["Title"]</h4>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<p>
+    <a asp-action="Details" asp-controller="Claims" asp-route-id="@Model.Claim.Id" class="btn btn-default">Назад к @Model.Claim.Name</a>
+    <a asp-action="Create" asp-controller="FileEntities" asp-route-owner="@Model.Claim.Id" class="btn btn-default">Добавить</a>
+</p>
+@Html.Partial("List", Model)
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Path)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedOnUtc)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UpdatedOnUtc)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Claim)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Path)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedOnUtc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdatedOnUtc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Claim.Code)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
