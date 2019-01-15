@@ -22,9 +22,11 @@ namespace Svr.Core.Entities
         [ForeignKey("CourtDecisionId")]
         public Dir CourtDecision { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name = "Дата решения")]
         public DateTime? DateCourtDecision { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name = "Дата получения решения")]
         public DateTime? DateInCourtDecision { get; set; }
 
@@ -59,8 +61,10 @@ namespace Svr.Core.Entities
         public decimal? DutyPaid { get; set; }
 
         //shortage-недостача
+        [DataType(DataType.Date)]
         [Display(Name = "Период с")]
         public DateTime? DateSShortage { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "Период по")]
         public DateTime? DateToShortage { get; set; }
         [Display(Name = "Страх.часть ПФР")]
@@ -73,8 +77,10 @@ namespace Svr.Core.Entities
         public decimal? TFOMSShortage { get; set; }
 
         //fine - пени
+        [DataType(DataType.Date)]
         [Display(Name = "Период с")]
         public DateTime? DateSFine { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "Период по")]
         public DateTime? DateToFine { get; set; }
         [Display(Name = "Страх.часть ПФР")]
@@ -87,8 +93,10 @@ namespace Svr.Core.Entities
         public decimal? TFOMSFine { get; set; }
 
         //penalty - штраф
+        [DataType(DataType.Date)]
         [Display(Name = "Период с")]
         public DateTime? DateSPenalty { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "Период по")]
         public DateTime? DateToPenalty { get; set; }
         [Display(Name = "Сумма штрафа")]

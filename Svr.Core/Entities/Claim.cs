@@ -78,10 +78,17 @@ namespace Svr.Core.Entities
         [Display(Name = "Инстанции")]
         public virtual ICollection<Instance> Instances { get; set; }
         
+        /// <summary>
+        /// Колекция заседаний
+        /// </summary>
+        [Display(Name = "График заседаний")]
+        public virtual ICollection<Meeting> Meetings { get; set; }
+
         public override string ToString() => "Иск";
         public Claim()
         {
             Instances = new List<Instance>();
+            Meetings = new List<Meeting>();
         }
     }
 }
