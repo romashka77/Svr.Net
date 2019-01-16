@@ -8,7 +8,7 @@
 <h2>@ViewData["Title"]</h2>
 
 <div>
-    <h4>Meeting</h4>
+    <h4>@Model</h4>
     <div>
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
         <a asp-action="Index" asp-route-owner="@Model.ClaimId" class="btn btn-default">Назад</a>

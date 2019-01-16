@@ -9,7 +9,7 @@ namespace Svr.Core.Entities
         [Display(Name = "Иск")]
         public virtual Claim Claim { get; set; }
 
-        [Display(Name = "Путь к файлу")]
+        [Display(Name = "Имя файла")]
         public string Path { get; set; }
 
         public override string ToString() => "Файл";

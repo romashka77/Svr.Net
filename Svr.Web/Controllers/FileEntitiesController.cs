@@ -161,18 +161,16 @@ namespace Svr.Web.Controllers
             if ((ModelState.IsValid) /*&& (uploadedFile != null)*/)
             {
                 // путь к папке Files
-                model.Path = $"{appEnvironment.WebRootPath}/Files/{model.ClaimId}_{model.UploadedFile.FileName}";
+                model.Path = $"{model.ClaimId}_{model.UploadedFile.FileName}";
                 // сохраняем файл в папку Files в каталоге wwwroot
-                using (var fileStream = new FileStream(model.Path , FileMode.Create))
+                using (var fileStream = new FileStream(GetFile(model.Path), FileMode.Create))
                 {
-                    await model.UploadedFile.CopyToAsync( fileStream);
+                    await model.UploadedFile.CopyToAsync(fileStream);
                 }
 
                 var item = await repository.AddAsync(new FileEntity { Name = model.Name, ClaimId = model.ClaimId, Description = model.Description, Claim = model.Claim, Path = model.Path });
                 if (item != null)
                 {
-
-
                     StatusMessage = $"Добавлено заседание с Id={item.Id}, имя={item.Name}.";
                     return RedirectToAction(nameof(Index), new { owner = item.ClaimId });
                 }
@@ -182,91 +180,144 @@ namespace Svr.Web.Controllers
             return View(model);
         }
         #endregion
-        // GET: FileEntities/Edit/5
-        //public async Task<IActionResult> Edit(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Download(string path)
+        {
+            if (path == null)
+                throw new ApplicationException($"Проверте имя файла.");
 
-        //    var fileEntity = await _context.FileEntities.SingleOrDefaultAsync(m => m.Id == id);
-        //    if (fileEntity == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["ClaimId"] = new SelectList(_context.Claims, "Id", "Code", fileEntity.ClaimId);
-        //    return View(fileEntity);
-        //}
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(GetFile(path), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, GetContentType(path), Path.GetFileName(path));
+        }
+
+        #region Edit
+        // GET: FileEntities/Edit/5
+        public async Task<ActionResult> Edit(long? id)
+        {
+            var item = await repository.GetByIdWithItemsAsync(id);
+            if (item == null)
+            {
+                StatusMessage = $"Ошибка: Не удалось найти заседание с ID = {id}.";
+                //return RedirectToAction(nameof(Index));
+                throw new ApplicationException($"Не удалось загрузить заседание с ID {id}.");
+            }
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, Claim = item.Claim, ClaimId = item.ClaimId, Path = item.Path };
+            await SetViewBag(model);
+            return View(model);
+        }
 
         //// POST: FileEntities/Edit/5
         //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(long id, [Bind("ClaimId,Path,Description,Name,Id,CreatedOnUtc,UpdatedOnUtc")] FileEntity fileEntity)
-        //{
-        //    if (id != fileEntity.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //using (var fileStream = new FileStream(model.Path, FileMode.Create))
+                    //{
+                    //    await model.UploadedFile.CopyToAsync(fileStream);
+                    //}
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(fileEntity);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!FileEntityExists(fileEntity.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["ClaimId"] = new SelectList(_context.Claims, "Id", "Code", fileEntity.ClaimId);
-        //    return View(fileEntity);
-        //}
+                    await repository.UpdateAsync(new FileEntity { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, Path = model.Path });
+                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    if (!(await repository.EntityExistsAsync(model.Id)))
+                    {
+                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                    }
+                    else
+                    {
+                        StatusMessage = $"Непредвиденная ошибка при обновлении заседания с ID {model.Id}. {ex.Message}";
+                    }
+                }
+                //return RedirectToAction(nameof(Index));
+            }
+            await SetViewBag(model);
+            return View(model);
+        }
+        #endregion
+        #region Delete
+        // GET: FileEntities/Delete/5
+        public async Task<IActionResult> Delete(long? id)
+        {
+            var item = await repository.GetByIdAsync(id);
+            if (item == null)
+            {
+                //StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                //return RedirectToAction(nameof(Index));
+                throw new ApplicationException($"Не удалось найти заседание с ID {id}.");
+            }
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage, ClaimId = item.ClaimId, Path = item.Path };
+            return View(model);
+        }
 
-        //// GET: FileEntities/Delete/5
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // POST: FileEntities/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
+        {
+            try
+            {
+                await repository.DeleteAsync(new FileEntity { Id = model.Id, Name = model.Name });
+                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
 
-        //    var fileEntity = await _context.FileEntities
-        //        .Include(f => f.Claim)
-        //        .SingleOrDefaultAsync(m => m.Id == id);
-        //    if (fileEntity == null)
-        //    {
-        //        return NotFound();
-        //    }
+                FileInfo fileInf = new FileInfo(GetFile(model.Path));
+                if (fileInf.Exists)
+                {
+                    fileInf.Delete();
+                    // альтернатива с помощью класса File
+                    // File.Delete(path);
+                }
 
-        //    return View(fileEntity);
-        //}
-
-        //// POST: FileEntities/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(long id)
-        //{
-        //    var fileEntity = await _context.FileEntities.SingleOrDefaultAsync(m => m.Id == id);
-        //    _context.FileEntities.Remove(fileEntity);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
+                return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при удалении заседания с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
+            }
+        }
+        #endregion
         private async Task SetViewBag(ItemViewModel model)
         {
+        }
+        private string GetFile(string patn)
+        {
+            return $"{appEnvironment.WebRootPath }/Files/{patn}";
+        }
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".xlsx", "application/vnd.openxmlformats officedocument.spreadsheetml.sheet"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"}
+            };
         }
     }
 }

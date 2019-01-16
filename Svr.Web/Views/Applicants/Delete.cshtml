@@ -37,11 +37,12 @@
             @Html.DisplayFor(model => model.UpdatedOnUtc)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="Name" />
         <input type="submit" value="Удалить" class="btn btn-default" />
         <a asp-action="Index" class="btn btn-default">Назад</a>
     </form>
+    
 </div>

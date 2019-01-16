@@ -236,6 +236,7 @@ namespace Svr.Web.Controllers
         }
         #endregion
         #region Delete
+        [HttpGet]
         // GET: Applicants/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
@@ -249,7 +250,7 @@ namespace Svr.Web.Controllers
             return View(model);
         }
         // POST: Applicants/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {

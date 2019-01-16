@@ -1,57 +1,49 @@
-﻿@model Svr.Core.Entities.FileEntity
+﻿@using Svr.Core.Entities
+@model Svr.Web.Models.FileEntityViewModels.ItemViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактировать";
 }
 
-<h2>Edit</h2>
-
-<h4>FileEntity</h4>
+<h2>@ViewData["Title"]</h2>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<h4>@Model</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ClaimId" class="control-label"></label>
-                <select asp-for="ClaimId" class="form-control" asp-items="ViewBag.ClaimId"></select>
-                <span asp-validation-for="ClaimId" class="text-danger"></span>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => Model.Id)
+        @Html.HiddenFor(model => Model.ClaimId)
+        @Html.HiddenFor(model => Model.CreatedOnUtc)
+        @Html.HiddenFor(model => Model.Path)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="Path" class="control-label"></label>
-                <input asp-for="Path" class="form-control" />
-                <span asp-validation-for="Path" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить" class="btn btn-default" />
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreatedOnUtc" class="control-label"></label>
-                <input asp-for="CreatedOnUtc" class="form-control" />
-                <span asp-validation-for="CreatedOnUtc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedOnUtc" class="control-label"></label>
-                <input asp-for="UpdatedOnUtc" class="form-control" />
-                <span asp-validation-for="UpdatedOnUtc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
+        </div>
+
     </div>
-</div>
+}
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-route-owner="@Model.ClaimId" class="btn btn-default">Назад</a>
 </div>
 
 @section Scripts {
