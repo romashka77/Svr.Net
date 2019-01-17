@@ -33,3 +33,8 @@
         display: none;
     }
 }
+/*textarea*/
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
