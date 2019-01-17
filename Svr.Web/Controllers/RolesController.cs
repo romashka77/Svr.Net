@@ -11,7 +11,7 @@ using Svr.Web.Models.RoleViewModels;
 
 namespace Svr.Web.Controllers
 {
-    [Authorize(Roles = "Администратор, Администратор ОПФР, Администратор УПФР")]
+    [Authorize(Roles = "Администратор")]
     public class RolesController : Controller
     {
         RoleManager<IdentityRole> roleManager;

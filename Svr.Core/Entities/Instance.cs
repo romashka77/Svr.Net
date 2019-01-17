@@ -31,33 +31,43 @@ namespace Svr.Core.Entities
         public DateTime? DateInCourtDecision { get; set; }
 
         [Display(Name = "Сумма отказано")]
+        [Column(TypeName = "money")]
         public decimal? SumDenied { get; set; }
 
         [Display(Name = "Сумма удовлетворено")]
+        [Column(TypeName = "money")]
         public decimal? SumSatisfied { get; set; }
 
         [Display(Name = "Уплачено добровольно")]
+        [Column(TypeName = "money")]
         public decimal? PaidVoluntarily { get; set; }
 
         [Display(Name = "Гос.пошлина удов.")]
+        [Column(TypeName = "money")]
         public decimal? DutySatisfied { get; set; }
 
         [Display(Name = "Гос.пошлина отк.")]
+        [Column(TypeName = "money")]
         public decimal? DutyDenied { get; set; }
 
         [Display(Name = "Услуги пред.удов.")]
+        [Column(TypeName = "money")]
         public decimal? ServicesSatisfied { get; set; }
 
         [Display(Name = "Услуги пред.отк.")]
+        [Column(TypeName = "money")]
         public decimal? ServicesDenied { get; set; }
 
         [Display(Name = "Суд.издер.удов.")]
+        [Column(TypeName = "money")]
         public decimal? СostSatisfied { get; set; }
 
         [Display(Name = "Суд.издер.отк.")]
+        [Column(TypeName = "money")]
         public decimal? СostDenied { get; set; }
 
         [Display(Name = "Упл.гос.пошлина")]
+        [Column(TypeName = "money")]
         public decimal? DutyPaid { get; set; }
 
         //shortage-недостача
@@ -68,12 +78,16 @@ namespace Svr.Core.Entities
         [Display(Name = "Период по")]
         public DateTime? DateToShortage { get; set; }
         [Display(Name = "Страх.часть ПФР")]
+        [Column(TypeName = "money")]
         public decimal? InsurancePartPFRShortage { get; set; }
         [Display(Name = "Накоп.часть ПФР")]
+        [Column(TypeName = "money")]
         public decimal? FundedPartPFRShortage { get; set; }
         [Display(Name = "В ФФОМС")]
+        [Column(TypeName = "money")]
         public decimal? FFOMSShortage { get; set; }
         [Display(Name = "В ТФОМС")]
+        [Column(TypeName = "money")]
         public decimal? TFOMSShortage { get; set; }
 
         //fine - пени
@@ -84,12 +98,16 @@ namespace Svr.Core.Entities
         [Display(Name = "Период по")]
         public DateTime? DateToFine { get; set; }
         [Display(Name = "Страх.часть ПФР")]
+        [Column(TypeName = "money")]
         public decimal? InsurancePartPFRFine { get; set; }
         [Display(Name = "Накоп.часть ПФР")]
+        [Column(TypeName = "money")]
         public decimal? FundedPartPFRFine { get; set; }
         [Display(Name = "В ФФОМС")]
+        [Column(TypeName = "money")]
         public decimal? FFOMSFine { get; set; }
         [Display(Name = "В ТФОМС")]
+        [Column(TypeName = "money")]
         public decimal? TFOMSFine { get; set; }
 
         //penalty - штраф
@@ -100,6 +118,7 @@ namespace Svr.Core.Entities
         [Display(Name = "Период по")]
         public DateTime? DateToPenalty { get; set; }
         [Display(Name = "Сумма штрафа")]
+        [Column(TypeName = "money")]
         public decimal? SumPenalty { get; set; }
 
         public override string ToString() => "Инстанция";

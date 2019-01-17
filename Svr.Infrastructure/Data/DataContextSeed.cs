@@ -179,11 +179,11 @@ namespace Svr.Infrastructure.Data
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(2));
 
-            groupClaim = new GroupClaim { Name = "3", Description = "", Code = "3", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 3", Description = "", Code = "3", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(3));
 
-            groupClaim = new GroupClaim { Name = "4", Description = "", Code = "4", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 4", Description = "", Code = "4", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(4));
 
@@ -199,95 +199,95 @@ namespace Svr.Infrastructure.Data
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(7));
 
-            groupClaim = new GroupClaim { Name = "8", Description = "", Code = "8", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 8", Description = "", Code = "8", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(8));
 
-            groupClaim = new GroupClaim { Name = "9", Description = "", Code = "9", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 9", Description = "", Code = "9", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(9));
 
-            groupClaim = new GroupClaim { Name = "10", Description = "", Code = "10", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 10", Description = "", Code = "10", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(10));
 
-            groupClaim = new GroupClaim { Name = "11", Description = "", Code = "11", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 11", Description = "", Code = "11", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(11));
 
-            groupClaim = new GroupClaim { Name = "12", Description = "", Code = "12", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 12", Description = "", Code = "12", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(12));
 
-            groupClaim = new GroupClaim { Name = "13", Description = "", Code = "13", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 13", Description = "", Code = "13", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(13));
 
-            groupClaim = new GroupClaim { Name = "14", Description = "", Code = "14", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 14", Description = "", Code = "14", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(14));
 
-            groupClaim = new GroupClaim { Name = "15", Description = "", Code = "15", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 15", Description = "", Code = "15", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(15));
 
-            groupClaim = new GroupClaim { Name = "16", Description = "", Code = "16", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 16", Description = "", Code = "16", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(16));
 
-            groupClaim = new GroupClaim { Name = "17", Description = "", Code = "17", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 17", Description = "", Code = "17", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(17));
 
-            groupClaim = new GroupClaim { Name = "18", Description = "", Code = "18", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 18", Description = "", Code = "18", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(18));
 
-            groupClaim = new GroupClaim { Name = "19", Description = "", Code = "19", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 19", Description = "", Code = "19", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(19));
 
-            groupClaim = new GroupClaim { Name = "20", Description = "", Code = "20", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 20", Description = "", Code = "20", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(20));
 
-            groupClaim = new GroupClaim { Name = "21", Description = "", Code = "21", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 21", Description = "", Code = "21", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(21));
 
-            groupClaim = new GroupClaim { Name = "22", Description = "", Code = "22", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 22", Description = "", Code = "22", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(22));
 
-            groupClaim = new GroupClaim { Name = "23", Description = "", Code = "23", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 23", Description = "", Code = "23", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(23));
 
-            groupClaim = new GroupClaim { Name = "24", Description = "", Code = "24", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 24", Description = "", Code = "24", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(24));
 
-            groupClaim = new GroupClaim { Name = "25", Description = "", Code = "25", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 25", Description = "", Code = "25", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(25));
 
-            groupClaim = new GroupClaim { Name = "26", Description = "", Code = "26", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 26", Description = "", Code = "26", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(26));
 
-            groupClaim = new GroupClaim { Name = "27", Description = "", Code = "27", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 27", Description = "", Code = "27", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(27));
 
-            groupClaim = new GroupClaim { Name = "28", Description = "", Code = "28", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 28", Description = "", Code = "28", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(28));
 
-            groupClaim = new GroupClaim { Name = "29", Description = "", Code = "29", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 29", Description = "", Code = "29", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(29));
 
-            groupClaim = new GroupClaim { Name = "31", Description = "", Code = "31", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = "Name 31", Description = "", Code = "31", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(31));
 

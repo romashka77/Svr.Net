@@ -14,6 +14,7 @@ namespace Svr.Core.Entities
         /// Возвращает или задает идентификатор сущности
         /// </summary>
         [Key]
+        
         public long Id { get; set; }
         /// <summary>
         /// Дата и время создания

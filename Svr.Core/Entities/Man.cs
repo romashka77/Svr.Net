@@ -22,6 +22,7 @@ namespace Svr.Core.Entities
         public string MiddleName { get; set; }//Отчество
 
         [Display(Name = "Дата рождения")]
+        [DataType(DataType.Date)]
         public DateTime? DateofBirth { get; set; }//Дата рождения
 
         [Display(Name = "СНИЛС", Prompt = "Введите СНИЛС")]

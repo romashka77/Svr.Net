@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Svr.Core.Entities
@@ -10,10 +11,12 @@ namespace Svr.Core.Entities
         /// <summary>
         /// Сумма
         /// </summary>
+        [Column(TypeName = "money")]
         public decimal Sum { get; set; }
         /// <summary>
         /// Дата
         /// </summary>
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         /// <summary>
         /// Описание
