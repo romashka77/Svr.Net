@@ -31,7 +31,8 @@ namespace Svr.Infrastructure.Data
                 if (!dataContext.CategoryDisputes.Any())
                 {
                     //Входящие
-                    dataContext.CategoryDisputes.AddRange(GetPreconfiguredCategoryDisputeIn(dataContext));
+                    dataContext.CategoryDisputes.AddRange(await GetPreconfiguredCategoryDisputeIn(dataContext));
+                    await dataContext.SaveChangesAsync();
                     //Исходящие
                     dataContext.CategoryDisputes.AddRange(GetPreconfiguredCategoryDisputeOut(dataContext));
                     await dataContext.SaveChangesAsync();
@@ -167,126 +168,154 @@ namespace Svr.Infrastructure.Data
             return new List<CategoryDispute>() { categoryDispute };
         }
 
-        private static IEnumerable<CategoryDispute> GetPreconfiguredCategoryDisputeIn(DataContext dataContext)
+        private static async Task<IEnumerable<CategoryDispute>> GetPreconfiguredCategoryDisputeIn(DataContext dataContext)
         {
             categoryDispute = new CategoryDispute { Name = "Входящие", Description = "Входящие документы" };
             dataContext.CategoryDisputes.Add(categoryDispute);
             groupClaim = new GroupClaim { Name = "Административные штрафы, в т.ч.", Description = "", Code = "1", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(1));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Обжалования", Description = "", Code = "2", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(2));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 3", Description = "", Code = "3", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(3));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 4", Description = "", Code = "4", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(4));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Взыскание по ДТП", Description = "", Code = "5", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(5));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Споры, возникающие в рамках исполнительного производства", Description = "", Code = "6", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(6));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Дела о банкротстве", Description = "", Code = "7", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(7));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 8", Description = "", Code = "8", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(8));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 9", Description = "", Code = "9", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(9));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 10", Description = "", Code = "10", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(10));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 11", Description = "", Code = "11", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(11));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 12", Description = "", Code = "12", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(12));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 13", Description = "", Code = "13", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(13));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 14", Description = "", Code = "14", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(14));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 15", Description = "", Code = "15", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(15));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 16", Description = "", Code = "16", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(16));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 17", Description = "", Code = "17", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(17));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 18", Description = "", Code = "18", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(18));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 19", Description = "", Code = "19", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(19));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 20", Description = "", Code = "20", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(20));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 21", Description = "", Code = "21", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(21));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 22", Description = "", Code = "22", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(22));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 23", Description = "", Code = "23", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(23));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 24", Description = "", Code = "24", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(24));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 25", Description = "", Code = "25", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(25));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 26", Description = "", Code = "26", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(26));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 27", Description = "", Code = "27", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(27));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 28", Description = "", Code = "28", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(28));
+            await dataContext.SaveChangesAsync();
 
             groupClaim = new GroupClaim { Name = "Name 29", Description = "", Code = "29", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(29));
-
+            await dataContext.SaveChangesAsync();
             groupClaim = new GroupClaim { Name = "Name 31", Description = "", Code = "31", CategoryDispute = categoryDispute };
             dataContext.GroupClaims.Add(groupClaim);
             dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(31));
@@ -823,113 +852,113 @@ namespace Svr.Infrastructure.Data
                 case 1:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = "О признании обязанности по уплате страховых взносов исполненной", Code = "1.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "О зачете (возврате) излишне уплаченных (взысканных) страховых взносов, пеней и штрафов", Code = "1.2", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = "О признании обязанности по уплате страховых взносов исполненной".Substring(0,100), Code = "1.1", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "О зачете (возврате) излишне уплаченных (взысканных) страховых взносов, пеней и штрафов".Substring(0,100), Code = "1.2", GroupClaim = groupClaim, Description = "О признании обязанности по уплате страховых взносов исполненной" }
                     };
                 case 2:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = "О признании незаконным решения территориального органа ПФР о взыскании недоимки по страховым взносам, пеней  и штрафов", Code = "2.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "О признании незаконным решения территориального органа ПФР о взыскании страховых взносов в фиксированных размерах", Code = "2.2", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "Об обжаловании  решения территориального органа ПФР о привлечении к ответственности за нарушение законодательства об обязательном пенсионном страховании и законодательства о страховых взносах", Code = "2.3", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "Об освобождении от уплаты страховых взносов на обязательное пенсионное и медицинское страхование в период   нахождения в отпуске по уходу за ребёнком до 1,5 лет.", Code = "2.4", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = "О признании незаконным решения территориального органа ПФР о взыскании недоимки по страховым взносам, пеней  и штрафов".Substring(0,100), Code = "2.1", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "О признании незаконным решения территориального органа ПФР о взыскании страховых взносов в фиксированных размерах".Substring(0,100), Code = "2.2", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "Об обжаловании  решения территориального органа ПФР о привлечении к ответственности за нарушение законодательства об обязательном пенсионном страховании и законодательства о страховых взносах".Substring(0,100), Code = "2.3", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "Об освобождении от уплаты страховых взносов на обязательное пенсионное и медицинское страхование в период   нахождения в отпуске по уходу за ребёнком до 1,5 лет.".Substring(0,100), Code = "2.4", GroupClaim = groupClaim, Description = "" }
                     };
                 case 3:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = "О внесении изменений в индивидуальные сведения персонифицированного учета застрахованного лица", Code = "3.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "Иные споры, возникающие при реализации Федерального закона от  01.04.1996  № 27-ФЗ", Code = "3.2", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = "О внесении изменений в индивидуальные сведения персонифицированного учета застрахованного лица".Substring(0,100), Code = "3.1", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "Иные споры, возникающие при реализации Федерального закона от  01.04.1996  № 27-ФЗ".Substring(0,100), Code = "3.2", GroupClaim = groupClaim, Description = "" }
                     };
                 case 4:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = "О признании недействительными договоров (гос.контрактов) и применении последствий недействительной сделки", Code = "4.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "Взыскание стоимости товара, работ, услуг по договору (государственному контракту)", Code = "4.2", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "О расторжении договора (гос.контракта) и взыскании неустойки, штрафа, пеней за неисполнение или ненадлежащее исполнение обязательств по договору", Code = "4.3", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "Иные споры, возникающие из договоров (соглашений, государственных контрактов)", Code = "4.4", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = "О признании недействительными договоров (гос.контрактов) и применении последствий недействительной сделки".Substring(0,100), Code = "4.1", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "Взыскание стоимости товара, работ, услуг по договору (государственному контракту)".Substring(0,100), Code = "4.2", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "О расторжении договора (гос.контракта) и взыскании неустойки, штрафа, пеней за неисполнение или ненадлежащее исполнение обязательств по договору".Substring(0,100), Code = "4.3", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "Иные споры, возникающие из договоров (соглашений, государственных контрактов)".Substring(0,100), Code = "4.4", GroupClaim = groupClaim, Description = "" }
                     };
                 case 5:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = "Взыскание по ДТП", Code = "5", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = "Взыскание по ДТП".Substring(0,100), Code = "5", GroupClaim = groupClaim, Description = "" }
                     };
                 case 6:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = "Споры, возникающие в рамках исполнительного производства", Code = "6", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = "Споры, возникающие в рамках исполнительного производства".Substring(0,100), Code = "6", GroupClaim = groupClaim, Description = "" }
                     };
                 case 7:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = "Дела о банкротстве", Code = "7", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = "Дела о банкротстве".Substring(0,100), Code = "7", GroupClaim = groupClaim, Description = "" }
                     };
                 case 8:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках ФЗ № 212-ФЗ", Code = "8.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц  в рамках ФЗ № 167-ФЗ", Code = "8.2", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц  в рамках ФЗ № 27-ФЗ", Code = "8.3", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках ФЗ № 212-ФЗ".Substring(0,100), Code = "8.1", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц  в рамках ФЗ № 167-ФЗ".Substring(0,100), Code = "8.2", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Name = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц  в рамках ФЗ № 27-ФЗ".Substring(0,100), Code = "8.3", GroupClaim = groupClaim, Description = "" }
                     };
                 case 9:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "9.1", Name = "О признании обязанности по уплате страховых взносов исполненной", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "9.2", Name = "О зачете(возврате) излишне уплаченных(взысканных) страховых взносов, пеней и штрафов", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "9.1", Name = "О признании обязанности по уплате страховых взносов исполненной".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "9.2", Name = "О зачете(возврате) излишне уплаченных(взысканных) страховых взносов, пеней и штрафов".Substring(0,100), GroupClaim = groupClaim, Description = "" }
                     };
                 case 10:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "10.1", Name = "О восстановлении на работе и оплате за время вынужденного прогула", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.2", Name = "О взыскании заработной платы", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.3", Name = "Об оспаривании дисциплинарного взыскания", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.4", Name = "О взыскании компенсации стоимости проезда к месту отдыха и обратно работников ПФР", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.5", Name = "Иные споры, возникающие из трудовых отношений", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "10.1", Name = "О восстановлении на работе и оплате за время вынужденного прогула".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "10.2", Name = "О взыскании заработной платы".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "10.3", Name = "Об оспаривании дисциплинарного взыскания".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "10.4", Name = "О взыскании компенсации стоимости проезда к месту отдыха и обратно работников ПФР".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "10.5", Name = "Иные споры, возникающие из трудовых отношений".Substring(0,100), GroupClaim = groupClaim, Description = "" }
                     };
                 case 11:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "11.1", Name = "О признании договора об обязательном пенсионном страховании недействительным", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "11.2", Name = "Споры по агентским договорам, заключенным с НПФ(территориальный орган ПФР – 3 - е лицо)", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "11.3", Name = "Иные споры, возникающие при реализации Федерального закона от 07.05.1998 № 75 - ФЗ", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "11.1", Name = "О признании договора об обязательном пенсионном страховании недействительным".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "11.2", Name = "Споры по агентским договорам, заключенным с НПФ(территориальный орган ПФР – 3 - е лицо)".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "11.3", Name = "Иные споры, возникающие при реализации Федерального закона от 07.05.1998 № 75 - ФЗ".Substring(0,100), GroupClaim = groupClaim, Description = "" }
                     };
                 case 12:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "12", Name = "О признании права состоять на учёте в ПФР без присвоения страхового номера индивидуального лицевого счета", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "12", Name = "О признании права состоять на учёте в ПФР без присвоения страхового номера индивидуального лицевого счета".Substring(0,100), GroupClaim = groupClaim, Description = "" }
                     };
                 case 13:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "13.1", Name = "О взыскании стоимости проезда к месту отдыха и обратно", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "13.2", Name = "О предоставлении проездных документов, обеспечивающих проезд пенсионера к месту отдыха и обратно", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "13.1", Name = "О взыскании стоимости проезда к месту отдыха и обратно".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "13.2", Name = "О предоставлении проездных документов, обеспечивающих проезд пенсионера к месту отдыха и обратно".Substring(0,100), GroupClaim = groupClaim, Description = "" }
                     };
                 case 14:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "14", Name = "О взыскании расходов, связанных с выездом из районов Крайнего Севера и приравненных к ним местностей   на новое место жительства(ст. 35 Закона РФ № 4520 - 1)", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "14", Name = "О взыскании расходов, связанных с выездом из районов Крайнего Севера и приравненных к ним местностей   на новое место жительства(ст. 35 Закона РФ № 4520 - 1)".Substring(0,100), GroupClaim = groupClaim, Description = "" }
                     };
                 case 15:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "15.1", Name = "Индексация и валоризация пенсий, в т.ч.", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.1", Name = "О взыскании индексации(компенсации) несвоевременно назначенной пенсии и несвоевременно произведённого перерасчёта пенсии", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.2.О", Name = "Взыскании индексации несвоевременно выплаченной пенсии", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.3", Name = "О взыскании убытков, причиненных неправильным исчислением пенсии", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.4", Name = "Спор о правильности индексации страховой пенсии", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.5", Name = "Спор о  правильности валоризации величины расчетного пенсионного капитала застрахованного лица, исчисленного  при оценке его пенсионных прав", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.6", Name = "Спор по  исчислению суммы расчетного пенсионного капитала застрахованного лица, с учетом которой исчисляется  размер страховой пенсии(страховой части  трудовой пенсии по старости)", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2", Name = "Специальный стаж(педагогический и медицинский состав), в т.ч.", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.1", Name = "Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости педагогическим работникам,  периодов их работы в должностях и учреждениях, не предусмотренных соответствующими Списками", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.2", Name = "Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости медицинским работникам,   периодов их работы в должностях и учреждениях, не предусмотренных соответствующими списками", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.3", Name = "Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости педагогическим работникам,  периодов работы и иной деятельности(в т.ч.по ранее действующему законодательству)", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.4", Name = "Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости медицинским работникам,  периодов работы и иной деятельности(в т.ч.по ранее действующему законодательству)", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.5", Name = "Об отказе исчислить медицинский стаж при работе в сельской местности и(или) поселках городского типа(рабочих поселках)  в соотношении один год, как год и три месяца", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.6", Name = "Об отказе исчислять стаж работы в должности хирурга, а также в иных должностях и учреждениях, предусмотренных в постановлении Правительства РФ от 29.10.2002 № 781, в соотношении один год, как год и шесть месяцев", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.7", Name = "Об отказе исчислять периоды нахождения в командировках, на курсах повышения квалификации, в учебных отпусках, протекавших   в периоды работы в должностях и учреждениях, предусмотренных в постановлении Правительства РФ от 29.10.2002 № 781 и по ранее действующему законодательству РФ, в соотношении один год, как год и шесть месяцев", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.3.1", Name = "Применение Списка №1 при назначении пенсии (пункт 1 части 1 статьи 30 ФЗ № 400-ФЗ)", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.3.2", Name = "Применение Списка №2 при назначении пенсии(пункт 2 части 1 статьи 30 ФЗ № 400 - ФЗ)", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.4.1", Name = "Назначение второй пенсии по ст. 29 Закона РФ № 1244 - 1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.4.2", Name = "О снижении пенсионного возраста на дополнительную величину по ст. 32 - 37 Закона РФ № 1244 - 1", GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.1", Name = "Индексация и валоризация пенсий, в т.ч.".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.1.1", Name = "О взыскании индексации(компенсации) несвоевременно назначенной пенсии и несвоевременно произведённого перерасчёта пенсии".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.1.2.О", Name = "Взыскании индексации несвоевременно выплаченной пенсии".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.1.3", Name = "О взыскании убытков, причиненных неправильным исчислением пенсии".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.1.4", Name = "Спор о правильности индексации страховой пенсии".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.1.5", Name = "Спор о  правильности валоризации величины расчетного пенсионного капитала застрахованного лица, исчисленного  при оценке его пенсионных прав".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.1.6", Name = "Спор по  исчислению суммы расчетного пенсионного капитала застрахованного лица, с учетом которой исчисляется  размер страховой пенсии(страховой части  трудовой пенсии по старости)".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.2", Name = "Специальный стаж(педагогический и медицинский состав), в т.ч.".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.2.1", Name = "Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости педагогическим работникам,  периодов их работы в должностях и учреждениях, не предусмотренных соответствующими Списками".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.2.2", Name = "Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости медицинским работникам,   периодов их работы в должностях и учреждениях, не предусмотренных соответствующими списками".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.2.3", Name = "Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости педагогическим работникам,  периодов работы и иной деятельности(в т.ч.по ранее действующему законодательству)".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.2.4", Name = "Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости медицинским работникам,  периодов работы и иной деятельности(в т.ч.по ранее действующему законодательству)".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.2.5", Name = "Об отказе исчислить медицинский стаж при работе в сельской местности и(или) поселках городского типа(рабочих поселках)  в соотношении один год, как год и три месяца".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.2.6", Name = "Об отказе исчислять стаж работы в должности хирурга, а также в иных должностях и учреждениях, предусмотренных в постановлении Правительства РФ от 29.10.2002 № 781, в соотношении один год, как год и шесть месяцев".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.2.7", Name = "Об отказе исчислять периоды нахождения в командировках, на курсах повышения квалификации, в учебных отпусках, протекавших   в периоды работы в должностях и учреждениях, предусмотренных в постановлении Правительства РФ от 29.10.2002 № 781 и по ранее действующему законодательству РФ, в соотношении один год, как год и шесть месяцев".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.3.1", Name = "Применение Списка №1 при назначении пенсии (пункт 1 части 1 статьи 30 ФЗ № 400-ФЗ)".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.3.2", Name = "Применение Списка №2 при назначении пенсии(пункт 2 части 1 статьи 30 ФЗ № 400 - ФЗ)".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.4.1", Name = "Назначение второй пенсии по ст. 29 Закона РФ № 1244 - 1".Substring(0,100), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.4.2", Name = "О снижении пенсионного возраста на дополнительную величину по ст. 32 - 37 Закона РФ № 1244 - 1".Substring(0,100), GroupClaim = groupClaim, Description = "" },
                         new SubjectClaim { Code = "15.4.3", Name = "О снижении пенсионного возраста по п. 11 ст. 2  Закона РФ № 2 - ФЗ", GroupClaim = groupClaim, Description = "" },
                         new SubjectClaim { Code = "15.5", Name = "Вторая пенсия, компенсационные и ежемесячные выплаты трудоспособному лицу, доплаты к пенсии, в т.ч.", GroupClaim = groupClaim, Description = "" },
                         new SubjectClaim { Code = "15.5.1", Name = "О праве на установление второй пенсии инвалидам военной травмы, УВОВ,ЖБЛ, родителям и вдовам военнослужащих", GroupClaim = groupClaim, Description = "" },
