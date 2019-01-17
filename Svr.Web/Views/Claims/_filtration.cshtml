@@ -5,10 +5,10 @@
         @Html.TextBox("searchString", Model.SearchString, htmlAttributes: new { @class = "form-control" })
         <label class="control-label">Регион: </label>
         @Html.DropDownList("lord", Model.Lords,"Выберите регион",
-                htmlAttributes: new { @class = "form-control" })
+                htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
         <label class="control-label">Район: </label>
         @Html.DropDownList("owner", Model.Owners,"Выберите район",
-                htmlAttributes: new { @class = "form-control" })
+                htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
         <input type="submit" value="Фильтр" class="btn btn-default" />
     </div>
 </form>

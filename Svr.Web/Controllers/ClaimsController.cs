@@ -253,9 +253,12 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId = model.RespondentId, Person3rdId = model.Person3rdId, Instances = model.Instances });
-
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    if ((model.RegionId != 0) && (model.DistrictId != 0))
+                    {
+                        await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId = model.RespondentId, Person3rdId = model.Person3rdId, Instances = model.Instances });
+                        StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    }
+                    else { StatusMessage = $"Проверте заполнение полей"; }
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -318,11 +321,15 @@ namespace Svr.Web.Controllers
 
             ViewBag.Сourts = new SelectList(await dirRepository.ListAsync(new DirSpecification("Суд")), "Id", "Name", model.СourtId);
 
-            var districtPerformers = (await districtRepository.GetByIdWithItemsAsync(model.DistrictId)).DistrictPerformers;
             var p = new List<Performer>();
-            foreach (var dp in districtPerformers)
+            var district = await districtRepository.GetByIdWithItemsAsync(model.DistrictId);
+            if (district!=null)
             {
-                p.Add(dp.Performer);
+                var districtPerformers = district.DistrictPerformers;
+                foreach (var dp in districtPerformers)
+                {
+                    p.Add(dp.Performer);
+                }
             }
             ViewBag.Performers = new SelectList(p, "Id", "Name", model.PerformerId);
             ViewBag.Applicants = new SelectList(await applicantRepository.ListAsync(new ApplicantSpecification(null)), "Id", "Name", model.PlaintiffId);

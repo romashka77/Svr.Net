@@ -62,49 +62,49 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Region, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.RegionId, ViewBag.Regions as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.RegionId, ViewBag.Regions as SelectList, "Выберите регион", htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
                 @Html.ValidationMessageFor(model => model.RegionId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.District, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.DistrictId, ViewBag.Districts as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.DistrictId, ViewBag.Districts as SelectList, "Выберите район", htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
                 @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.CategoryDispute, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CategoryDisputeId, ViewBag.CategoryDisputes as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.CategoryDisputeId, ViewBag.CategoryDisputes as SelectList, "Выберите категорию споров", htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
                 @Html.ValidationMessageFor(model => model.CategoryDisputeId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.GroupClaim, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.GroupClaimId, ViewBag.GroupClaims as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.GroupClaimId, ViewBag.GroupClaims as SelectList, "Выберите группу исков", htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
                 @Html.ValidationMessageFor(model => model.GroupClaimId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.SubjectClaim, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.SubjectClaimId, ViewBag.SubjectClaims as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.SubjectClaimId, ViewBag.SubjectClaims as SelectList, "Выберите предмет иска", htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SubjectClaimId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.Сourt, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.СourtId, ViewBag.Сourts as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.СourtId, ViewBag.Сourts as SelectList, "Выберите суд", htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.СourtId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.Performer, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.PerformerId, ViewBag.Performers as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.PerformerId, ViewBag.Performers as SelectList, "Выберите исполнителя", htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.PerformerId, "", new { @class = "text-danger" })
             </div>
         </div>
