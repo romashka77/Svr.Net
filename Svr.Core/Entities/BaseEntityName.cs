@@ -7,15 +7,14 @@ namespace Svr.Core.Entities
     /// </summary>
     public abstract class BaseEntityName : BaseEntity
     {
-        private string name;
         /// <summary>
         /// Наименование
         /// </summary>
         [Required(ErrorMessage = ErrorStringEmpty)]
         //[MaxLength(250, ErrorMessage = ErrorStringMaxLength)]
         [Display(Name = "Наименование", Prompt = "Введите наименование")]
-        [MaxLength(100, ErrorMessage = ErrorStringMaxLength)]
-        public string Name { get { return name; } set { name = value.Substring(0, 99); } }
+        [MaxLength(150, ErrorMessage = ErrorStringMaxLength)]
+        public string Name { get; set; }
         public override string ToString() => "Базовая сущность c наименованием";
     }
 }
