@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
+    [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class PerformersController : Controller
     {
         private IPerformerRepository repository;

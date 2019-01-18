@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
+    [Authorize]
     public class ClaimsController : Controller
     {
         private IClaimRepository repository;
@@ -210,6 +212,7 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Code = SetCode(model);
                 // добавляем новый Район
                 var item = await repository.AddAsync(new Claim { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId });
                 if (item != null)
@@ -242,6 +245,7 @@ namespace Svr.Web.Controllers
             return View(model);
         }
 
+
         // POST: Claims/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -253,6 +257,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
+                    model.Code = SetCode(model);
                     if ((model.RegionId != 0) && (model.DistrictId != 0))
                     {
                         await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId = model.RespondentId, Person3rdId = model.Person3rdId, Instances = model.Instances });
@@ -295,6 +300,7 @@ namespace Svr.Web.Controllers
         // POST: Claims/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Администратор, Администратор ОПФР, Администратор УПФР")]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
@@ -316,14 +322,15 @@ namespace Svr.Web.Controllers
             ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
 
             ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", model.CategoryDisputeId);
-            ViewBag.GroupClaims = new SelectList(await groupClaimRepository.ListAsync(new GroupClaimSpecification(model.CategoryDisputeId)), "Id", "Name", model.GroupClaimId);
-            ViewBag.SubjectClaims = new SelectList(await subjectClaimRepository.ListAsync(new SubjectClaimSpecification(model.GroupClaimId)), "Id", "Name", model.SubjectClaimId);
+
+            ViewBag.GroupClaims = new SelectList((await groupClaimRepository.ListAsync(new GroupClaimSpecification(model.CategoryDisputeId))).Select(i => new { Id = i.Id, Name = $"{i.Code} {i.Name}" }), "Id", "Name", model.GroupClaimId);
+            ViewBag.SubjectClaims = new SelectList((await subjectClaimRepository.ListAsync(new SubjectClaimSpecification(model.GroupClaimId))).Select(i => new { Id = i.Id, Name = $"{i.Code} {i.Name}" }), "Id", "Name", model.SubjectClaimId);
 
             ViewBag.Сourts = new SelectList(await dirRepository.ListAsync(new DirSpecification("Суд")), "Id", "Name", model.СourtId);
 
             var p = new List<Performer>();
             var district = await districtRepository.GetByIdWithItemsAsync(model.DistrictId);
-            if (district!=null)
+            if (district != null)
             {
                 var districtPerformers = district.DistrictPerformers;
                 foreach (var dp in districtPerformers)
@@ -333,6 +340,11 @@ namespace Svr.Web.Controllers
             }
             ViewBag.Performers = new SelectList(p, "Id", "Name", model.PerformerId);
             ViewBag.Applicants = new SelectList(await applicantRepository.ListAsync(new ApplicantSpecification(null)), "Id", "Name", model.PlaintiffId);
+        }
+
+        private string SetCode(ItemViewModel model)
+        {
+            return $"{model.Id}-{model.CreatedOnUtc.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}";
         }
     }
 }

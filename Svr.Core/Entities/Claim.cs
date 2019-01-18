@@ -8,7 +8,7 @@ namespace Svr.Core.Entities
     /// <summary>
     /// Иск
     /// </summary>
-    public class Claim : BaseEntityDescription
+    public class Claim : BaseEntity
     {
         public long RegionId { get; set; }
         [Display(Name = "Регион")]
@@ -19,12 +19,21 @@ namespace Svr.Core.Entities
         public virtual District District { get; set; }
 
         [MaxLength(50, ErrorMessage = ErrorStringMaxLength)]
-        [Display(Name = "Код", Prompt = "Введите код")]
+        [Display(Name = "Рег.номер", Prompt = "Введите регистрационный номер")]
         public string Code { get; set; }
+
+        [MaxLength(10, ErrorMessage = ErrorStringMaxLength)]
+        [Display(Name = "№ дела", Prompt = "Введите № дела")]
+        [Required(ErrorMessage = ErrorStringEmpty)]
+        public string Name { get; set; }
+
+        [Display(Name = "Описание", Prompt = "Введите описание")]
+        public string Description { get; set; }
 
         [Display(Name = "Дата регистрации")]
         [DataType(DataType.Date)]
-        public DateTime? DateReg { get; set; }
+        [Required(ErrorMessage = ErrorStringEmpty)]
+        public DateTime DateReg { get; set; }
 
         [Display(Name = "Дата принятия иска")]
         [DataType(DataType.Date)]

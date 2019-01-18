@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,6 +19,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
+    [Authorize]
     public class FileEntitiesController : Controller
     {
         private IFileEntityRepository repository;
@@ -158,10 +160,11 @@ namespace Svr.Web.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Create(ItemViewModel model/*, IFormFile uploadedFile*/)
         {
-            if ((ModelState.IsValid) /*&& (uploadedFile != null)*/)
+            if ((ModelState.IsValid) && (model.UploadedFile != null))
             {
                 // путь к папке Files
                 model.Path = $"{model.ClaimId}_{model.UploadedFile.FileName}";
+                model.Name = model.UploadedFile.FileName;
                 // сохраняем файл в папку Files в каталоге wwwroot
                 using (var fileStream = new FileStream(GetFile(model.Path), FileMode.Create))
                 {
@@ -225,7 +228,6 @@ namespace Svr.Web.Controllers
                     //{
                     //    await model.UploadedFile.CopyToAsync(fileStream);
                     //}
-
                     await repository.UpdateAsync(new FileEntity { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, Path = model.Path });
                     StatusMessage = $"{model} c ID = {model.Id} обновлен";
                     return RedirectToAction(nameof(Index), new { owner = model.ClaimId });

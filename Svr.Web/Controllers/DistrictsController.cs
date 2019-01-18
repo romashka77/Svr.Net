@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
+    [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class DistrictsController : Controller
     {
         private IDistrictRepository repository;
@@ -58,7 +60,7 @@ namespace Svr.Web.Controllers
             {
                 _owner = Int64.Parse(owner);
             }
-
+            var r= User.IsInRole("Администратор");
             var filterSpecification = new DistrictSpecification(_owner);
             IEnumerable<District> list = await repository.ListAsync(filterSpecification);
             //фильтрация

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
+    [Authorize]
     public class ApplicantsController : Controller
     {
         private IApplicantRepository repository;
@@ -252,6 +254,7 @@ namespace Svr.Web.Controllers
         // POST: Applicants/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Администратор, Администратор ОПФР, Администратор УПФР")]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try

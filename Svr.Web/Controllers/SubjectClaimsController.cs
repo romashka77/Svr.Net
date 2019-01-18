@@ -12,9 +12,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Svr.Web.Models.SubjectClaimsViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Svr.Web.Controllers
 {
+    [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class SubjectClaimsController : Controller
     {
         private IGroupClaimRepository groupClaimRepository;

@@ -245,7 +245,8 @@ namespace Svr.Web.Controllers
                     //await emailService.SendEmailAsync(model.Email, "Confirm your account", $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
 
                     await emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-                    
+
+                    await userManager.AddToRoleAsync(user, "Пользователь");
                     // установка куки
                     await signInManager.SignInAsync(user, isPersistent: false);
                     logger.LogInformation("Пользователь создал новую учетную запись с паролем.");
