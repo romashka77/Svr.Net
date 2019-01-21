@@ -37,15 +37,19 @@ namespace Svr.Infrastructure.Identity
 
         [MaxLength(100)]
         public string MiddleName { get; set; }//Отчество
+
         [Required]
+        [DataType(DataType.Date)]
         public DateTime DateofBirth { get; set; }//Дата рождения
         /// <summary>
         /// Дата и время создания
         /// </summary>
+        [DataType(DataType.Date)]
         public DateTime CreatedOnUtc { get; set; }
         /// <summary>
         /// Дата и время обновления
         /// </summary>
+        [DataType(DataType.Date)]
         public DateTime UpdatedOnUtc { get; set; }
 
     }

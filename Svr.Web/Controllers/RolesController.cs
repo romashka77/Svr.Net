@@ -108,8 +108,8 @@ namespace Svr.Web.Controllers
             if (user != null)
             {
                 user.DistrictId = districtId;
-                userManager.UpdateAsync(user);
-                userManager.Save
+                await userManager.UpdateAsync(user);
+                //await userManager.AccessFailedAsync(user);
                 // получем список ролей пользователя
                 var userRoles = await userManager.GetRolesAsync(user);
                 // получаем все роли

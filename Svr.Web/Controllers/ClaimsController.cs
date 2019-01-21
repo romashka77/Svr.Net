@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
 using Svr.Infrastructure.Data;
+using Svr.Infrastructure.Identity;
 using Svr.Web.Models;
 using Svr.Web.Models.ClaimsViewModels;
 using System;
@@ -29,13 +31,13 @@ namespace Svr.Web.Controllers
         private IPerformerRepository performerRepository;
         private IApplicantRepository applicantRepository;
         private IInstanceRepository instanceRepository;
-
+        private readonly UserManager<ApplicationUser> userManager;
         private ILogger<ClaimsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ClaimsController(IClaimRepository repository, IRegionRepository regionRepository, IDistrictRepository districtRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository, IPerformerRepository performerRepository, IDirRepository dirRepository, IApplicantRepository applicantRepository, IInstanceRepository instanceRepository, ILogger<ClaimsController> logger)
+        public ClaimsController(IClaimRepository repository, IRegionRepository regionRepository, IDistrictRepository districtRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository, IPerformerRepository performerRepository, IDirRepository dirRepository, IApplicantRepository applicantRepository, IInstanceRepository instanceRepository, ILogger<ClaimsController> logger, UserManager<ApplicationUser> userManager)
         {
             this.logger = logger;
             this.repository = repository;
@@ -48,6 +50,7 @@ namespace Svr.Web.Controllers
             this.dirRepository = dirRepository;
             this.applicantRepository = applicantRepository;
             this.instanceRepository = instanceRepository;
+            this.userManager = userManager;
         }
         #endregion
         #region Деструктор
@@ -79,6 +82,15 @@ namespace Svr.Web.Controllers
             if (!String.IsNullOrEmpty(owner))
             {
                 _owner = Int64.Parse(owner);
+            }
+            else
+            {
+                if (String.IsNullOrEmpty(lord))
+                {
+                    ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
+                    owner = user.DistrictId.ToString();
+                    _owner = user.DistrictId;
+                }
             }
             var filterSpecification = new ClaimSpecification(_owner);
             IEnumerable<Claim> list = await repository.ListAsync(filterSpecification);

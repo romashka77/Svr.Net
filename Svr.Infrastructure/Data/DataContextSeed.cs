@@ -16,7 +16,7 @@ namespace Svr.Infrastructure.Data
 
         private static string StrTrim(string str, int len = 100)
         {
-            if (str.Length<len){len = str.Length;}
+            if (str.Length < len) { len = str.Length; }
             return str.Substring(0, len);
         }
         public static async Task SeedAsync(DataContext dataContext/*, ILoggerFactory loggerFactory, int? retry = 0*/)
@@ -26,20 +26,20 @@ namespace Svr.Infrastructure.Data
             {
                 if (!dataContext.Regions.Any())
                 {
-                    dataContext.Regions.AddRange(GetPreconfiguredRegions());
+                    await dataContext.Regions.AddRangeAsync(GetPreconfiguredRegions());
                     if (!dataContext.Districts.Any())
                     {
-                        dataContext.Districts.AddRange(GetPreconfiguredDistricts());
+                        await dataContext.Districts.AddRangeAsync(GetPreconfiguredDistricts());
                         await dataContext.SaveChangesAsync();
                     }
                 }
                 if (!dataContext.CategoryDisputes.Any())
                 {
                     //Входящие
-                    dataContext.CategoryDisputes.AddRange(await GetPreconfiguredCategoryDisputeIn(dataContext));
+                    await dataContext.CategoryDisputes.AddRangeAsync(await GetPreconfiguredCategoryDisputeIn(dataContext));
                     await dataContext.SaveChangesAsync();
                     //Исходящие
-                    dataContext.CategoryDisputes.AddRange(GetPreconfiguredCategoryDisputeOut(dataContext));
+                    await dataContext.CategoryDisputes.AddRangeAsync(await GetPreconfiguredCategoryDisputeOut(dataContext));
                     await dataContext.SaveChangesAsync();
                 }
                 if (!dataContext.DirName.Any())
@@ -47,31 +47,31 @@ namespace Svr.Infrastructure.Data
                     //dataContext.DirName.AddRange(GetPreconfiguredDirNamePerformers(dataContext));
                     //await dataContext.SaveChangesAsync();
 
-                    dataContext.DirName.AddRange(GetPreconfiguredDirNameOPF(dataContext));
+                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameOPF(dataContext));
                     await dataContext.SaveChangesAsync();
-                    dataContext.DirName.AddRange(GetPreconfiguredDirNameCourt(dataContext));
+                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameCourt(dataContext));
                     await dataContext.SaveChangesAsync();
-                    dataContext.DirName.AddRange(GetPreconfiguredDirNameTypeApplicant(dataContext));
+                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameTypeApplicant(dataContext));
                     await dataContext.SaveChangesAsync();
 
-                    dataContext.DirName.AddRange(GetPreconfiguredDirNameCourtDecision1(dataContext));
+                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameCourtDecision1(dataContext));
                     await dataContext.SaveChangesAsync();
-                    dataContext.DirName.AddRange(GetPreconfiguredDirNameCourtDecision2(dataContext));
+                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameCourtDecision2(dataContext));
                     await dataContext.SaveChangesAsync();
-                    dataContext.DirName.AddRange(GetPreconfiguredDirNameCourtDecision3(dataContext));
+                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameCourtDecision3(dataContext));
                     await dataContext.SaveChangesAsync();
-                    dataContext.DirName.AddRange(GetPreconfiguredDirNameCourtDecision4(dataContext));
+                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameCourtDecision4(dataContext));
                     await dataContext.SaveChangesAsync();
                 }
                 if (!dataContext.Performers.Any())
                 {
-                    dataContext.Performers.AddRange(GetPreconfiguredPerformers());
+                    await dataContext.Performers.AddRangeAsync(GetPreconfiguredPerformers());
                     await dataContext.SaveChangesAsync();
                 }
                 if (!dataContext.DistrictPerformers.Any())
                 {
-                    dataContext.DistrictPerformers.Add(new DistrictPerformer { DistrictId = 1, PerformerId = 1 });
-                    dataContext.DistrictPerformers.Add(new DistrictPerformer { DistrictId = 1, PerformerId = 2 });
+                    await dataContext.DistrictPerformers.AddAsync(new DistrictPerformer { DistrictId = 1, PerformerId = 1 });
+                    await dataContext.DistrictPerformers.AddAsync(new DistrictPerformer { DistrictId = 1, PerformerId = 2 });
                     await dataContext.SaveChangesAsync();
                 }
             }
@@ -89,86 +89,86 @@ namespace Svr.Infrastructure.Data
             }
         }
 
-        private static IEnumerable<CategoryDispute> GetPreconfiguredCategoryDisputeOut(DataContext dataContext)
+        private static async Task<IEnumerable<CategoryDispute>> GetPreconfiguredCategoryDisputeOut(DataContext dataContext)
         {
             categoryDispute = new CategoryDispute { Name = "Исходящие", Description = "Исходящие документы" };
-            dataContext.CategoryDisputes.Add(categoryDispute);
+            await dataContext.CategoryDisputes.AddAsync(categoryDispute);
 
             groupClaim = new GroupClaim { Name = "1", Description = "", Code = "1", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(1));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(1));
 
             groupClaim = new GroupClaim { Name = "2", Description = "", Code = "2", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(2));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(2));
 
             groupClaim = new GroupClaim { Name = "3", Description = "", Code = "3", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(3));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(3));
 
             groupClaim = new GroupClaim { Name = "4", Description = "", Code = "4", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(4));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(4));
 
             groupClaim = new GroupClaim { Name = "Взыскание по ДТП", Description = "", Code = "5", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(5));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(5));
 
             groupClaim = new GroupClaim { Name = StrTrim("Споры, возникающие в рамках исполнительного производства"), Description = "", Code = "6", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(6));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(6));
 
             groupClaim = new GroupClaim { Name = "Дела о банкротстве", Description = "", Code = "7", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(7));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(7));
 
             groupClaim = new GroupClaim { Name = "8", Description = "", Code = "8", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(8));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(8));
 
             groupClaim = new GroupClaim { Name = "9", Description = "", Code = "9", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(9));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(9));
 
             groupClaim = new GroupClaim { Name = "10", Description = "", Code = "10", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(10));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(10));
 
             groupClaim = new GroupClaim { Name = "11", Description = "", Code = "11", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(11));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(11));
 
             groupClaim = new GroupClaim { Name = "12", Description = "", Code = "12", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(12));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(12));
 
             groupClaim = new GroupClaim { Name = "13", Description = "", Code = "13", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(13));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(13));
 
             groupClaim = new GroupClaim { Name = "14", Description = "", Code = "14", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(14));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(14));
 
             groupClaim = new GroupClaim { Name = "15", Description = "", Code = "15", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(15));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(15));
 
             groupClaim = new GroupClaim { Name = "16", Description = "", Code = "16", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(16));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(16));
 
             groupClaim = new GroupClaim { Name = "17", Description = "", Code = "17", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(17));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(17));
 
             groupClaim = new GroupClaim { Name = "18", Description = "", Code = "18", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(18));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(18));
 
             groupClaim = new GroupClaim { Name = "19", Description = "", Code = "19", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsOut(19));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(19));
 
             return new List<CategoryDispute>() { categoryDispute };
         }
@@ -176,194 +176,194 @@ namespace Svr.Infrastructure.Data
         private static async Task<IEnumerable<CategoryDispute>> GetPreconfiguredCategoryDisputeIn(DataContext dataContext)
         {
             categoryDispute = new CategoryDispute { Name = "Входящие", Description = "Входящие документы" };
-            dataContext.CategoryDisputes.Add(categoryDispute);
+            await dataContext.CategoryDisputes.AddAsync(categoryDispute);
             groupClaim = new GroupClaim { Name = "Административные штрафы, в т.ч.", Description = "", Code = "1", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(1));
-            
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(1));
+
             groupClaim = new GroupClaim { Name = "Обжалования", Description = "", Code = "2", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(2));
-            
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(2));
+
             groupClaim = new GroupClaim { Name = "Name 3", Description = "", Code = "3", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(3));
-            
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(3));
+
             groupClaim = new GroupClaim { Name = "Name 4", Description = "", Code = "4", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(4));
-            
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(4));
+
             groupClaim = new GroupClaim { Name = "Взыскание по ДТП", Description = "", Code = "5", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(5));
-            
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(5));
+
             groupClaim = new GroupClaim { Name = "Споры, возникающие в рамках исполнительного производства", Description = "", Code = "6", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(6));
-            
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(6));
+
             groupClaim = new GroupClaim { Name = "Дела о банкротстве", Description = "", Code = "7", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(7));
-            
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(7));
+
             groupClaim = new GroupClaim { Name = "Name 8", Description = "", Code = "8", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(8));
-            
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(8));
+
             groupClaim = new GroupClaim { Name = "Name 9", Description = "", Code = "9", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(9));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(9));
 
             groupClaim = new GroupClaim { Name = "Name 10", Description = "", Code = "10", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(10));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(10));
 
             groupClaim = new GroupClaim { Name = "Name 11", Description = "", Code = "11", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(11));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(11));
 
             groupClaim = new GroupClaim { Name = "Name 12", Description = "", Code = "12", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(12));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(12));
 
             groupClaim = new GroupClaim { Name = "Name 13", Description = "", Code = "13", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(13));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(13));
 
             groupClaim = new GroupClaim { Name = "Name 14", Description = "", Code = "14", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(14));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(14));
 
             groupClaim = new GroupClaim { Name = "Name 15", Description = "", Code = "15", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(15));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(15));
 
             groupClaim = new GroupClaim { Name = "Name 16", Description = "", Code = "16", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(16));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(16));
 
             groupClaim = new GroupClaim { Name = "Name 17", Description = "", Code = "17", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(17));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(17));
 
             groupClaim = new GroupClaim { Name = "Name 18", Description = "", Code = "18", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(18));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(18));
 
             groupClaim = new GroupClaim { Name = "Name 19", Description = "", Code = "19", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(19));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(19));
 
             groupClaim = new GroupClaim { Name = "Name 20", Description = "", Code = "20", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(20));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(20));
 
             groupClaim = new GroupClaim { Name = "Name 21", Description = "", Code = "21", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(21));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(21));
 
             groupClaim = new GroupClaim { Name = "Name 22", Description = "", Code = "22", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(22));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(22));
 
             groupClaim = new GroupClaim { Name = "Name 23", Description = "", Code = "23", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(23));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(23));
 
             groupClaim = new GroupClaim { Name = "Name 24", Description = "", Code = "24", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(24));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(24));
 
             groupClaim = new GroupClaim { Name = "Name 25", Description = "", Code = "25", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(25));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(25));
 
             groupClaim = new GroupClaim { Name = "Name 26", Description = "", Code = "26", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(26));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(26));
 
             groupClaim = new GroupClaim { Name = "Name 27", Description = "", Code = "27", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(27));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(27));
 
             groupClaim = new GroupClaim { Name = "Name 28", Description = "", Code = "28", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(28));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(28));
 
             groupClaim = new GroupClaim { Name = "Name 29", Description = "", Code = "29", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(29));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(29));
 
             groupClaim = new GroupClaim { Name = "Name 31", Description = "", Code = "31", CategoryDispute = categoryDispute };
-            dataContext.GroupClaims.Add(groupClaim);
-            dataContext.SubjectClaims.AddRange(GetPreconfiguredSubjectClaimsIn(31));
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(31));
 
             return new List<CategoryDispute>() { categoryDispute };
         }
-        private static IEnumerable<DirName> GetPreconfiguredDirNameTypeApplicant(DataContext dataContext)
+        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameTypeApplicant(DataContext dataContext)
         {
             dirName = new DirName { Name = "Тип контрагента" };
-            dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredTypeApplicant(dataContext));
+            await dataContext.DirName.AddAsync(dirName);
+            await dataContext.Dir.AddRangeAsync(await GetPreconfiguredTypeApplicant(dataContext));
 
             var resault = new List<DirName> { };
             resault.Add(dirName);
             return resault;
         }
-        private static IEnumerable<DirName> GetPreconfiguredDirNameOPF(DataContext dataContext)
+        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameOPF(DataContext dataContext)
         {
             dirName = new DirName { Name = "ОПФ" };
-            dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredOPF());
+            await dataContext.DirName.AddAsync(dirName);
+            await dataContext.Dir.AddRangeAsync(GetPreconfiguredOPF());
 
             var resault = new List<DirName> { };
             resault.Add(dirName);
             return resault;
         }
-        private static IEnumerable<DirName> GetPreconfiguredDirNameCourtDecision1(DataContext dataContext)
+        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourtDecision1(DataContext dataContext)
         {
             dirName = new DirName { Name = "Решения суда 1-ой инстанции" };
-            dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredDecision1());
+            await dataContext.DirName.AddAsync(dirName);
+            await dataContext.Dir.AddRangeAsync(GetPreconfiguredDecision1());
 
             var resault = new List<DirName> { };
             resault.Add(dirName);
             return resault;
         }
-        private static IEnumerable<DirName> GetPreconfiguredDirNameCourtDecision2(DataContext dataContext)
+        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourtDecision2(DataContext dataContext)
         {
             dirName = new DirName { Name = "Решения суда 2-ой инстанции" };
-            dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredDecision2());
+            await dataContext.DirName.AddAsync(dirName);
+            await dataContext.Dir.AddRangeAsync(GetPreconfiguredDecision2());
 
             var resault = new List<DirName> { };
             resault.Add(dirName);
             return resault;
         }
-        private static IEnumerable<DirName> GetPreconfiguredDirNameCourtDecision3(DataContext dataContext)
+        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourtDecision3(DataContext dataContext)
         {
             dirName = new DirName { Name = "Решения суда 3-ей инстанции" };
-            dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredDecision3());
+            await dataContext.DirName.AddAsync(dirName);
+            await dataContext.Dir.AddRangeAsync(GetPreconfiguredDecision3());
 
             var resault = new List<DirName> { };
             resault.Add(dirName);
             return resault;
         }
-        private static IEnumerable<DirName> GetPreconfiguredDirNameCourtDecision4(DataContext dataContext)
+        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourtDecision4(DataContext dataContext)
         {
             dirName = new DirName { Name = "Решения суда 4-ой инстанции" };
-            dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredDecision4());
+            await dataContext.DirName.AddAsync(dirName);
+            await dataContext.Dir.AddRangeAsync(GetPreconfiguredDecision4());
 
             var resault = new List<DirName> { };
             resault.Add(dirName);
             return resault;
         }
-        private static IEnumerable<DirName> GetPreconfiguredDirNameCourt(DataContext dataContext)
+        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourt(DataContext dataContext)
         {
             dirName = new DirName { Name = "Суд" };
-            dataContext.DirName.Add(dirName);
-            dataContext.Dir.AddRange(GetPreconfiguredCourt());
+            await dataContext.DirName.AddAsync(dirName);
+            await dataContext.Dir.AddRangeAsync(GetPreconfiguredCourt());
 
             var resault = new List<DirName> { };
             resault.Add(dirName);
@@ -435,20 +435,20 @@ namespace Svr.Infrastructure.Data
             };
         }
 
-        private static IEnumerable<Dir> GetPreconfiguredTypeApplicant(DataContext dataContext)
+        private static async Task<IEnumerable<Dir>> GetPreconfiguredTypeApplicant(DataContext dataContext)
         {
             var result = new List<Dir>();
 
             dir = new Dir { Name = "Физическое лицо", DirName = dirName };
             result.Add(dir);
-            dataContext.Dir.Add(dir);
-            dataContext.Applicant.AddRange(new List<Applicant>() { new Applicant { Name = "test", Description = "test", TypeApplicant = dir }, new Applicant { Name = "test1", Description = "test1", TypeApplicant = dir }
+            await dataContext.Dir.AddAsync(dir);
+            await dataContext.Applicant.AddRangeAsync(new List<Applicant>() { new Applicant { Name = "test", Description = "test", TypeApplicant = dir }, new Applicant { Name = "test1", Description = "test1", TypeApplicant = dir }
             });
 
             dir = new Dir { Name = "Юридическое лицо", DirName = dirName };
-            dataContext.Dir.Add(dir);
+            await dataContext.Dir.AddAsync(dir);
             result.Add(dir);
-            dataContext.Applicant.AddRange(new List<Applicant>() { new Applicant { Name = "test2", Description = "test2", TypeApplicant = dir }, new Applicant { Name = "test3", Description = "test3", TypeApplicant = dir }
+            await dataContext.Applicant.AddRangeAsync(new List<Applicant>() { new Applicant { Name = "test2", Description = "test2", TypeApplicant = dir }, new Applicant { Name = "test3", Description = "test3", TypeApplicant = dir }
             });
 
             return result;
