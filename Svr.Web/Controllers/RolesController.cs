@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Svr.Core.Interfaces;
+using Svr.Core.Specifications;
 using Svr.Infrastructure.Identity;
 using Svr.Web.Models;
 using Svr.Web.Models.RoleViewModels;
@@ -16,11 +19,24 @@ namespace Svr.Web.Controllers
     {
         RoleManager<IdentityRole> roleManager;
         UserManager<ApplicationUser> userManager;
-        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        IDistrictRepository districtRepository;
+        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IDistrictRepository districtRepository)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
+            this.districtRepository = districtRepository;
         }
+        #region Деструктор
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                districtRepository = null;
+            }
+            base.Dispose(disposing);
+        }
+        #endregion
+
         public IActionResult Index() => View(roleManager.Roles.ToList());
 
         [Authorize(Roles = "Администратор")]
@@ -75,20 +91,25 @@ namespace Svr.Web.Controllers
                     UserId = user.Id,
                     UserEmail = user.Email,
                     UserRoles = userRoles,
-                    AllRoles = allRoles
+                    AllRoles = allRoles,
+                    DistrictId= user.DistrictId
                 };
+                ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(null)), "Id", "Name", model.DistrictId);
                 return View(model);
             }
 
             return NotFound();
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(string userId, List<string> roles)
+        public async Task<IActionResult> Edit(string userId, List<string> roles, long? districtId)
         {
             // получаем пользователя
             ApplicationUser user = await userManager.FindByIdAsync(userId);
             if (user != null)
             {
+                user.DistrictId = districtId;
+                userManager.UpdateAsync(user);
+                userManager.Save
                 // получем список ролей пользователя
                 var userRoles = await userManager.GetRolesAsync(user);
                 // получаем все роли

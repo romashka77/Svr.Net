@@ -25,6 +25,8 @@ namespace Svr.Infrastructure.Identity
     //PhoneNumberConfirmed: подтвержден ли номер телефона
     public class ApplicationUser : IdentityUser
     {
+        public long? DistrictId { get; set; }
+
         [Required]
         [MaxLength(100)]
         public string LastName { get; set; }//Фамилия
