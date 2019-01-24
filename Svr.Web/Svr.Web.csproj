@@ -27,6 +27,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="MailKit" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.3" PrivateAssets="All" />
@@ -53,8 +54,10 @@
     <Folder Include="Models\InstanceViewModels\" />
     <Folder Include="Models\MeetingsViewModels\" />
     <Folder Include="Models\FileEntityViewModels\" />
+    <Folder Include="Models\ReportsViewModels\" />
     <Folder Include="Views\Applicants\" />
     <Folder Include="wwwroot\Files\" />
+    <Folder Include="wwwroot\Reports\" />
   </ItemGroup>
 
 </Project>
