@@ -56,7 +56,6 @@ namespace Svr.Web.Controllers
         // GET: Districts
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var r= User.IsInRole("Администратор");
             var filterSpecification = new DistrictSpecification(owner.ToLong());
             IEnumerable<District> list = await repository.ListAsync(filterSpecification);
             //фильтрация
@@ -249,6 +248,7 @@ namespace Svr.Web.Controllers
         }
         // POST: Districts/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {

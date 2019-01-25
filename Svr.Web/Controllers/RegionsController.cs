@@ -184,6 +184,7 @@ namespace Svr.Web.Controllers
 
         // POST: Regions/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
