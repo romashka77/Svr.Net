@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Svr.Core.Entities;
+using Svr.Core.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Identity
@@ -20,36 +20,13 @@ namespace Svr.Infrastructure.Identity
         /// <returns></returns>
         public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string roleAdmin = "Администратор";
-            string roleUser = "Пользователь";
-            string adminEmail = "romashka_77@mail.ru";
-            if (await roleManager.FindByNameAsync(roleAdmin) == null)
+            const string adminEmail = "romashka_77@mail.ru";
+            foreach (RoleState item in Enum.GetValues(typeof(RoleState)))
             {
-                await roleManager.CreateAsync(new IdentityRole(roleAdmin));
-            }
-            if (await roleManager.FindByNameAsync(roleUser) == null)
-            {
-                await roleManager.CreateAsync(new IdentityRole(roleUser));
-            }
-            roleUser = "Администратор ОПФР";
-            if (await roleManager.FindByNameAsync(roleUser) == null)
-            {
-                await roleManager.CreateAsync(new IdentityRole(roleUser));
-            }
-            roleUser = "Администратор УПФР";
-            if (await roleManager.FindByNameAsync(roleUser) == null)
-            {
-                await roleManager.CreateAsync(new IdentityRole(roleUser));
-            }
-            roleUser = "Пользователь ОПФР";
-            if (await roleManager.FindByNameAsync(roleUser) == null)
-            {
-                await roleManager.CreateAsync(new IdentityRole(roleUser));
-            }
-            roleUser = "Пользователь УПФР";
-            if (await roleManager.FindByNameAsync(roleUser) == null)
-            {
-                await roleManager.CreateAsync(new IdentityRole(roleUser));
+                if (await roleManager.FindByNameAsync(item.GetDescription()) == null)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(item.GetDescription()));
+                }
             }
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
@@ -57,7 +34,7 @@ namespace Svr.Infrastructure.Identity
                 IdentityResult result = await userManager.CreateAsync(admin, "Ram270984");
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(admin, roleAdmin);
+                    await userManager.AddToRoleAsync(admin, RoleState.Administrator.GetDescription());
                 }
             }
         }
