@@ -7,6 +7,7 @@ using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
 using Svr.Infrastructure.Data;
+using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.DirViewModels;
 using System;
@@ -50,13 +51,8 @@ namespace Svr.Web.Controllers
         // GET: Dirs
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            long? _owner = null;
-            if (!String.IsNullOrEmpty(owner))
-            {
-                _owner = Int64.Parse(owner);
-            }
             //фильтрация
-            var filterSpecification = new DirSpecification(_owner);
+            var filterSpecification = new DirSpecification(owner.ToLong());
             IEnumerable<Dir> list = await repository.ListAsync(filterSpecification);
 
             if (!String.IsNullOrEmpty(searchString))

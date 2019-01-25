@@ -1,7 +1,15 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
+using Svr.Core.Entities;
+using Svr.Core.Interfaces;
+using Svr.Core.Specifications;
+using Svr.Infrastructure.Identity;
+using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.ReportsViewModels;
 using System;
@@ -21,19 +29,47 @@ namespace Svr.Web.Controllers
         private const string reportsFolder = "Reports";
         private const string templatesFolder = "Templates";
         private const string fileTemplateName = "Template1.xlsx";
-
-
+        private readonly UserManager<ApplicationUser> userManager;
+        private ILogger<ClaimsController> logger;
+        private IRegionRepository regionRepository;
+        private IDistrictRepository districtRepository;
 
         [TempData]
         public string StatusMessage { get; set; }
-
-        public ReportsController(IHostingEnvironment hostingEnvironment)
+        #region Конструктор
+        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository)
         {
+            this.logger = logger;
+            this.userManager = userManager;
+            this.regionRepository = regionRepository;
+            this.districtRepository = districtRepository;
             this.hostingEnvironment = hostingEnvironment;
         }
-        public IActionResult Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? date = null)
+        #endregion
+        #region Деструктор
+        protected override void Dispose(bool disposing)
         {
-            var path = Path.Combine(hostingEnvironment.WebRootPath, reportsFolder);
+            if (disposing)
+            {
+                districtRepository = null;
+                regionRepository = null;
+                logger = null;
+            }
+            base.Dispose(disposing);
+        }
+        #endregion
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? date = null)
+        {
+            if (String.IsNullOrEmpty( owner))
+            {
+                if (String.IsNullOrEmpty(lord))
+                {
+                    ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
+                    owner = user.DistrictId.ToString();
+                }
+            }
+            var path = await GetPath(date, owner.ToLong());
+
             DirectoryInfo dirInfo = new DirectoryInfo(path);
             if (!dirInfo.Exists)
             {
@@ -87,7 +123,7 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString),
+                FilterViewModel = new FilterViewModel(searchString, owner, (await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong()))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord, (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) })),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
@@ -109,8 +145,17 @@ namespace Svr.Web.Controllers
         }
 
 
-        public IActionResult FileReport()
+        public async Task<IActionResult> FileReport(string lord = null, string owner = null, DateTime? date = null)
         {
+            if (String.IsNullOrEmpty(owner))
+            {
+                if (String.IsNullOrEmpty(lord))
+                {
+                    ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
+                    owner = user.DistrictId.ToString();
+                }
+            }
+            var path = await GetPath(date, owner.ToLong());
             using (var package = createExcelPackage())
             {
                 if (package == null)
@@ -118,9 +163,9 @@ namespace Svr.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                package.SaveAs(new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, reportsFolder, fileDownloadName)));
+                package.SaveAs(new FileInfo(Path.Combine(path, fileDownloadName)));
             }
-            return File($"~/{reportsFolder}/{fileDownloadName}", XlsxContentType, fileDownloadName);
+            return File(path, XlsxContentType, fileDownloadName);
         }
 
         private ExcelPackage createExcelPackage()
@@ -187,6 +232,20 @@ namespace Svr.Web.Controllers
             //    new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, "images", "captcha.jpg")),
             //    PictureAlignment.Right);
             return package;
+        }
+        private async Task<string> GetPath(DateTime? date, long? owner)
+        {
+            var path = Path.Combine(hostingEnvironment.WebRootPath, reportsFolder);
+            if (date != null)
+            {
+                path = Path.Combine(path, ((DateTime)date).ToString("yyyy"));
+            }
+            if (owner != null)
+            {
+                var district = await districtRepository.GetByIdAsync(owner);
+                path = Path.Combine(path, district.Name);
+            }
+            return path;
         }
     }
 }

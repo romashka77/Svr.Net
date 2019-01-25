@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Svr.Web.Models.SubjectClaimsViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Svr.Web.Extensions;
 
 namespace Svr.Web.Controllers
 {
@@ -48,18 +49,9 @@ namespace Svr.Web.Controllers
         // GET: SubjectClaims
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            long? _owner = null;
-            if (!String.IsNullOrEmpty(owner))
-            {
-                _owner = Int64.Parse(owner);
-            }
-            var filterSpecification = new SubjectClaimSpecification(_owner);
+            var filterSpecification = new SubjectClaimSpecification(owner.ToLong());
             IEnumerable<SubjectClaim> list = await subjectClaimRepository.ListAsync(filterSpecification);
             //фильтрация
-            if (owner != null)
-            {
-                list = list.Where(d => d.GroupClaimId == _owner);
-            }
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));

@@ -18,5 +18,6 @@ namespace Svr.Core.Interfaces
         void Delete(T entity);
         bool EntityExists(long id);
         IQueryable<T> Table();
+        IQueryable<T> TableNoTracking();
     }
 }

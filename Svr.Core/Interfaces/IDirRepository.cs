@@ -6,7 +6,7 @@ using Svr.Core.Entities;
 
 namespace Svr.Core.Interfaces
 {
-    public interface IDirRepository : IRepository<Dir>, IAsyncRepository<Dir>
+    public interface IDirRepository : IRepository<Dir>, IRepositoryAsync<Dir>
     {
         Dir GetByIdWithItems(long? id);
         Task<Dir> GetByIdWithItemsAsync(long? id);

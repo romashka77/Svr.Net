@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Core.Interfaces
 {
-    public interface IMeetingRepository : IRepository<Meeting>, IAsyncRepository<Meeting>
+    public interface IMeetingRepository : IRepository<Meeting>, IRepositoryAsync<Meeting>
     {
         Meeting GetByIdWithItems(long? id);
         Task<Meeting> GetByIdWithItemsAsync(long? id);

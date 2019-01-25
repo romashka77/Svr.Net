@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Svr.Web.Models
+namespace Svr.Core.Entities
 {
     public enum SortState
     {

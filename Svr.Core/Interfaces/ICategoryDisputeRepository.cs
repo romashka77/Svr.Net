@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Core.Interfaces
 {
-    public interface ICategoryDisputeRepository : IRepository<CategoryDispute>, IAsyncRepository<CategoryDispute>
+    public interface ICategoryDisputeRepository : IRepository<CategoryDispute>, IRepositoryAsync<CategoryDispute>
     {
         CategoryDispute GetByIdWithItems(long? id);
         Task<CategoryDispute> GetByIdWithItemsAsync(long? id);

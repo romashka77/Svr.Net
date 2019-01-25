@@ -11,7 +11,7 @@ using Svr.Web.Models.RegionsViewModels;
 
 namespace Svr.Web.Services
 {
-    public class RegionService : IRegionService
+    public class RegionService //: IRegionService
     {
         #region поля
         private readonly ILogger<RegionService> _logger;

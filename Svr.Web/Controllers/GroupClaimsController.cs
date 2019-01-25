@@ -7,6 +7,7 @@ using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
 using Svr.Infrastructure.Data;
+using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.GroupClaimsViewModels;
 using System;
@@ -50,18 +51,9 @@ namespace Svr.Web.Controllers
         // GET: GroupClaims
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            long? _owner = null;
-            if (!String.IsNullOrEmpty(owner))
-            {
-                _owner = Int64.Parse(owner);
-            }
-            var filterSpecification = new GroupClaimSpecification(_owner);
+            var filterSpecification = new GroupClaimSpecification(owner.ToLong());
             IEnumerable<GroupClaim> list = await repository.ListAsync(filterSpecification);
             //фильтрация
-            if (owner != null)
-            {
-                list = list.Where(d => d.CategoryDisputeId == _owner);
-            }
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));

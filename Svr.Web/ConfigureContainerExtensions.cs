@@ -36,7 +36,7 @@ namespace Svr.Web
         public static void AddRepository(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+            services.AddScoped(typeof(IRepositoryAsync<>), typeof(EfRepository<>));
 
             services.AddScoped<IRegionRepository, RegionRepository>();
             services.AddScoped<IDistrictRepository, DistrictRepository>();
@@ -56,7 +56,7 @@ namespace Svr.Web
             services.AddScoped<IMeetingRepository, MeetingRepository>();
             services.AddScoped<IFileEntityRepository, FileEntityRepository>();
 
-            services.AddScoped<IRegionService, RegionService>();
+            //services.AddScoped<IRegionService, RegionService>();
 
 
         }

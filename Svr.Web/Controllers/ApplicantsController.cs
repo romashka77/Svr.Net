@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
+using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.ApplicantViewModels;
 using System;
@@ -50,18 +51,9 @@ namespace Svr.Web.Controllers
         // GET: Applicants
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string parentowner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            long? _owner = null;
-            if (!String.IsNullOrEmpty(owner))
-            {
-                _owner = Int64.Parse(owner);
-            }
-            var filterSpecification = new ApplicantSpecification(_owner);
+            var filterSpecification = new ApplicantSpecification(owner.ToLong());
             IEnumerable<Applicant> list = await repository.ListAsync(filterSpecification);
             //фильтрация
-            //if (_owner != null)
-            //{
-            //    list = list.Where(d => d.TypeApplicantId == _owner);
-            //}
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));

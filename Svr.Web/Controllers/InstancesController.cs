@@ -7,6 +7,7 @@ using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
 using Svr.Infrastructure.Data;
+using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.InstanceViewModels;
 using System;
@@ -53,12 +54,7 @@ namespace Svr.Web.Controllers
         // GET: Instances
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            long? _owner = null;
-            if (!String.IsNullOrEmpty(owner))
-            {
-                _owner = Int64.Parse(owner);
-            }
-            var filterSpecification = new InstanceSpecification(_owner);
+            var filterSpecification = new InstanceSpecification(owner.ToLong());
             IEnumerable<Instance> list = await repository.ListAsync(filterSpecification);
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
@@ -114,7 +110,7 @@ namespace Svr.Web.Controllers
                     Claim = i.Claim,
                     Number = i.Number
                 }),
-                Claim = (await сlaimRepository.GetByIdAsync(_owner)),
+                Claim = (await сlaimRepository.GetByIdAsync(owner.ToLong())),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
                 FilterViewModel = new FilterViewModel(searchString, owner),

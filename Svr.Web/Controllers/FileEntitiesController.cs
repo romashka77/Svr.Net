@@ -9,6 +9,7 @@ using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
 using Svr.Infrastructure.Data;
+using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.FileEntityViewModels;
 using System;
@@ -22,6 +23,7 @@ namespace Svr.Web.Controllers
     [Authorize]
     public class FileEntitiesController : Controller
     {
+        private const string filesFolder = "Files";
         private IFileEntityRepository repository;
         private IClaimRepository сlaimRepository;
         private ILogger<FileEntitiesController> logger;
@@ -56,12 +58,7 @@ namespace Svr.Web.Controllers
         // GET: FileEntities
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            long? _owner = null;
-            if (!String.IsNullOrEmpty(owner))
-            {
-                _owner = Int64.Parse(owner);
-            }
-            var filterSpecification = new FileEntitySpecification(_owner);
+            var filterSpecification = new FileEntitySpecification(owner.ToLong());
             IEnumerable<FileEntity> list = await repository.ListAsync(filterSpecification);
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
@@ -117,7 +114,7 @@ namespace Svr.Web.Controllers
                     Claim = i.Claim,
                     Path = i.Path
                 }),
-                Claim = (await сlaimRepository.GetByIdAsync(_owner)),
+                Claim = (await сlaimRepository.GetByIdAsync(owner.ToLong())),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
                 FilterViewModel = new FilterViewModel(searchString, owner),
@@ -296,7 +293,7 @@ namespace Svr.Web.Controllers
         }
         private string GetFile(string patn)
         {
-            return $"{appEnvironment.WebRootPath }/Files/{patn}";
+            return $"{appEnvironment.WebRootPath }/{filesFolder}/{patn}";
         }
         private string GetContentType(string path)
         {

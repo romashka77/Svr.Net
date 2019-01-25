@@ -9,6 +9,7 @@ using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
 using Svr.Infrastructure.Data;
 using Svr.Infrastructure.Identity;
+using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.ClaimsViewModels;
 using System;
@@ -78,23 +79,21 @@ namespace Svr.Web.Controllers
         // GET: Claims
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            long? _owner = null;
-            if (!String.IsNullOrEmpty(owner))
-            {
-                _owner = Int64.Parse(owner);
-            }
-            else
+            if (String.IsNullOrEmpty(owner))
             {
                 if (String.IsNullOrEmpty(lord))
                 {
                     ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
-                    owner = user.DistrictId.ToString();
-                    _owner = user.DistrictId;
+                    if (user != null)
+                    {
+                        owner = user.DistrictId.ToString();
+                    }
                 }
             }
-            var filterSpecification = new ClaimSpecification(_owner);
+            var filterSpecification = new ClaimSpecification(owner.ToLong());
             IEnumerable<Claim> list = await repository.ListAsync(filterSpecification);
             //фильтрация
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));
@@ -143,12 +142,6 @@ namespace Svr.Web.Controllers
             var count = list.Count();
             var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
 
-            long? _lord = null;
-            if (!String.IsNullOrEmpty(lord))
-            {
-                _lord = Int64.Parse(lord);
-            }
-
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -166,7 +159,7 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, (await districtRepository.ListAsync(new DistrictSpecification(_lord))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord, (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) })),
+                FilterViewModel = new FilterViewModel(searchString, owner, (await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong()))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord, (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) })),
 
                 StatusMessage = StatusMessage
             };
@@ -195,24 +188,9 @@ namespace Svr.Web.Controllers
         // GET: Claims/Create
         public async Task<IActionResult> Create(string lord = null, string owner = null)
         {
-            long? _lord = null;
-            if (!String.IsNullOrEmpty(lord))
-            {
-                _lord = Int64.Parse(lord);
-            }
             ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", lord);
-            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(_lord)), "Id", "Name", owner);
+            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong())), "Id", "Name", owner);
             return View();
-
-            //ViewData["CategoryDisputeId"] = new SelectList(_context.CategoryDisputes, "Id", "Name");
-            //ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Code");
-            //ViewData["GroupClaimId"] = new SelectList(_context.GroupClaims, "Id", "Code");
-            //ViewData["PerformerId"] = new SelectList(_context.Performers, "Id", "Name");
-            //ViewData["Person3rdId"] = new SelectList(_context.Applicant, "Id", "Name");
-            //ViewData["PlaintiffId"] = new SelectList(_context.Applicant, "Id", "Name");
-            //ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Code");
-            //ViewData["RespondentId"] = new SelectList(_context.Applicant, "Id", "Name");
-            //ViewData["СourtId"] = new SelectList(_context.Dir, "Id", "Name");
         }
 
         // POST: Claims/Create

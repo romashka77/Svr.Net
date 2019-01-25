@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
 {
-    public class EfRepository<T> : IRepository<T>, IAsyncRepository<T> where T : BaseEntity
+    public class EfRepository<T>: ISort<T>, IRepository<T>, IRepositoryAsync<T> where T : BaseEntity
     {
         private readonly DataContext dbContext;
         private DbSet<T> _entities;
@@ -179,14 +179,31 @@ namespace Svr.Infrastructure.Data
         /// Получить таблицу
         /// </summary>
         public virtual IQueryable<T> Table() { return Entities; }
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Возвращает таблицу с включенной функцией "без отслеживания" (функция EF) используйте ее только при загрузке записей только для операций только для чтения
         /// </summary>
-        public virtual IQueryable<T> TableNoTracking { get { return Entities.AsNoTracking(); } }
+        public virtual IQueryable<T> TableNoTracking() { return Entities.AsNoTracking(); }
 
+        public virtual IQueryable<T> Sort(IQueryable<T> source, SortState sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case SortState.CreatedOnUtcAsc:
+                    return source.OrderBy(p => p.CreatedOnUtc);
+                case SortState.CreatedOnUtcDesc:
+                    return source.OrderByDescending(p => p.CreatedOnUtc);
+                case SortState.UpdatedOnUtcAsc:
+                    return source.OrderBy(p => p.UpdatedOnUtc);
+                case SortState.UpdatedOnUtcDesc:
+                    return source.OrderByDescending(p => p.UpdatedOnUtc);
+                default:
+                    return source;
+            }
+        }
+
+        #endregion
+
+        #region Properties
         /// <summary>
         /// Entities
         /// </summary>

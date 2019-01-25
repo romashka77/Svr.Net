@@ -6,7 +6,7 @@ using Svr.Core.Entities;
 
 namespace Svr.Core.Interfaces
 {
-    public interface IDistrictRepository : IRepository<District>, IAsyncRepository<District>
+    public interface IDistrictRepository : IRepository<District>, IRepositoryAsync<District>
     {
         District GetByIdWithItems(long? id);
         Task<District> GetByIdWithItemsAsync(long? id);

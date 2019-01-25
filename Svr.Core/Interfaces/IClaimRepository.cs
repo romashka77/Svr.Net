@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Core.Interfaces
 {
-    public interface IClaimRepository : IRepository<Claim>, IAsyncRepository<Claim>
+    public interface IClaimRepository : IRepository<Claim>, IRepositoryAsync<Claim>
     {
         Claim GetByIdWithItems(long? id);
         Task<Claim> GetByIdWithItemsAsync(long? id);
