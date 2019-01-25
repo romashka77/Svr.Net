@@ -24,8 +24,6 @@ namespace Svr.Web.Controllers
     {
         private ILogger<RegionsController> logger;
         private IRegionRepository regionRepository;
-        
-
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -52,7 +50,7 @@ namespace Svr.Web.Controllers
         #region Index
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var list = regionRepository.TableNoTracking();
+            var list = regionRepository.Table();
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -62,7 +60,7 @@ namespace Svr.Web.Controllers
             list = regionRepository.Sort(list, sortOrder);
             //пагинация
             var totalItems = await list.CountAsync();
-            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).ToListAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()

@@ -29,7 +29,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return await Entities.Include(r => r.Districts).Include(p => p.Performers).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(r => r.Districts).Include(p => p.Performers).AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
         }
         public override IQueryable<Region> Sort(IQueryable<Region> source, SortState sortOrder)
         {
