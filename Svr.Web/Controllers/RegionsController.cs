@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Infrastructure.Data;
+using Svr.Web.Extensions;
 using Svr.Web.Interfaces;
 using Svr.Web.Models;
 using Svr.Web.Models.RegionsViewModels;
@@ -56,41 +57,6 @@ namespace Svr.Web.Controllers
             }
             //сортировка
             list = regionRepository.Sort(list, sortOrder);
-
-
-            //switch (sortOrder)
-            //{
-            //    case SortState.NameDesc:
-            //        list = list.OrderByDescending(p => p.Name);
-            //        break;
-            //    case SortState.CodeAsc:
-            //        list = list.OrderBy(p => p.Code);
-            //        break;
-            //    case SortState.CodeDesc:
-            //        list = list.OrderByDescending(p => p.Code);
-            //        break;
-            //    case SortState.DescriptionAsc:
-            //        list = list.OrderBy(p => p.Description);
-            //        break;
-            //    case SortState.DescriptionDesc:
-            //        list = list.OrderByDescending(p => p.Description);
-            //        break;
-            //    case SortState.CreatedOnUtcAsc:
-            //        list = list.OrderBy(p => p.CreatedOnUtc);
-            //        break;
-            //    case SortState.CreatedOnUtcDesc:
-            //        list = list.OrderByDescending(p => p.CreatedOnUtc);
-            //        break;
-            //    case SortState.UpdatedOnUtcAsc:
-            //        list = list.OrderBy(p => p.UpdatedOnUtc);
-            //        break;
-            //    case SortState.UpdatedOnUtcDesc:
-            //        list = list.OrderByDescending(p => p.UpdatedOnUtc);
-            //        break;
-            //    default:
-            //        list = list.OrderBy(p => p.Name);
-            //        break;
-            //}
             //пагинация
             var totalItems = await list.CountAsync();
             var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).ToListAsync();
@@ -121,9 +87,8 @@ namespace Svr.Web.Controllers
             var region = await regionRepository.GetByIdWithItemsAsync(id);
             if (region == null)
             {
-                StatusMessage = $"Не удалось загрузить район с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить регион с ID {id}.");
             }
             var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, Districts = region.Districts, StatusMessage = StatusMessage, CreatedOnUtc = region.CreatedOnUtc, UpdatedOnUtc = region.UpdatedOnUtc,Performers = region.Performers };
             return View(model);
@@ -145,14 +110,14 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 //добавляем новый регион
-                var region = await regionRepository.AddAsync(new Region { Code = model.Code, Name = model.Name, Description = model.Description });
-                if (region != null)
+                var item = await regionRepository.AddAsync(new Region { Code = model.Code, Name = model.Name, Description = model.Description });
+                if (item != null)
                 {
-                    StatusMessage = $"Добавлен {region} с Id={region.Id}, Code={region.Code}, Name={region.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             return View(model);
         }
         #endregion
@@ -163,7 +128,7 @@ namespace Svr.Web.Controllers
             var region = await regionRepository.GetByIdAsync(id);
             if (region == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти регион с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description, StatusMessage = StatusMessage, CreatedOnUtc = region.CreatedOnUtc };
@@ -182,17 +147,17 @@ namespace Svr.Web.Controllers
                 try
                 {
                     await regionRepository.UpdateAsync(new Region { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, Districts = model.Districts, CreatedOnUtc= model.CreatedOnUtc});
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     if (!(await regionRepository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении региона с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -207,7 +172,7 @@ namespace Svr.Web.Controllers
             var region = await regionRepository.GetByIdAsync(id);
             if (region == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти регион с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = region.Id, Code = region.Code, Name = region.Name, Description = region.Description };
@@ -222,12 +187,12 @@ namespace Svr.Web.Controllers
             try
             {
                 await regionRepository.DeleteAsync(new Region { Id = model.Id, Name = model.Name, Code = model.Code });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении района с Id={model.Id}, Name = {model.Name}, Code = {model.Code} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }

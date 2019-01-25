@@ -15,6 +15,9 @@ namespace Svr.Web.Extensions
             }
             return Int64.Parse(str);
         }
-
+        public static string ErrorFind(this string id)
+        {
+            return $"Ошибка: Не удалось найти ID = {id}.";
+        }
     }
 }
