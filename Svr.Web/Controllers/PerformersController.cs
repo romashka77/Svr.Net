@@ -21,11 +21,11 @@ namespace Svr.Web.Controllers
     [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class PerformersController : Controller
     {
-        private IPerformerRepository repository;
-        private IRegionRepository regionRepository;
-        private IDistrictRepository districtRepository;
-        private IDistrictPerformerRepository districtPerformerRepository;
-        private ILogger<PerformersController> logger;
+        private readonly IPerformerRepository repository;
+        private readonly IRegionRepository regionRepository;
+        private readonly IDistrictRepository districtRepository;
+        private readonly IDistrictPerformerRepository districtPerformerRepository;
+        private readonly ILogger<PerformersController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -44,11 +44,11 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                districtRepository = null;
-                repository = null;
-                regionRepository = null;
-                districtPerformerRepository = null;
-                logger = null;
+                //districtRepository = null;
+                //repository = null;
+                //regionRepository = null;
+                //districtPerformerRepository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -58,49 +58,17 @@ namespace Svr.Web.Controllers
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
             var filterSpecification = new PerformerSpecification(owner.ToLong());
-            IEnumerable<Performer> list = await repository.ListAsync(filterSpecification);
+            var list = repository.List(filterSpecification);
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.DescriptionAsc:
-                    list = list.OrderBy(p => p.Description);
-                    break;
-                case SortState.DescriptionDesc:
-                    list = list.OrderByDescending(p => p.Description);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.Region.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.Region.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             // пагинация
-            var count = list.Count();
-            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = await list.CountAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -114,8 +82,7 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, regionRepository.ListAll().ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
-
+                FilterViewModel = new FilterViewModel(searchString, owner, (await regionRepository.ListAllAsync()).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
@@ -128,9 +95,8 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить исполнителя с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, RegionId = item.RegionId, Region = item.Region, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, DistrictPerformers = item.DistrictPerformers };
             return View(model);
@@ -143,7 +109,6 @@ namespace Svr.Web.Controllers
             ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
             return View();
         }
-
         // POST: Performers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -153,16 +118,14 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // добавляем новый Район
                 var item = await repository.AddAsync(new Performer { Name = model.Name, Description = model.Description, RegionId = model.RegionId });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлен исполнитель" +
-                        $" с Id={item.Id}, имя={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
@@ -171,17 +134,11 @@ namespace Svr.Web.Controllers
         // GET: Performers/Edit/5
         public async Task<ActionResult> Edit(long? id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-            var item = await repository.GetByIdAsync(id);
-            //District item = await repository.Table().Include(e => e.DistrictPerformers).SingleOrDefaultAsync(m => m.Id == id);
+            var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictPerformers = item.DistrictPerformers };
             ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", 1);
@@ -199,9 +156,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    var filterSpecification = new PerformerDistrictSpecification(model.Id);
-                    await districtPerformerRepository.ClearAsync(filterSpecification);
-
+                    await districtPerformerRepository.ClearAsync(new PerformerDistrictSpecification(model.Id));
                     if (selectedDistricts != null)
                     {
                         foreach (var d in selectedDistricts)
@@ -209,20 +164,18 @@ namespace Svr.Web.Controllers
                             await districtPerformerRepository.AddAsync(new DistrictPerformer { DistrictId = d, PerformerId = model.Id });
                         }
                     }
-
                     await repository.UpdateAsync(new Performer { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, RegionId = model.RegionId });
-
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении района с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -232,37 +185,37 @@ namespace Svr.Web.Controllers
             return View(model);
         }
         #endregion
+        #region Delete
         // GET: Performers/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти исполнителя с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
             return View(model);
         }
-
         // POST: Performers/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
             {
                 await repository.DeleteAsync(new Performer { Id = model.Id, Name = model.Name });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении исполнителя с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }
-
-
+        #endregion
     }
 }

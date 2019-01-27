@@ -55,5 +55,5 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
     <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-default">Удалить</a>
-    <a asp-action="Index" asp-route-owner="@Model.ClaimId" class="btn btn-default">Назад</a>
+    <a asp-action="Index" asp-route-owner="@Model.Claim.Id" class="btn btn-default">Назад</a>
 </div>

@@ -22,18 +22,18 @@ namespace Svr.Web.Controllers
     [Authorize]
     public class ClaimsController : Controller
     {
-        private IClaimRepository repository;
-        private IDistrictRepository districtRepository;
-        private IRegionRepository regionRepository;
-        private ICategoryDisputeRepository categoryDisputeRepository;
-        private IGroupClaimRepository groupClaimRepository;
-        private ISubjectClaimRepository subjectClaimRepository;
-        private IDirRepository dirRepository;
-        private IPerformerRepository performerRepository;
-        private IApplicantRepository applicantRepository;
-        private IInstanceRepository instanceRepository;
+        private readonly IClaimRepository repository;
+        private readonly IDistrictRepository districtRepository;
+        private readonly IRegionRepository regionRepository;
+        private readonly ICategoryDisputeRepository categoryDisputeRepository;
+        private readonly IGroupClaimRepository groupClaimRepository;
+        private readonly ISubjectClaimRepository subjectClaimRepository;
+        private readonly IDirRepository dirRepository;
+        private readonly IPerformerRepository performerRepository;
+        private readonly IApplicantRepository applicantRepository;
+        private readonly IInstanceRepository instanceRepository;
         private readonly UserManager<ApplicationUser> userManager;
-        private ILogger<ClaimsController> logger;
+        private readonly ILogger<ClaimsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -59,22 +59,21 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                repository = null;
-                districtRepository = null;
-                regionRepository = null;
-                categoryDisputeRepository = null;
-                groupClaimRepository = null;
-                subjectClaimRepository = null;
-                performerRepository = null;
-                dirRepository = null;
-                applicantRepository = null;
-                instanceRepository = null;
-                logger = null;
+                //repository = null;
+                //districtRepository = null;
+                //regionRepository = null;
+                //categoryDisputeRepository = null;
+                //groupClaimRepository = null;
+                //subjectClaimRepository = null;
+                //performerRepository = null;
+                //dirRepository = null;
+                //applicantRepository = null;
+                //instanceRepository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
         #endregion
-
         #region Index
         // GET: Claims
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
@@ -90,58 +89,17 @@ namespace Svr.Web.Controllers
                     }
                 }
             }
-            var filterSpecification = new ClaimSpecification(owner.ToLong());
-            IEnumerable<Claim> list = await repository.ListAsync(filterSpecification);
+            var list = repository.List(new ClaimSpecification(owner.ToLong()));
             //фильтрация
-
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.CodeAsc:
-                    list = list.OrderBy(p => p.Code);
-                    break;
-                case SortState.CodeDesc:
-                    list = list.OrderByDescending(p => p.Code);
-                    break;
-                case SortState.DescriptionAsc:
-                    list = list.OrderBy(p => p.Description);
-                    break;
-                case SortState.DescriptionDesc:
-                    list = list.OrderByDescending(p => p.Description);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.Region.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.Region.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             // пагинация
-            var count = list.Count();
-            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
-
+            var count = await list.CountAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -154,19 +112,13 @@ namespace Svr.Web.Controllers
                     UpdatedOnUtc = i.UpdatedOnUtc,
                     Region = i.Region,
                     District = i.District,
-                    //Instances =i.Instances,
-                    //Meetings =i.Meetings
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
                 FilterViewModel = new FilterViewModel(searchString, owner, (await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong()))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord, (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) })),
-
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
-
-            //var dataContext = _context.Claims.Include(c => c.CategoryDispute).Include(c => c.District).Include(c => c.GroupClaim).Include(c => c.Performer).Include(c => c.Person3rd).Include(c => c.Plaintiff).Include(c => c.Region).Include(c => c.Respondent).Include(c => c.Сourt);
-            //    return View(await dataContext.ToListAsync());
         }
         #endregion
         #region Details
@@ -176,11 +128,11 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить иск с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, /*RegionId = item.RegionId, */Region = item.Region, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, District = item.District, Instances = item.Instances, Meetings = item.Meetings, FileEntities = item.FileEntities };
+            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, /*RegionId = item.RegionId,*/ Region = item.Region, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, District = item.District, Instances = item.Instances, Meetings = item.Meetings, FileEntities = item.FileEntities };
             return View(model);
         }
         #endregion
@@ -192,7 +144,6 @@ namespace Svr.Web.Controllers
             ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong())), "Id", "Name", owner);
             return View();
         }
-
         // POST: Claims/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -203,15 +154,14 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 model.Code = SetCode(model);
-                // добавляем новый Район
                 var item = await repository.AddAsync(new Claim { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлен район с Id={item.Id}, код={item.Code}, имя={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Edit), new { id = item.Id });
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
             ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
             return View(model);
@@ -224,18 +174,13 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId, DateReg = item.DateReg, DateIn = item.DateIn, CategoryDisputeId = item.CategoryDisputeId, GroupClaimId = item.GroupClaimId, SubjectClaimId = item.SubjectClaimId, СourtId = item.СourtId, PerformerId = item.PerformerId, Sum = item.Sum, PlaintiffId = item.PlaintiffId, RespondentId = item.RespondentId, Person3rdId = item.Person3rdId, Instances = item.Instances };
-
             await SetViewBag(model);
-
             return View(model);
         }
-
-
         // POST: Claims/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -251,7 +196,7 @@ namespace Svr.Web.Controllers
                     if ((model.RegionId != 0) && (model.DistrictId != 0))
                     {
                         await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId = model.RespondentId, Person3rdId = model.Person3rdId, Instances = model.Instances });
-                        StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                        StatusMessage = model.MessageEditOk();
                     }
                     else { StatusMessage = $"Проверте заполнение полей"; }
                 }
@@ -259,17 +204,15 @@ namespace Svr.Web.Controllers
                 {
                     if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении района с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
-                //return RedirectToAction(nameof(Index));
             }
             await SetViewBag(model);
-
             return View(model);
         }
         #endregion
@@ -280,28 +223,27 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage, RegionId = item.RegionId, DistrictId = item.DistrictId };
             return View(model);
         }
-
         // POST: Claims/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Администратор, Администратор ОПФР, Администратор УПФР")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
             {
                 await repository.DeleteAsync(new Claim { Id = model.Id, Name = model.Name, Code = model.Code, });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении иска с Id={model.Id}, Name = {model.Name}, Code = {model.Code} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }

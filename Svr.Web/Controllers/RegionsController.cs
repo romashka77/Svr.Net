@@ -22,18 +22,18 @@ namespace Svr.Web.Controllers
     [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class RegionsController : Controller
     {
-        private ILogger<RegionsController> logger;
-        private IRegionRepository regionRepository;
+        private readonly ILogger<RegionsController> logger;
+        private readonly IRegionRepository repository;
 
         [TempData]
         public string StatusMessage { get; set; }
 
         #region Конструктор
-        public RegionsController(IRegionRepository regionRepository, ILogger<RegionsController> logger = null)
+        public RegionsController(IRegionRepository repository, ILogger<RegionsController> logger = null)
         {
             //this.regionService = regionService;
             this.logger = logger;
-            this.regionRepository = regionRepository;
+            this.repository = repository;
         }
         #endregion
         #region Деструктор
@@ -41,8 +41,8 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                regionRepository = null;
-                logger = null;
+                //repository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -50,14 +50,14 @@ namespace Svr.Web.Controllers
         #region Index
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var list = regionRepository.Table();
+            var list = repository.Table();
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(p => p.Name.ToUpper().Contains(searchString.ToUpper()) || p.Code.ToUpper().Contains(searchString.ToUpper()));
             }
             //сортировка
-            list = regionRepository.Sort(list, sortOrder);
+            list = repository.Sort(list, sortOrder);
             //пагинация
             var totalItems = await list.CountAsync();
             var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
@@ -85,7 +85,7 @@ namespace Svr.Web.Controllers
         // GET: Regions/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            var region = await regionRepository.GetByIdWithItemsAsync(id);
+            var region = await repository.GetByIdWithItemsAsync(id);
             if (region == null)
             {
                 StatusMessage = id.ToString().ErrorFind();
@@ -111,7 +111,7 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 //добавляем новый регион
-                var item = await regionRepository.AddAsync(new Region { Code = model.Code, Name = model.Name, Description = model.Description });
+                var item = await repository.AddAsync(new Region { Code = model.Code, Name = model.Name, Description = model.Description });
                 if (item != null)
                 {
                     StatusMessage = item.MessageAddOk();
@@ -126,7 +126,7 @@ namespace Svr.Web.Controllers
         // GET: Regions/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
-            var region = await regionRepository.GetByIdAsync(id);
+            var region = await repository.GetByIdAsync(id);
             if (region == null)
             {
                 StatusMessage = id.ToString().ErrorFind();
@@ -147,12 +147,12 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await regionRepository.UpdateAsync(new Region { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, Districts = model.Districts, CreatedOnUtc= model.CreatedOnUtc});
+                    await repository.UpdateAsync(new Region { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, Districts = model.Districts, CreatedOnUtc= model.CreatedOnUtc});
                     StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!(await regionRepository.EntityExistsAsync(model.Id)))
+                    if (!(await repository.EntityExistsAsync(model.Id)))
                     {
                         StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
@@ -170,7 +170,7 @@ namespace Svr.Web.Controllers
         // GET: Regions/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            var region = await regionRepository.GetByIdAsync(id);
+            var region = await repository.GetByIdAsync(id);
             if (region == null)
             {
                 StatusMessage = id.ToString().ErrorFind();
@@ -188,7 +188,7 @@ namespace Svr.Web.Controllers
         {
             try
             {
-                await regionRepository.DeleteAsync(new Region { Id = model.Id, Name = model.Name, Code = model.Code });
+                await repository.DeleteAsync(new Region { Id = model.Id, Name = model.Name, Code = model.Code });
                 StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }

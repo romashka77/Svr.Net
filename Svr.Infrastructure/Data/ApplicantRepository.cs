@@ -20,7 +20,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).AsNoTracking().SingleOrDefault(r => r.Id == id);
         }
         public virtual async Task<Applicant> GetByIdWithItemsAsync(long? id)
         {
@@ -28,7 +28,29 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return await Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(d => d.TypeApplicant).Include(d => d.Opf).AsNoTracking().SingleOrDefaultAsync(r => r.Id == id);
+        }
+        public override IQueryable<Applicant> Sort(IQueryable<Applicant> source, SortState sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case SortState.NameDesc:
+                    return source.OrderByDescending(p => p.Name);
+                case SortState.CreatedOnUtcAsc:
+                    return source.OrderBy(p => p.CreatedOnUtc);
+                case SortState.CreatedOnUtcDesc:
+                    return source.OrderByDescending(p => p.CreatedOnUtc);
+                case SortState.UpdatedOnUtcAsc:
+                    return source.OrderBy(p => p.UpdatedOnUtc);
+                case SortState.UpdatedOnUtcDesc:
+                    return source.OrderByDescending(p => p.UpdatedOnUtc);
+                case SortState.OwnerAsc:
+                    return source.OrderBy(s => s.TypeApplicant.Name);
+                case SortState.OwnerDesc:
+                    return source.OrderByDescending(s => s.TypeApplicant.Name);
+                default:
+                    return source.OrderBy(s => s.Name);
+            }
         }
     }
 }

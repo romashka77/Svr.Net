@@ -20,10 +20,10 @@ namespace Svr.Web.Controllers
     [Authorize]
     public class InstancesController : Controller
     {
-        private IInstanceRepository repository;
-        private IClaimRepository сlaimRepository;
-        private IDirRepository dirRepository;
-        private ILogger<InstancesController> logger;
+        private readonly IInstanceRepository repository;
+        private readonly IClaimRepository сlaimRepository;
+        private readonly IDirRepository dirRepository;
+        private readonly ILogger<InstancesController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -42,10 +42,10 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                сlaimRepository = null;
-                repository = null;
-                dirRepository = null;
-                logger = null;
+                //сlaimRepository = null;
+                //repository = null;
+                //dirRepository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -54,50 +54,17 @@ namespace Svr.Web.Controllers
         // GET: Instances
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var filterSpecification = new InstanceSpecification(owner.ToLong());
-            IEnumerable<Instance> list = await repository.ListAsync(filterSpecification);
+            var list = repository.List(new InstanceSpecification(owner.ToLong()));
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.DescriptionAsc:
-                    list = list.OrderBy(p => p.Description);
-                    break;
-                case SortState.DescriptionDesc:
-                    list = list.OrderByDescending(p => p.Description);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.Claim.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.Claim.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             // пагинация
-            var count = list.Count();
-            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = await list.CountAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -114,10 +81,8 @@ namespace Svr.Web.Controllers
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
                 FilterViewModel = new FilterViewModel(searchString, owner),
-
                 StatusMessage = StatusMessage
             };
-
             return View(indexModel);
         }
         #endregion
@@ -128,12 +93,11 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить иск с ID = {id}.";
-                //return RedirectToAction(nameof(Index));
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
                 throw new ApplicationException($"Не удалось загрузить инстанцию с ID {id}.");
             }
-            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, Claim = item.Claim, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, CourtDecision = item.CourtDecision, DateCourtDecision = item.DateCourtDecision, DateInCourtDecision = item.DateInCourtDecision, DateSFine = item.DateSFine, DateSPenalty = item.DateSPenalty, DateSShortage = item.DateSShortage, DateToFine = item.DateToFine, DateToPenalty = item.DateToPenalty, DateToShortage = item.DateToShortage, DateTransfer = item.DateTransfer, DutyDenied = item.DutyDenied, DutyPaid = item.DutyPaid, DutySatisfied = item.DutySatisfied, FFOMSFine = item.FFOMSFine, FFOMSShortage = item.FFOMSShortage, FundedPartPFRFine = item.InsurancePartPFRFine, FundedPartPFRShortage = item.FundedPartPFRShortage, InsurancePartPFRFine = item.InsurancePartPFRFine, InsurancePartPFRShortage = item.InsurancePartPFRShortage, PaidVoluntarily = item.PaidVoluntarily, ServicesDenied = item.ServicesDenied, ServicesSatisfied = item.ServicesSatisfied, SumDenied = item.SumDenied, SumPenalty = item.SumPenalty, SumSatisfied = item.SumSatisfied, TFOMSFine = item.TFOMSFine, TFOMSShortage = item.TFOMSShortage, СostDenied = item.СostDenied, СostSatisfied = item.СostSatisfied };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, Claim = item.Claim,  StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, CourtDecision = item.CourtDecision, DateCourtDecision = item.DateCourtDecision, DateInCourtDecision = item.DateInCourtDecision, DateSFine = item.DateSFine, DateSPenalty = item.DateSPenalty, DateSShortage = item.DateSShortage, DateToFine = item.DateToFine, DateToPenalty = item.DateToPenalty, DateToShortage = item.DateToShortage, DateTransfer = item.DateTransfer, DutyDenied = item.DutyDenied, DutyPaid = item.DutyPaid, DutySatisfied = item.DutySatisfied, FFOMSFine = item.FFOMSFine, FFOMSShortage = item.FFOMSShortage, FundedPartPFRFine = item.InsurancePartPFRFine, FundedPartPFRShortage = item.FundedPartPFRShortage, InsurancePartPFRFine = item.InsurancePartPFRFine, InsurancePartPFRShortage = item.InsurancePartPFRShortage, PaidVoluntarily = item.PaidVoluntarily, ServicesDenied = item.ServicesDenied, ServicesSatisfied = item.ServicesSatisfied, SumDenied = item.SumDenied, SumPenalty = item.SumPenalty, SumSatisfied = item.SumSatisfied, TFOMSFine = item.TFOMSFine, TFOMSShortage = item.TFOMSShortage, СostDenied = item.СostDenied, СostSatisfied = item.СostSatisfied };
             return View(model);
         }
         #endregion
@@ -174,15 +138,14 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // добавляем новый Район
                 var item = await repository.AddAsync(new Instance { Name = model.Name, ClaimId = model.ClaimId, Description = model.Description, Claim = model.Claim, CourtDecision = model.CourtDecision, DateCourtDecision = model.DateCourtDecision, СostSatisfied = model.СostSatisfied, СostDenied = model.СostDenied, TFOMSShortage = model.TFOMSShortage, TFOMSFine = model.TFOMSFine, DateInCourtDecision = model.DateInCourtDecision, DateSFine = model.DateSFine, DateSPenalty = model.DateSPenalty, DateSShortage = model.DateSShortage, DateToFine = model.DateToFine, DateToPenalty = model.DateToPenalty, DateToShortage = model.DateToShortage, DateTransfer = model.DateTransfer, DutyDenied = model.DutyDenied, DutyPaid = model.DutyPaid, DutySatisfied = model.DutySatisfied, FFOMSFine = model.FFOMSFine, FFOMSShortage = model.FFOMSShortage, FundedPartPFRFine = model.FundedPartPFRFine, FundedPartPFRShortage = model.FundedPartPFRShortage, InsurancePartPFRFine = model.InsurancePartPFRFine, InsurancePartPFRShortage = model.InsurancePartPFRShortage, PaidVoluntarily = model.PaidVoluntarily, ServicesDenied = model.ServicesDenied, ServicesSatisfied = model.ServicesSatisfied, SumDenied = model.SumDenied, SumPenalty = model.SumPenalty, SumSatisfied = model.SumSatisfied, CourtDecisionId = model.CourtDecisionId, Number = model.Number });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлена инстанция с Id={item.Id}, имя={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index), new { owner = item.ClaimId });
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             await SetViewBag(model);
             return View(model);
         }
@@ -194,17 +157,14 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти инстанцию с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
                 throw new ApplicationException($"Не удалось загрузить инстанцию с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, TFOMSShortage = item.TFOMSShortage, СostDenied = item.СostDenied, СostSatisfied = item.СostSatisfied, TFOMSFine = item.TFOMSFine, PaidVoluntarily = item.PaidVoluntarily, SumSatisfied = item.SumSatisfied, SumPenalty = item.SumPenalty, SumDenied = item.SumDenied, ServicesSatisfied = item.ServicesSatisfied, ServicesDenied = item.ServicesDenied, CourtDecision = item.CourtDecision, DateCourtDecision = item.DateCourtDecision, DateInCourtDecision = item.DateInCourtDecision, DateSFine = item.DateSFine, DateSPenalty = item.DateSPenalty, DateSShortage = item.DateSShortage, DateToFine = item.DateToFine, DateToPenalty = item.DateToPenalty, DateToShortage = item.DateToShortage, DateTransfer = item.DateTransfer, DutyDenied = item.DutyDenied, DutyPaid = item.DutyPaid, DutySatisfied = item.DutySatisfied, FFOMSFine = item.FFOMSFine, FFOMSShortage = item.FFOMSShortage, FundedPartPFRFine = item.FundedPartPFRFine, FundedPartPFRShortage = item.FundedPartPFRShortage, Claim = item.Claim, InsurancePartPFRFine = item.InsurancePartPFRFine, InsurancePartPFRShortage = item.InsurancePartPFRShortage, ClaimId = item.ClaimId, Number = item.Number };
-
             await SetViewBag(model);
-
             return View(model);
         }
-
         // POST: Instances/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -217,24 +177,22 @@ namespace Svr.Web.Controllers
                 try
                 {
                     await repository.UpdateAsync(new Instance { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, CourtDecision = model.CourtDecision, DateCourtDecision = model.DateCourtDecision, DateInCourtDecision = model.DateInCourtDecision, DateSFine = model.DateSFine, DateSPenalty = model.DateSPenalty, DateSShortage = model.DateSShortage, DateToFine = model.DateToFine, DateToPenalty = model.DateToPenalty, DateToShortage = model.DateToShortage, DateTransfer = model.DateTransfer, DutyDenied = model.DutyDenied, DutySatisfied = model.DutySatisfied, DutyPaid = model.DutyPaid, FFOMSFine = model.FFOMSFine, FFOMSShortage = model.FFOMSShortage, FundedPartPFRFine = model.FundedPartPFRFine, FundedPartPFRShortage = model.FundedPartPFRShortage, InsurancePartPFRFine = model.InsurancePartPFRFine, InsurancePartPFRShortage = model.InsurancePartPFRShortage, PaidVoluntarily = model.PaidVoluntarily, ServicesDenied = model.ServicesDenied, SumDenied = model.SumDenied, ServicesSatisfied = model.ServicesSatisfied, SumPenalty = model.SumPenalty, SumSatisfied = model.SumSatisfied, TFOMSFine = model.TFOMSFine, TFOMSShortage = model.TFOMSShortage, СostDenied = model.СostDenied, СostSatisfied = model.СostSatisfied, Number = model.Number });
-
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении инстанции с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 //return RedirectToAction(nameof(Index));
             }
             await SetViewBag(model);
-
             return View(model);
         }
         #endregion
@@ -245,7 +203,7 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                //StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
                 throw new ApplicationException($"Не удалось найти инстанцию с ID {id}.");
             }
@@ -261,12 +219,12 @@ namespace Svr.Web.Controllers
             try
             {
                 await repository.DeleteAsync(new Instance { Id = model.Id, Name = model.Name });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении инстанции с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
         }

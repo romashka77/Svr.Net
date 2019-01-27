@@ -11,7 +11,7 @@ namespace Svr.Core.Interfaces
         T GetById(long? id);
         T GetSingleBySpec(ISpecification<T> spec);
         IEnumerable<T> ListAll();
-        IEnumerable<T> List(ISpecification<T> spec);
+        IQueryable<T> List(ISpecification<T> spec);
         T Add(T entity);
         int Add(IEnumerable<T> entities);
         void Update(T entity);

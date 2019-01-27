@@ -22,7 +22,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(r => r.Dirs).FirstOrDefault(r => r.Id == id);
+            return Entities.Include(r => r.Dirs).AsNoTracking().FirstOrDefault(r => r.Id == id);
         }
 
         public virtual async Task<DirName> GetByIdWithItemsAsync(long? id)
@@ -31,7 +31,25 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return await Entities.Include(r => r.Dirs).FirstOrDefaultAsync(r => r.Id == id);
+            return await Entities.Include(r => r.Dirs).AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
+        }
+        public override IQueryable<DirName> Sort(IQueryable<DirName> source, SortState sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case SortState.NameDesc:
+                    return source.OrderByDescending(p => p.Name);
+                case SortState.CreatedOnUtcAsc:
+                    return source.OrderBy(p => p.CreatedOnUtc);
+                case SortState.CreatedOnUtcDesc:
+                    return source.OrderByDescending(p => p.CreatedOnUtc);
+                case SortState.UpdatedOnUtcAsc:
+                    return source.OrderBy(p => p.UpdatedOnUtc);
+                case SortState.UpdatedOnUtcDesc:
+                    return source.OrderByDescending(p => p.UpdatedOnUtc);
+                default:
+                    return source.OrderBy(p => p.Name);
+            }
         }
     }
 }

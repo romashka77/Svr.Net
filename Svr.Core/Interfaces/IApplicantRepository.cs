@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Svr.Core.Interfaces
 {
-    public interface IApplicantRepository : IRepository<Applicant>, IRepositoryAsync<Applicant>
-    {
+    public interface IApplicantRepository : IRepository<Applicant>, IRepositoryAsync<Applicant>, ISort<Applicant>
+    { 
         Applicant GetByIdWithItems(long? id);
         Task<Applicant> GetByIdWithItemsAsync(long? id);
     }

@@ -20,9 +20,9 @@ namespace Svr.Web.Controllers
     [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class GroupClaimsController : Controller
     {
-        private IGroupClaimRepository repository;
-        private ICategoryDisputeRepository categoryDisputeRepository;
-        private ILogger<GroupClaimsController> logger;
+        private readonly IGroupClaimRepository repository;
+        private readonly ICategoryDisputeRepository categoryDisputeRepository;
+        private readonly ILogger<GroupClaimsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -40,9 +40,9 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                repository = null;
-                categoryDisputeRepository = null;
-                logger = null;
+                //repository = null;
+                //categoryDisputeRepository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -51,56 +51,17 @@ namespace Svr.Web.Controllers
         // GET: GroupClaims
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var filterSpecification = new GroupClaimSpecification(owner.ToLong());
-            IEnumerable<GroupClaim> list = await repository.ListAsync(filterSpecification);
+            var list = repository.List(new GroupClaimSpecification(owner.ToLong()));
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.CodeAsc:
-                    list = list.OrderBy(p => p.Code);
-                    break;
-                case SortState.CodeDesc:
-                    list = list.OrderByDescending(p => p.Code);
-                    break;
-                case SortState.DescriptionAsc:
-                    list = list.OrderBy(p => p.Description);
-                    break;
-                case SortState.DescriptionDesc:
-                    list = list.OrderByDescending(p => p.Description);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.CategoryDispute.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.CategoryDispute.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             // пагинация
-            var count = list.Count();
-            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = await list.CountAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -116,8 +77,7 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, categoryDisputeRepository.ListAll().ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
-
+                FilterViewModel = new FilterViewModel(searchString, owner,(await  categoryDisputeRepository.ListAllAsync()).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
@@ -130,9 +90,8 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить район с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, CategoryDispute = item.CategoryDispute, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, SubjectClaims = item.SubjectClaims };
             return View(model);
@@ -157,11 +116,11 @@ namespace Svr.Web.Controllers
                 var item = await repository.AddAsync(new GroupClaim { Code = model.Code, Name = model.Name, Description = model.Description, CategoryDisputeId = model.CategoryDisputeId });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлена группа исков с Id={item.Id}, код={item.Code}, имя={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
@@ -173,9 +132,8 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
             ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", 1);
@@ -193,17 +151,17 @@ namespace Svr.Web.Controllers
                 try
                 {
                     await repository.UpdateAsync(new GroupClaim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId });
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении района с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -219,7 +177,7 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, CategoryDisputeId = item.CategoryDisputeId, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
@@ -227,18 +185,19 @@ namespace Svr.Web.Controllers
         }
         // POST: GroupClaims/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
             {
                 await repository.DeleteAsync(new GroupClaim { Id = model.Id, Name = model.Name, Code = model.Code, });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении группы исков с Id={model.Id}, Name = {model.Name}, Code = {model.Code} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }

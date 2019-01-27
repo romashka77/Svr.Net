@@ -45,7 +45,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return await Entities.SingleOrDefaultAsync(m => m.Id == id);
+            return await Entities.AsNoTracking().SingleOrDefaultAsync(m => m.Id == id);
         }
 
         public virtual IEnumerable<T> ListAll()
@@ -55,10 +55,10 @@ namespace Svr.Infrastructure.Data
 
         public virtual async Task<List<T>> ListAllAsync()
         {
-            return await Entities.ToListAsync();
+            return await Entities.AsNoTracking().ToListAsync();
         }
 
-        public virtual IEnumerable<T> List(ISpecification<T> spec)
+        public virtual IQueryable<T> List(ISpecification<T> spec)
         {
             // получение запроса, который включает в себя все выражения includes
             var queryableResultWithIncludes = spec.Includes.Aggregate(Entities.AsQueryable(), (current, include) => current.Include(include));
@@ -67,7 +67,7 @@ namespace Svr.Infrastructure.Data
             var secondaryResult = spec.IncludeStrings.Aggregate(queryableResultWithIncludes, (current, include) => current.Include(include));
 
             // возвращает результат запроса с помощью выражения критериев спецификации
-            return secondaryResult.Where(spec.Criteria).AsEnumerable();
+            return secondaryResult.Where(spec.Criteria);
         }
         public virtual async Task<List<T>> ListAsync(ISpecification<T> spec)
         {
@@ -78,7 +78,7 @@ namespace Svr.Infrastructure.Data
             var secondaryResult = spec.IncludeStrings.Aggregate(queryableResultWithIncludes, (current, include) => current.Include(include));
 
             // возвращает результат запроса с помощью выражения критериев спецификации
-            return await secondaryResult.Where(spec.Criteria).ToListAsync();
+            return await secondaryResult.Where(spec.Criteria).AsNoTracking().ToListAsync();
         }
 
         public virtual T Add(T entity)

@@ -13,7 +13,15 @@ namespace Svr.Web.Extensions
             {
                 return null;
             }
-            return Int64.Parse(str);
+            try
+            {
+                return Int64.Parse(str);
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
         }
         public static string ErrorFind(this string id)
         {

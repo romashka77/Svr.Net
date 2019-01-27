@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Infrastructure.Data;
+using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.CategoryDisputesViewModels;
 using System;
@@ -18,15 +19,15 @@ namespace Svr.Web.Controllers
     [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class CategoryDisputesController : Controller
     {
-        private ILogger<CategoryDisputesController> logger;
-        private ICategoryDisputeRepository сategoryDisputeRepository;
+        private readonly ILogger<CategoryDisputesController> logger;
+        private readonly ICategoryDisputeRepository repository;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public CategoryDisputesController(ICategoryDisputeRepository сategoryDisputeRepository, ILogger<CategoryDisputesController> logger = null)
+        public CategoryDisputesController(ICategoryDisputeRepository repository, ILogger<CategoryDisputesController> logger = null)
         {
-            this.сategoryDisputeRepository = сategoryDisputeRepository;
+            this.repository = repository;
             this.logger = logger;
         }
         #endregion
@@ -35,8 +36,8 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                сategoryDisputeRepository = null;
-                logger = null;
+                //repository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -46,40 +47,14 @@ namespace Svr.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string currentFilter = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            IEnumerable<CategoryDispute> list = await сategoryDisputeRepository.ListAllAsync();
+            var list = repository.Table();
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(p => p.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             //сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.DescriptionAsc:
-                    list = list.OrderBy(p => p.Description);
-                    break;
-                case SortState.DescriptionDesc:
-                    list = list.OrderByDescending(p => p.Description);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                default:
-                    list = list.OrderBy(p => p.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             //пагинация
             var totalItems = list.Count();
             var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
@@ -105,10 +80,10 @@ namespace Svr.Web.Controllers
         // GET: CategoryDisputes/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            var item = await сategoryDisputeRepository.GetByIdWithItemsAsync(id);
+            var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить категорию споров с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, GroupClaims = item.GroupClaims, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc };
@@ -131,14 +106,14 @@ namespace Svr.Web.Controllers
             if (ModelState.IsValid)
             {
                 //добавляем новый регион
-                var item = await сategoryDisputeRepository.AddAsync(new CategoryDispute { Name = model.Name, Description = model.Description });
+                var item = await repository.AddAsync(new CategoryDispute { Name = model.Name, Description = model.Description });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлен {item} с Id={item.Id}, Name={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             return View(model);
         }
         #endregion
@@ -146,16 +121,15 @@ namespace Svr.Web.Controllers
         // GET: CategoryDisputes/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
-            var item = await сategoryDisputeRepository.GetByIdAsync(id);
+            var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти категорию споров с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
             return View(model);
         }
-
         // POST: CategoryDisputes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -167,18 +141,18 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await сategoryDisputeRepository.UpdateAsync(new CategoryDispute { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc /*Districts = model.Districts*/});
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    await repository.UpdateAsync(new CategoryDispute { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc });
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!(await сategoryDisputeRepository.EntityExistsAsync(model.Id)))
+                    if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении категории споров с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -190,10 +164,10 @@ namespace Svr.Web.Controllers
         // GET: CategoryDisputes/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            var item = await сategoryDisputeRepository.GetByIdAsync(id);
+            var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти категорию диспутов с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description };
@@ -202,18 +176,19 @@ namespace Svr.Web.Controllers
 
         // POST: CategoryDisputes/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
             {
-                await сategoryDisputeRepository.DeleteAsync(new CategoryDispute { Id = model.Id, Name = model.Name});
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                await repository.DeleteAsync(new CategoryDispute { Id = model.Id, Name = model.Name });
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении района с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }

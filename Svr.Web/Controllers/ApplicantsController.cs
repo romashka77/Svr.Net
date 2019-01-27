@@ -20,13 +20,12 @@ namespace Svr.Web.Controllers
     [Authorize]
     public class ApplicantsController : Controller
     {
-        private IApplicantRepository repository;
-        private IDirRepository dirRepository;
-        private ILogger<ApplicantsController> logger;
+        private readonly IApplicantRepository repository;
+        private readonly IDirRepository dirRepository;
+        private readonly ILogger<ApplicantsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
-
         #region Конструктор
         public ApplicantsController(IApplicantRepository repository, IDirRepository dirRepository, ILogger<ApplicantsController> logger)
         {
@@ -40,9 +39,9 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                repository = null;
-                dirRepository = null;
-                logger = null;
+                //repository = null;
+                //dirRepository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -51,44 +50,17 @@ namespace Svr.Web.Controllers
         // GET: Applicants
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string parentowner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var filterSpecification = new ApplicantSpecification(owner.ToLong());
-            IEnumerable<Applicant> list = await repository.ListAsync(filterSpecification);
+            var list = repository.List(new ApplicantSpecification(owner.ToLong()));
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.TypeApplicant.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.TypeApplicant.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             // пагинация
-            var count = list.Count();
-            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = await list.CountAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -115,7 +87,7 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить значение с ID = {id} из справочника.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, FullName = item.FullName, TypeApplicant = item.TypeApplicant, TypeApplicantId = item.TypeApplicantId, Opf = item.Opf, Address = item.Address, AddressBank = item.AddressBank, Inn = item.Inn, OpfId = item.OpfId, Born = item.Born, IsMan= item.TypeApplicant.Name == "Физическое лицо" };
@@ -126,7 +98,6 @@ namespace Svr.Web.Controllers
         // GET: Applicants/Create
         public async Task<ActionResult> Create()
         {
-            //SelectList dirName = new SelectList(dirRepository.ListAll(), "Id", "Name", 1);
             ViewBag.TypeApplicants = await GetTypeApplicants();
             ViewBag.Opfs = await GetOpfs();
             return View();
@@ -139,28 +110,26 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // добавляем новый Район
                 var item = await repository.AddAsync(new Applicant { Name = model.Name, TypeApplicantId = model.TypeApplicantId, /*Description = model.Description, FullName = model.FullName, OpfId = model.OpfId, Inn = model.Inn, Address = model.Address, AddressBank = model.AddressBank, Born = model.Born */});
                 if (item != null)
                 {
-                    //StatusMessage = $"Добавлен элемент с Id={item.Id}, имя={item.Name}.";
-                    //return RedirectToAction(nameof(Index));
-                    //model.IsMan = item.TypeApplicant.Name == "Физическое лицо";
-                    //ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
-                    //if (!model.IsMan)
-                    //{
-                    //    ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
-                    //}
+                    StatusMessage = item.MessageAddOk();
+                    return RedirectToAction(nameof(Index));
+                    model.IsMan = item.TypeApplicant.Name == "Физическое лицо";
+                    ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
+                    if (!model.IsMan)
+                    {
+                        ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
+                    }
                     return RedirectToAction( nameof(Edit), new {id = item.Id });
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
             if (!model.IsMan)
             {
                 ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
             }
-            //ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
             return View(model);
         }
         #endregion
@@ -171,7 +140,7 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти элемент с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -183,7 +152,6 @@ namespace Svr.Web.Controllers
             }
             return View(model);
         }
-
         // POST: Applicants/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -194,22 +162,20 @@ namespace Svr.Web.Controllers
                 try
                 {
                     await repository.UpdateAsync(new Applicant { Id = model.Id, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, TypeApplicantId = model.TypeApplicantId, Description = model.Description, FullName = model.FullName, OpfId = model.OpfId, Address = model.Address, AddressBank = model.AddressBank, Born = model.Born, Inn = model.Inn });
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении элемента с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                     return RedirectToAction(nameof(Index));
                 }
-                //return RedirectToAction(nameof(Index));
-
                 model.IsMan = (await repository.GetByIdWithItemsAsync(model.Id)).TypeApplicant.Name == "Физическое лицо";
                 ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
                 if (!model.IsMan)
@@ -218,14 +184,12 @@ namespace Svr.Web.Controllers
                 }
                 return View(model);
             }
-            StatusMessage = $"{model} c ID = {model.Id} проверте правильность заполнения полей";
             ModelState.AddModelError(string.Empty, StatusMessage);
             ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
             if (!model.IsMan)
             {
                 ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
             }
-            //return RedirectToAction($"{nameof(Edit)}/{model.Id}");
             return View(model);
         }
         #endregion
@@ -237,7 +201,7 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, TypeApplicantId = item.TypeApplicantId, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
@@ -252,12 +216,12 @@ namespace Svr.Web.Controllers
             try
             {
                 await repository.DeleteAsync(new Applicant { Id = model.Id, Name = model.Name });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении элемента с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -265,12 +229,10 @@ namespace Svr.Web.Controllers
         private async Task<IEnumerable<SelectListItem>> GetTypeApplicants(string owner = null)
         {
             return (await dirRepository.ListAsync(new DirSpecification("Тип контрагента"))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
-            //return dirRepository.List(new DirSpecification(dirNameId)).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
         }
         private async Task<IEnumerable<SelectListItem>> GetOpfs(string owner = null)
         {
             return (await dirRepository.ListAsync(new DirSpecification("ОПФ"))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
-            //return dirRepository.List(new DirSpecification(dirNameId)).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) });
         }
     }
 }

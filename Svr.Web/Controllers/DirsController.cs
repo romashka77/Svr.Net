@@ -20,13 +20,12 @@ namespace Svr.Web.Controllers
     [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class DirsController : Controller
     {
-        private IDirRepository repository;
-        private IDirNameRepository repositoryDirName;
-        private ILogger<DirsController> logger;
+        private readonly IDirRepository repository;
+        private readonly IDirNameRepository repositoryDirName;
+        private readonly ILogger<DirsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
-
         #region Конструктор
         public DirsController(IDirRepository repository, IDirNameRepository repositoryDirName, ILogger<DirsController> logger)
         {
@@ -40,9 +39,9 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                repository = null;
-                repositoryDirName = null;
-                logger = null;
+                //repository = null;
+                //repositoryDirName = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -52,44 +51,16 @@ namespace Svr.Web.Controllers
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
             //фильтрация
-            var filterSpecification = new DirSpecification(owner.ToLong());
-            IEnumerable<Dir> list = await repository.ListAsync(filterSpecification);
-
+            var list = repository.List(new DirSpecification(owner.ToLong()));
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.DirName.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.DirName.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             // пагинация
-            var count = list.Count();
-            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = await list.CountAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -102,7 +73,7 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, repositoryDirName.ListAll().ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
+                FilterViewModel = new FilterViewModel(searchString, owner,(await repositoryDirName.ListAllAsync()).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
@@ -115,9 +86,8 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить значение с ID = {id} из справочника.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, DirNameId = item.DirNameId, DirName = item.DirName, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, Applicants = item.Applicants };
             return View(model);
@@ -140,15 +110,14 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // добавляем новый Район
                 var item = await repository.AddAsync(new Dir { Name = model.Name, DirNameId = model.DirNameId });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлен элемент с Id={item.Id}, имя={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             ViewBag.DirNames = new SelectList(await repositoryDirName.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
@@ -160,15 +129,13 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти элемент с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, DirNameId = item.DirNameId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
             ViewBag.DirNames = new SelectList(await repositoryDirName.ListAllAsync(), "Id", "Name", 1);
             return View(model);
         }
-
         // POST: Dirs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -181,17 +148,17 @@ namespace Svr.Web.Controllers
                 try
                 {
                     await repository.UpdateAsync(new Dir { Id = model.Id, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, DirNameId = model.DirNameId });
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении элемента с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -207,7 +174,7 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти район с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, DirNameId = item.DirNameId, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
@@ -216,18 +183,19 @@ namespace Svr.Web.Controllers
 
         // POST: Dirs/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
             {
                 await repository.DeleteAsync(new Dir { Id = model.Id, Name = model.Name });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении элемента с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }

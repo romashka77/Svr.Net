@@ -20,17 +20,17 @@ namespace Svr.Web.Controllers
     [Authorize(Roles = "Администратор, Администратор ОПФР")]
     public class SubjectClaimsController : Controller
     {
-        private IGroupClaimRepository groupClaimRepository;
-        private ISubjectClaimRepository subjectClaimRepository;
-        private ILogger<SubjectClaimsController> logger;
+        private readonly IGroupClaimRepository groupClaimRepository;
+        private readonly ISubjectClaimRepository repository;
+        private readonly ILogger<SubjectClaimsController> logger;
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public SubjectClaimsController(IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository, ILogger<SubjectClaimsController> logger)
+        public SubjectClaimsController(IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository repository, ILogger<SubjectClaimsController> logger)
         {
             this.logger = logger;
             this.groupClaimRepository = groupClaimRepository;
-            this.subjectClaimRepository = subjectClaimRepository;
+            this.repository = repository;
         }
         #endregion
         #region Деструктор
@@ -38,9 +38,9 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                groupClaimRepository = null;
-                subjectClaimRepository = null;
-                logger = null;
+                //groupClaimRepository = null;
+                //subjectClaimRepository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -49,53 +49,14 @@ namespace Svr.Web.Controllers
         // GET: SubjectClaims
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var filterSpecification = new SubjectClaimSpecification(owner.ToLong());
-            IEnumerable<SubjectClaim> list = await subjectClaimRepository.ListAsync(filterSpecification);
+            var list = repository.List(new SubjectClaimSpecification(owner.ToLong()));
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.CodeAsc:
-                    list = list.OrderBy(p => p.Code);
-                    break;
-                case SortState.CodeDesc:
-                    list = list.OrderByDescending(p => p.Code);
-                    break;
-                case SortState.DescriptionAsc:
-                    list = list.OrderBy(p => p.Description);
-                    break;
-                case SortState.DescriptionDesc:
-                    list = list.OrderByDescending(p => p.Description);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.GroupClaim.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.GroupClaim.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             // пагинация
             var count = list.Count();
             var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
@@ -113,7 +74,7 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, groupClaimRepository.ListAll().ToList().Select(a => new SelectListItem { Text = $"{a.Code} {a.Name}", Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
+                FilterViewModel = new FilterViewModel(searchString, owner, (await groupClaimRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = $"{a.Code} {a.Name}", Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) })),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
@@ -123,10 +84,10 @@ namespace Svr.Web.Controllers
         // GET: SubjectClaims/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            var item = await subjectClaimRepository.GetByIdWithItemsAsync(id);
+            var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить предмет иска с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
                 //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
@@ -150,14 +111,14 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var item = await  subjectClaimRepository.AddAsync(new SubjectClaim { Code = model.Code, Name = model.Name, Description = model.Description, GroupClaimId = model.GroupClaimId });
+                var item = await  repository.AddAsync(new SubjectClaim { Code = model.Code, Name = model.Name, Description = model.Description, GroupClaimId = model.GroupClaimId });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлен предмет иска с Id={item.Id}, код={item.Code}, имя={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index));
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new { Id = a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
             return View(model);
         }
@@ -166,12 +127,11 @@ namespace Svr.Web.Controllers
         // GET: SubjectClaims/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
-            var item = await subjectClaimRepository.GetByIdAsync(id);
+            var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти предмет иска с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
-                //throw new ApplicationException($"Не удалось загрузить район с ID {id}.");
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, GroupClaimId= item. GroupClaimId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
             ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new { Id = a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
@@ -188,18 +148,18 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    await subjectClaimRepository.UpdateAsync(new SubjectClaim{ Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, GroupClaimId = model.GroupClaimId });
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    await repository.UpdateAsync(new SubjectClaim{ Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, GroupClaimId = model.GroupClaimId });
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!(await subjectClaimRepository.EntityExistsAsync(model.Id)))
+                    if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении района с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -212,10 +172,10 @@ namespace Svr.Web.Controllers
         // GET: SubjectClaims/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            var item = await subjectClaimRepository.GetByIdAsync(id);
+            var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, GroupClaimId= item.GroupClaimId, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage };
@@ -224,18 +184,19 @@ namespace Svr.Web.Controllers
 
         // POST: SubjectClaims/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ItemViewModel model)
         {
             try
             {
-                await subjectClaimRepository.DeleteAsync(new SubjectClaim { Id = model.Id, Name = model.Name, Code = model.Code, });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code}.";
+                await repository.DeleteAsync(new SubjectClaim { Id = model.Id, Name = model.Name, Code = model.Code, });
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении {model} с Id={model.Id}, Name = {model.Name}, Code = {model.Code} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index));
             }
         }
