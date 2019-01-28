@@ -20,9 +20,9 @@ namespace Svr.Web.Controllers
     [Authorize]
     public class MeetingsController : Controller
     {
-        private IMeetingRepository repository;
-        private IClaimRepository сlaimRepository;
-        private ILogger<MeetingsController> logger;
+        private readonly IMeetingRepository repository;
+        private readonly IClaimRepository сlaimRepository;
+        private readonly ILogger<MeetingsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -39,9 +39,9 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                сlaimRepository = null;
-                repository = null;
-                logger = null;
+                //сlaimRepository = null;
+                //repository = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -50,50 +50,17 @@ namespace Svr.Web.Controllers
         // GET: Meetings
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            var filterSpecification = new MeetingSpecification(owner.ToLong());
-            IEnumerable<Meeting> list = await repository.ListAsync(filterSpecification);
+            var list = repository.List(new MeetingSpecification(owner.ToLong()));
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.DescriptionAsc:
-                    list = list.OrderBy(p => p.Description);
-                    break;
-                case SortState.DescriptionDesc:
-                    list = list.OrderByDescending(p => p.Description);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.Claim.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.Claim.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            
             // пагинация
-            var count = list.Count();
-            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = await list.CountAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -126,10 +93,10 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить иск с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
                 //return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
-                throw new ApplicationException($"Не удалось загрузить инстанцию с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, Claim = item.Claim, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, ClaimId = item.ClaimId, Number = item.Number, Date = item.Date, Time = item.Time };
             return View(model);
@@ -156,11 +123,11 @@ namespace Svr.Web.Controllers
                 var item = await repository.AddAsync(new Meeting { Name = model.Name, ClaimId = model.ClaimId, Description = model.Description, Claim = model.Claim, Number = model.Number, Date = model.Date, Time = model.Time, });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлено заседание с Id={item.Id}, имя={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index), new { owner = item.ClaimId });
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             await SetViewBag(model);
             return View(model);
         }
@@ -172,9 +139,9 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти заседание с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
-                throw new ApplicationException($"Не удалось загрузить заседание с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, Claim = item.Claim, ClaimId = item.ClaimId, Number = item.Number, Date = item.Date, Time = item.Time };
             await SetViewBag(model);
@@ -193,18 +160,17 @@ namespace Svr.Web.Controllers
                 try
                 {
                     await repository.UpdateAsync(new Meeting { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, Number = model.Number, Date = model.Date, Time = model.Time });
-
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении заседания с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 //return RedirectToAction(nameof(Index));
@@ -221,9 +187,9 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                //StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
-                throw new ApplicationException($"Не удалось найти заседание с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage, ClaimId = item.ClaimId };
             return View(model);
@@ -237,12 +203,12 @@ namespace Svr.Web.Controllers
             try
             {
                 await repository.DeleteAsync(new Meeting { Id = model.Id, Name = model.Name });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении заседания с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
         }

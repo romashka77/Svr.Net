@@ -95,7 +95,7 @@ namespace Svr.Web.Controllers
             {
                 StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
-                throw new ApplicationException($"Не удалось загрузить инстанцию с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, Claim = item.Claim,  StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, CourtDecision = item.CourtDecision, DateCourtDecision = item.DateCourtDecision, DateInCourtDecision = item.DateInCourtDecision, DateSFine = item.DateSFine, DateSPenalty = item.DateSPenalty, DateSShortage = item.DateSShortage, DateToFine = item.DateToFine, DateToPenalty = item.DateToPenalty, DateToShortage = item.DateToShortage, DateTransfer = item.DateTransfer, DutyDenied = item.DutyDenied, DutyPaid = item.DutyPaid, DutySatisfied = item.DutySatisfied, FFOMSFine = item.FFOMSFine, FFOMSShortage = item.FFOMSShortage, FundedPartPFRFine = item.InsurancePartPFRFine, FundedPartPFRShortage = item.FundedPartPFRShortage, InsurancePartPFRFine = item.InsurancePartPFRFine, InsurancePartPFRShortage = item.InsurancePartPFRShortage, PaidVoluntarily = item.PaidVoluntarily, ServicesDenied = item.ServicesDenied, ServicesSatisfied = item.ServicesSatisfied, SumDenied = item.SumDenied, SumPenalty = item.SumPenalty, SumSatisfied = item.SumSatisfied, TFOMSFine = item.TFOMSFine, TFOMSShortage = item.TFOMSShortage, СostDenied = item.СostDenied, СostSatisfied = item.СostSatisfied };
             return View(model);
@@ -159,7 +159,7 @@ namespace Svr.Web.Controllers
             {
                 StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
-                throw new ApplicationException($"Не удалось загрузить инстанцию с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, TFOMSShortage = item.TFOMSShortage, СostDenied = item.СostDenied, СostSatisfied = item.СostSatisfied, TFOMSFine = item.TFOMSFine, PaidVoluntarily = item.PaidVoluntarily, SumSatisfied = item.SumSatisfied, SumPenalty = item.SumPenalty, SumDenied = item.SumDenied, ServicesSatisfied = item.ServicesSatisfied, ServicesDenied = item.ServicesDenied, CourtDecision = item.CourtDecision, DateCourtDecision = item.DateCourtDecision, DateInCourtDecision = item.DateInCourtDecision, DateSFine = item.DateSFine, DateSPenalty = item.DateSPenalty, DateSShortage = item.DateSShortage, DateToFine = item.DateToFine, DateToPenalty = item.DateToPenalty, DateToShortage = item.DateToShortage, DateTransfer = item.DateTransfer, DutyDenied = item.DutyDenied, DutyPaid = item.DutyPaid, DutySatisfied = item.DutySatisfied, FFOMSFine = item.FFOMSFine, FFOMSShortage = item.FFOMSShortage, FundedPartPFRFine = item.FundedPartPFRFine, FundedPartPFRShortage = item.FundedPartPFRShortage, Claim = item.Claim, InsurancePartPFRFine = item.InsurancePartPFRFine, InsurancePartPFRShortage = item.InsurancePartPFRShortage, ClaimId = item.ClaimId, Number = item.Number };
             await SetViewBag(model);
@@ -205,7 +205,7 @@ namespace Svr.Web.Controllers
             {
                 StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
-                throw new ApplicationException($"Не удалось найти инстанцию с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage, ClaimId = item.ClaimId };
             return View(model);
