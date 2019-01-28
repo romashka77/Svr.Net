@@ -22,16 +22,18 @@ namespace Svr.Web.Controllers
     {
         private readonly IApplicantRepository repository;
         private readonly IDirRepository dirRepository;
+        private readonly IClaimRepository claimRepository;
         private readonly ILogger<ApplicantsController> logger;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ApplicantsController(IApplicantRepository repository, IDirRepository dirRepository, ILogger<ApplicantsController> logger)
+        public ApplicantsController(IApplicantRepository repository, IDirRepository dirRepository, IClaimRepository claimRepository, ILogger<ApplicantsController> logger)
         {
             this.logger = logger;
             this.repository = repository;
             this.dirRepository = dirRepository;
+            this.claimRepository = claimRepository;
         }
         #endregion
         #region Деструктор
@@ -42,6 +44,7 @@ namespace Svr.Web.Controllers
                 //repository = null;
                 //dirRepository = null;
                 //logger = null;
+                //claimRepository=null;
             }
             base.Dispose(disposing);
         }
@@ -90,7 +93,10 @@ namespace Svr.Web.Controllers
                 StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
-            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, FullName = item.FullName, TypeApplicant = item.TypeApplicant, TypeApplicantId = item.TypeApplicantId, Opf = item.Opf, Address = item.Address, AddressBank = item.AddressBank, Inn = item.Inn, OpfId = item.OpfId, Born = item.Born, IsMan= item.TypeApplicant.Name == "Физическое лицо" };
+            var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, FullName = item.FullName, TypeApplicant = item.TypeApplicant, TypeApplicantId = item.TypeApplicantId, Opf = item.Opf, Address = item.Address, AddressBank = item.AddressBank, Inn = item.Inn, OpfId = item.OpfId, Born = item.Born, IsMan = item.TypeApplicant.Name == "Физическое лицо" };
+            ViewBag.Claims = (await claimRepository.Table().Where(c => c.PlaintiffId == item.Id || c.RespondentId == item.Id || c.Person3rdId == item.Id).AsNoTracking().ToListAsync());
+
+
             return View(model);
         }
         #endregion
@@ -121,7 +127,7 @@ namespace Svr.Web.Controllers
                     {
                         ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
                     }
-                    return RedirectToAction( nameof(Edit), new {id = item.Id });
+                    return RedirectToAction(nameof(Edit), new { id = item.Id });
                 }
             }
             ModelState.AddModelError(string.Empty, model.MessageAddError());
@@ -144,7 +150,7 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var model = new ItemViewModel { Id = item.Id, CreatedOnUtc = item.CreatedOnUtc, Name = item.Name, TypeApplicantId = item.TypeApplicantId, Description = item.Description, FullName = item.FullName, OpfId = item.OpfId, Address = item.Address, AddressBank = item.AddressBank, Born = item.Born, Inn = item.Inn, IsMan= item.TypeApplicant.Name== "Физическое лицо" };
+            var model = new ItemViewModel { Id = item.Id, CreatedOnUtc = item.CreatedOnUtc, Name = item.Name, TypeApplicantId = item.TypeApplicantId, Description = item.Description, FullName = item.FullName, OpfId = item.OpfId, Address = item.Address, AddressBank = item.AddressBank, Born = item.Born, Inn = item.Inn, IsMan = item.TypeApplicant.Name == "Физическое лицо" };
             ViewBag.TypeApplicants = await GetTypeApplicants(item.TypeApplicantId.ToString());
             if (!model.IsMan)
             {

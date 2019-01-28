@@ -18,11 +18,11 @@ namespace Svr.Core.Entities
         [Display(Name = "Район")]
         public virtual District District { get; set; }
 
-        [MaxLength(50, ErrorMessage = ErrorStringMaxLength)]
+        [MaxLength(100, ErrorMessage = ErrorStringMaxLength)]
         [Display(Name = "Рег.номер", Prompt = "Введите регистрационный номер")]
         public string Code { get; set; }
 
-        [MaxLength(10, ErrorMessage = ErrorStringMaxLength)]
+        [MaxLength(50, ErrorMessage = ErrorStringMaxLength)]
         [Display(Name = "№ дела", Prompt = "Введите № дела")]
         [Required(ErrorMessage = ErrorStringEmpty)]
         public string Name { get; set; }
@@ -34,19 +34,25 @@ namespace Svr.Core.Entities
         [DataType(DataType.Date)]
         [Required(ErrorMessage = ErrorStringEmpty)]
         public DateTime DateReg { get; set; }
-
+        
         [Display(Name = "Дата принятия иска")]
         [DataType(DataType.Date)]
         public DateTime? DateIn { get; set; }
 
+        [Display(Name = "Категория споров")]
+        [Required(ErrorMessage = ErrorStringEmpty)]
         public long? CategoryDisputeId { get; set; }
         [Display(Name = "Категория споров")]
         public virtual CategoryDispute CategoryDispute { get; set; }
 
+        [Display(Name = "Группа исков")]
+        [Required(ErrorMessage = ErrorStringEmpty)]
         public long? GroupClaimId { get; set; }
         [Display(Name = "Группа исков")]
         public virtual GroupClaim GroupClaim { get; set; }
 
+        [Display(Name = "Предмет иска")]
+        [Required(ErrorMessage = ErrorStringEmpty)]
         public long? SubjectClaimId { get; set; }
         [Display(Name = "Предмет иска")]
         public virtual SubjectClaim SubjectClaim { get; set; }

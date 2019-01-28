@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
@@ -149,14 +150,14 @@ namespace Svr.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ItemViewModel model)
+        public async Task<IActionResult> Create(CreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                model.Code = SetCode(model);
-                var item = await repository.AddAsync(new Claim { Code = model.Code, Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId });
+                var item = await repository.AddAsync(new Claim { Code = $"{model.Id}-{DateTime.Now.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}", Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg });
                 if (item != null)
                 {
+                    
                     StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Edit), new { id = item.Id });
                 }
@@ -192,7 +193,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    model.Code = SetCode(model);
+                    model.Code = $"{model.Id}-{model.CreatedOnUtc.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}";
                     if ((model.RegionId != 0) && (model.DistrictId != 0))
                     {
                         await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId = model.RespondentId, Person3rdId = model.Person3rdId, Instances = model.Instances });
@@ -274,9 +275,6 @@ namespace Svr.Web.Controllers
             ViewBag.Applicants = new SelectList(await applicantRepository.ListAsync(new ApplicantSpecification(null)), "Id", "Name", model.PlaintiffId);
         }
 
-        private string SetCode(ItemViewModel model)
-        {
-            return $"{model.Id}-{model.CreatedOnUtc.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}";
-        }
+        
     }
 }
