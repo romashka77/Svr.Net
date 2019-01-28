@@ -24,20 +24,20 @@ namespace Svr.Web.Controllers
     public class FileEntitiesController : Controller
     {
         private const string filesFolder = "Files";
-        private IFileEntityRepository repository;
-        private IClaimRepository сlaimRepository;
-        private ILogger<FileEntitiesController> logger;
-        private IHostingEnvironment appEnvironment;
+        private readonly IFileEntityRepository repository;
+        private readonly IClaimRepository сlaimRepository;
+        private readonly ILogger<FileEntitiesController> logger;
+        private readonly IHostingEnvironment hostingEnvironment;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public FileEntitiesController(IFileEntityRepository repository, IClaimRepository сlaimRepository, IHostingEnvironment appEnvironment, ILogger<FileEntitiesController> logger)
+        public FileEntitiesController(IFileEntityRepository repository, IClaimRepository сlaimRepository, IHostingEnvironment hostingEnvironment, ILogger<FileEntitiesController> logger)
         {
             this.logger = logger;
             this.repository = repository;
             this.сlaimRepository = сlaimRepository;
-            this.appEnvironment = appEnvironment;
+            this.hostingEnvironment = hostingEnvironment;
         }
         #endregion
         #region Деструктор
@@ -45,10 +45,10 @@ namespace Svr.Web.Controllers
         {
             if (disposing)
             {
-                сlaimRepository = null;
-                repository = null;
-                appEnvironment = null;
-                logger = null;
+                //сlaimRepository = null;
+                //repository = null;
+                //hostingEnvironment = null;
+                //logger = null;
             }
             base.Dispose(disposing);
         }
@@ -56,52 +56,19 @@ namespace Svr.Web.Controllers
 
         #region Index
         // GET: FileEntities
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? date = null)
         {
-            var filterSpecification = new FileEntitySpecification(owner.ToLong());
-            IEnumerable<FileEntity> list = await repository.ListAsync(filterSpecification);
+            var list = repository.List(new FileEntitySpecification(owner.ToLong()));
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.DescriptionAsc:
-                    list = list.OrderBy(p => p.Description);
-                    break;
-                case SortState.DescriptionDesc:
-                    list = list.OrderByDescending(p => p.Description);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreatedOnUtc);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.UpdatedOnUtc);
-                    break;
-                case SortState.OwnerAsc:
-                    list = list.OrderBy(s => s.Claim.Name);
-                    break;
-                case SortState.OwnerDesc:
-                    list = list.OrderByDescending(s => s.Claim.Name);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = repository.Sort(list, sortOrder);
             // пагинация
-            var count = list.Count();
-            var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
+            var count = await list.CountAsync();
+            var itemsOnPage = await list.Skip((page - 1) * itemsPage).Take(itemsPage).AsNoTracking().ToListAsync();
             var indexModel = new IndexViewModel()
             {
                 ItemViewModels = itemsOnPage.Select(i => new ItemViewModel()
@@ -118,10 +85,8 @@ namespace Svr.Web.Controllers
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
                 FilterViewModel = new FilterViewModel(searchString, owner),
-
                 StatusMessage = StatusMessage
             };
-
             return View(indexModel);
         }
         #endregion
@@ -132,10 +97,10 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Не удалось загрузить файл с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
                 //return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
-                throw new ApplicationException($"Не удалось загрузить инстанцию с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, Claim = item.Claim, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, ClaimId = item.ClaimId, Path = item.Path };
             return View(model);
@@ -148,7 +113,6 @@ namespace Svr.Web.Controllers
             ViewBag.Owner = owner;
             return View();
         }
-
         // POST: FileEntities/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -160,22 +124,27 @@ namespace Svr.Web.Controllers
             if ((ModelState.IsValid) && (model.UploadedFile != null))
             {
                 // путь к папке Files
-                model.Path = $"{model.ClaimId}_{model.UploadedFile.FileName}";
+                model.Path = DateTime.Now.Year.ToString();
+                DirectoryInfo dirInfo = new DirectoryInfo(GetFile(model.Path));
+                if (!dirInfo.Exists)
+                {
+                    dirInfo.Create();
+                }
+                model.Path = Path.Combine(model.Path, $"{model.ClaimId}_{model.UploadedFile.FileName}");
                 model.Name = model.UploadedFile.FileName;
                 // сохраняем файл в папку Files в каталоге wwwroot
                 using (var fileStream = new FileStream(GetFile(model.Path), FileMode.Create))
                 {
                     await model.UploadedFile.CopyToAsync(fileStream);
                 }
-
                 var item = await repository.AddAsync(new FileEntity { Name = model.Name, ClaimId = model.ClaimId, Description = model.Description, Claim = model.Claim, Path = model.Path });
                 if (item != null)
                 {
-                    StatusMessage = $"Добавлено заседание с Id={item.Id}, имя={item.Name}.";
+                    StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index), new { owner = item.ClaimId });
                 }
             }
-            ModelState.AddModelError(string.Empty, $"Ошибка: {model} - неудачная попытка регистрации.");
+            ModelState.AddModelError(string.Empty, model.MessageAddError());
             await SetViewBag(model);
             return View(model);
         }
@@ -191,7 +160,7 @@ namespace Svr.Web.Controllers
                 await stream.CopyToAsync(memory);
             }
             memory.Position = 0;
-            return File(memory, GetContentType(path), Path.GetFileName(path));
+            return File(memory, GetContentType(path), Path.GetFileName(GetFile(path)));
         }
 
         #region Edit
@@ -201,15 +170,14 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdWithItemsAsync(id);
             if (item == null)
             {
-                StatusMessage = $"Ошибка: Не удалось найти заседание с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
-                throw new ApplicationException($"Не удалось загрузить заседание с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, Claim = item.Claim, ClaimId = item.ClaimId, Path = item.Path };
             await SetViewBag(model);
             return View(model);
         }
-
         //// POST: FileEntities/Edit/5
         //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -221,23 +189,19 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    //using (var fileStream = new FileStream(model.Path, FileMode.Create))
-                    //{
-                    //    await model.UploadedFile.CopyToAsync(fileStream);
-                    //}
                     await repository.UpdateAsync(new FileEntity { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, Path = model.Path });
-                    StatusMessage = $"{model} c ID = {model.Id} обновлен";
+                    StatusMessage = model.MessageEditOk();
                     return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     if (!(await repository.EntityExistsAsync(model.Id)))
                     {
-                        StatusMessage = $"Не удалось найти {model} с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditError()} {ex.Message}";
                     }
                     else
                     {
-                        StatusMessage = $"Непредвиденная ошибка при обновлении заседания с ID {model.Id}. {ex.Message}";
+                        StatusMessage = $"{model.MessageEditErrorNoknow()} {ex.Message}";
                     }
                 }
                 //return RedirectToAction(nameof(Index));
@@ -253,9 +217,9 @@ namespace Svr.Web.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
-                //StatusMessage = $"Ошибка: Не удалось найти группу исков с ID = {id}.";
+                StatusMessage = id.ToString().ErrorFind();
                 //return RedirectToAction(nameof(Index));
-                throw new ApplicationException($"Не удалось найти заседание с ID {id}.");
+                throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, CreatedOnUtc = item.CreatedOnUtc, UpdatedOnUtc = item.UpdatedOnUtc, StatusMessage = StatusMessage, ClaimId = item.ClaimId, Path = item.Path };
             return View(model);
@@ -269,7 +233,7 @@ namespace Svr.Web.Controllers
             try
             {
                 await repository.DeleteAsync(new FileEntity { Id = model.Id, Name = model.Name });
-                StatusMessage = $"Удален {model} с Id={model.Id}, Name = {model.Name}.";
+                StatusMessage = model.MessageDeleteOk();
 
                 FileInfo fileInf = new FileInfo(GetFile(model.Path));
                 if (fileInf.Exists)
@@ -278,12 +242,12 @@ namespace Svr.Web.Controllers
                     // альтернатива с помощью класса File
                     // File.Delete(path);
                 }
-
+                StatusMessage = model.MessageDeleteOk();
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при удалении заседания с Id={model.Id}, Name = {model.Name} - {ex.Message}.";
+                StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
         }
@@ -291,9 +255,9 @@ namespace Svr.Web.Controllers
         private async Task SetViewBag(ItemViewModel model)
         {
         }
-        private string GetFile(string patn)
+        private string GetFile(string path)
         {
-            return $"{appEnvironment.WebRootPath }/{filesFolder}/{patn}";
+            return Path.Combine(hostingEnvironment.WebRootPath, filesFolder, path);
         }
         private string GetContentType(string path)
         {
