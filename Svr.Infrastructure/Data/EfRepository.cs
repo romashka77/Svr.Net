@@ -207,7 +207,7 @@ namespace Svr.Infrastructure.Data
         /// <summary>
         /// Entities
         /// </summary>
-        protected virtual DbSet<T> Entities
+        /*protected*/public virtual DbSet<T> Entities
         {
             get
             {

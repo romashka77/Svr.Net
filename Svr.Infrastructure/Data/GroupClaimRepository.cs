@@ -2,9 +2,7 @@
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
@@ -20,7 +18,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return Entities.Include(c => c.SubjectClaims).Include(d => d.CategoryDispute).AsNoTracking().FirstOrDefault(r => r.Id == id); 
+            return Entities.Include(c => c.SubjectClaims).Include(d => d.CategoryDispute).AsNoTracking().FirstOrDefault(r => r.Id == id);
         }
         public virtual async Task<GroupClaim> GetByIdWithItemsAsync(long? id)
         {
@@ -30,6 +28,7 @@ namespace Svr.Infrastructure.Data
             }
             return await Entities.Include(r => r.CategoryDispute).Include(c => c.SubjectClaims).AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
         }
+
         public override IQueryable<GroupClaim> Sort(IQueryable<GroupClaim> source, SortState sortOrder)
         {
             switch (sortOrder)

@@ -22,6 +22,8 @@ using System.Threading.Tasks;
 namespace Svr.Web.Controllers
 {
     //https://zennolab.com/discussion/threads/generacija-krasivyx-excel-otchjotov-po-shablonu.33585/
+
+    //https://habr.com/ru/post/109820/
     [Authorize(Roles = "Администратор")]
     public class ReportsController : Controller
     {
@@ -36,16 +38,22 @@ namespace Svr.Web.Controllers
         private readonly IRegionRepository regionRepository;
         private readonly IDistrictRepository districtRepository;
 
+        private readonly IGroupClaimRepository groupClaimRepository;
+        private readonly ISubjectClaimRepository subjectClaimRepository;
+
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository)
+        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository)
         {
             this.logger = logger;
             this.userManager = userManager;
             this.regionRepository = regionRepository;
             this.districtRepository = districtRepository;
             this.hostingEnvironment = hostingEnvironment;
+
+            this.groupClaimRepository = groupClaimRepository;
+            this.subjectClaimRepository = subjectClaimRepository;
         }
         #endregion
         #region Деструктор
@@ -62,7 +70,7 @@ namespace Svr.Web.Controllers
         #endregion
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? date = null)
         {
-            if (String.IsNullOrEmpty( owner))
+            if (String.IsNullOrEmpty(owner))
             {
                 if (String.IsNullOrEmpty(lord))
                 {
@@ -131,10 +139,10 @@ namespace Svr.Web.Controllers
             return View(indexModel);
         }
 
-        public IActionResult InMemoryReport()
+        public async Task<IActionResult> InMemoryReport()
         {
             byte[] reportBytes;
-            using (var package = createExcelPackage())
+            using (var package = await createExcelPackage())
             {
                 if (package == null)
                 {
@@ -158,7 +166,7 @@ namespace Svr.Web.Controllers
                 }
             }
             var path = await GetPath(date, owner.ToLong());
-            using (var package = createExcelPackage())
+            using (var package = await createExcelPackage())
             {
                 if (package == null)
                 {
@@ -170,7 +178,9 @@ namespace Svr.Web.Controllers
             return File(path, XlsxContentType, fileDownloadName);
         }
 
-        private ExcelPackage createExcelPackage()
+
+
+        private async Task<ExcelPackage> createExcelPackage()
         {
             FileInfo template = new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, templatesFolder, fileTemplateName));
             if (!template.Exists)
@@ -185,13 +195,46 @@ namespace Svr.Web.Controllers
             package.Workbook.Properties.Keywords = "Salary";
 
 
-            var worksheet = package.Workbook.Worksheets.Add("Employee");
+            //var worksheet = package.Workbook.Worksheets.Add("Employee");
+            var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+            int i = 14;
+            worksheet.Cells[i++, 2].Value = "Споры, рассмотренные в арбитражных судах";
+
+            var list = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(2))).OrderBy(a => a.Code.ToLong());
+            foreach (var item in list)
+            {
+                worksheet.Cells[i, 1].Value = item.Code;
+                worksheet.Cells[i++, 2].Value = item.Name;
+                //worksheet.Cells[i, 3].Value = item.Name;= СУММ(C$16:C$27)
+                var i0 = i;
+                var items = item.SubjectClaims.OrderBy(a => a.Code);
+                foreach (var item2 in items)
+                {
+                    worksheet.Cells[i, 1].Value = item2.Code;
+                    worksheet.Cells[i++, 2].Value = item2.Name;
+                }
+                //= СУММ(C$15; C$28; C$31; C$34; C$41; C$47; C$48)
+                var i1 = i;
+            }
+
+            //var query = from b in groupClaimRepository.Table().Where(b => b.CategoryDisputeId == 2)
+            //            join c in subjectClaimRepository.Table() on b equals c.GroupClaim into gj
+            //            from bc in gj.DefaultIfEmpty()
+            //            select new { GroupClaimCode = b.Code, GroupClaimName = b.Name, SubjectClaimId = bc?. ?? String.Empty };
+            //groupClaimRepository.Table()..In  .Where(b => b.CategoryDisputeId == 2).
+
+
+
+            //var list = groupClaimRepository.Table().Where(b => b.CategoryDisputeId == 2).Join(subjectClaimRepository.Table(), b => b.Id, c => c.GroupClaimId, (b, c) => new { GroupClaimCode=b.Code, GroupClaimName = b.Name, SubjectClaimId=c.Id, SubjectClaimName=c.Name});
+
+
+
 
             //First add the headers
-            worksheet.Cells[1, 1].Value = "ID";
-            worksheet.Cells[1, 2].Value = "Name";
-            worksheet.Cells[1, 3].Value = "Gender";
-            worksheet.Cells[1, 4].Value = "Salary (in $)";
+            //worksheet.Cells[1, 1].Value = "ID";
+            //worksheet.Cells[1, 2].Value = "Name";
+            //worksheet.Cells[1, 3].Value = "Gender";
+            //worksheet.Cells[1, 4].Value = "Salary (in $)";
 
             //Add values
 
@@ -200,23 +243,23 @@ namespace Svr.Web.Controllers
             var numStyle = package.Workbook.Styles.CreateNamedStyle(dataCellStyleName);
             numStyle.Style.Numberformat.Format = numberformat;
 
-            worksheet.Cells[2, 1].Value = 1000;
-            worksheet.Cells[2, 2].Value = "Jon";
-            worksheet.Cells[2, 3].Value = "M";
-            worksheet.Cells[2, 4].Value = 5000;
-            worksheet.Cells[2, 4].Style.Numberformat.Format = numberformat;
+            //worksheet.Cells[2, 1].Value = 1000;
+            //worksheet.Cells[2, 2].Value = "Jon";
+            //worksheet.Cells[2, 3].Value = "M";
+            //worksheet.Cells[2, 4].Value = 5000;
+            //worksheet.Cells[2, 4].Style.Numberformat.Format = numberformat;
 
-            worksheet.Cells[3, 1].Value = 1001;
-            worksheet.Cells[3, 2].Value = "Graham";
-            worksheet.Cells[3, 3].Value = "M";
-            worksheet.Cells[3, 4].Value = 10000;
-            worksheet.Cells[3, 4].Style.Numberformat.Format = numberformat;
+            //worksheet.Cells[3, 1].Value = 1001;
+            //worksheet.Cells[3, 2].Value = "Graham";
+            //worksheet.Cells[3, 3].Value = "M";
+            //worksheet.Cells[3, 4].Value = 10000;
+            //worksheet.Cells[3, 4].Style.Numberformat.Format = numberformat;
 
-            worksheet.Cells[4, 1].Value = 1002;
-            worksheet.Cells[4, 2].Value = "Jenny";
-            worksheet.Cells[4, 3].Value = "F";
-            worksheet.Cells[4, 4].Value = 5000;
-            worksheet.Cells[4, 4].Style.Numberformat.Format = numberformat;
+            //worksheet.Cells[4, 1].Value = 1002;
+            //worksheet.Cells[4, 2].Value = "Jenny";
+            //worksheet.Cells[4, 3].Value = "F";
+            //worksheet.Cells[4, 4].Value = 5000;
+            //worksheet.Cells[4, 4].Style.Numberformat.Format = numberformat;
 
             // Add to table / Add summary row
             //var tbl = worksheet.Tables.Add(new ExcelAddressBase(fromRow: 1, fromCol: 1, toRow: 4, toColumn: 4), "Data");

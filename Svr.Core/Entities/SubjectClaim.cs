@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Svr.Core.Entities
 {
@@ -20,6 +17,13 @@ namespace Svr.Core.Entities
         //[ForeignKey("GroupClaimId")]
         public virtual GroupClaim GroupClaim { get; set; }  //навигационное свойство
 
+        //[Display(Name = "Предметы исков")]
+        //public virtual ICollection<Claim> Claims { get; set; }
+
+        //public SubjectClaim()
+        //{
+        //    Claims = new List<Claim>();
+        //}
         public override string ToString() => "Предмет иска";
     }
 }
