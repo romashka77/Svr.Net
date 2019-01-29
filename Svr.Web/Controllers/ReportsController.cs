@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
-using OfficeOpenXml.Table;
+using OfficeOpenXml.Style;
+//using OfficeOpenXml.Table;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
@@ -15,6 +16,7 @@ using Svr.Web.Models;
 using Svr.Web.Models.ReportsViewModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +26,10 @@ namespace Svr.Web.Controllers
     //https://zennolab.com/discussion/threads/generacija-krasivyx-excel-otchjotov-po-shablonu.33585/
 
     //https://habr.com/ru/post/109820/
+    //http://www.pvsm.ru/programmirovanie/49187#begin
+
+    //https://riptutorial.com/ru/epplus/example/26411/text-alignment-and-word-wrap
+    //https://ru.inettools.net/image/opredelit-tsvet-piksela-na-kartinke-onlayn
     [Authorize(Roles = "Администратор")]
     public class ReportsController : Controller
     {
@@ -197,14 +203,28 @@ namespace Svr.Web.Controllers
 
             //var worksheet = package.Workbook.Worksheets.Add("Employee");
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
-            int i = 14;
-            worksheet.Cells[i++, 2].Value = "Споры, рассмотренные в арбитражных судах";
 
-            var list = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(2))).OrderBy(a => a.Code.ToLong());
+
+
+            int i = 14;
+            int start = i;
+            int s = 0;
+            worksheet.Cells[i, 2].Value = "Споры, рассмотренные в арбитражных судах";
+            worksheet.Cells[$"A{i}:B{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            worksheet.Cells[$"A{i}:B{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ff6600"));
+            i++;
+
+            var list = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport("Исходящие"))).OrderBy(a => a.Code.ToLong());
             foreach (var item in list)
             {
+                
                 worksheet.Cells[i, 1].Value = item.Code;
-                worksheet.Cells[i++, 2].Value = item.Name;
+                worksheet.Cells[i, 2].Value = item.Name;
+                worksheet.Cells[$"A{i}:B{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[$"A{i}:B{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#2fcdcd"));
+                i++;
+
+                s++;
                 //worksheet.Cells[i, 3].Value = item.Name;= СУММ(C$16:C$27)
                 var i0 = i;
                 var items = item.SubjectClaims.OrderBy(a => a.Code);
@@ -212,10 +232,21 @@ namespace Svr.Web.Controllers
                 {
                     worksheet.Cells[i, 1].Value = item2.Code;
                     worksheet.Cells[i++, 2].Value = item2.Name;
+                    s++;
                 }
-                //= СУММ(C$15; C$28; C$31; C$34; C$41; C$47; C$48)
+                //= СУММ(C$15; C$28; C$31; C$34; C$41; C$47; C$48) Times New Roman
                 var i1 = i;
             }
+            Font font10 = new Font("Times New Roman", 10);
+            Font font8 = new Font("Times New Roman", 8);
+
+            worksheet.Cells[$"A{start}:A{start + s}"].Style.Font.SetFromFont(font10);
+            worksheet.Cells[$"B{start}:B{start + s}"].Style.Font.SetFromFont(font8);
+            worksheet.Cells[$"B{start}:B{start + s}"].Style.WrapText = true;
+            worksheet.Cells[$"A{start}:B{start + s}"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells[$"A{start}:B{start + s}"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            
+
 
             //var query = from b in groupClaimRepository.Table().Where(b => b.CategoryDisputeId == 2)
             //            join c in subjectClaimRepository.Table() on b equals c.GroupClaim into gj
@@ -238,10 +269,10 @@ namespace Svr.Web.Controllers
 
             //Add values
 
-            var numberformat = "#,##0";
-            var dataCellStyleName = "TableNumber";
-            var numStyle = package.Workbook.Styles.CreateNamedStyle(dataCellStyleName);
-            numStyle.Style.Numberformat.Format = numberformat;
+            //var numberformat = "#,##0";
+            //var dataCellStyleName = "TableNumber";
+            //var numStyle = package.Workbook.Styles.CreateNamedStyle(dataCellStyleName);
+            //numStyle.Style.Numberformat.Format = numberformat;
 
             //worksheet.Cells[2, 1].Value = 1000;
             //worksheet.Cells[2, 2].Value = "Jon";
