@@ -313,7 +313,7 @@ namespace Svr.Web.Controllers
         }
         private string GetFileName(DateTime? dateS, DateTime? datePo)
         {
-            return $"{dateS?.ToString("yyyy.mm.dd")}-{datePo?.ToString("yyyy.mm.dd")} {fileDownloadName}";
+            return $"{dateS?.ToString("yyyy.MM.dd")}-{datePo?.ToString("yyyy.MM.dd")} {fileDownloadName}";
         }
 
         private async Task<string> GetPath(long? lord, long? owner)
