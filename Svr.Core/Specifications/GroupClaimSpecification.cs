@@ -15,7 +15,7 @@ namespace Svr.Core.Specifications
     }
     public class GroupClaimSpecificationReport : BaseSpecification<GroupClaim>
     {
-        public GroupClaimSpecificationReport(string owner) : base(i => (String.IsNullOrEmpty(owner) || i.CategoryDispute.Name == owner))
+        public GroupClaimSpecificationReport(long? id) : base(i => (!id.HasValue || i.CategoryDispute.Id == id))
         {
             AddInclude(d => d.CategoryDispute);
             AddInclude(d => d.SubjectClaims);

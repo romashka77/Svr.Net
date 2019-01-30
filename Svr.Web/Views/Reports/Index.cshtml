@@ -6,12 +6,36 @@
 <h4>@ViewData["Title"]</h4>
 
 @Html.Partial("_StatusMessage", Model.StatusMessage)
-<p>
-    <a asp-action="InMemoryReport" asp-controller="Reports" class="btn btn-default">Создание отчета в памяти</a>
-    <a asp-action="FileReport" asp-controller="Reports" class="btn btn-default">Создать файл отчета </a>
-</p>
+
+<div class="form-group form-inline">
+    <div>
+        <form asp-action="InMemoryReport" method="post">
+            @Html.Hidden("dateS", Model.FilterViewModel.DateS)
+            @Html.Hidden("datePo", Model.FilterViewModel.DatePo)
+            @Html.Hidden("lord", Model.FilterViewModel.SelectedLord)
+            @Html.Hidden("owner", Model.FilterViewModel.SelectedOwner)
+            @Html.Hidden("category", Model.FilterViewModel.SelectedCategory)
+            <input type="submit" value="Создание отчета в памяти" class="btn btn-default" />
+        </form>
+    </div>
+    <div>
+        <form asp-action="FileReport" method="post">
+            @Html.Hidden("dateS", Model.FilterViewModel.DateS)
+            @Html.Hidden("datePo", Model.FilterViewModel.DatePo)
+            @Html.Hidden("lord", Model.FilterViewModel.SelectedLord)
+            @Html.Hidden("owner", Model.FilterViewModel.SelectedOwner)
+            @Html.Hidden("category", Model.FilterViewModel.SelectedCategory)
+            <input type="submit" value="Создать файл отчета" class="btn btn-default" />
+        </form>
+    </div>
+</div>
+
 
 @Html.Partial("List", Model)
+
+@*@section Scripts {
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+    }*@
 
 
 @*<fieldset style="margin-top: 15px">

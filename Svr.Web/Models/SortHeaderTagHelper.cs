@@ -17,7 +17,9 @@ namespace Svr.Web.Models
         public string SearchString { get; set; }// фильтрация
         public string CurrentFilterOwner { get; set; }
         public string CurrentFilterLord { get; set; }
-        public DateTime? CurrentFilterDate { get; set; }
+        public string CurrentFilterCategory { get; set; }
+        public DateTime? CurrentFilterDateS { get; set; }
+        public DateTime? CurrentFilterDatePo { get; set; }
 
         public SortState Property { get; set; } // значение текущего свойства, для которого создается тег
         public SortState Current { get; set; }  // значение активного свойства, выбранного для сортировки
@@ -39,7 +41,7 @@ namespace Svr.Web.Models
         {
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
             output.TagName = "a";
-            string url = urlHelper.Action(Action, new { sortOrder = Property, searchString = SearchString, owner = CurrentFilterOwner, lord = CurrentFilterLord, date = CurrentFilterDate });
+            string url = urlHelper.Action(Action, new { sortOrder = Property, searchString = SearchString, owner = CurrentFilterOwner, lord = CurrentFilterLord, dateS = CurrentFilterDateS, datePo = CurrentFilterDatePo, category = CurrentFilterCategory });
             output.Attributes.SetAttribute("href", url);
             // если текущее свойство имеет значение CurrentSort
             if (((Current == SortState.CodeAsc) && (Property == SortState.CodeDesc)) || ((Current == SortState.CodeDesc) && (Property == SortState.CodeAsc)) ||

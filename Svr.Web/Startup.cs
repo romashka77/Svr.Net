@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Svr.Web.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Svr.Web
 {
@@ -26,6 +28,7 @@ namespace Svr.Web
         //Этот метод вызывается средой выполнения. Используйте этот метод для добавления служб в контейнер.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Localization & options
             // добавление ApplicationDbContext для взаимодействия с базой данных
             services.AddDbContext();
 
@@ -50,6 +53,19 @@ namespace Svr.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            var supportedCultures = new[]
+           {
+                new CultureInfo("ru-RU"),
+                new CultureInfo("ru"),
+            };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("ru-RU"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
+
 
             app.UseStaticFiles();
 

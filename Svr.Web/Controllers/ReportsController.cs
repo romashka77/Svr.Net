@@ -44,13 +44,14 @@ namespace Svr.Web.Controllers
         private readonly IRegionRepository regionRepository;
         private readonly IDistrictRepository districtRepository;
 
+        private readonly ICategoryDisputeRepository categoryDisputeRepository;
         private readonly IGroupClaimRepository groupClaimRepository;
         private readonly ISubjectClaimRepository subjectClaimRepository;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository)
+        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository)
         {
             this.logger = logger;
             this.userManager = userManager;
@@ -58,6 +59,7 @@ namespace Svr.Web.Controllers
             this.districtRepository = districtRepository;
             this.hostingEnvironment = hostingEnvironment;
 
+            this.categoryDisputeRepository = categoryDisputeRepository;
             this.groupClaimRepository = groupClaimRepository;
             this.subjectClaimRepository = subjectClaimRepository;
         }
@@ -74,7 +76,7 @@ namespace Svr.Web.Controllers
             base.Dispose(disposing);
         }
         #endregion
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? date = null)
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             if (String.IsNullOrEmpty(owner))
             {
@@ -82,9 +84,10 @@ namespace Svr.Web.Controllers
                 {
                     ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
                     owner = user.DistrictId.ToString();
+                    lord = "1";
                 }
             }
-            var path = await GetPath(date, owner.ToLong());
+            var path = await GetPath(lord.ToLong(), owner.ToLong());
 
             DirectoryInfo dirInfo = new DirectoryInfo(path);
             if (!dirInfo.Exists)
@@ -139,16 +142,16 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, (await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong()))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord, (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) })),
+                FilterViewModel = new FilterViewModel(searchString, owner, (await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong()))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord, (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) }), dateS, datePo, category, (await categoryDisputeRepository.ListAllAsync()).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (category == a.Id.ToString()) })),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
         }
 
-        public async Task<IActionResult> InMemoryReport()
+        public async Task<IActionResult> InMemoryReport(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             byte[] reportBytes;
-            using (var package = await createExcelPackage())
+            using (var package = await createExcelPackage(lord, owner, dateS, datePo, category))
             {
                 if (package == null)
                 {
@@ -156,12 +159,11 @@ namespace Svr.Web.Controllers
                 }
                 reportBytes = package.GetAsByteArray();
             }
-
-            return File(reportBytes, XlsxContentType, fileDownloadName);
+            return File(reportBytes, XlsxContentType, GetFileName(dateS, datePo));
         }
 
 
-        public async Task<IActionResult> FileReport(string lord = null, string owner = null, DateTime? date = null)
+        public async Task<IActionResult> FileReport(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             if (String.IsNullOrEmpty(owner))
             {
@@ -171,22 +173,22 @@ namespace Svr.Web.Controllers
                     owner = user.DistrictId.ToString();
                 }
             }
-            var path = await GetPath(date, owner.ToLong());
-            using (var package = await createExcelPackage())
+            var path = await GetPath(lord.ToLong(), owner.ToLong());
+            using (var package = await createExcelPackage(lord, owner, dateS, datePo, category))
             {
                 if (package == null)
                 {
                     return RedirectToAction(nameof(Index));
                 }
 
-                package.SaveAs(new FileInfo(Path.Combine(path, fileDownloadName)));
+                package.SaveAs(new FileInfo(Path.Combine(path, GetFileName(dateS, datePo))));
             }
-            return File(path, XlsxContentType, fileDownloadName);
+            return File(path, XlsxContentType, GetFileName(dateS, datePo));
         }
 
 
 
-        private async Task<ExcelPackage> createExcelPackage()
+        private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             FileInfo template = new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, templatesFolder, fileTemplateName));
             if (!template.Exists)
@@ -214,10 +216,10 @@ namespace Svr.Web.Controllers
             worksheet.Cells[$"A{i}:B{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ff6600"));
             i++;
 
-            var list = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport("Исходящие"))).OrderBy(a => a.Code.ToLong());
+            var list = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
             foreach (var item in list)
             {
-                
+
                 worksheet.Cells[i, 1].Value = item.Code;
                 worksheet.Cells[i, 2].Value = item.Name;
                 worksheet.Cells[$"A{i}:B{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -245,7 +247,7 @@ namespace Svr.Web.Controllers
             worksheet.Cells[$"B{start}:B{start + s}"].Style.WrapText = true;
             worksheet.Cells[$"A{start}:B{start + s}"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells[$"A{start}:B{start + s}"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            
+
 
 
             //var query = from b in groupClaimRepository.Table().Where(b => b.CategoryDisputeId == 2)
@@ -309,12 +311,18 @@ namespace Svr.Web.Controllers
             //    PictureAlignment.Right);
             return package;
         }
-        private async Task<string> GetPath(DateTime? date, long? owner)
+        private string GetFileName(DateTime? dateS, DateTime? datePo)
+        {
+            return $"{dateS?.ToString("yyyy.mm.dd")}-{datePo?.ToString("yyyy.mm.dd")} {fileDownloadName}";
+        }
+
+        private async Task<string> GetPath(long? lord, long? owner)
         {
             var path = Path.Combine(hostingEnvironment.WebRootPath, reportsFolder);
-            if (date != null)
+            if (lord != null)
             {
-                path = Path.Combine(path, ((DateTime)date).ToString("yyyy"));
+                var region = await regionRepository.GetByIdAsync(lord);
+                path = Path.Combine(path, region.Name);
             }
             if (owner != null)
             {
