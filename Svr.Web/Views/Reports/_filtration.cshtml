@@ -12,7 +12,7 @@
         <label class="control-label">Район: </label>
         @Html.DropDownList("owner", Model.Owners, "Выберите район", htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
         <label class="control-label">Категория: </label>
-        @Html.DropDownList("category", Model.Сategores, htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
+        @Html.DropDownList("category", Model.Сategores, "Выберите категорию споров", htmlAttributes: new { @class = "form-control", onchange = @"form.submit();" })
         <input type="submit" value="Фильтр" class="btn btn-default" />
     </div>
 </form>

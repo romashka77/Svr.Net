@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Extensions
 {
@@ -17,15 +14,25 @@ namespace Svr.Infrastructure.Extensions
                 if (long.TryParse(a[i], out long c) && long.TryParse(b[i], out long d))
                 {
                     if (c > d)
-                    {
                         return 1;
-                    }
-                    else if (c < d) return -1;
+                    else if (c < d)
+                        return -1;
                 }
                 else
                 {
-                    break;
+                    if (long.TryParse(a[i], out c))
+                        return 1;
+                    else
+                        return -1;
                 }
+            }
+            if (a.Length>b.Length)
+            {
+                return 1;
+            }
+            if (a.Length < b.Length)
+            {
+                return -1;
             }
             return 0;
         }

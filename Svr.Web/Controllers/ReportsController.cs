@@ -33,7 +33,7 @@ namespace Svr.Web.Controllers
 
     //https://riptutorial.com/ru/epplus/example/26411/text-alignment-and-word-wrap
     //https://ru.inettools.net/image/opredelit-tsvet-piksela-na-kartinke-onlayn
-    [Authorize(Roles = "Администратор")]
+    [Authorize]
     public class ReportsController : Controller
     {
         private const string XlsxContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -208,7 +208,7 @@ namespace Svr.Web.Controllers
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
             Font font10 = new Font("Times New Roman", 10);
             Font font8 = new Font("Times New Roman", 8);
-            var numberformat = "#,##0";
+            var numberformat = "#,##0.00";
             //var dataCellStyleName = "TableNumber";
             //var numStyle = package.Workbook.Styles.CreateNamedStyle(dataCellStyleName);
             //numStyle.Style.Numberformat.Format = numberformat;
@@ -258,7 +258,12 @@ namespace Svr.Web.Controllers
                     }
                     worksheet.Cells[i, 3].Value = await claims.CountAsync();
                     worksheet.Cells[i, 4].Value = await claims.SumAsync(c => c.Sum);
+                    worksheet.Cells[i, 4].Value = worksheet.Cells[i, 4].Value ?? 0;
                     worksheet.Cells[i, 4].Style.Numberformat.Format = numberformat;
+                    worksheet.Cells[i,3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i,3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    worksheet.Cells[i, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i, 4].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
                     i++;
                     s++;
