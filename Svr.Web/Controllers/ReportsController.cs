@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -10,11 +11,13 @@ using OfficeOpenXml.Style;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
+using Svr.Infrastructure.Extensions;
 using Svr.Infrastructure.Identity;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.ReportsViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -46,12 +49,12 @@ namespace Svr.Web.Controllers
 
         private readonly ICategoryDisputeRepository categoryDisputeRepository;
         private readonly IGroupClaimRepository groupClaimRepository;
-        private readonly ISubjectClaimRepository subjectClaimRepository;
+        private readonly IClaimRepository claimRepository;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, ISubjectClaimRepository subjectClaimRepository)
+        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, IClaimRepository claimRepository)
         {
             this.logger = logger;
             this.userManager = userManager;
@@ -61,7 +64,7 @@ namespace Svr.Web.Controllers
 
             this.categoryDisputeRepository = categoryDisputeRepository;
             this.groupClaimRepository = groupClaimRepository;
-            this.subjectClaimRepository = subjectClaimRepository;
+            this.claimRepository = claimRepository;
         }
         #endregion
         #region Деструктор
@@ -186,8 +189,6 @@ namespace Svr.Web.Controllers
             return File(path, XlsxContentType, GetFileName(dateS, datePo));
         }
 
-
-
         private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             FileInfo template = new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, templatesFolder, fileTemplateName));
@@ -205,42 +206,67 @@ namespace Svr.Web.Controllers
 
             //var worksheet = package.Workbook.Worksheets.Add("Employee");
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+            Font font10 = new Font("Times New Roman", 10);
+            Font font8 = new Font("Times New Roman", 8);
+            var numberformat = "#,##0";
+            //var dataCellStyleName = "TableNumber";
+            //var numStyle = package.Workbook.Styles.CreateNamedStyle(dataCellStyleName);
+            //numStyle.Style.Numberformat.Format = numberformat;
 
+            worksheet.Cells[2, 4].Style.Numberformat.Format = numberformat;
+            CodeComparer codeComparer = new CodeComparer();
+            //Regex regex = new Regex(@"[0-9]*[0-9]\.");
 
-
-            int i = 14;
+            int i = 14;//срока
+            int j = 1;//столбец
             int start = i;
             int s = 0;
             worksheet.Cells[i, 2].Value = "Споры, рассмотренные в арбитражных судах";
-            worksheet.Cells[$"A{i}:B{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[$"A{i}:B{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ff6600"));
+            worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ff6600"));
             i++;
-
-            var list = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
-            foreach (var item in list)
+            
+            var groupClaims = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
+            foreach (var groupClaim in groupClaims)
             {
 
-                worksheet.Cells[i, 1].Value = item.Code;
-                worksheet.Cells[i, 2].Value = item.Name;
-                worksheet.Cells[$"A{i}:B{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells[$"A{i}:B{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#2fcdcd"));
+                worksheet.Cells[i, j].Value = groupClaim.Code;//A15
+                worksheet.Cells[i, j + 1].Value = groupClaim.Name;
+                worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#2fcdcd"));
                 i++;
 
                 s++;
                 //worksheet.Cells[i, 3].Value = item.Name;= СУММ(C$16:C$27)
                 var i0 = i;
-                var items = item.SubjectClaims.OrderBy(a => a.Code);
-                foreach (var item2 in items)
+                
+                //var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code.ToString(), codeComparer);
+                var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code, codeComparer);
+
+                foreach (var subjectClaim in subjectClaims)
                 {
-                    worksheet.Cells[i, 1].Value = item2.Code;
-                    worksheet.Cells[i++, 2].Value = item2.Name;
+                    worksheet.Cells[i, 1].Value = subjectClaim.Code;
+                    worksheet.Cells[i, 2].Value = subjectClaim.Name;
+                    var claims = claimRepository.List(new ClaimSpecificationRepost(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
+                    if (dateS != null)
+                    {
+                        claims = claims.Where(c => c.DateReg >= dateS);
+                    }
+                    if (datePo != null)
+                    {
+                        claims = claims.Where(c => c.DateReg <= datePo);
+                    }
+                    worksheet.Cells[i, 3].Value = await claims.CountAsync();
+                    worksheet.Cells[i, 4].Value = await claims.SumAsync(c => c.Sum);
+                    worksheet.Cells[i, 4].Style.Numberformat.Format = numberformat;
+
+                    i++;
                     s++;
                 }
                 //= СУММ(C$15; C$28; C$31; C$34; C$41; C$47; C$48) Times New Roman
                 var i1 = i;
             }
-            Font font10 = new Font("Times New Roman", 10);
-            Font font8 = new Font("Times New Roman", 8);
+
 
             worksheet.Cells[$"A{start}:A{start + s}"].Style.Font.SetFromFont(font10);
             worksheet.Cells[$"B{start}:B{start + s}"].Style.Font.SetFromFont(font8);

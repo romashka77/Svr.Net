@@ -919,7 +919,7 @@ namespace Svr.Infrastructure.Data
                     {
                         new SubjectClaim { Code = "15.1", Name = StrTrim("Индексация и валоризация пенсий, в т.ч."), GroupClaim = groupClaim, Description = "" },
                         new SubjectClaim { Code = "15.1.1", Name = StrTrim("О взыскании индексации(компенсации) несвоевременно назначенной пенсии и несвоевременно произведённого перерасчёта пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.2.О", Name = StrTrim("Взыскании индексации несвоевременно выплаченной пенсии"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "15.1.2", Name = StrTrim("О взыскании индексации несвоевременно выплаченной пенсии"), GroupClaim = groupClaim, Description = "" },
                         new SubjectClaim { Code = "15.1.3", Name = StrTrim("О взыскании убытков, причиненных неправильным исчислением пенсии"), GroupClaim = groupClaim, Description = "" },
                         new SubjectClaim { Code = "15.1.4", Name = StrTrim("Спор о правильности индексации страховой пенсии"), GroupClaim = groupClaim, Description = "" },
                         new SubjectClaim { Code = "15.1.5", Name = StrTrim("Спор о  правильности валоризации величины расчетного пенсионного капитала застрахованного лица, исчисленного  при оценке его пенсионных прав"), GroupClaim = groupClaim, Description = "" },

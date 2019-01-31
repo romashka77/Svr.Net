@@ -14,4 +14,13 @@ namespace Svr.Core.Specifications
             //var dataContext = _context.Claims.Include(c => c.CategoryDispute).Include(c => c.District).Include(c => c.GroupClaim).Include(c => c.Performer).Include(c => c.Person3rd).Include(c => c.Plaintiff).Include(c => c.Region).Include(c => c.Respondent).Include(c => c.Сourt);
         }
     }
+    public class ClaimSpecificationRepost : BaseSpecification<Claim>
+    {
+        public ClaimSpecificationRepost(long? id) : base(i => (!id.HasValue || i.District.Id == id))
+        {
+            AddInclude(d => d.District);
+            AddInclude(d => d.Instances);
+            //var dataContext = _context.Claims.Include(c => c.CategoryDispute).Include(c => c.District).Include(c => c.GroupClaim).Include(c => c.Performer).Include(c => c.Person3rd).Include(c => c.Plaintiff).Include(c => c.Region).Include(c => c.Respondent).Include(c => c.Сourt);
+        }
+    }
 }
