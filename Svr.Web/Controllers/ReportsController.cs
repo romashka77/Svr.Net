@@ -229,7 +229,8 @@ namespace Svr.Web.Controllers
             var groupClaims = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
             foreach (var groupClaim in groupClaims)
             {
-
+                var i0 = i;
+                int j0 = j;
                 worksheet.Cells[i, j].Value = groupClaim.Code;//A15
                 worksheet.Cells[i, j + 1].Value = groupClaim.Name;
                 worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -238,7 +239,7 @@ namespace Svr.Web.Controllers
 
                 s++;
                 //worksheet.Cells[i, 3].Value = item.Name;= СУММ(C$16:C$27)
-                var i0 = i;
+                
                 
                 //var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code.ToString(), codeComparer);
                 var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code, codeComparer);
@@ -268,6 +269,9 @@ namespace Svr.Web.Controllers
                     i++;
                     s++;
                 }
+                worksheet.Cells[$"C{i0}"].Formula = $"=SUM(C{i0+1}:C{i-1})";
+                worksheet.Cells[$"D{i0}"].Formula = $"=SUM(D{i0 + 1}:D{i - 1})";
+
                 //= СУММ(C$15; C$28; C$31; C$34; C$41; C$47; C$48) Times New Roman
                 var i1 = i;
             }
