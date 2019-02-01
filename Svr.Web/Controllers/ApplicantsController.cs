@@ -57,7 +57,11 @@ namespace Svr.Web.Controllers
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
-                list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()));
+                string[] searchStrings = searchString.Split(' ');
+                foreach (var item in searchStrings)
+                {
+                    list = list.Where(d => d.Name.ToUpper().Contains(item.ToUpper())|| d.Address.ToUpper().Contains(item.ToUpper()) );
+                }
             }
             // сортировка
             list = repository.Sort(list, sortOrder);
@@ -73,6 +77,7 @@ namespace Svr.Web.Controllers
                     CreatedOnUtc = i.CreatedOnUtc,
                     UpdatedOnUtc = i.UpdatedOnUtc,
                     TypeApplicant = i.TypeApplicant,
+                    Address=i.Address,
                     Opf = i.Opf
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),

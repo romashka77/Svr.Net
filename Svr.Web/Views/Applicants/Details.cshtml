@@ -67,6 +67,9 @@
             <dt>
                 @Html.DisplayNameFor(model => model.AddressBank)
             </dt>
+            <dd>
+                @Html.DisplayFor(model => model.AddressBank)
+            </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Inn)
             </dt>
@@ -91,13 +94,13 @@
         </dt>
         @if (ViewBag.Claims != null)
         {
-        <dd>
-            @foreach (var item in ViewBag.Claims)
-            {
-                <a asp-controller="Claims" asp-action="Details" asp-route-id="@item.Id">@item.Code</a>
-                <br/>
-            }
-        </dd>
+            <dd>
+                @foreach (var item in ViewBag.Claims)
+                {
+                    <a asp-controller="Claims" asp-action="Details" asp-route-id="@item.Id">@item.Code</a>
+                    <br />
+                }
+            </dd>
         }
 
     </dl>

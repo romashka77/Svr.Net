@@ -272,7 +272,7 @@ namespace Svr.Web.Controllers
                 }
             }
             ViewBag.Performers = new SelectList(p, "Id", "Name", model.PerformerId);
-            ViewBag.Applicants = new SelectList(await applicantRepository.ListAsync(new ApplicantSpecification(null)), "Id", "Name", model.PlaintiffId);
+            ViewBag.Applicants = new SelectList((await applicantRepository.ListAsync(new ApplicantSpecification(null))).Select(a => new {Id=a.Id, Name=string.Concat(a.Name," ",a.Address)}), "Id", "Name", model.PlaintiffId);
         }
 
         

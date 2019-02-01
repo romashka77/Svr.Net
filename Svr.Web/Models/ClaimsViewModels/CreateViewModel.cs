@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace Svr.Web.Models.ClaimsViewModels
 {
-    public class CreateViewModel: BaseEntityDescription
+    public class CreateViewModel: BaseEntity
     {
+        [MaxLength(50, ErrorMessage = ErrorStringMaxLength)]
+        [Display(Name = "№ дела", Prompt = "Введите № дела")]
+        [Required(ErrorMessage = ErrorStringEmpty)]
+        public string Name { get; set; }
+        [Display(Name = "Описание", Prompt = "Введите описание")]
+        public string Description { get; set; }
         [Display(Name = "Регион")]
         [Required(ErrorMessage = ErrorStringEmpty)]
         public long RegionId { get; set; }

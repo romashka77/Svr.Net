@@ -188,6 +188,19 @@ namespace Svr.Web.Controllers
             }
             return File(path, XlsxContentType, GetFileName(dateS, datePo));
         }
+        private string ListSum(ExcelWorksheet worksheet, List<int> items, int c)
+        {
+            //var result = "=SUM(";
+            var result = "=";
+            foreach (var item in items)
+            {
+                //result = string.Concat(result, worksheet.Cells[item, c].Address, ";");
+                result = string.Concat(result, worksheet.Cells[item, c].Address, "+");
+            }
+            //result = string.Concat(result, ")");
+            result = string.Concat(result, "0");
+            return result;
+        }
 
         private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
@@ -202,7 +215,6 @@ namespace Svr.Web.Controllers
             package.Workbook.Properties.Author = User.Identity.Name;
             package.Workbook.Properties.Subject = "Salary Report";
             package.Workbook.Properties.Keywords = "Salary";
-
 
             //var worksheet = package.Workbook.Worksheets.Add("Employee");
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
@@ -221,27 +233,27 @@ namespace Svr.Web.Controllers
             int j = 1;//столбец
             int start = i;
             int s = 0;
-            worksheet.Cells[i, 2].Value = "Споры, рассмотренные в арбитражных судах";
+
+            bool flg = true;
+            List<int> list0 = new List<int>();
+            List<int> list1 = new List<int>();
+
+            list0.Add(i);//"Споры, рассмотренные в арбитражных судах";
+            worksheet.Cells[$"B{list0.Last()}"].Value = "Споры, рассмотренные в арбитражных судах";
             worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
             worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ff6600"));
             i++;
-            
+
             var groupClaims = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
             foreach (var groupClaim in groupClaims)
             {
-                var i0 = i;
-                int j0 = j;
+                list1.Add(i); //1
                 worksheet.Cells[i, j].Value = groupClaim.Code;//A15
                 worksheet.Cells[i, j + 1].Value = groupClaim.Name;
-                worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#2fcdcd"));
+                worksheet.Cells[worksheet.Cells[i, 1].Address + ":" + worksheet.Cells[i, 35].Address].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[worksheet.Cells[i, 1].Address + ":" + worksheet.Cells[i, 35].Address].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#2fcdcd"));
                 i++;
-
                 s++;
-                //worksheet.Cells[i, 3].Value = item.Name;= СУММ(C$16:C$27)
-                
-                
-                //var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code.ToString(), codeComparer);
                 var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code, codeComparer);
 
                 foreach (var subjectClaim in subjectClaims)
@@ -261,42 +273,43 @@ namespace Svr.Web.Controllers
                     worksheet.Cells[i, 4].Value = await claims.SumAsync(c => c.Sum);
                     worksheet.Cells[i, 4].Value = worksheet.Cells[i, 4].Value ?? 0;
                     worksheet.Cells[i, 4].Style.Numberformat.Format = numberformat;
-                    worksheet.Cells[i,3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[i,3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    worksheet.Cells[i, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i, 3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells[i, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     worksheet.Cells[i, 4].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-
                     i++;
                     s++;
                 }
-                worksheet.Cells[$"C{i0}"].Formula = $"=SUM(C{i0+1}:C{i-1})";
-                worksheet.Cells[$"D{i0}"].Formula = $"=SUM(D{i0 + 1}:D{i - 1})";
+                worksheet.Cells[list1.Last(), 3].Formula = $"=SUM(" + worksheet.Cells[list1.Last() + 1, 3].Address + ":" + worksheet.Cells[i - 1, 3].Address + ")";
+                worksheet.Cells[list1.Last(), 4].Formula = $"=SUM(" + worksheet.Cells[list1.Last() + 1, 4].Address + ":" + worksheet.Cells[i - 1, 4].Address + ")";
+                worksheet.Cells[list1.Last(), 4].Style.Numberformat.Format = numberformat;
+                if ((list1.Count == 7) && (flg))
+                {
+                    flg = false;
+                    worksheet.Cells[list0.Last(), 3].Formula = ListSum(worksheet, list1, 3);
+                    worksheet.Cells[list0.Last(), 4].Formula = ListSum(worksheet, list1, 4);
+                    worksheet.Cells[list0.Last(), 4].Style.Numberformat.Format = numberformat;
 
-                //= СУММ(C$15; C$28; C$31; C$34; C$41; C$47; C$48) Times New Roman
-                var i1 = i;
+                    list1.Clear();
+                    list0.Add(i);
+                    worksheet.Cells[list0.Last(), 2].Value = "Споры, рассмотренные в судах общей юрисдикции";
+                    worksheet.Cells[worksheet.Cells[i, 1].Address + ":" + worksheet.Cells[i, 35].Address].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Cells[worksheet.Cells[i, 1].Address + ":" + worksheet.Cells[i, 35].Address].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ff6600"));
+                    i++; s++;
+                }
+
             }
+            worksheet.Cells[list0.Last(), 3].Formula = ListSum(worksheet, list1, 3);
+            worksheet.Cells[list0.Last(), 4].Formula = ListSum(worksheet, list1, 4);
+            worksheet.Cells[list0.Last(), 4].Style.Numberformat.Format = numberformat;
 
 
-            worksheet.Cells[$"A{start}:A{start + s}"].Style.Font.SetFromFont(font10);
-            worksheet.Cells[$"B{start}:B{start + s}"].Style.Font.SetFromFont(font8);
-            worksheet.Cells[$"B{start}:B{start + s}"].Style.WrapText = true;
-            worksheet.Cells[$"A{start}:B{start + s}"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells[$"A{start}:B{start + s}"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells[worksheet.Cells[start,1].Address +":"+ worksheet.Cells[start + s,1].Address].Style.Font.SetFromFont(font10);
+            worksheet.Cells[worksheet.Cells[start, 2].Address + ":" + worksheet.Cells[start + s, 2].Address].Style.Font.SetFromFont(font8);
+            worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 35].Address].Style.WrapText = true;
 
-
-
-            //var query = from b in groupClaimRepository.Table().Where(b => b.CategoryDisputeId == 2)
-            //            join c in subjectClaimRepository.Table() on b equals c.GroupClaim into gj
-            //            from bc in gj.DefaultIfEmpty()
-            //            select new { GroupClaimCode = b.Code, GroupClaimName = b.Name, SubjectClaimId = bc?. ?? String.Empty };
-            //groupClaimRepository.Table()..In  .Where(b => b.CategoryDisputeId == 2).
-
-
-
-            //var list = groupClaimRepository.Table().Where(b => b.CategoryDisputeId == 2).Join(subjectClaimRepository.Table(), b => b.Id, c => c.GroupClaimId, (b, c) => new { GroupClaimCode=b.Code, GroupClaimName = b.Name, SubjectClaimId=c.Id, SubjectClaimName=c.Name});
-
-
-
+            worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 35].Address].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 35].Address].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
             //First add the headers
             //worksheet.Cells[1, 1].Value = "ID";

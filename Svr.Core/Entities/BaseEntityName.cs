@@ -11,7 +11,6 @@ namespace Svr.Core.Entities
         /// Наименование
         /// </summary>
         [Required(ErrorMessage = ErrorStringEmpty)]
-        //[MaxLength(250, ErrorMessage = ErrorStringMaxLength)]
         [Display(Name = "Наименование", Prompt = "Введите наименование")]
         [MaxLength(100, ErrorMessage = ErrorStringMaxLength)]
         public string Name { get; set; }
