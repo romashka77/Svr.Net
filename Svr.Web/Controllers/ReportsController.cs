@@ -41,7 +41,8 @@ namespace Svr.Web.Controllers
         private const string fileDownloadName = "report.xlsx";
         private const string reportsFolder = "Reports";
         private const string templatesFolder = "Templates";
-        private const string fileTemplateName = "Template1.xlsx";
+        private const string fileTemplateNameOut = "0902.xls ";//"Template1.xlsx";
+        private const string fileTemplateNameIn = "0901.xls ";
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<ClaimsController> logger;
         private readonly IRegionRepository regionRepository;
@@ -204,6 +205,16 @@ namespace Svr.Web.Controllers
 
         private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
+            string fileTemplateName;
+            if (category.ToLong() == null)
+            {
+                StatusMessage = $"Ошибка: Выберите категорию.";
+                return null;
+            }
+            else if (category.ToLong() == 3)
+                fileTemplateName = fileTemplateNameIn;
+            else
+                fileTemplateName = fileTemplateNameOut;
             FileInfo template = new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, templatesFolder, fileTemplateName));
             if (!template.Exists)
             {  //Делаем проверку - если Template.xlsx отсутствует - выходим по красной ветке
@@ -304,7 +315,7 @@ namespace Svr.Web.Controllers
             worksheet.Cells[list0.Last(), 4].Style.Numberformat.Format = numberformat;
 
 
-            worksheet.Cells[worksheet.Cells[start,1].Address +":"+ worksheet.Cells[start + s,1].Address].Style.Font.SetFromFont(font10);
+            worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 1].Address].Style.Font.SetFromFont(font10);
             worksheet.Cells[worksheet.Cells[start, 2].Address + ":" + worksheet.Cells[start + s, 2].Address].Style.Font.SetFromFont(font8);
             worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 35].Address].Style.WrapText = true;
 
