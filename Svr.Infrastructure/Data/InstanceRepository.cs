@@ -20,6 +20,10 @@ namespace Svr.Infrastructure.Data
             }
             return Entities.Include(d => d.Claim).AsNoTracking().SingleOrDefault(r => r.Id == id);
         }
+        public virtual IQueryable<Instance> ListReport()
+        {
+            return Entities.Include(d => d.Claim).ThenInclude(c=>c.SubjectClaim).ThenInclude(s=>s.GroupClaim);
+        }
         public virtual async Task<Instance> GetByIdWithItemsAsync(long? id)
         {
             if (id == null)

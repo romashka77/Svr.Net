@@ -1,4 +1,5 @@
 ﻿using Svr.Core.Entities;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Svr.Core.Interfaces
@@ -7,5 +8,6 @@ namespace Svr.Core.Interfaces
     {
         Instance GetByIdWithItems(long? id);
         Task<Instance> GetByIdWithItemsAsync(long? id);
+        IQueryable<Instance> ListReport();
     }
 }

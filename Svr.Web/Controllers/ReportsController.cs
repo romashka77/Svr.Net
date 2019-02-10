@@ -41,8 +41,8 @@ namespace Svr.Web.Controllers
         private const string fileDownloadName = "report.xlsx";
         private const string reportsFolder = "Reports";
         private const string templatesFolder = "Templates";
-        private const string fileTemplateNameOut = "0902.xls ";//"Template1.xlsx";
-        private const string fileTemplateNameIn = "0901.xls ";
+        private const string fileTemplateNameOut = "0901.xlsx";//"Template1.xlsx";
+        private const string fileTemplateNameIn = "0902.xlsx";
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<ClaimsController> logger;
         private readonly IRegionRepository regionRepository;
@@ -51,11 +51,12 @@ namespace Svr.Web.Controllers
         private readonly ICategoryDisputeRepository categoryDisputeRepository;
         private readonly IGroupClaimRepository groupClaimRepository;
         private readonly IClaimRepository claimRepository;
+        private readonly IInstanceRepository instanceRepository;
 
         [TempData]
         public string StatusMessage { get; set; }
         #region Конструктор
-        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, IClaimRepository claimRepository)
+        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, IClaimRepository claimRepository, IInstanceRepository instanceRepository)
         {
             this.logger = logger;
             this.userManager = userManager;
@@ -66,6 +67,7 @@ namespace Svr.Web.Controllers
             this.categoryDisputeRepository = categoryDisputeRepository;
             this.groupClaimRepository = groupClaimRepository;
             this.claimRepository = claimRepository;
+            this.instanceRepository = instanceRepository;
         }
         #endregion
         #region Деструктор
@@ -202,8 +204,7 @@ namespace Svr.Web.Controllers
             result = string.Concat(result, "0");
             return result;
         }
-
-        private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
+        private FileInfo GetFileTemplateName(string category)
         {
             string fileTemplateName;
             if (category.ToLong() == null)
@@ -217,10 +218,71 @@ namespace Svr.Web.Controllers
                 fileTemplateName = fileTemplateNameOut;
             FileInfo template = new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, templatesFolder, fileTemplateName));
             if (!template.Exists)
-            {  //Делаем проверку - если Template.xlsx отсутствует - выходим по красной ветке
+            {
                 StatusMessage = $"Ошибка: Файл Excel-шаблона {fileTemplateName} отсутствует.";
                 return null;
             }
+            return template;
+        }
+        private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
+        {
+            var template = GetFileTemplateName(category);
+            if (template == null) return null;
+            ExcelPackage package = new ExcelPackage(template, true);
+            package.Workbook.Properties.Author = User.Identity.Name;
+            var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+            //Группы споров
+            var groupClaims = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
+            foreach (var groupClaim in groupClaims)
+            {
+                /// Предметы иска
+                //var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code, codeComparer);
+                foreach (var subjectClaim in groupClaim.SubjectClaims)
+                {
+                    var claims = claimRepository.List(new ClaimSpecificationRepost(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
+                    if (dateS != null)
+                    {
+                        claims = claims.Where(c => c.DateReg >= dateS);
+                    }
+                    if (datePo != null)
+                    {
+                        claims = claims.Where(c => c.DateReg <= datePo);
+                    }
+                    var count = await claims.CountAsync();
+                    if (count > 0)
+                    {
+                        var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
+                        worksheet.Cells[$"C{acells.Last().End.Row}"].Value = count;
+                        var sum = await claims.SumAsync(c => c.Sum);
+                        if (sum!=null)
+                        {
+                            worksheet.Cells[$"D{acells.Last().End.Row}"].Value = sum;
+                        }
+                    }
+                    var instances = instanceRepository.ListReport().Where(i => i.Claim.SubjectClaimId == subjectClaim.Id);
+                    if (dateS != null)
+                    {
+                        instances = instances.Where(c => c.DateCourtDecision >= dateS);
+                    }
+                    if (datePo != null)
+                    {
+                        instances = instances.Where(c => c.DateCourtDecision <= datePo);
+                    }
+                    count = await claims.CountAsync();
+                    if (count > 0)
+                    {
+                        var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
+                    }
+
+                    }
+            }
+            return package;
+        }
+        private async Task<ExcelPackage> createExcelPackage0(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
+        {
+            var template = GetFileTemplateName(category);
+            if (template==null) return null;
+            
             ExcelPackage package = new ExcelPackage(template, true);
             package.Workbook.Properties.Title = "Salary Report";
             package.Workbook.Properties.Author = User.Identity.Name;
