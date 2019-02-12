@@ -224,6 +224,43 @@ namespace Svr.Web.Controllers
             }
             return template;
         }
+        private int GetSumInstances(List<Instance> instances, List<string> str, byte type, out decimal sum)
+        {
+            int result = 0;
+            sum = 0;
+            foreach (var item in instances)
+            {
+                bool flg = false;
+                if (item.CourtDecision != null)
+                    foreach (var f in str)
+                    {
+                        flg = flg || item.CourtDecision.Name.ToUpper().Contains(f.ToUpper());
+                        if (flg) break;
+                    }
+                if (flg)
+                {
+                    result++;
+                    switch (type)
+                    {
+                        case 1:
+                            sum = sum + (decimal)item.SumSatisfied;
+                            break;
+                        case 2:
+                            sum = sum + (decimal)item.SumDenied;
+                            break;
+                        case 3:
+                            sum = sum + (decimal)item.PaidVoluntarily;
+                            break;
+                        case 4:
+                            sum = sum + (decimal)item.PaidVoluntarily;
+                            break;
+                    }
+                }
+            }
+            return result;
+        }
+
+
         private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             var template = GetFileTemplateName(category);
@@ -240,6 +277,7 @@ namespace Svr.Web.Controllers
                 foreach (var subjectClaim in groupClaim.SubjectClaims)
                 {
                     var claims = claimRepository.List(new ClaimSpecificationRepost(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
+                    var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
                     if (dateS != null)
                     {
                         claims = claims.Where(c => c.DateReg >= dateS);
@@ -251,10 +289,10 @@ namespace Svr.Web.Controllers
                     var count = await claims.CountAsync();
                     if (count > 0)
                     {
-                        var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
+
                         worksheet.Cells[$"C{acells.Last().End.Row}"].Value = count;
                         var sum = await claims.SumAsync(c => c.Sum);
-                        if (sum!=null)
+                        if (sum != null)
                         {
                             worksheet.Cells[$"D{acells.Last().End.Row}"].Value = sum;
                         }
@@ -268,21 +306,100 @@ namespace Svr.Web.Controllers
                     {
                         instances = instances.Where(c => c.DateCourtDecision <= datePo);
                     }
-                    count = await claims.CountAsync();
+                    decimal Sum;
+                    var instances1 = await instances.Where(i => i.Number == 1).AsNoTracking().ToListAsync();
+                    count = GetSumInstances(instances1, new List<string>() { "Удовлетворено" }, 1, out Sum);
                     if (count > 0)
                     {
-                        var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
+                        worksheet.Cells[$"I{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"J{acells.Last().End.Row}"].Value = Sum;
+                    }
+                    count = GetSumInstances(instances1, new List<string>() { "отказано" }, 2, out Sum);
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"U{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"V{acells.Last().End.Row}"].Value = Sum;
                     }
 
+                    var instances2 = await instances.Where(i => i.Number == 2).AsNoTracking().ToListAsync();
+                    count = GetSumInstances(instances2, new List<string>() { "Решение отменено" }, 1, out Sum);
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"K{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"L{acells.Last().End.Row}"].Value = Sum;
                     }
+                    count = GetSumInstances(instances2, new List<string>() { "Решение оставлено без изменения", "Возвращение апелляционной жалобы" }, 2, out Sum);
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"W{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"X{acells.Last().End.Row}"].Value = Sum;
+                    }
+
+                    var instances3 = await instances.Where(i => i.Number == 3).AsNoTracking().ToListAsync();
+                    count = GetSumInstances(instances3, new List<string>() { "Решение отменено" }, 1, out Sum);
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"M{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"N{acells.Last().End.Row}"].Value = Sum;
+                    }
+                    count = GetSumInstances(instances3, new List<string>() { "Решение оставлено без изменения", "Возвращение кассационной жалобы" }, 2, out Sum);
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"X{acells.Last().End.Row}"].Value = Sum;
+                    }
+
+                    var instances4 = await instances.Where(i => i.Number == 4).AsNoTracking().ToListAsync();
+                    count = GetSumInstances(instances4, new List<string>() { "Решение отменено" }, 1, out Sum);
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"O{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"P{acells.Last().End.Row}"].Value = Sum;
+                    }
+                    count = GetSumInstances(instances4, new List<string>() { "Решение оставлено без изменения", "отказ" }, 2, out Sum);
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = Sum;
+                    }
+                    decimal Sum1 = 0;
+                    count = GetSumInstances(instances1, new List<string>() { "Прекращено" }, 3, out Sum);
+                    Sum1 = Sum1 + Sum;
+                    count = count + GetSumInstances(instances2, new List<string>() { "Прекращено" }, 3, out Sum);
+                    Sum1 = Sum1 + Sum;
+                    count = count + GetSumInstances(instances3, new List<string>() { "Прекращено" }, 3, out Sum);
+                    Sum1 = Sum1 + Sum;
+                    count = count + GetSumInstances(instances4, new List<string>() { "Прекращено" }, 3, out Sum);
+                    Sum1 = Sum1 + Sum;
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"AE{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"AF{acells.Last().End.Row}"].Value = Sum1;
+                    }
+                    Sum1 = 0;
+                    count = GetSumInstances(instances1, new List<string>() { "Оставлено" }, 4, out Sum);
+                    Sum1 = Sum1 + Sum;
+                    count = count + GetSumInstances(instances2, new List<string>() { "Оставлено без движения" }, 4, out Sum);
+                    Sum1 = Sum1 + Sum;
+                    count = count + GetSumInstances(instances3, new List<string>() { "Оставлено без движения" }, 4, out Sum);
+                    Sum1 = Sum1 + Sum;
+                    count = count + GetSumInstances(instances4, new List<string>() { "Оставлено без движения" }, 4, out Sum);
+                    Sum1 = Sum1 + Sum;
+                    if (count > 0)
+                    {
+                        worksheet.Cells[$"AE{acells.Last().End.Row}"].Value = count;
+                        worksheet.Cells[$"AF{acells.Last().End.Row}"].Value = Sum1;
+                    }
+
+                }
             }
             return package;
         }
         private async Task<ExcelPackage> createExcelPackage0(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             var template = GetFileTemplateName(category);
-            if (template==null) return null;
-            
+            if (template == null) return null;
+
             ExcelPackage package = new ExcelPackage(template, true);
             package.Workbook.Properties.Title = "Salary Report";
             package.Workbook.Properties.Author = User.Identity.Name;

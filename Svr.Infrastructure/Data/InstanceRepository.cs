@@ -22,7 +22,7 @@ namespace Svr.Infrastructure.Data
         }
         public virtual IQueryable<Instance> ListReport()
         {
-            return Entities.Include(d => d.Claim).ThenInclude(c=>c.SubjectClaim).ThenInclude(s=>s.GroupClaim);
+            return Entities.Include(d => d.Claim).ThenInclude(c=>c.SubjectClaim).ThenInclude(s=>s.GroupClaim).Include(cd =>cd.CourtDecision);
         }
         public virtual async Task<Instance> GetByIdWithItemsAsync(long? id)
         {
