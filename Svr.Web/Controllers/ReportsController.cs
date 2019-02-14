@@ -41,8 +41,8 @@ namespace Svr.Web.Controllers
         private const string fileDownloadName = "report.xlsx";
         private const string reportsFolder = "Reports";
         private const string templatesFolder = "Templates";
-        private const string fileTemplateNameOut = "0902.xlsx";//"Template1.xlsx";
-        private const string fileTemplateNameIn = "0901.xlsx";
+        private const string fileTemplateNameOut = "0901.xlsx";//"Template1.xlsx";
+        private const string fileTemplateNameIn = "0902.xlsx";
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<ClaimsController> logger;
         private readonly IRegionRepository regionRepository;
@@ -213,7 +213,7 @@ namespace Svr.Web.Controllers
             result = string.Concat(result, "0");
             return result;
         }
-        private FileInfo GetFileTemplateName(string category)
+        private async Task<FileInfo> GetFileTemplateName(string category)
         {
             string fileTemplateName;
             if (category.ToLong() == null)
@@ -221,10 +221,15 @@ namespace Svr.Web.Controllers
                 StatusMessage = $"Ошибка: Выберите категорию.";
                 return null;
             }
-            else if (category.ToLong() == 3)
+            else if ((await categoryDisputeRepository.GetByIdAsync(category.ToLong())).Name.ToUpper().Equals("Входящие".ToUpper()))
                 fileTemplateName = fileTemplateNameIn;
-            else
+            else if ((await categoryDisputeRepository.GetByIdAsync(category.ToLong())).Name.ToUpper().Equals("Исходящие".ToUpper()))
                 fileTemplateName = fileTemplateNameOut;
+            else
+            {
+                StatusMessage = $"Ошибка: Категория не определена.";
+                return null;
+            }
             FileInfo template = new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, templatesFolder, fileTemplateName));
             if (!template.Exists)
             {
@@ -281,7 +286,7 @@ namespace Svr.Web.Controllers
 
         private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
-            var template = GetFileTemplateName(category);
+            var template = await GetFileTemplateName(category);
             if (template == null) return null;
             ExcelPackage package = new ExcelPackage(template, true);
             package.Workbook.Properties.Author = User.Identity.Name;
