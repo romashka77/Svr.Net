@@ -461,83 +461,37 @@ namespace Svr.Infrastructure.Data
         {
             return new List<Dir>()
             {
-                new Dir {Name ="Оставлено без рассмотрения (абз. 2 ст. 222 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (абз. 3 ст. 222 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (абз. 4 ст. 222 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (абз. 5 ст. 222 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (абз. 7 ст. 222 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (абз. 8 ст. 222 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (п. 1 ст. 148 АПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (п. 2 ст. 148 АПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (п. 3 ст. 148 АПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (п. 4 ст. 148 АПК РФ)", DirName=dirName },
-                new Dir {Name="Оставлено без рассмотрения (п. 7 ст. 148 АПК РФ)", DirName=dirName },
+                new Dir {Name="Удовлетворено (частично)", DirName=dirName },
                 new Dir {Name="Отказано", DirName=dirName },
-                new Dir {Name="Прекращено (абз. 2 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз. 3 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз. 4 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз. 7 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (п. 2 ст. 150 АПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (п. 5 ст. 150 АПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (п. 6 ст. 150 АПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (п.1 ст. 150 АПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (п.4 ст. 150 АПК РФ)", DirName=dirName },
-                new Dir {Name="Удовлетворено", DirName=dirName },
-                new Dir {Name="Удовлетворено в части", DirName=dirName }
+                new Dir {Name="Прекращено", DirName=dirName },
+                new Dir {Name ="Оставлено без рассмотрения", DirName=dirName }
             };
         }
         private static IEnumerable<Dir> GetPreconfiguredDecision2()
         {
             return new List<Dir>()
             {
-                new Dir {Name="Возвращение апелляционной жалобы", DirName=dirName },
-                new Dir {Name="Оставлено без движения", DirName=dirName },
-                new Dir {Name="Прекращено (абз. 2 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз. 3 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз. 4 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз. 7 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (п. 1 ст. 265 АПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (п. 2 ст. 265 АПК РФ)", DirName=dirName },
-                new Dir {Name="Решение оставлено без изменения", DirName=dirName },
-                new Dir {Name="Решение отменено  - вынесено новое решение", DirName=dirName },
-                new Dir {Name="Решение отменено – направлено на новое рассмотрение", DirName=dirName },
-                new Dir {Name="Решение отменено в части", DirName=dirName }
+                new Dir {Name="Удовлетворено (частично)", DirName=dirName },
+                new Dir {Name="Отказано", DirName=dirName },
+                new Dir {Name="Прекращено", DirName=dirName }
             };
         }
         private static IEnumerable<Dir> GetPreconfiguredDecision3()
         {
             return new List<Dir>()
             {
-                new Dir {Name="Возвращение кассационной жалобы", DirName=dirName },
-                new Dir {Name="Оставлено без движения", DirName=dirName },
-                new Dir {Name="Прекращено (абз.2 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз.3 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз.4 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз.7 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (п.1 ст. 282 АПК РФ)", DirName=dirName },
-                new Dir {Name="Решение оставлено без изменения", DirName=dirName },
-                new Dir {Name="Решение отменено – вынесено новое решение", DirName=dirName },
-                new Dir {Name="Решение отменено – направлено на новое рассмотрение", DirName=dirName },
-                new Dir {Name="Решение отменено в части", DirName=dirName }
+                new Dir {Name="Удовлетворено (частично)", DirName=dirName },
+                new Dir {Name="Отказано", DirName=dirName },
+                new Dir {Name="Прекращено", DirName=dirName }
             };
         }
         private static IEnumerable<Dir> GetPreconfiguredDecision4()
         {
             return new List<Dir>()
             {
-                new Dir {Name="Возвращение надзорной жалобы", DirName=dirName },
-                new Dir {Name="Оставлено без движения", DirName=dirName },
-                new Dir {Name="Отказ в передаче дела в Президиум ВАС РФ", DirName=dirName },
-                new Dir {Name="Отказано в истребовании", DirName=dirName },
-                new Dir {Name="Отказано в передаче для рассмотрения по существу", DirName=dirName },
-                new Dir {Name="Прекращено (абз.2 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз.3 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз.4 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Прекращено (абз.7 ст. 220 ГПК РФ)", DirName=dirName },
-                new Dir {Name="Решение оставлено без изменения", DirName=dirName },
-                new Dir {Name="Решение отменено – вынесено новое решение", DirName=dirName },
-                new Dir {Name="Решение отменено – направлено на новое рассмотрение", DirName=dirName },
-                new Dir {Name="Решение отменено в части", DirName=dirName }
+                new Dir {Name="Удовлетворено (частично)", DirName=dirName },
+                new Dir {Name="Отказано", DirName=dirName },
+                new Dir {Name="Прекращено", DirName=dirName }
             };
         }
         private static IEnumerable<Dir> GetPreconfiguredOPF()

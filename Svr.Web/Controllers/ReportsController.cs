@@ -41,8 +41,8 @@ namespace Svr.Web.Controllers
         private const string fileDownloadName = "report.xlsx";
         private const string reportsFolder = "Reports";
         private const string templatesFolder = "Templates";
-        private const string fileTemplateNameOut = "0901.xlsx";//"Template1.xlsx";
-        private const string fileTemplateNameIn = "0902.xlsx";
+        private const string fileTemplateNameOut = "0902.xlsx";//"Template1.xlsx";
+        private const string fileTemplateNameIn = "0901.xlsx";
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<ClaimsController> logger;
         private readonly IRegionRepository regionRepository;
@@ -156,6 +156,14 @@ namespace Svr.Web.Controllers
 
         public async Task<IActionResult> InMemoryReport(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
+            if (String.IsNullOrEmpty(owner))
+            {
+                if (String.IsNullOrEmpty(lord))
+                {
+                    ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
+                    owner = user.DistrictId.ToString();
+                }
+            }
             byte[] reportBytes;
             using (var package = await createExcelPackage(lord, owner, dateS, datePo, category))
             {
@@ -180,16 +188,17 @@ namespace Svr.Web.Controllers
                 }
             }
             var path = await GetPath(lord.ToLong(), owner.ToLong());
+            //byte[] reportBytes;
             using (var package = await createExcelPackage(lord, owner, dateS, datePo, category))
             {
                 if (package == null)
                 {
                     return RedirectToAction(nameof(Index));
                 }
-
+                //reportBytes = package.GetAsByteArray();
                 package.SaveAs(new FileInfo(Path.Combine(path, GetFileName(dateS, datePo))));
             }
-            return File(path, XlsxContentType, GetFileName(dateS, datePo));
+            return File(/*path*//*reportBytes*/Path.Combine(path, GetFileName(dateS, datePo)), XlsxContentType, GetFileName(dateS, datePo));
         }
         private string ListSum(ExcelWorksheet worksheet, List<int> items, int c)
         {
@@ -224,36 +233,45 @@ namespace Svr.Web.Controllers
             }
             return template;
         }
-        private int GetSumInstances(List<Instance> instances, List<string> str, byte type, out decimal sum)
+        private int GetSumInstances(List<Instance> instances, out int countSatisfied, out decimal sumSatisfied, out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo, out decimal sumNo)
         {
             int result = 0;
-            sum = 0;
+            countSatisfied = 0;
+            sumSatisfied = 0;
+            countDenied = 0;
+            sumDenied = 0;
+            countEnd = 0;
+            sumEnd = 0;
+            countNo = 0;
+            sumNo = 0;
             foreach (var item in instances)
             {
-                bool flg = false;
                 if (item.CourtDecision != null)
-                    foreach (var f in str)
-                    {
-                        flg = flg || item.CourtDecision.Name.ToUpper().Contains(f.ToUpper());
-                        if (flg) break;
-                    }
-                if (flg)
                 {
                     result++;
-                    switch (type)
+                    if (item.CourtDecision.Name.ToUpper().Equals("Удовлетворено (частично)".ToUpper()))
                     {
-                        case 1:
-                            sum = sum + (decimal)item.SumSatisfied;
-                            break;
-                        case 2:
-                            sum = sum + (decimal)item.SumDenied;
-                            break;
-                        case 3:
-                            sum = sum + (decimal)item.PaidVoluntarily;
-                            break;
-                        case 4:
-                            sum = sum + (decimal)item.PaidVoluntarily;
-                            break;
+                        countSatisfied++;
+                        sumSatisfied = sumSatisfied + (item?.SumSatisfied ?? 0);
+                        sumDenied = sumDenied + (item?.SumDenied ?? 0);
+                    }
+                    else
+                    if (item.CourtDecision.Name.ToUpper().Equals("Отказано".ToUpper()))
+                    {
+                        countDenied++;
+                        sumDenied = sumDenied + (item?.SumDenied ?? 0);
+                    }
+                    else
+                    if (item.CourtDecision.Name.ToUpper().Equals("Прекращено".ToUpper()))
+                    {
+                        countEnd++;
+                        sumEnd = sumEnd + (item?.Claim?.Sum ?? 0);
+                    }
+                    else
+                    if (item.CourtDecision.Name.ToUpper().Equals("Оставлено без рассмотрения".ToUpper()))
+                    {
+                        countNo++;
+                        sumNo = sumNo + (item?.Claim?.Sum ?? 0);
                     }
                 }
             }
@@ -289,7 +307,6 @@ namespace Svr.Web.Controllers
                     var count = await claims.CountAsync();
                     if (count > 0)
                     {
-
                         worksheet.Cells[$"C{acells.Last().End.Row}"].Value = count;
                         var sum = await claims.SumAsync(c => c.Sum);
                         if (sum != null)
@@ -298,6 +315,10 @@ namespace Svr.Web.Controllers
                         }
                     }
                     var instances = instanceRepository.ListReport().Where(i => i.Claim.SubjectClaimId == subjectClaim.Id);
+                    if (owner != null)
+                    {
+                        instances = instances.Where(i => i.Claim.DistrictId == owner.ToLong());
+                    }
                     if (dateS != null)
                     {
                         instances = instances.Where(c => c.DateCourtDecision >= dateS);
@@ -306,247 +327,95 @@ namespace Svr.Web.Controllers
                     {
                         instances = instances.Where(c => c.DateCourtDecision <= datePo);
                     }
-                    decimal Sum;
+                    int countSatisfied = 0;
+                    decimal sumSatisfied = 0;
+                    int countDenied = 0;
+                    decimal sumDenied = 0;
+                    int countEnd = 0;
+                    decimal sumEnd = 0;
+                    int countNo = 0;
+                    decimal sumNo = 0;
+                    int countEnd0 = 0;
+                    decimal sumEnd0 = 0;
+                    int countNo0 = 0;
+                    decimal sumNo0 = 0;
                     var instances1 = await instances.Where(i => i.Number == 1).AsNoTracking().ToListAsync();
-                    count = GetSumInstances(instances1, new List<string>() { "Удовлетворено" }, 1, out Sum);
-                    if (count > 0)
+                    if (instances1.Count > 0)
                     {
-                        worksheet.Cells[$"I{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"J{acells.Last().End.Row}"].Value = Sum;
+                        count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo);
+                        if (count > 0)
+                        {
+                            worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countSatisfied;
+                            worksheet.Cells[$"J{acells.Last().End.Row}"].Value = sumSatisfied;
+                            worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countDenied;
+                            worksheet.Cells[$"V{acells.Last().End.Row}"].Value = sumDenied;
+                            countEnd0 = countEnd0 + countEnd;
+                            sumEnd0 = sumEnd0 + sumEnd;
+                            countNo0 = countNo0 + countNo;
+                            sumNo0 = sumNo0 + sumNo;
+                        }
                     }
-                    count = GetSumInstances(instances1, new List<string>() { "отказано" }, 2, out Sum);
-                    if (count > 0)
-                    {
-                        worksheet.Cells[$"U{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"V{acells.Last().End.Row}"].Value = Sum;
-                    }
-
                     var instances2 = await instances.Where(i => i.Number == 2).AsNoTracking().ToListAsync();
-                    count = GetSumInstances(instances2, new List<string>() { "Решение отменено" }, 1, out Sum);
-                    if (count > 0)
+                    if (instances2.Count > 0)
                     {
-                        worksheet.Cells[$"K{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"L{acells.Last().End.Row}"].Value = Sum;
+                        count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo);
+                        if (count > 0)
+                        {
+                            worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countSatisfied;
+                            worksheet.Cells[$"L{acells.Last().End.Row}"].Value = sumSatisfied;
+                            worksheet.Cells[$"W{acells.Last().End.Row}"].Value = countDenied;
+                            worksheet.Cells[$"X{acells.Last().End.Row}"].Value = sumDenied;
+                            countEnd0 = countEnd0 + countEnd;
+                            sumEnd0 = sumEnd0 + sumEnd;
+                            countNo0 = countNo0 + countNo;
+                            sumNo0 = sumNo0 + sumNo;
+                        }
                     }
-                    count = GetSumInstances(instances2, new List<string>() { "Решение оставлено без изменения", "Возвращение апелляционной жалобы" }, 2, out Sum);
-                    if (count > 0)
-                    {
-                        worksheet.Cells[$"W{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"X{acells.Last().End.Row}"].Value = Sum;
-                    }
-
                     var instances3 = await instances.Where(i => i.Number == 3).AsNoTracking().ToListAsync();
-                    count = GetSumInstances(instances3, new List<string>() { "Решение отменено" }, 1, out Sum);
-                    if (count > 0)
+                    if (instances3.Count > 0)
                     {
-                        worksheet.Cells[$"M{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"N{acells.Last().End.Row}"].Value = Sum;
+                        count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo);
+                        if (count > 0)
+                        {
+                            worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countSatisfied;
+                            worksheet.Cells[$"N{acells.Last().End.Row}"].Value = sumSatisfied;
+                            worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = countDenied;
+                            worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = sumDenied;
+                            countEnd0 = countEnd0 + countEnd;
+                            sumEnd0 = sumEnd0 + sumEnd;
+                            countNo0 = countNo0 + countNo;
+                            sumNo0 = sumNo0 + sumNo;
+                        }
                     }
-                    count = GetSumInstances(instances3, new List<string>() { "Решение оставлено без изменения", "Возвращение кассационной жалобы" }, 2, out Sum);
-                    if (count > 0)
-                    {
-                        worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"X{acells.Last().End.Row}"].Value = Sum;
-                    }
-
                     var instances4 = await instances.Where(i => i.Number == 4).AsNoTracking().ToListAsync();
-                    count = GetSumInstances(instances4, new List<string>() { "Решение отменено" }, 1, out Sum);
-                    if (count > 0)
+                    if (instances4.Count > 0)
                     {
-                        worksheet.Cells[$"O{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"P{acells.Last().End.Row}"].Value = Sum;
+                        count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo);
+                        if (count > 0)
+                        {
+                            worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countSatisfied;
+                            worksheet.Cells[$"P{acells.Last().End.Row}"].Value = sumSatisfied;
+                            worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = countDenied;
+                            worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = sumDenied;
+                            countEnd0 = countEnd0 + countEnd;
+                            sumEnd0 = sumEnd0 + sumEnd;
+                            countNo0 = countNo0 + countNo;
+                            sumNo0 = sumNo0 + sumNo;
+                        }
                     }
-                    count = GetSumInstances(instances4, new List<string>() { "Решение оставлено без изменения", "отказ" }, 2, out Sum);
-                    if (count > 0)
+                    if (countEnd0 > 0)
                     {
-                        worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = Sum;
+                        worksheet.Cells[$"AE{acells.Last().End.Row}"].Value = countEnd0;
+                        worksheet.Cells[$"AF{acells.Last().End.Row}"].Value = sumEnd0;
                     }
-                    decimal Sum1 = 0;
-                    count = GetSumInstances(instances1, new List<string>() { "Прекращено" }, 3, out Sum);
-                    Sum1 = Sum1 + Sum;
-                    count = count + GetSumInstances(instances2, new List<string>() { "Прекращено" }, 3, out Sum);
-                    Sum1 = Sum1 + Sum;
-                    count = count + GetSumInstances(instances3, new List<string>() { "Прекращено" }, 3, out Sum);
-                    Sum1 = Sum1 + Sum;
-                    count = count + GetSumInstances(instances4, new List<string>() { "Прекращено" }, 3, out Sum);
-                    Sum1 = Sum1 + Sum;
-                    if (count > 0)
+                    if (countNo0 > 0)
                     {
-                        worksheet.Cells[$"AE{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"AF{acells.Last().End.Row}"].Value = Sum1;
-                    }
-                    Sum1 = 0;
-                    count = GetSumInstances(instances1, new List<string>() { "Оставлено" }, 4, out Sum);
-                    Sum1 = Sum1 + Sum;
-                    count = count + GetSumInstances(instances2, new List<string>() { "Оставлено без движения" }, 4, out Sum);
-                    Sum1 = Sum1 + Sum;
-                    count = count + GetSumInstances(instances3, new List<string>() { "Оставлено без движения" }, 4, out Sum);
-                    Sum1 = Sum1 + Sum;
-                    count = count + GetSumInstances(instances4, new List<string>() { "Оставлено без движения" }, 4, out Sum);
-                    Sum1 = Sum1 + Sum;
-                    if (count > 0)
-                    {
-                        worksheet.Cells[$"AE{acells.Last().End.Row}"].Value = count;
-                        worksheet.Cells[$"AF{acells.Last().End.Row}"].Value = Sum1;
+                        worksheet.Cells[$"AG{acells.Last().End.Row}"].Value = countNo0;
+                        worksheet.Cells[$"AH{acells.Last().End.Row}"].Value = sumNo0;
                     }
 
                 }
             }
-            return package;
-        }
-        private async Task<ExcelPackage> createExcelPackage0(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
-        {
-            var template = GetFileTemplateName(category);
-            if (template == null) return null;
-
-            ExcelPackage package = new ExcelPackage(template, true);
-            package.Workbook.Properties.Title = "Salary Report";
-            package.Workbook.Properties.Author = User.Identity.Name;
-            package.Workbook.Properties.Subject = "Salary Report";
-            package.Workbook.Properties.Keywords = "Salary";
-
-            //var worksheet = package.Workbook.Worksheets.Add("Employee");
-            var worksheet = package.Workbook.Worksheets.FirstOrDefault();
-            Font font10 = new Font("Times New Roman", 10);
-            Font font8 = new Font("Times New Roman", 8);
-            var numberformat = "#,##0.00";
-            //var dataCellStyleName = "TableNumber";
-            //var numStyle = package.Workbook.Styles.CreateNamedStyle(dataCellStyleName);
-            //numStyle.Style.Numberformat.Format = numberformat;
-
-            worksheet.Cells[2, 4].Style.Numberformat.Format = numberformat;
-            CodeComparer codeComparer = new CodeComparer();
-            //Regex regex = new Regex(@"[0-9]*[0-9]\.");
-
-            int i = 14;//срока
-            int j = 1;//столбец
-            int start = i;
-            int s = 0;
-
-            bool flg = true;
-            List<int> list0 = new List<int>();
-            List<int> list1 = new List<int>();
-
-            list0.Add(i);//"Споры, рассмотренные в арбитражных судах";
-            worksheet.Cells[$"B{list0.Last()}"].Value = "Споры, рассмотренные в арбитражных судах";
-            worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[$"A{i}:AI{i}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ff6600"));
-            i++;
-
-            var groupClaims = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
-            foreach (var groupClaim in groupClaims)
-            {
-                list1.Add(i); //1
-                worksheet.Cells[i, j].Value = groupClaim.Code;//A15
-                worksheet.Cells[i, j + 1].Value = groupClaim.Name;
-                worksheet.Cells[worksheet.Cells[i, 1].Address + ":" + worksheet.Cells[i, 35].Address].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells[worksheet.Cells[i, 1].Address + ":" + worksheet.Cells[i, 35].Address].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#2fcdcd"));
-                i++;
-                s++;
-                var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code, codeComparer);
-
-                foreach (var subjectClaim in subjectClaims)
-                {
-                    worksheet.Cells[i, 1].Value = subjectClaim.Code;
-                    worksheet.Cells[i, 2].Value = subjectClaim.Name;
-                    var claims = claimRepository.List(new ClaimSpecificationRepost(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
-                    if (dateS != null)
-                    {
-                        claims = claims.Where(c => c.DateReg >= dateS);
-                    }
-                    if (datePo != null)
-                    {
-                        claims = claims.Where(c => c.DateReg <= datePo);
-                    }
-                    worksheet.Cells[i, 3].Value = await claims.CountAsync();
-                    worksheet.Cells[i, 4].Value = await claims.SumAsync(c => c.Sum);
-                    worksheet.Cells[i, 4].Value = worksheet.Cells[i, 4].Value ?? 0;
-                    worksheet.Cells[i, 4].Style.Numberformat.Format = numberformat;
-                    worksheet.Cells[i, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[i, 3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                    worksheet.Cells[i, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[i, 4].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                    i++;
-                    s++;
-                }
-                worksheet.Cells[list1.Last(), 3].Formula = $"=SUM(" + worksheet.Cells[list1.Last() + 1, 3].Address + ":" + worksheet.Cells[i - 1, 3].Address + ")";
-                worksheet.Cells[list1.Last(), 4].Formula = $"=SUM(" + worksheet.Cells[list1.Last() + 1, 4].Address + ":" + worksheet.Cells[i - 1, 4].Address + ")";
-                worksheet.Cells[list1.Last(), 4].Style.Numberformat.Format = numberformat;
-                if ((list1.Count == 7) && (flg))
-                {
-                    flg = false;
-                    worksheet.Cells[list0.Last(), 3].Formula = ListSum(worksheet, list1, 3);
-                    worksheet.Cells[list0.Last(), 4].Formula = ListSum(worksheet, list1, 4);
-                    worksheet.Cells[list0.Last(), 4].Style.Numberformat.Format = numberformat;
-
-                    list1.Clear();
-                    list0.Add(i);
-                    worksheet.Cells[list0.Last(), 2].Value = "Споры, рассмотренные в судах общей юрисдикции";
-                    worksheet.Cells[worksheet.Cells[i, 1].Address + ":" + worksheet.Cells[i, 35].Address].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    worksheet.Cells[worksheet.Cells[i, 1].Address + ":" + worksheet.Cells[i, 35].Address].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ff6600"));
-                    i++; s++;
-                }
-
-            }
-            worksheet.Cells[list0.Last(), 3].Formula = ListSum(worksheet, list1, 3);
-            worksheet.Cells[list0.Last(), 4].Formula = ListSum(worksheet, list1, 4);
-            worksheet.Cells[list0.Last(), 4].Style.Numberformat.Format = numberformat;
-
-
-            worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 1].Address].Style.Font.SetFromFont(font10);
-            worksheet.Cells[worksheet.Cells[start, 2].Address + ":" + worksheet.Cells[start + s, 2].Address].Style.Font.SetFromFont(font8);
-            worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 35].Address].Style.WrapText = true;
-
-            worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 35].Address].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells[worksheet.Cells[start, 1].Address + ":" + worksheet.Cells[start + s, 35].Address].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-
-            //First add the headers
-            //worksheet.Cells[1, 1].Value = "ID";
-            //worksheet.Cells[1, 2].Value = "Name";
-            //worksheet.Cells[1, 3].Value = "Gender";
-            //worksheet.Cells[1, 4].Value = "Salary (in $)";
-
-            //Add values
-
-            //var numberformat = "#,##0";
-            //var dataCellStyleName = "TableNumber";
-            //var numStyle = package.Workbook.Styles.CreateNamedStyle(dataCellStyleName);
-            //numStyle.Style.Numberformat.Format = numberformat;
-
-            //worksheet.Cells[2, 1].Value = 1000;
-            //worksheet.Cells[2, 2].Value = "Jon";
-            //worksheet.Cells[2, 3].Value = "M";
-            //worksheet.Cells[2, 4].Value = 5000;
-            //worksheet.Cells[2, 4].Style.Numberformat.Format = numberformat;
-
-            //worksheet.Cells[3, 1].Value = 1001;
-            //worksheet.Cells[3, 2].Value = "Graham";
-            //worksheet.Cells[3, 3].Value = "M";
-            //worksheet.Cells[3, 4].Value = 10000;
-            //worksheet.Cells[3, 4].Style.Numberformat.Format = numberformat;
-
-            //worksheet.Cells[4, 1].Value = 1002;
-            //worksheet.Cells[4, 2].Value = "Jenny";
-            //worksheet.Cells[4, 3].Value = "F";
-            //worksheet.Cells[4, 4].Value = 5000;
-            //worksheet.Cells[4, 4].Style.Numberformat.Format = numberformat;
-
-            // Add to table / Add summary row
-            //var tbl = worksheet.Tables.Add(new ExcelAddressBase(fromRow: 1, fromCol: 1, toRow: 4, toColumn: 4), "Data");
-            //tbl.ShowHeader = true;
-            //tbl.TableStyle = TableStyles.Dark9;
-            //tbl.ShowTotal = true;
-            //tbl.Columns[3].DataCellStyleName = dataCellStyleName;
-            //tbl.Columns[3].TotalsRowFunction = RowFunctions.Sum;
-            //worksheet.Cells[5, 4].Style.Numberformat.Format = numberformat;
-
-            //// AutoFitColumns
-            //worksheet.Cells[1, 1, 4, 4].AutoFitColumns();
-
-            //worksheet.HeaderFooter.OddFooter.InsertPicture(
-            //    new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, "images", "captcha.jpg")),
-            //    PictureAlignment.Right);
             return package;
         }
         private string GetFileName(DateTime? dateS, DateTime? datePo)

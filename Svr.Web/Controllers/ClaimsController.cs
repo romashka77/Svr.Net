@@ -157,12 +157,12 @@ namespace Svr.Web.Controllers
                 var item = await repository.AddAsync(new Claim { Code = $"{model.Id}-{DateTime.Now.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}", Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg });
                 if (item != null)
                 {
-                    
+
                     StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Edit), new { id = item.Id });
                 }
             }
-            ModelState.AddModelError(string.Empty, model.MessageAddError());
+            //ModelState.AddModelError(string.Empty, model.MessageAddError());
             ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
             ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
             return View(model);
@@ -178,7 +178,7 @@ namespace Svr.Web.Controllers
                 StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
-            var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId, DateReg = item.DateReg, DateIn = item.DateIn, CategoryDisputeId = item.CategoryDisputeId, GroupClaimId = item.GroupClaimId, SubjectClaimId = item.SubjectClaimId, СourtId = item.СourtId, PerformerId = item.PerformerId, Sum = item.Sum, PlaintiffId = item.PlaintiffId, RespondentId = item.RespondentId, Person3rdId = item.Person3rdId, Instances = item.Instances };
+            var model = new EditViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId, DateReg = item.DateReg, DateIn = item.DateIn, CategoryDisputeId = item.CategoryDisputeId, GroupClaimId = item.GroupClaimId, SubjectClaimId = item.SubjectClaimId, СourtId = item.СourtId, PerformerId = item.PerformerId, Sum = item.Sum, PlaintiffId = item.PlaintiffId, RespondentId = item.RespondentId, Person3rdId = item.Person3rdId};
             await SetViewBag(model);
             return View(model);
         }
@@ -187,7 +187,7 @@ namespace Svr.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ItemViewModel model)
+        public async Task<IActionResult> Edit(EditViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -196,7 +196,7 @@ namespace Svr.Web.Controllers
                     model.Code = $"{model.Id}-{model.CreatedOnUtc.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}";
                     if ((model.RegionId != 0) && (model.DistrictId != 0))
                     {
-                        await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId = model.RespondentId, Person3rdId = model.Person3rdId, Instances = model.Instances });
+                        await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId = model.RespondentId, Person3rdId = model.Person3rdId });
                         StatusMessage = model.MessageEditOk();
                     }
                     else { StatusMessage = $"Проверте заполнение полей"; }
@@ -214,6 +214,7 @@ namespace Svr.Web.Controllers
                 }
             }
             await SetViewBag(model);
+            model.StatusMessage = StatusMessage;
             return View(model);
         }
         #endregion
@@ -249,7 +250,7 @@ namespace Svr.Web.Controllers
             }
         }
         #endregion
-        private async Task SetViewBag(ItemViewModel model)
+        private async Task SetViewBag(EditViewModel model)
         {
             ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
             ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
@@ -272,9 +273,9 @@ namespace Svr.Web.Controllers
                 }
             }
             ViewBag.Performers = new SelectList(p, "Id", "Name", model.PerformerId);
-            ViewBag.Applicants = new SelectList((await applicantRepository.ListAsync(new ApplicantSpecification(null))).Select(a => new {Id=a.Id, Name=string.Concat(a.Name," ",a.Address)}), "Id", "Name", model.PlaintiffId);
+            ViewBag.Applicants = new SelectList((await applicantRepository.ListAsync(new ApplicantSpecification(null))).Select(a => new { Id = a.Id, Name = string.Concat(a.Name, " ", a.Address) }), "Id", "Name", model.PlaintiffId);
         }
 
-        
+
     }
 }

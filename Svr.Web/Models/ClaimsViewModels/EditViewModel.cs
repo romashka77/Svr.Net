@@ -1,22 +1,22 @@
-﻿using System;
+﻿using Svr.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Svr.Core.Entities
+namespace Svr.Web.Models.ClaimsViewModels
 {
     /// <summary>
     /// Иск
     /// </summary>
-    public class Claim : BaseEntity
+    public class EditViewModel : BaseEntity
     {
-        public long RegionId { get; set; }
         [Display(Name = "Регион")]
-        public virtual Region Region { get; set; }
+        public long RegionId { get; set; }
 
-        public long DistrictId { get; set; }
         [Display(Name = "Район")]
-        public virtual District District { get; set; }
+        public long DistrictId { get; set; }
 
         [MaxLength(100, ErrorMessage = ErrorStringMaxLength)]
         [Display(Name = "Рег.номер", Prompt = "Введите регистрационный номер")]
@@ -34,52 +34,41 @@ namespace Svr.Core.Entities
         [DataType(DataType.Date)]
         [Required(ErrorMessage = ErrorStringEmpty)]
         public DateTime DateReg { get; set; }
-        
+
         [Display(Name = "Дата принятия иска")]
         [DataType(DataType.Date)]
         public DateTime? DateIn { get; set; }
 
         [Display(Name = "Категория споров")]
+        [Required(ErrorMessage = ErrorStringEmpty)]
         public long? CategoryDisputeId { get; set; }
-        [Display(Name = "Категория споров")]
-        public virtual CategoryDispute CategoryDispute { get; set; }
-
+        
         [Display(Name = "Группа исков")]
+        [Required(ErrorMessage = ErrorStringEmpty)]
         public long? GroupClaimId { get; set; }
-        [Display(Name = "Группа исков")]
-        public virtual GroupClaim GroupClaim { get; set; }
-
+        
         [Display(Name = "Предмет иска")]
+        [Required(ErrorMessage = ErrorStringEmpty)]
         public long? SubjectClaimId { get; set; }
-        [Display(Name = "Предмет иска")]
-        public virtual SubjectClaim SubjectClaim { get; set; }
-
+        
         public long? СourtId { get; set; }
         [Display(Name = "Суд")]
         public virtual Dir Сourt { get; set; }
 
-        public long? PerformerId { get; set; }
         [Display(Name = "Исполнитель")]
-        public virtual Performer Performer { get; set; }
-
+        public long? PerformerId { get; set; }
+        
         [Display(Name = "Сумма иска")]
-        [Column(TypeName = "money")]
         public decimal? Sum { get; set; }
 
-        public long? PlaintiffId { get; set; }
         [Display(Name = "Истец")]
-        [ForeignKey("PlaintiffId")]
-        public Applicant Plaintiff { get; set; }
+        public long? PlaintiffId { get; set; }
 
-        public long? RespondentId { get; set; }
         [Display(Name = "Ответчик")]
-        [ForeignKey("RespondentId")]
-        public Applicant Respondent { get; set; }
+        public long? RespondentId { get; set; }
 
-        public long? Person3rdId { get; set; }
         [Display(Name = "3-е лицо")]
-        [ForeignKey("Person3rdId")]
-        public Applicant Person3rd { get; set; }
+        public long? Person3rdId { get; set; }
         //-----------
 
         [Display(Name = "Дата вступления в законную силу")]
@@ -89,30 +78,7 @@ namespace Svr.Core.Entities
         [Display(Name = "Итоговое решение суда")]
         public string FinalDecision { get; set; }
 
-        /// <summary>
-        /// Колекция инстанций
-        /// </summary>
-        [Display(Name = "Инстанции")]
-        public virtual ICollection<Instance> Instances { get; set; }
-        
-        /// <summary>
-        /// Колекция заседаний
-        /// </summary>
-        [Display(Name = "График заседаний")]
-        public virtual ICollection<Meeting> Meetings { get; set; }
-
-        /// <summary>
-        /// Колекция файлов
-        /// </summary>
-        [Display(Name = "Документы по иску")]
-        public virtual ICollection<FileEntity> FileEntities { get; set; }
-
         public override string ToString() => "Иск";
-        public Claim()
-        {
-            Instances = new List<Instance>();
-            Meetings = new List<Meeting>();
-            FileEntities = new List<FileEntity>();
-        }
+        public string StatusMessage { get; set; }
     }
 }
