@@ -200,19 +200,7 @@ namespace Svr.Web.Controllers
             }
             return File(/*path*//*reportBytes*/Path.Combine(path, GetFileName(dateS, datePo)), XlsxContentType, GetFileName(dateS, datePo));
         }
-        private string ListSum(ExcelWorksheet worksheet, List<int> items, int c)
-        {
-            //var result = "=SUM(";
-            var result = "=";
-            foreach (var item in items)
-            {
-                //result = string.Concat(result, worksheet.Cells[item, c].Address, ";");
-                result = string.Concat(result, worksheet.Cells[item, c].Address, "+");
-            }
-            //result = string.Concat(result, ")");
-            result = string.Concat(result, "0");
-            return result;
-        }
+
         private async Task<FileInfo> GetFileTemplateName(string category)
         {
             string fileTemplateName;
@@ -238,7 +226,7 @@ namespace Svr.Web.Controllers
             }
             return template;
         }
-        private int GetSumInstances(List<Instance> instances, out int countSatisfied, out decimal sumSatisfied, out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo, out decimal sumNo)
+        private int GetSumInstances(List<Instance> instances, out int countSatisfied, out decimal sumSatisfied, out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo, out decimal sumNo, ref int countDutySatisfied, ref decimal dutySatisfied)
         {
             int result = 0;
             countSatisfied = 0;
@@ -278,6 +266,11 @@ namespace Svr.Web.Controllers
                         countNo++;
                         sumNo = sumNo + (item?.Claim?.Sum ?? 0);
                     }
+                    if (item?.DutySatisfied != null && item.DutySatisfied > 0)
+                    {
+                        countDutySatisfied++;
+                        dutySatisfied = (item?.DutySatisfied ?? 0);
+                    }
                 }
             }
             return result;
@@ -293,6 +286,16 @@ namespace Svr.Web.Controllers
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
             //Группы споров
             var groupClaims = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
+
+            int countDutySatisfied1 = 0;
+            decimal dutySatisfied1 = 0;
+            int countDutySatisfied2 = 0;
+            decimal dutySatisfied2 = 0;
+            int countDutySatisfied3 = 0;
+            decimal dutySatisfied3 = 0;
+            int countDutySatisfied4 = 0;
+            decimal dutySatisfied4 = 0;
+
             foreach (var groupClaim in groupClaims)
             {
                 /// Предметы иска
@@ -332,24 +335,29 @@ namespace Svr.Web.Controllers
                     {
                         instances = instances.Where(c => c.DateCourtDecision <= datePo);
                     }
-                    int countSatisfied = 0;
-                    decimal sumSatisfied = 0;
-                    int countDenied = 0;
-                    decimal sumDenied = 0;
-                    int countEnd = 0;
-                    decimal sumEnd = 0;
-                    int countNo = 0;
-                    decimal sumNo = 0;
+
                     int countEnd0 = 0;
                     decimal sumEnd0 = 0;
                     int countNo0 = 0;
                     decimal sumNo0 = 0;
+
+                    //int countDutySatisfied = 0;
+                    //decimal dutySatisfied = 0;
+
                     var instances1 = await instances.Where(i => i.Number == 1).AsNoTracking().ToListAsync();
                     if (instances1.Count > 0)
                     {
-                        count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo);
-                        if (count > 0)
+                        count = GetSumInstances(instances1, out int countSatisfied, out decimal sumSatisfied, out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo, out decimal sumNo, ref countDutySatisfied1, ref dutySatisfied1);
+                        //if (count > 0)
                         {
+                            if (template.Name.Equals(fileTemplateNameIn)&& subjectClaim.Code.Equals("31"))
+                            {
+                                countSatisfied = countSatisfied + countDutySatisfied1;
+                                sumSatisfied = sumSatisfied + dutySatisfied1;
+                                countDutySatisfied1 = 0;
+                                dutySatisfied1 = 0;
+                            }
+
                             worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countSatisfied;
                             worksheet.Cells[$"J{acells.Last().End.Row}"].Value = sumSatisfied;
                             worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countDenied;
@@ -363,7 +371,7 @@ namespace Svr.Web.Controllers
                     var instances2 = await instances.Where(i => i.Number == 2).AsNoTracking().ToListAsync();
                     if (instances2.Count > 0)
                     {
-                        count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo);
+                        count = GetSumInstances(instances2, out int countSatisfied, out decimal sumSatisfied, out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo, out decimal sumNo, ref countDutySatisfied2, ref dutySatisfied2);
                         if (count > 0)
                         {
                             worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countSatisfied;
@@ -379,7 +387,7 @@ namespace Svr.Web.Controllers
                     var instances3 = await instances.Where(i => i.Number == 3).AsNoTracking().ToListAsync();
                     if (instances3.Count > 0)
                     {
-                        count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo);
+                        count = GetSumInstances(instances3, out int countSatisfied, out decimal sumSatisfied, out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo, out decimal sumNo, ref countDutySatisfied3, ref dutySatisfied3);
                         if (count > 0)
                         {
                             worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countSatisfied;
@@ -395,8 +403,9 @@ namespace Svr.Web.Controllers
                     var instances4 = await instances.Where(i => i.Number == 4).AsNoTracking().ToListAsync();
                     if (instances4.Count > 0)
                     {
-                        count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo);
+                        count = GetSumInstances(instances4, out int countSatisfied, out decimal sumSatisfied, out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo, out decimal sumNo, ref countDutySatisfied4, ref dutySatisfied4);
                         if (count > 0)
+
                         {
                             worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countSatisfied;
                             worksheet.Cells[$"P{acells.Last().End.Row}"].Value = sumSatisfied;
@@ -421,6 +430,11 @@ namespace Svr.Web.Controllers
 
                 }
             }
+
+
+
+
+
             return package;
         }
         private string GetFileName(DateTime? dateS, DateTime? datePo)
