@@ -178,7 +178,7 @@ namespace Svr.Web.Controllers
                 StatusMessage = id.ToString().ErrorFind();
                 return RedirectToAction(nameof(Index));
             }
-            var model = new EditViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId, DateReg = item.DateReg, DateIn = item.DateIn, CategoryDisputeId = item.CategoryDisputeId, GroupClaimId = item.GroupClaimId, SubjectClaimId = item.SubjectClaimId, СourtId = item.СourtId, PerformerId = item.PerformerId, Sum = item.Sum, PlaintiffId = item.PlaintiffId, RespondentId = item.RespondentId, Person3rdId = item.Person3rdId};
+            var model = new EditViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, RegionId = item.RegionId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, DistrictId = item.DistrictId, DateReg = item.DateReg, DateIn = item.DateIn, CategoryDisputeId = item.CategoryDisputeId, GroupClaimId = item.GroupClaimId, SubjectClaimId = item.SubjectClaimId, СourtId = item.СourtId, PerformerId = item.PerformerId, Sum = item.Sum, PlaintiffId = item.PlaintiffId, RespondentId = item.RespondentId, Person3rdId = item.Person3rdId };
             await SetViewBag(model);
             return View(model);
         }
@@ -252,15 +252,15 @@ namespace Svr.Web.Controllers
         #endregion
         private async Task SetViewBag(EditViewModel model)
         {
-            ViewBag.Regions = new SelectList(await regionRepository.ListAllAsync(), "Id", "Name", model.RegionId);
-            ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(model.RegionId)), "Id", "Name", model.DistrictId);
+            ViewBag.Regions = new SelectList((await regionRepository.ListAllAsync()).OrderBy(n => n.Name), "Id", "Name", model.RegionId);
+            ViewBag.Districts = new SelectList((await districtRepository.ListAsync(new DistrictSpecification(model.RegionId))).OrderBy(n => n.Name), "Id", "Name", model.DistrictId);
 
             ViewBag.CategoryDisputes = new SelectList(await categoryDisputeRepository.ListAllAsync(), "Id", "Name", model.CategoryDisputeId);
 
-            ViewBag.GroupClaims = new SelectList((await groupClaimRepository.ListAsync(new GroupClaimSpecification(model.CategoryDisputeId))).Select(i => new { Id = i.Id, Name = $"{i.Code} {i.Name}" }), "Id", "Name", model.GroupClaimId);
-            ViewBag.SubjectClaims = new SelectList((await subjectClaimRepository.ListAsync(new SubjectClaimSpecification(model.GroupClaimId))).Select(i => new { Id = i.Id, Name = $"{i.Code} {i.Name}" }), "Id", "Name", model.SubjectClaimId);
+            ViewBag.GroupClaims = new SelectList((await groupClaimRepository.ListAsync(new GroupClaimSpecification(model.CategoryDisputeId))).OrderBy(n => n.Code).Select(i => new { Id = i.Id, Name = $"{i.Code} {i.Name}" }), "Id", "Name", model.GroupClaimId);
+            ViewBag.SubjectClaims = new SelectList((await subjectClaimRepository.ListAsync(new SubjectClaimSpecification(model.GroupClaimId))).OrderBy(n => n.Code).Select(i => new { Id = i.Id, Name = $"{i.Code} {i.Name}" }), "Id", "Name", model.SubjectClaimId);
 
-            ViewBag.Сourts = new SelectList(await dirRepository.ListAsync(new DirSpecification("Суд")), "Id", "Name", model.СourtId);
+            ViewBag.Сourts = new SelectList((await dirRepository.ListAsync(new DirSpecification("Суд"))).OrderBy(n => n.Name), "Id", "Name", model.СourtId);
 
             var p = new List<Performer>();
             var district = await districtRepository.GetByIdWithItemsAsync(model.DistrictId);
@@ -272,8 +272,8 @@ namespace Svr.Web.Controllers
                     p.Add(dp.Performer);
                 }
             }
-            ViewBag.Performers = new SelectList(p, "Id", "Name", model.PerformerId);
-            ViewBag.Applicants = new SelectList((await applicantRepository.ListAsync(new ApplicantSpecification(null))).Select(a => new { Id = a.Id, Name = string.Concat(a.Name, " ", a.Address) }), "Id", "Name", model.PlaintiffId);
+            ViewBag.Performers = new SelectList(p.OrderBy(n => n.Name), "Id", "Name", model.PerformerId);
+            ViewBag.Applicants = new SelectList((await applicantRepository.ListAsync(new ApplicantSpecification(null))).OrderBy(n => n.Name).Select(a => new { Id = a.Id, Name = string.Concat(a.Name, " ", a.Address) }), "Id", "Name", model.PlaintiffId);
         }
 
 

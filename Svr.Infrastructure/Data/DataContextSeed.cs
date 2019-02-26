@@ -94,79 +94,79 @@ namespace Svr.Infrastructure.Data
             categoryDispute = new CategoryDispute { Name = "Исходящие", Description = "Исходящие документы" };
             await dataContext.CategoryDisputes.AddAsync(categoryDispute);
 
-            groupClaim = new GroupClaim { Name = "1", Description = "", Code = "1", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо)"), Description = "Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо)", Code = "1", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(1));
 
-            groupClaim = new GroupClaim { Name = "2", Description = "", Code = "2", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание финансовых санкций за непредставление в установленные сроки необходимых для осуществления индивидуального (персонифицированного) учета в системе обязательного пенсионного страхования сведений либо представление"), Description = "Взыскание финансовых санкций за непредставление в установленные сроки необходимых для осуществления индивидуального (персонифицированного) учета в системе обязательного пенсионного страхования сведений либо представление", Code = "2", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(2));
 
-            groupClaim = new GroupClaim { Name = "3", Description = "", Code = "3", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Дела о банкротстве (в т.ч. территориальный орган ПФР – заинтересованное лицо)"), Description = "Дела о банкротстве (в т.ч. территориальный орган ПФР – заинтересованное лицо)", Code = "3", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(3));
 
-            groupClaim = new GroupClaim { Name = "4", Description = "", Code = "4", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание излишне выплаченных сумм пенсий, дополнительного материального обеспечения, компенсационных и иных социальных выплат"), Description = "Взыскание излишне выплаченных сумм пенсий, дополнительного материального обеспечения, компенсационных и иных социальных выплат", Code = "4", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(4));
 
-            groupClaim = new GroupClaim { Name = "Взыскание по ДТП", Description = "", Code = "5", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо)"), Description = "Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо)", Code = "5", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(5));
 
-            groupClaim = new GroupClaim { Name = StrTrim("Споры, возникающие в рамках исполнительного производства"), Description = "", Code = "6", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Индивидуальные сведения и иная информация"), Description = "Индивидуальные сведения и иная информация", Code = "6", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(6));
 
-            groupClaim = new GroupClaim { Name = "Дела о банкротстве", Description = "", Code = "7", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание неправомерно полученной пенсии и иных социальных выплат"), Description = "Взыскание неправомерно полученной пенсии и иных социальных выплат", Code = "7", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(7));
 
-            groupClaim = new GroupClaim { Name = "8", Description = "", Code = "8", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Административные штрафы"), Description = "Административные штрафы", Code = "8", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(8));
 
-            groupClaim = new GroupClaim { Name = "9", Description = "", Code = "9", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание средств пенсионных накоплений в порядке регресса с правопреемников, которым выплачены средства пенсионных накоплений (п. 31 Правил, утвержденных постановлением Правительства Российской Федерации от 30.07.2014 № 711)"), Description = "Взыскание средств пенсионных накоплений в порядке регресса с правопреемников, которым выплачены средства пенсионных накоплений (п. 31 Правил, утвержденных постановлением Правительства Российской Федерации от 30.07.2014 № 711)", Code = "9", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(9));
 
-            groupClaim = new GroupClaim { Name = "10", Description = "", Code = "10", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация ФЗ от 29.12.2006 № 256-ФЗ «О дополнительных мерах государственной поддержки семей, имеющих детей»"), Description = "Реализация ФЗ от 29.12.2006 № 256-ФЗ «О дополнительных мерах государственной поддержки семей, имеющих детей»", Code = "10", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(10));
 
-            groupClaim = new GroupClaim { Name = "11", Description = "", Code = "11", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание незаконно полученных сумм пенсий и (или) иных социальных выплат в рамках рассмотрения уголовного дела"), Description = "Взыскание незаконно полученных сумм пенсий и (или) иных социальных выплат в рамках рассмотрения уголовного дела", Code = "11", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(11));
 
-            groupClaim = new GroupClaim { Name = "12", Description = "", Code = "12", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("О взыскании незаконно полученной компенсации стоимости проезда к месту отдыха и обратно"), Description = "О взыскании незаконно полученной компенсации стоимости проезда к месту отдыха и обратно", Code = "12", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(12));
 
-            groupClaim = new GroupClaim { Name = "13", Description = "", Code = "13", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»"), Description = "Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»", Code = "13", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(13));
 
-            groupClaim = new GroupClaim { Name = "14", Description = "", Code = "14", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»"), Description = "Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»", Code = "14", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(14));
 
-            groupClaim = new GroupClaim { Name = "15", Description = "", Code = "15", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»"), Description = "Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»", Code = "15", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(15));
 
-            groupClaim = new GroupClaim { Name = "16", Description = "", Code = "16", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой"), Description = "Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой", Code = "16", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(16));
 
-            groupClaim = new GroupClaim { Name = "17", Description = "", Code = "17", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Споры, связанные с финансово-хозяйственной деятельностью территориальных органов ПФР, а также споры, вытекающие из договоров (государственных контрактов)"), Description = "Споры, связанные с финансово-хозяйственной деятельностью территориальных органов ПФР, а также споры, вытекающие из договоров (государственных контрактов)", Code = "17", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(17));
 
-            groupClaim = new GroupClaim { Name = "18", Description = "", Code = "18", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Иные"), Description = "Иные", Code = "18", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(18));
 
-            groupClaim = new GroupClaim { Name = "19", Description = "", Code = "19", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Судебные расходы"), Description = "Судебные расходы", Code = "19", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(19));
 
@@ -177,125 +177,105 @@ namespace Svr.Infrastructure.Data
         {
             categoryDispute = new CategoryDispute { Name = "Входящие", Description = "Входящие документы" };
             await dataContext.CategoryDisputes.AddAsync(categoryDispute);
-            groupClaim = new GroupClaim { Name = "Административные штрафы, в т.ч.", Description = "", Code = "1", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо), из них"), Description = "Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо), из них", Code = "1", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(1));
 
-            groupClaim = new GroupClaim { Name = "Обжалования", Description = "", Code = "2", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Обжалование действий (бездействий), актов, решений территориальных органов ПФР"), Description = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР", Code = "2", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(2));
 
-            groupClaim = new GroupClaim { Name = "Name 3", Description = "", Code = "3", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Индивидуальные сведения и иная информация (ФЗ от 01.04.1996 № 27-ФЗ)"), Description = "Индивидуальные сведения и иная информация (ФЗ от 01.04.1996 № 27-ФЗ)", Code = "3", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(3));
 
-            groupClaim = new GroupClaim { Name = "Name 4", Description = "", Code = "4", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Дела о банкротстве"), Description = "Дела о банкротстве", Code = "4", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(4));
 
-            groupClaim = new GroupClaim { Name = "Взыскание по ДТП", Description = "", Code = "5", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках ФЗ  № 27-ФЗ"), Description = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках ФЗ  № 27-ФЗ", Code = "5", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(5));
 
-            groupClaim = new GroupClaim { Name = "Споры, возникающие в рамках исполнительного производства", Description = "", Code = "6", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо)"), Description = "Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо)", Code = "6", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(6));
 
-            groupClaim = new GroupClaim { Name = "Дела о банкротстве", Description = "", Code = "7", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Отношения, возникающие из договоров об обязательном пенсионном страховании (ФЗ от 07.05.1998 № 75-ФЗ)"), Description = "Отношения, возникающие из договоров об обязательном пенсионном страховании (ФЗ от 07.05.1998 № 75-ФЗ)", Code = "7", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(7));
 
-            groupClaim = new GroupClaim { Name = "Name 8", Description = "", Code = "8", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Компенсация расходов на оплату стоимости проезда пенсионерам, являющимся получателями страховых пенсий по старости и по инвалидности, к месту отдыха и обратно (ст. 34 Закона Российской Федерации № 4520-1)"), Description = "Компенсация расходов на оплату стоимости проезда пенсионерам, являющимся получателями страховых пенсий по старости и по инвалидности, к месту отдыха и обратно (ст. 34 Закона Российской Федерации № 4520-1)", Code = "8", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(8));
 
-            groupClaim = new GroupClaim { Name = "Name 9", Description = "", Code = "9", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("О взыскании расходов, связанных с выездом из районов Крайнего Севера и приравненных к ним местностей на новое место жительства (ст. 35 Закона Российской Федерации № 4520-1)"), Description = "О взыскании расходов, связанных с выездом из районов Крайнего Севера и приравненных к ним местностей на новое место жительства (ст. 35 Закона Российской Федерации № 4520-1)", Code = "9", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(9));
 
-            groupClaim = new GroupClaim { Name = "Name 10", Description = "", Code = "10", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Иски по назначению и выплате пенсий и иных социальных выплат"), Description = "Иски по назначению и выплате пенсий и иных социальных выплат", Code = "10", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(10));
 
-            groupClaim = new GroupClaim { Name = "Name 11", Description = "", Code = "11", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Споры, связанные с софинансированием средств пенсионных накоплений (ФЗ от 30.04.2008 № 56-ФЗ)"), Description = "Споры, связанные с софинансированием средств пенсионных накоплений (ФЗ от 30.04.2008 № 56-ФЗ)", Code = "11", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(11));
 
-            groupClaim = new GroupClaim { Name = "Name 12", Description = "", Code = "12", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация ФЗ от 29.12.2006 № 256-ФЗ «О дополнительных мерах государственной поддержки семей, имеющих детей»"), Description = "Реализация ФЗ от 29.12.2006 № 256-ФЗ «О дополнительных мерах государственной поддержки семей, имеющих детей»", Code = "12", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(12));
 
-            groupClaim = new GroupClaim { Name = "Name 13", Description = "", Code = "13", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»"), Description = "Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»", Code = "13", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(13));
 
-            groupClaim = new GroupClaim { Name = "Name 14", Description = "", Code = "14", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Споры по ФЗ от 15.12.2001 № 166-ФЗ  «О государственном пенсионном обеспечении в Российской Федерации»"), Description = "Споры по ФЗ от 15.12.2001 № 166-ФЗ  «О государственном пенсионном обеспечении в Российской Федерации»", Code = "14", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(14));
 
-            groupClaim = new GroupClaim { Name = "Name 15", Description = "", Code = "15", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Споры, возникающие по вопросам применения законодательства Российской Федерации о противодействии коррупции"), Description = "Споры, возникающие по вопросам применения законодательства Российской Федерации о противодействии коррупции", Code = "15", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(15));
 
-            groupClaim = new GroupClaim { Name = "Name 16", Description = "", Code = "16", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Об обжаловании решений, действий (бездействий) при оказании территориальными органами ПФР и их должностными лицами государственных услуг"), Description = "Об обжаловании решений, действий (бездействий) при оказании территориальными органами ПФР и их должностными лицами государственных услуг", Code = "16", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(16));
 
-            groupClaim = new GroupClaim { Name = "Name 17", Description = "", Code = "17", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Споры, связанные с осуществлением  территориальными органами ПФР мероприятий по реализации государственной программы Российской Федерации «Доступная среда»"), Description = "Споры, связанные с осуществлением  территориальными органами ПФР мероприятий по реализации государственной программы Российской Федерации «Доступная среда»", Code = "17", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(17));
 
-            groupClaim = new GroupClaim { Name = "Name 18", Description = "", Code = "18", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Споры, связанные с реализацией постановления Правительства Российской Федерации от 16.07.2016  № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»"), Description = "Споры, связанные с реализацией постановления Правительства Российской Федерации от 16.07.2016  № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»", Code = "18", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(18));
 
-            groupClaim = new GroupClaim { Name = "Name 19", Description = "", Code = "19", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Споры, связанные с реализацией постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»"), Description = "Споры, связанные с реализацией постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»", Code = "19", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(19));
 
-            groupClaim = new GroupClaim { Name = "Name 20", Description = "", Code = "20", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Трудовые споры"), Description = "Трудовые споры", Code = "20", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(20));
 
-            groupClaim = new GroupClaim { Name = "Name 21", Description = "", Code = "21", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Споры, связанные с финансово-хозяйственной деятельностью территориальных органов ПФР, а также споры, вытекающие из договоров (государственных контрактов)"), Description = "Споры, связанные с финансово-хозяйственной деятельностью территориальных органов ПФР, а также споры, вытекающие из договоров (государственных контрактов)", Code = "21", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(21));
 
-            groupClaim = new GroupClaim { Name = "Name 22", Description = "", Code = "22", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Иные"), Description = "Иные", Code = "22", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(22));
 
-            groupClaim = new GroupClaim { Name = "Name 23", Description = "", Code = "23", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("О взыскании средств пенсионных накоплений (накопительной  пенсии) правопреемниками умерших  застрахованных лиц ( восстановление срока для обращения за выплатой СПН)"), Description = "О взыскании средств пенсионных накоплений (накопительной  пенсии) правопреемниками умерших  застрахованных лиц ( восстановление срока для обращения за выплатой СПН)", Code = "23", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(23));
 
-            groupClaim = new GroupClaim { Name = "Name 24", Description = "", Code = "24", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Дела особого производства (территориальный органы ПФР - заинтересованные лица)"), Description = "Дела особого производства (территориальный органы ПФР - заинтересованные лица)", Code = "24", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(24));
 
-            groupClaim = new GroupClaim { Name = "Name 25", Description = "", Code = "25", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Судебные расходы"), Description = "Судебные расходы", Code = "25", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(25));
-
-            groupClaim = new GroupClaim { Name = "Name 26", Description = "", Code = "26", CategoryDispute = categoryDispute };
-            await dataContext.GroupClaims.AddAsync(groupClaim);
-            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(26));
-
-            groupClaim = new GroupClaim { Name = "Name 27", Description = "", Code = "27", CategoryDispute = categoryDispute };
-            await dataContext.GroupClaims.AddAsync(groupClaim);
-            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(27));
-
-            groupClaim = new GroupClaim { Name = "Name 28", Description = "", Code = "28", CategoryDispute = categoryDispute };
-            await dataContext.GroupClaims.AddAsync(groupClaim);
-            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(28));
-
-            groupClaim = new GroupClaim { Name = "Name 29", Description = "", Code = "29", CategoryDispute = categoryDispute };
-            await dataContext.GroupClaims.AddAsync(groupClaim);
-            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(29));
-
-            groupClaim = new GroupClaim { Name = "Name 31", Description = "", Code = "31", CategoryDispute = categoryDispute };
-            await dataContext.GroupClaims.AddAsync(groupClaim);
-            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsIn(31));
 
             return new List<CategoryDispute>() { categoryDispute };
         }
@@ -637,127 +617,105 @@ namespace Svr.Infrastructure.Data
                 case 1:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "1.1", Name = StrTrim("Взыскание недоимки по страховым взносам и пеней с организаций и индивидуальных предпринимателей (ч.4 ст.18, ч.5 ст.19)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.2", Name = StrTrim("Взыскание штрафа за непредставление в установленный срок расчета по начисленным и уплаченным страховым взносам (ч. 1 ст. 46 )"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.3", Name = StrTrim("Взыскание штрафа за несоблюдение порядка представления расчета по начисленным и уплаченным страховым взносам в орган контроля за уплатой страховых взносов в электронном виде (ч.2 ст.46 )"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.4", Name = StrTrim("Взыскание штрафа за неуплату сумм страховых взносов (занижение базы для начисления) (ч.1 ст.47 )"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.5", Name = StrTrim("Взыскание штрафа за неуплату сумм страховых взносов (занижение базы для начисления) (ч.2 ст.47 )"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.6", Name = StrTrim("Взыскание штрафа за отказ или непредставление в орган контроля за уплатой страховых взносов документов, необходимых для осуществления контроля за уплатой страховых взносов (ст.48)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.7", Name = StrTrim("О взыскании штрафа за несообщение банком сведений о счете плательщика страховых взносов (ст.49)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.8", Name = StrTrim("О взыскании штрафа за непредставление банком справок (выписок) по операциям и счетам в орган контроля за уплатой страховых взносов (ст. 49.1)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.9", Name = StrTrim("О взыскании штрафа за нарушение банком срока исполнения поручения о перечислении страховых взносов, пеней и штрафов (ст.50 )"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.10", Name = StrTrim("О взыскании штрафа за неисполнение банком поручения о перечислении страховых взносов, пеней и штрафов (ст. 51)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.11", Name = StrTrim("Взыскание страховых взносов с предприятий, признанных банкротами (о взыскании текущих платежей)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "1.12", Name = StrTrim("Иные вопросы по уплате страховых взносов"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "1.1", Name = StrTrim("О взыскании недоимки по страховым взносам,  пеней и штрафов с организаций и индивидуальных предпринимателей"), GroupClaim = groupClaim, Description = "О взыскании недоимки по страховым взносам,  пеней и штрафов с организаций и индивидуальных предпринимателей" }
                     };
                 case 2:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "2.1", Name = StrTrim("Взыскание финансовых санкций за непредставление в установленные сроки необходимых для осуществления индивидуального (персонифицированного) учета сведений"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "2.2", Name = StrTrim("Взыскание финансовых санкций за представление страхователем неполных и (или) недостоверных сведений"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "2.1", Name = StrTrim("О взыскании финансовых санкций за непредставление в установленные сроки сведений, необходимых для осуществления индивидуального (персонифицированного) учета (абз. 3 ст. 17 ФЗ № 27-ФЗ)"), GroupClaim = groupClaim, Description = "О взыскании финансовых санкций за непредставление в установленные сроки сведений, необходимых для осуществления индивидуального (персонифицированного) учета (абз. 3 ст. 17 ФЗ № 27-ФЗ)" },
+                        new SubjectClaim { Code = "2.2", Name = StrTrim("О взыскании финансовых санкций за представление страхователем неполных и (или) недостоверных сведений (абз. 3 ст. 17 ФЗ № 27-ФЗ)"), GroupClaim = groupClaim, Description = "О взыскании финансовых санкций за представление страхователем неполных и (или) недостоверных сведений (абз. 3 ст. 17 ФЗ № 27-ФЗ)" },
+                        new SubjectClaim { Code = "2.3", Name = StrTrim("О взыскании финансовых санкций за несоблюдение страхователем порядка представлений сведений для индивидуального (персонифицированного) учета в форме электронных документов (абз. 4 ст. 17 ФЗ № 27-ФЗ)"), GroupClaim = groupClaim, Description = "О взыскании финансовых санкций за несоблюдение страхователем порядка представлений сведений для индивидуального (персонифицированного) учета в форме электронных документов (абз. 4 ст. 17 ФЗ № 27-ФЗ)" }
                     };
                 case 3:
                     return new List<SubjectClaim>
-                    {   new SubjectClaim { Code = "3.1", Name = StrTrim("Взыскание штрафа за несвоевременную регистрацию в ПФР (абз. 1 п.1 ст.27)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "3.2", Name = StrTrim("Взыскание штрафа за несвоевременную регистрацию в ПФР (более 90 дней) (абз. 3 п.1 ст.27)"), GroupClaim = groupClaim, Description = "" }
+                    {   new SubjectClaim { Code = "3.1", Name = StrTrim("О включении в реестр требований кредиторов задолженности по страховым взносам, пеней и штрафов"), GroupClaim = groupClaim, Description = "О включении в реестр требований кредиторов задолженности по страховым взносам, пеней и штрафов" }
                     };
                 case 4:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "4.1", Name = StrTrim("О признании недействительными договоров (государственных контрактов) и применении последствий недействительности сделки"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "4.2", Name = StrTrim("Взыскание стоимости товара, работ или услуг по договору  (государственному контракту)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "4.3", Name = StrTrim("О взыскании долга и процентов за пользование чужими денежными средствами"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "4.4", Name = StrTrim("Об обмене некачественного или некомплектного товара"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "4.5", Name = StrTrim("О расторжении договора (государственного контракта) и взыскании неустойки, штрафа, пеней за неисполнение или ненадлежащее исполнение обязательств по договору"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "4.6", Name = StrTrim("Иные вопросы по договорным отношениям"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "4.1", Name = StrTrim("О взыскании ущерба с  работодателя в связи с представлением им неполных (или) недостоверных сведений, предусмотренных"), GroupClaim = groupClaim, Description = "О взыскании ущерба с  работодателя в связи с представлением им неполных (или) недостоверных сведений, предусмотренных" },
+                        new SubjectClaim { Code = "4.2", Name = StrTrim("О взыскании с кредитных организаций излишне перечисленных на счет пенсионеров после их смерти сумм пенсии, ЕДВ, ДМО, региональной социальной доплаты, иных выплат"), GroupClaim = groupClaim, Description = "О взыскании с кредитных организаций излишне перечисленных на счет пенсионеров после их смерти сумм пенсии, ЕДВ, ДМО, региональной социальной доплаты, иных выплат" },
+                        new SubjectClaim { Code = "4.3", Name = StrTrim("О взыскании с учреждения медико-социальной экспертизы ущерба, возникшего вследствие излишней выплаты пенсионеру пенсии, ЕДВ и других компенсационных выплат"), GroupClaim = groupClaim, Description = "О взыскании с учреждения медико-социальной экспертизы ущерба, возникшего вследствие излишней выплаты пенсионеру пенсии, ЕДВ и других компенсационных выплат" }
                     };
                 case 5:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "5.1", Name = StrTrim("Жалоба на действия (бездействия) арбитражного управляющего"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "5.2", Name = StrTrim("Об оспаривании сделок должника"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "5.3", Name = StrTrim("О включении в реестр требований кредиторов задолженности по страховым взносам, пеней и штрафов"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "5.4", Name = StrTrim("Об очередности удовлетворения требований кредиторов"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "5.5", Name = StrTrim("Иные споры по делам о банкротстве"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "5.1", Name = StrTrim("О взыскании недоимки по страховым взносам, пеней и штрафов с физического лица, утратившего статус индивидуального предпринимателя"), GroupClaim = groupClaim, Description = "О взыскании недоимки по страховым взносам, пеней и штрафов с физического лица, утратившего статус индивидуального предпринимателя" }
                     };
                 case 6:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "6", Name = StrTrim("Взыскание излишне выплаченных сумм пенсий, дополнительного материального обеспечения и компенсационных выплат с организации, представившей недостоверные сведения"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "6.1", Name = StrTrim("О взыскании финансовых санкций за непредставление в установленные сроки необходимых для осуществления индивидуального (персонифицированного) учета в системе обязательного пенсионного страхования сведений либо представление"), GroupClaim = groupClaim, Description = "О взыскании финансовых санкций за непредставление в установленные сроки необходимых для осуществления индивидуального (персонифицированного) учета в системе обязательного пенсионного страхования сведений либо представление" },
+                        new SubjectClaim { Code = "6.1.1", Name = StrTrim("О взыскании финансовых санкций за непредставление в установленные сроки сведений, необходимых для осуществления индивидуального (персонифицированного) учета (абз. 3 ст. 17 ФЗ № 27-ФЗ)"), GroupClaim = groupClaim, Description = "О взыскании финансовых санкций за непредставление в установленные сроки сведений, необходимых для осуществления индивидуального (персонифицированного) учета (абз. 3 ст. 17 ФЗ № 27-ФЗ)" },
+                        new SubjectClaim { Code = "6.1.2", Name = StrTrim("О взыскании финансовых санкций за представление страхователем неполных и (или) недостоверных сведений (абз. 3 ст. 17 ФЗ № 27-ФЗ)"), GroupClaim = groupClaim, Description = "О взыскании финансовых санкций за представление страхователем неполных и (или) недостоверных сведений (абз. 3 ст. 17 ФЗ № 27-ФЗ)" },
+                        new SubjectClaim { Code = "6.1.3", Name = StrTrim("О взыскании финансовых санкций за несоблюдение страхователем порядка представлений сведений для индивидуального (персонифицированного) учета в форме электронных документов (абз. 4 ст. 17 ФЗ № 27-ФЗ)"), GroupClaim = groupClaim, Description = "О взыскании финансовых санкций за несоблюдение страхователем порядка представлений сведений для индивидуального (персонифицированного) учета в форме электронных документов (абз. 4 ст. 17 ФЗ № 27-ФЗ)" },
+                        new SubjectClaim { Code = "6.2", Name = StrTrim("Об обязании представить индивидуальные сведения о застрахованных лицах"), GroupClaim = groupClaim, Description = "Об обязании представить индивидуальные сведения о застрахованных лицах" },
+                        new SubjectClaim { Code = "6.3", Name = StrTrim("О внесении изменений в индивидуальные сведения персонифицированного учета застрахованного лица"), GroupClaim = groupClaim, Description = "О внесении изменений в индивидуальные сведения персонифицированного учета застрахованного лица" }
                     };
                 case 7:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "7", Name = StrTrim("Исполнительное производство"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "7.1", Name = StrTrim("О взыскании излишне выплаченных сумм пенсий, ЕДВ, ДМО, федеральной социальной доплаты к пенсии и иных выплат"), GroupClaim = groupClaim, Description = "О взыскании излишне выплаченных сумм пенсий, ЕДВ, ДМО, федеральной социальной доплаты к пенсии и иных выплат" },
+                        new SubjectClaim { Code = "7.2", Name = StrTrim("О взыскании в регрессном порядке выплаченных сумм пенсии по инвалидности или по потере кормильца с лиц, виновных в причинении вреда здоровью или жизни кормильца"), GroupClaim = groupClaim, Description = "О взыскании в регрессном порядке выплаченных сумм пенсии по инвалидности или по потере кормильца с лиц, виновных в причинении вреда здоровью или жизни кормильца" }
                     };
                 case 8:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "8.1", Name = StrTrim("Взыскание недоимки по страховым взносам, пеней и штрафов за счет имущества плательщика страховых взносов - физического лица, не являющегося индивидуальным предпринимателем (ст. 21 )"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "8.2", Name = StrTrim("Взыскание недоимки по страховым взносам, а также пеней и штрафов с физического лица, утратившего статус индивидуального предпринимателя (ст.21)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "8.3", Name = StrTrim("Взыскание штрафа за непредставление в установленные сроки расчета по начисленным и уплаченным страховым взносам  (ч. 1 ст. 46 )"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "8.4", Name = StrTrim("Взыскание штрафа за отказ или непредставление в орган контроля за уплатой страховых взносов документов, необходимых для осуществления контроля за уплатой страховых взносов (ст.48)"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "8.1", Name = StrTrim("О взыскании штрафа за непредставление в установленный законодательством Российской Федерации срок либо отказ от представления, предоставление в неполном объеме или искаженном виде сведений, необходимых для ведения индивидуального"), GroupClaim = groupClaim, Description = "О взыскании штрафа за непредставление в установленный законодательством Российской Федерации срок либо отказ от представления, предоставление в неполном объеме или искаженном виде сведений, необходимых для ведения индивидуального" }
                         };
                 case 9:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "9.1", Name = StrTrim("Взыскание штрафа за несвоевременную регистрацию в ПФР (абз. 1 п.1 ст.27 )"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "9.2", Name = StrTrim("Взыскание штрафа за несвоевременную регистрацию в ПФР (более 90 дней) (абз. 2 п.1 ст.27 )"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "9", Name = StrTrim("Взыскание средств пенсионных накоплений в порядке регресса с правопреемников, которым выплачены средства пенсионных накоплений (п. 31 Правил, утвержденных постановлением Правительства Российской Федерации от 30.07.2014 № 711)"), GroupClaim = groupClaim, Description = "Взыскание средств пенсионных накоплений в порядке регресса с правопреемников, которым выплачены средства пенсионных накоплений (п. 31 Правил, утвержденных постановлением Правительства Российской Федерации от 30.07.2014 № 711)" }
                       };
                 case 10:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "10.1", Name = StrTrim("Взыскание штрафа за нарушение срока регистрации (ст.15.32 КоАП РФ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.2", Name = StrTrim("Взыскание штрафа за нарушение срока представления сведений об открытии (закрытии) счета (ч.1 ст. 15.33 КоАП РФ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.3", Name = StrTrim("Взыскание штрафа за нарушение установленных законодательством Российской Федерации сроков представления расчета по начисленным и уплаченным страховым взносам (ч.2 ст. 15.33 КоАП РФ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.4", Name = StrTrim("Взыскание финансовых санкций за представление сведений, необходимых для осуществления контроля (ч.3 ст. 15.33 КоАП РФ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.5", Name = StrTrim("Взыскание штрафа за нарушение срока исполнения поручения о перечислении страховых взносов (ч.2 ст.15.10 КоАП РФ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.6", Name = StrTrim("Взыскание штрафа за представление негосударственным пенсионным фондом в Пенсионный фонд Российской Федерации недостоверных сведений в уведомлении о вновь заключенных договорах об обязательном пенсионном страховании, а также подложных заявлений застрахованных лиц о выборе страховщика по обязательному пенсионному страхованию и (или) договоров об обязательном пенсионном страховании, повлекшее неправомерное перечисление негосударственному пенсионному фонду средств пенсионных накоплений (ч.10.1 ст.15.29 КоАП РФ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.7", Name = StrTrim("Взыскание штрафа за повторное в течение года совершение административного правонарушения, предусмотренного частью 10.1 статьи 15.29 КоАП РФ (ч.10.2 ст.15.29 КоАП РФ)"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "10.1", Name = StrTrim("О признании государственного сертификата на материнский (семейный) капитал недействительным"), GroupClaim = groupClaim, Description = "О признании государственного сертификата на материнский (семейный) капитал недействительным" },
+                        new SubjectClaim { Code = "10.2", Name = StrTrim("О взыскании средств материнского (семейного) капитала"), GroupClaim = groupClaim, Description = "О взыскании средств материнского (семейного) капитала" },
+                        new SubjectClaim { Code = "10.3", Name = StrTrim("Об исполнении обязательства оформить жилое помещение, приобретенное с использованием средств МСК в общую долевую собственность"), GroupClaim = groupClaim, Description = "Об исполнении обязательства оформить жилое помещение, приобретенное с использованием средств МСК в общую долевую собственность" }
                     };
                 case 11:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "11.1", Name = StrTrim("О внесении изменений в индивидуальные сведения персонифицированного учета застрахованного лица"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "11.2", Name = StrTrim("Об обязании представить индивидуальные сведения о застрахованных лицах, а также расчет по начисленным и уплаченным страховым взносам"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "11.1", Name = StrTrim("О взыскании  незаконно полученных средств материнского (семейного) капитала в рамках рассмотрения уголовного дела"), GroupClaim = groupClaim, Description = "О взыскании  незаконно полученных средств материнского (семейного) капитала в рамках рассмотрения уголовного дела" },
+                        new SubjectClaim { Code = "11.2", Name = StrTrim("О взыскании незаконно полученной пенсии по инвалидности"), GroupClaim = groupClaim, Description = "О взыскании незаконно полученной пенсии по инвалидности" }
                     };
                 case 12:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "12.1", Name = StrTrim("Взыскание излишне выплаченных сумм пенсии,ЕДВ, ДМО, региональной социальной доплаты , иных выплат"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "12.2", Name = StrTrim("Взыскание в регрессном порядке выплаченных сумм пенсии по инвалидности или по потере кормильца с лиц, виновных в причинении вреда здоровью или жизни кормильца"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "12.3", Name = StrTrim("Взыскание незаконно полученной компенсации стоимости проезда к месту отдыха и обратно"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "12.4", Name = StrTrim("Взыскание незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и (или) пенсий по государственному пенсионному обеспечению, и членам их семей"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "12.5", Name = StrTrim("Взыскание выплаченных сумм пенсии с виновного лица по искам прокуроров в интересах ПФР"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "12.1", Name = StrTrim("О взыскании незаконно полученной компенсации стоимости проезда к месту отдыха за пределами территории Российской Федерации"), GroupClaim = groupClaim, Description = "О взыскании незаконно полученной компенсации стоимости проезда к месту отдыха за пределами территории Российской Федерации" },
+                        new SubjectClaim { Code = "12.2", Name = StrTrim("О взыскании незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и (или) пенсий по государственному пенсионному"), GroupClaim = groupClaim, Description = "О взыскании незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и (или) пенсий по государственному пенсионному" }
                     };
                 case 13:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "13", Name = StrTrim("Взыскание средств пенсионных накоплений в порядке регресса (п. 31 Правил, утвержденных постановлением Правительства РФ от 30.07.2014 № 711)"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "13", Name = StrTrim("Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»"), GroupClaim = groupClaim, Description = "Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»" }
                     };
                 case 14:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "14", Name = StrTrim("Взыскание по ДТП"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "14", Name = StrTrim("Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»"), GroupClaim = groupClaim, Description = "Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»" }
                      };
                 case 15:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "15.1", Name = StrTrim("О признании государственного сертификата на материнский (семейный) капитал недействительным ( ПФР истец)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2", Name = StrTrim("О взыскании средств материнского (семейного) капитала (ПФР истец)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.3", Name = StrTrim("О взыскании незаконно полученных средств материнского (семейного) капитала в рамках рассмотрения уголовного дела (ПФР истец)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.4", Name = StrTrim("Об исполнении обязательства оформить жилое помещение, приобретенное с использованием средств МСК в общую долевую собственность ( ПФР третье лицо)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.5", Name = StrTrim("Иные"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "15", Name = StrTrim("Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»"), GroupClaim = groupClaim, Description = "Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»" }
                     };
                 case 16:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "16", Name = StrTrim("Взыскание незаконно полученных сумм пенсий  и (или) иных социальных выплат в рамках рассмотрения уголовного дела,"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "16", Name = StrTrim("Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой"), GroupClaim = groupClaim, Description = "Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой" }
                         };
                 case 17:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "17", Name = StrTrim("Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой страховых взносов, в т.ч. возмещении морального вреда (территориальный орган ПФР 3-е лицо )"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "17.1", Name = StrTrim("О расторжении договора (государственного контракта) в случае неисполнения или ненадлежащего исполнения поставщиком (подрядчиком, исполнителем) обязательств, предусмотренных государственным контрактом и (или) взыскании неустойки"), GroupClaim = groupClaim, Description = "О расторжении договора (государственного контракта) в случае неисполнения или ненадлежащего исполнения поставщиком (подрядчиком, исполнителем) обязательств, предусмотренных государственным контрактом и (или) взыскании неустойки" },
+                        new SubjectClaim { Code = "17.2", Name = StrTrim("О взыскании с поставщиков (подрядчиков, исполнителей) сумм неустоек (штрафов, пеней) в случае просрочки исполнения поставщиком (подрядчиком, исполнителем) обязательств (в том числе гарантийного обязательства), предусмотренных "), GroupClaim = groupClaim, Description = "О взыскании с поставщиков (подрядчиков, исполнителей) сумм неустоек (штрафов, пеней) в случае просрочки исполнения поставщиком (подрядчиком, исполнителем) обязательств (в том числе гарантийного обязательства), предусмотренных" },
+                        new SubjectClaim { Code = "17.3", Name = StrTrim("Об обмене некачественного или некомплектного товара, взыскании долга и процентов за пользование чужими денежными средствами"), GroupClaim = groupClaim, Description = "Об обмене некачественного или некомплектного товара, взыскании долга и процентов за пользование чужими денежными средствами" },
+                        new SubjectClaim { Code = "17.4", Name = StrTrim("О признании незаконными решений федерального органа исполнительной власти, уполномоченного на осуществление контроля в сфере закупок (ФАС России, территориальных органов ФАС России)"), GroupClaim = groupClaim, Description = "О признании незаконными решений федерального органа исполнительной власти, уполномоченного на осуществление контроля в сфере закупок (ФАС России, территориальных органов ФАС России)" },
+                        new SubjectClaim { Code = "17.5", Name = StrTrim("О взыскании по ДТП"), GroupClaim = groupClaim, Description = "О взыскании по ДТП" },
+                        new SubjectClaim { Code = "17.6", Name = StrTrim("О возмещении ущерба, причиненного работодателю"), GroupClaim = groupClaim, Description = "О возмещении ущерба, причиненного работодателю" }
                     };
                 case 18:
                     return new List<SubjectClaim>
@@ -783,294 +741,163 @@ namespace Svr.Infrastructure.Data
                 case 1:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = StrTrim("О признании обязанности по уплате страховых взносов исполненной"), Code = "1.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("О зачете (возврате) излишне уплаченных (взысканных) страховых взносов, пеней и штрафов"), Code = "1.2", GroupClaim = groupClaim, Description = "О признании обязанности по уплате страховых взносов исполненной" }
+                        new SubjectClaim { Name = StrTrim("О признании исполненной обязанности по уплате страховых взносов, подлежащих уплате за отчетные (расчетные)  периоды, истекшие до 01.01.2017"), Code = "1.1", GroupClaim = groupClaim, Description = "О признании исполненной обязанности по уплате страховых взносов, подлежащих уплате за отчетные (расчетные)  периоды, истекшие до 01.01.2017" },
+                        new SubjectClaim { Name = StrTrim("О зачете (возврате) излишне уплаченных (взысканных) страховых взносов, пеней и штрафов за отчетные (расчетные) периоды, истекшие до 01.01.2017"), Code = "1.2", GroupClaim = groupClaim, Description = "О зачете (возврате) излишне уплаченных (взысканных) страховых взносов, пеней и штрафов за отчетные (расчетные) периоды, истекшие до 01.01.2017" },
+                        new SubjectClaim { Name = StrTrim("О признании невозможной ко взысканию недоимки по уплате страховых взносов, пеней и штрафов по искам к налоговым органам"), Code = "1.3", GroupClaim = groupClaim, Description = "О признании невозможной ко взысканию недоимки по уплате страховых взносов, пеней и штрафов по искам к налоговым органам" }
                     };
                 case 2:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = StrTrim("О признании незаконным решения территориального органа ПФР о взыскании недоимки по страховым взносам, пеней  и штрафов"), Code = "2.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("О признании незаконным решения территориального органа ПФР о взыскании страховых взносов в фиксированных размерах"), Code = "2.2", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("Об обжаловании  решения территориального органа ПФР о привлечении к ответственности за нарушение законодательства об обязательном пенсионном страховании и законодательства о страховых взносах"), Code = "2.3", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("Об освобождении от уплаты страховых взносов на обязательное пенсионное и медицинское страхование в период   нахождения в отпуске по уходу за ребёнком до 1,5 лет."), Code = "2.4", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = StrTrim("О признании незаконным решения территориального органа ПФР о взыскании недоимки по страховым взносам, пеней и штрафов за отчетные (расчетные) периоды, истекшие до 01.01.2017"), Code = "2.1", GroupClaim = groupClaim, Description = "О признании незаконным решения территориального органа ПФР о взыскании недоимки по страховым взносам, пеней и штрафов за отчетные (расчетные) периоды, истекшие до 01.01.2017" },
+                        new SubjectClaim { Name = StrTrim("Об обжаловании  решения территориального органа ПФР о привлечении к ответственности за нарушение законодательства об обязательном пенсионном страховании и законодательства Российской Федерации о страховых взносах"), Code = "2.2", GroupClaim = groupClaim, Description = "Об обжаловании  решения территориального органа ПФР о привлечении к ответственности за нарушение законодательства об обязательном пенсионном страховании и законодательства Российской Федерации о страховых взносах" }
                     };
                 case 3:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = StrTrim("О внесении изменений в индивидуальные сведения персонифицированного учета застрахованного лица"), Code = "3.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("Иные споры, возникающие при реализации Федерального закона от  01.04.1996  № 27-ФЗ"), Code = "3.2", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = StrTrim("О внесении изменений в индивидуальные сведения персонифицированного учета застрахованного лица"), Code = "3.1", GroupClaim = groupClaim, Description = "О внесении изменений в индивидуальные сведения персонифицированного учета застрахованного лица" },
+                        new SubjectClaim { Name = StrTrim("Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках абз. 3 ст. 17 ФЗ № 27-ФЗ"), Code = "3.2", GroupClaim = groupClaim, Description = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках абз. 3 ст. 17 ФЗ № 27-ФЗ" },
+                        new SubjectClaim { Name = StrTrim("Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках абз. 4 ст. 17 ФЗ № 27-ФЗ"), Code = "3.3", GroupClaim = groupClaim, Description = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках абз. 4 ст. 17 ФЗ № 27-ФЗ" }
                     };
                 case 4:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = StrTrim("О признании недействительными договоров (гос.контрактов) и применении последствий недействительной сделки"), Code = "4.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("Взыскание стоимости товара, работ, услуг по договору (государственному контракту)"), Code = "4.2", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("О расторжении договора (гос.контракта) и взыскании неустойки, штрафа, пеней за неисполнение или ненадлежащее исполнение обязательств по договору"), Code = "4.3", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("Иные споры, возникающие из договоров (соглашений, государственных контрактов)"), Code = "4.4", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = StrTrim("Об оспаривании сделок"), Code = "4.1", GroupClaim = groupClaim, Description = "Об оспаривании сделок" }
                     };
                 case 5:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = StrTrim("Взыскание по ДТП"), Code = "5", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = StrTrim("Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках ФЗ  № 27-ФЗ"), Code = "5", GroupClaim = groupClaim, Description = "Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках ФЗ  № 27-ФЗ" }
                     };
                 case 6:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = StrTrim("Споры, возникающие в рамках исполнительного производства"), Code = "6", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = StrTrim("Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо)"), Code = "6", GroupClaim = groupClaim, Description = "Взыскание страховых взносов, пеней и штрафов (в т.ч. территориальный орган ПФР – третье лицо)" }
                     };
                 case 7:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = StrTrim("Дела о банкротстве"), Code = "7", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = StrTrim("О признании договора об обязательном пенсионном страховании недействительным и (или) внесении изменений в Единый реестр застрахованных лиц"), Code = "7.1", GroupClaim = groupClaim, Description = "О признании договора об обязательном пенсионном страховании недействительным и (или) внесении изменений в Единый реестр застрахованных лиц" },
+                        new SubjectClaim { Name = StrTrim("Споры по агентским договорам, заключенным с НПФ (территориальный орган ПФР – 3-е лицо)"), Code = "7.2", GroupClaim = groupClaim, Description = "Споры по агентским договорам, заключенным с НПФ (территориальный орган ПФР – 3-е лицо)" }
                     };
                 case 8:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Name = StrTrim("Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц в рамках ФЗ № 212-ФЗ"), Code = "8.1", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц  в рамках ФЗ № 167-ФЗ"), Code = "8.2", GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Name = StrTrim("Обжалование действий (бездействий), актов, решений территориальных органов ПФР и их должностных лиц  в рамках ФЗ № 27-ФЗ"), Code = "8.3", GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Name = StrTrim("О взыскании компенсации стоимости проезда к месту отдыха за пределы Российской Федерации"), Code = "8.1", GroupClaim = groupClaim, Description = "О взыскании компенсации стоимости проезда к месту отдыха за пределы Российской Федерации" }
                     };
                 case 9:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "9.1", Name = StrTrim("О признании обязанности по уплате страховых взносов исполненной"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "9.2", Name = StrTrim("О зачете(возврате) излишне уплаченных(взысканных) страховых взносов, пеней и штрафов"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "9", Name = StrTrim("О взыскании расходов, связанных с выездом из районов Крайнего Севера и приравненных к ним местностей на новое место жительства (ст. 35 Закона Российской Федерации № 4520-1)"), GroupClaim = groupClaim, Description = "О взыскании расходов, связанных с выездом из районов Крайнего Севера и приравненных к ним местностей на новое место жительства (ст. 35 Закона Российской Федерации № 4520-1)" }
                     };
                 case 10:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "10.1", Name = StrTrim("О восстановлении на работе и оплате за время вынужденного прогула"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.2", Name = StrTrim("О взыскании заработной платы"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.3", Name = StrTrim("Об оспаривании дисциплинарного взыскания"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.4", Name = StrTrim("О взыскании компенсации стоимости проезда к месту отдыха и обратно работников ПФР"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "10.5", Name = StrTrim("Иные споры, возникающие из трудовых отношений"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "10.1", Name = StrTrim("Индексация и валоризация  пенсий"), GroupClaim = groupClaim, Description = "Индексация и валоризация  пенсий" },
+                        new SubjectClaim { Code = "10.2.1", Name = StrTrim("Установление досрочных пенсий по ст. 30 ФЗ № 400-ФЗ, по п. 1 и 2 ч. 1 ст. 30"), GroupClaim = groupClaim, Description = "Установление досрочных пенсий по ст. 30 ФЗ № 400-ФЗ, по п. 1 и 2 ч. 1 ст. 30" },
+                        new SubjectClaim { Code = "10.2.2", Name = StrTrim("Установление досрочных пенсий по ст. 30 ФЗ № 400-ФЗ, по п. 19 и 20 ч. 1 ст. 30"), GroupClaim = groupClaim, Description = "Установление досрочных пенсий по ст. 30 ФЗ № 400-ФЗ, по п. 19 и 20 ч. 1 ст. 30" },
+                        new SubjectClaim { Code = "10.3.1", Name = StrTrim("Установление страховой пенсии, о праве на назначение пенсий (кроме ст. 30 ФЗ № 400-ФЗ)"), GroupClaim = groupClaim, Description = "Установление страховой пенсии, о праве на назначение пенсий (кроме ст. 30 ФЗ № 400-ФЗ)" },
+                        new SubjectClaim { Code = "10.3.2", Name = StrTrim("Установление страховой пенсии, об исчислении размера пенсии"), GroupClaim = groupClaim, Description = "Установление страховой пенсии, об исчислении размера пенсии" },
+                        new SubjectClaim { Code = "10.3.3", Name = StrTrim("Установление страховой пенсии, о сроках назначения пенсии"), GroupClaim = groupClaim, Description = "Установление страховой пенсии, о сроках назначения пенсии" },
+                        new SubjectClaim { Code = "10.4", Name = StrTrim("Выплата пенсии"), GroupClaim = groupClaim, Description = "Выплата пенсии" },
+                        new SubjectClaim { Code = "10.5", Name = StrTrim("Компенсационные и ежемесячные выплаты трудоспособному лицу, доплаты к пенсии и иные социальные выплаты"), GroupClaim = groupClaim, Description = "Компенсационные и ежемесячные выплаты трудоспособному лицу, доплаты к пенсии и иные социальные выплаты" },
+                        new SubjectClaim { Code = "10.6", Name = StrTrim("Иски об установлении, перерасчете и выплате федеральной социальной доплаты к пенсии"), GroupClaim = groupClaim, Description = "Иски об установлении, перерасчете и выплате федеральной социальной доплаты к пенсии" },
+                        new SubjectClaim { Code = "10.7", Name = StrTrim("Споры, связанные с выплатой накопительной пенсии"), GroupClaim = groupClaim, Description = "Споры, связанные с выплатой накопительной пенсии" }
+
                     };
                 case 11:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "11.1", Name = StrTrim("О признании договора об обязательном пенсионном страховании недействительным"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "11.2", Name = StrTrim("Споры по агентским договорам, заключенным с НПФ(территориальный орган ПФР – 3 - е лицо)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "11.3", Name = StrTrim("Иные споры, возникающие при реализации Федерального закона от 07.05.1998 № 75 - ФЗ"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "11", Name = StrTrim("Споры, связанные с софинансированием средств пенсионных накоплений (ФЗ от 30.04.2008 № 56-ФЗ)"), GroupClaim = groupClaim, Description = "Споры, связанные с софинансированием средств пенсионных накоплений (ФЗ от 30.04.2008 № 56-ФЗ)" }
                     };
                 case 12:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "12", Name = StrTrim("О признании права состоять на учёте в ПФР без присвоения страхового номера индивидуального лицевого счета"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "12.1", Name = StrTrim("Об обжаловании решения об отказе в выдаче государственного сертификата на материнский (семейный) капитал  (ч. 6 ст. 5 ФЗ № 256-ФЗ)"), GroupClaim = groupClaim, Description = "Об обжаловании решения об отказе в выдаче государственного сертификата на материнский (семейный) капитал  (ч. 6 ст. 5 ФЗ № 256-ФЗ)" },
+                        new SubjectClaim { Code = "12.2.1", Name = StrTrim("Об обжаловании решений об отказе в удовлетворении заявления о распоряжении  средствами (частью средств) материнского  (семейного) капитала  (ст. 10 ФЗ № 256-ФЗ)"), GroupClaim = groupClaim, Description = "Об обжаловании решений об отказе в удовлетворении заявления о распоряжении  средствами (частью средств) материнского  (семейного) капитала  (ст. 10 ФЗ № 256-ФЗ)" },
+                        new SubjectClaim { Code = "12.3", Name = StrTrim("О восстановлении права на дополнительные меры государственной  поддержки и зачислении средств материнского (семейного)  капитала на лицевой счет владельца государственного сертификата"), GroupClaim = groupClaim, Description = "О восстановлении права на дополнительные меры государственной  поддержки и зачислении средств материнского (семейного)  капитала на лицевой счет владельца государственного сертификата" }
                     };
                 case 13:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "13.1", Name = StrTrim("О взыскании стоимости проезда к месту отдыха и обратно"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "13.2", Name = StrTrim("О предоставлении проездных документов, обеспечивающих проезд пенсионера к месту отдыха и обратно"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "13", Name = StrTrim("Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»"), GroupClaim = groupClaim, Description = "Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»" }
                     };
                 case 14:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "14", Name = StrTrim("О взыскании расходов, связанных с выездом из районов Крайнего Севера и приравненных к ним местностей   на новое место жительства(ст. 35 Закона РФ № 4520 - 1)"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "14", Name = StrTrim("Споры по ФЗ от 15.12.2001 № 166-ФЗ  «О государственном пенсионном обеспечении в Российской Федерации»"), GroupClaim = groupClaim, Description = "Споры по ФЗ от 15.12.2001 № 166-ФЗ  «О государственном пенсионном обеспечении в Российской Федерации»" }
                     };
                 case 15:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "15.1", Name = StrTrim("Индексация и валоризация пенсий, в т.ч."), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.1", Name = StrTrim("О взыскании индексации(компенсации) несвоевременно назначенной пенсии и несвоевременно произведённого перерасчёта пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.2", Name = StrTrim("О взыскании индексации несвоевременно выплаченной пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.3", Name = StrTrim("О взыскании убытков, причиненных неправильным исчислением пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.4", Name = StrTrim("Спор о правильности индексации страховой пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.5", Name = StrTrim("Спор о  правильности валоризации величины расчетного пенсионного капитала застрахованного лица, исчисленного  при оценке его пенсионных прав"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.1.6", Name = StrTrim("Спор по  исчислению суммы расчетного пенсионного капитала застрахованного лица, с учетом которой исчисляется  размер страховой пенсии(страховой части  трудовой пенсии по старости)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2", Name = StrTrim("Специальный стаж(педагогический и медицинский состав), в т.ч."), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.1", Name = StrTrim("Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости педагогическим работникам,  периодов их работы в должностях и учреждениях, не предусмотренных соответствующими Списками"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.2", Name = StrTrim("Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости медицинским работникам,   периодов их работы в должностях и учреждениях, не предусмотренных соответствующими списками"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.3", Name = StrTrim("Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости педагогическим работникам,  периодов работы и иной деятельности(в т.ч.по ранее действующему законодательству)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.4", Name = StrTrim("Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости медицинским работникам,  периодов работы и иной деятельности(в т.ч.по ранее действующему законодательству)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.5", Name = StrTrim("Об отказе исчислить медицинский стаж при работе в сельской местности и(или) поселках городского типа(рабочих поселках)  в соотношении один год, как год и три месяца"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.6", Name = StrTrim("Об отказе исчислять стаж работы в должности хирурга, а также в иных должностях и учреждениях, предусмотренных в постановлении Правительства РФ от 29.10.2002 № 781, в соотношении один год, как год и шесть месяцев"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.2.7", Name = StrTrim("Об отказе исчислять периоды нахождения в командировках, на курсах повышения квалификации, в учебных отпусках, протекавших   в периоды работы в должностях и учреждениях, предусмотренных в постановлении Правительства РФ от 29.10.2002 № 781 и по ранее действующему законодательству РФ, в соотношении один год, как год и шесть месяцев"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.3.1", Name = StrTrim("Применение Списка №1 при назначении пенсии (пункт 1 части 1 статьи 30 ФЗ № 400-ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.3.2", Name = StrTrim("Применение Списка №2 при назначении пенсии(пункт 2 части 1 статьи 30 ФЗ № 400 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.4.1", Name = StrTrim("Назначение второй пенсии по ст. 29 Закона РФ № 1244 - 1"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.4.2", Name = StrTrim("О снижении пенсионного возраста на дополнительную величину по ст. 32 - 37 Закона РФ № 1244 - 1"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.4.3", Name = StrTrim("О снижении пенсионного возраста по п. 11 ст. 2  Закона РФ № 2 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.5", Name = StrTrim("Вторая пенсия, компенсационные и ежемесячные выплаты трудоспособному лицу, доплаты к пенсии, в т.ч."), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.5.1", Name = StrTrim("О праве на установление второй пенсии инвалидам военной травмы, УВОВ,ЖБЛ, родителям и вдовам военнослужащих"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.5.2", Name = StrTrim("О назначении, перерасчете пенсии участникам ВОВ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.5.3", Name = StrTrim("О взыскании сумм компенсационной и ежемесячной  выплаты неработающему трудоспособному лицу, осуществляющему   уход за нетрудоспособными гражданами"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.5.4", Name = StrTrim("О праве на одновременное получение двух пенсий, за исключением категорий, указанных в графе 15.5.1"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.5.5", Name = StrTrim("Споры о назначении, перерасчете и выплате доплаты к пенсии работникам угольной промышленности в соответствии с Федеральным законом от 10 мая 2010 № 84 - ФЗ О дополнительном социальном обеспечении отдельных категорий работников организаций угольной промышленности"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.5.6", Name = StrTrim("О ежемесячной и компенсационной выплате неработающему трудоспособному лицу"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.1", Name = StrTrim("О назначении страховой пенсии военным пенсионерам"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.2", Name = StrTrim("О подтверждении и исчислении среднемесячного заработка в целях оценки пенсионных прав"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.3", Name = StrTrim("О порядке исчисления, правил подсчета и порядке подтверждения страхового стажа в соответствии со статьями 13, 14 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.4", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 3 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.5", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 4 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.6", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 5 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.7", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 6 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.8", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 7 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.9", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 8 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.10", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 9 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.11", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 10 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.12", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 11 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.13", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 12 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.14", Name = StrTrim("О праве на досрочное назначение пенсии в соответствии с пунктом 1 части 1 статьи 32 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.15", Name = StrTrim("О праве на досрочное назначение пенсии женщинам, имеющим двух и более детей за работу в РКС / МКС в соответствии пунктом 2 части 1 статьи 32 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.16", Name = StrTrim("О праве на досрочное назначение пенсии инвалидам вследствие военной травмы в соответствии с пунктом 3 части 1 статьи 32   ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.17", Name = StrTrim("О праве на досрочное назначение пенсии инвалидам по зрению в соответствии с пунктом 4 части 1 статьи 32 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.18", Name = StrTrim("О праве на досрочное назначение пенсии лилипутам и карликам в соответствии с пунктом 5 части 1 статьи 32 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.19", Name = StrTrim("О праве на досрочное назначение пенсии за работу в РКС/ МКС в соответствии с пунктом 6 части 1 статьи 32 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.20", Name = StrTrim("О праве на досрочное назначение пенсии за работу спасателем МЧС в соответствии с пунктом 16 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.21", Name = StrTrim("О праве на досрочное назначение пенсии за работу с осужденными в соответствии с пунктом 17 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.22", Name = StrTrim("О праве на досрочное назначение пенсии за работу пожарным в соответствии с пунктом 18 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.23", Name = StrTrim("О праве на досрочное назначение пенсии работникам театров в соответствии с пунктом 21 части 1 статьи 30 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.24", Name = StrTrim("О льготном порядке исчисления страхового стажа на соответствующих видах работ с учетом РКС / МКС(в 2 - кратном и 1, 5 - кратном размере)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.25", Name = StrTrim("О праве на досрочное назначение пенсии оленеводам, рыбакам, охотникам - промысловикам в соответствии с пунктом 7 части 1 статьи 32 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.26", Name = StrTrim("Об исчислении  стажа(суммирование стажа на соответствующих видах работ и снижение возраста, дающего право   на страховую пенсию по старости, лицам, работавшим в районах Крайнего Севера и приравненных к ним местностях) часть 2 статьи 33 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.27", Name = StrTrim("О включении в стаж на соответствующих видах работ иных периодов, предусмотренных статьей 12 ФЗ № 400 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.28", Name = StrTrim("Об установлении и выплате пенсии по СПК"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.29", Name = StrTrim("О сроках назначения и  перерасчета пенсии в соответствии со статьями 22, 23 ФЗ № 400 - ФЗ, в том числе о назначении пенсии с момента первоначального обращения"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.30", Name = StrTrim("О конвертации пенсионных прав застрахованных лиц с применением стажа на соответствующих видах работ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.31", Name = StrTrim("О суммировании стажа работы, дающей право на досрочное назначение трудовой пенсии по старости в связи с особыми  условиями труда, предусмотренными абз.3 п.3 постановления Правительства РФ от 11.07.2002 г. № 516"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.32", Name = StrTrim("Об отказе включения в общий трудовой стаж в целях оценки пенсионных прав застрахованных лиц нестраховых периодов"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.33", Name = StrTrim("О применении районного коэффициента при конвертации пенсионных прав ЗЛ с учетом размера отношения заработков"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.34", Name = StrTrim("О конвертации пенсионных прав лиц, с применением общего трудового стажа"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.35", Name = StrTrim("Об отказе во включении в спец. стаж периодов нахождения в отпусках по уходу за ребенком"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.36", Name = StrTrim("О конвертации пенсионных прав с применением сниженных требований к стажевому коэффициенту"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.37", Name = StrTrim("Об установлении и выплате пенсии по инвалидности"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.38", Name = StrTrim("Об установленииповышения  фиксированной выплаты к страховой  пенсии по старости и к страховой пенсии по инвалидности в связи с работой в РКС и МПКС"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.39", Name = StrTrim("О назначении трудовой пенсии иностранному гражданину или лицу без гражданства, без вида на жительство"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.40", Name = StrTrim("О включении в общий трудовой стаж периодов работы во время ВОВ до достижения возраста 16 лет по свидетельским показаниям"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.41", Name = StrTrim("Об отказе включить в стаж, дающий право на досрочное назначение страховой пенсии по старости, периодов нахождения  в командировках, на курсах повышения квалификации, в учебных отпусках(в т.ч.по ранее действующему законодательству)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.42", Name = StrTrim("Перерасчет пенсии по документам, не предусмотренным пенсионным законодательством"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.43", Name = StrTrim("Об оспаривании удержаний из пенсий и других выплат"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.44", Name = StrTrim("Обжалование решения территориальных органов ПФР об отказе в назначении пенсии в связи с недостоверным(откорректированным) представлением сведений индивидуального(персонифицированного) учёта"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.45", Name = StrTrim("О включении в стаж на соответствующих видах работ периодов нахождения на военных сборах и донорские дни"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.46", Name = StrTrim("О назначении(перерасчете) пенсии в соответствии с нормами международных договоров(соглашений) о сотрудничестве в области пенсионного обеспечения"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.6.47", Name = StrTrim("Обжалование отказа произвести перерасчёт пенсии с учётом иждивенцев"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.1 ", Name = StrTrim("Об обжаловании решений о приостановлении выплаты пенсии по доверенности сроком действия более 1 года в случае не подтверждения пенсионером факта регистрации по месту получения пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.2", Name = StrTrim("О прекращении и восстановлении выплаты пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.3", Name = StrTrim("О приостановлении и возобновлении выплаты пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.4", Name = StrTrim("О выплате пенсии, неполученной пенсионером своевременно по вине пенсионера или территориального органа ПФР"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.5", Name = StrTrim("О выплате сумм пенсий, неполученных пенсионером в связи со смертью, а также о включении суммы неполученной   пенсии в наследственную массу"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.6", Name = StrTrim("О выплате пенсии гражданину, выехавшему на постоянное место жительства за пределы РФ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.7", Name = StrTrim("О выплате пособия на погребение"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.8", Name = StrTrim("О взыскании процентов с невыплаченной через кредитные организации пенсии"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.7.9", Name = StrTrim("О выплате сумм начисленной пенсии в полном размере"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.8.1", Name = StrTrim("Летный состав ГА(пункт 13 части 1 статьи 30 ФЗ № 400 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.8.2", Name = StrTrim("Управление полетами воздушных судов ГА(пункт 14 части 1 статьи 30 ФЗ № 400 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.8.3", Name = StrTrim("Инженерно - технический состав по обслуживанию воздушных судов ГА(пункт 15 части 1 статьи 30 ФЗ № 400 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.8.4", Name = StrTrim("Установление ежемесячной доплаты к пенсии ЧЛЭ(ФЗ № 155 - ФЗ от 27.11.2001)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.8.5", Name = StrTrim("О включении в стаж для назначения пенсии летно-испытательному составу периодов военной службы в должностях летного состава, работы в должностях летного состава гражданской авиации и обучения в учебных заведениях"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.8.6", Name = StrTrim("Об установлении страховой пенсии и пенсии за выслугу лет гражданам из числа работников летно-испытательного состава"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "15.9", Name = StrTrim("Иные споры об обжаловании решений территориальных органов ПФР об отказе в назначении(перерасчете) пенсии"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "15", Name = StrTrim("Споры, возникающие по вопросам применения законодательства Российской Федерации о противодействии коррупции"), GroupClaim = groupClaim, Description = "Споры, возникающие по вопросам применения законодательства Российской Федерации о противодействии коррупции"}
                     };
                 case 16:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "16", Name = StrTrim("Иски о назначении, перерасчете и выплате ЕДВ"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "16", Name = StrTrim("Об обжаловании решений, действий (бездействий) при оказании территориальными органами ПФР и их должностными лицами государственных услуг"), GroupClaim = groupClaim, Description = "Об обжаловании решений, действий (бездействий) при оказании территориальными органами ПФР и их должностными лицами государственных услуг" }
                     };
                 case 17:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "17.1", Name = StrTrim("Об обжаловании решения об отказе в выдаче государственного сертификата на материнский(семейный) капитал(ч. 6 ст. 5  ФЗ № 256 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "17.2", Name = StrTrim("Об обжаловании решения об отказе в удовлетворении заявления о распоряжении средствами(частью средств) материнского(семейного) капитала(ст. 10 ФЗ № 256 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "17.3", Name = StrTrim("Об обжаловании решения об отказе в удовлетворении заявления о распоряжении  средствами(частью средств) материнского(семейного) капитала(ст. 11 ФЗ № 256 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "17.4", Name = StrTrim("Об обжаловании решения об отказе в удовлетворении заявления о распоряжении  средствами(частью средств) материнского(семейного) капитала(ст. 11.1 ФЗ № 256 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "17.5", Name = StrTrim("Об обжаловании решения об отказе в удовлетворении заявления о распоряжении  средствами(частью средств) материнского(семейного) капитала(ст. 12  ФЗ № 256 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "17.6", Name = StrTrim("О восстановлении права на дополнительные меры государственной поддержки и зачислении средств материнского(семейного)  капитала на лицевой счет владельца государственного сертификата"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "17.7", Name = StrTrim("Иски прокурора в интересах Российской Федерации(территориальный орган ПФР – 3 - е лицо)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "17.8", Name = StrTrim("О предоставлении единовременной выплаты за счет средств материнского (семейного) капитала"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "17.9", Name = StrTrim("Иные споры, возникающие при реализации Федерального закона от 29.12.2006 г.№256 - ФЗ"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "17.1", Name = StrTrim("Иски органов прокуратуры, связанные с реализацией территориальными органами ПФР мероприятий по реализации государственной программы Российской Федерации «Доступная среда»"), GroupClaim = groupClaim, Description = "Иски органов прокуратуры, связанные с реализацией территориальными органами ПФР мероприятий по реализации государственной программы Российской Федерации «Доступная среда»" }
                     };
                 case 18:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "18.1", Name = StrTrim("О назначении дополнительного материального обеспечения в соответствии с Указом Президента РФ от 23.08.2000 № 1563 «О неотложных мерах социальной поддержки специалистов ядерного оружейного комплекса РФ»"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "18.2", Name = StrTrim("О назначении дополнительного ежемесячного материального обеспечения как вдове инвалида ВОВ, ДМО гражданам за выдающиеся достижения и особые заслуги перед РФ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "18.3", Name = StrTrim("Иные споры по дополнительному материальному обеспечению"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "18.4", Name = StrTrim("О порядке установления дополнительного материального обеспечения отдельным категориям граждан"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "18", Name = StrTrim("Споры, связанные с реализацией постановления Правительства Российской Федерации от 16.07.2016  № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»"), GroupClaim = groupClaim, Description = "Споры, связанные с реализацией постановления Правительства Российской Федерации от 16.07.2016  № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»" }
                     };
                 case 19:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "19.1", Name = StrTrim("По вопросам, связанным с назначением пенсий по инвалидности военнослужащим, проходившим военную службу по призыву в качестве солдат, матросов, сержантов и старшин, и пенсии по СПК членам их семей"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "19.2", Name = StrTrim("Об исчислении стажа государственной службы и среднемесячного заработка, из которого исчисляется размер пенсии федеральных государственных служащих"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "19.3", Name = StrTrim("Об установлении пенсии по государственному обеспечению граждан из числа космонавтов и членам их семей"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "19.4", Name = StrTrim("Иные споры, возникающие при реализации ФЗ № 166 - ФЗ"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "19.5", Name = StrTrim("По вопросам, связанным с назначением и выплатой социальной пенсии"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "19", Name = StrTrim("Споры, связанные с реализацией постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»"), GroupClaim = groupClaim, Description = "Споры, связанные с реализацией постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»" }
                     };
                 case 20:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "20", Name = StrTrim("Споры, возникающие в рамках исполнительного производства"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "20.1", Name = StrTrim("О восстановлении на работе и оплате за время вынужденного прогула"), GroupClaim = groupClaim, Description = "О восстановлении на работе и оплате за время вынужденного прогула" },
+                        new SubjectClaim { Code = "20.2", Name = StrTrim("О взыскании заработной платы"), GroupClaim = groupClaim, Description = "О взыскании заработной платы" },
+                        new SubjectClaim { Code = "20.3", Name = StrTrim("Об оспаривании дисциплинарного взыскания"), GroupClaim = groupClaim, Description = "Об оспаривании дисциплинарного взыскания" },
+                        new SubjectClaim { Code = "20.4", Name = StrTrim("О взыскании компенсации стоимости проезда к месту отдыха и обратно работников ПФР"), GroupClaim = groupClaim, Description = "О взыскании компенсации стоимости проезда к месту отдыха и обратно работников ПФР" },
+                        new SubjectClaim { Code = "20.5", Name = StrTrim("Об обжаловании увольнения по п. 1, 2 ст. 81 ТК Российской Федерации"), GroupClaim = groupClaim, Description = "Об обжаловании увольнения по п. 1, 2 ст. 81 ТК Российской Федерации" }
                     };
                 case 21:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "21", Name = StrTrim("Об обжаловании действий(бездействий), актов, решений территориальных органов ПФР по назначению, пересмотру  размера, выплате и доставке федеральной социальной доплаты к пенсии"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "21.1", Name = StrTrim("О признании торгов недействительными по иску заинтересованного лица и о применении последствий недействительности государственного контракта, заключенного по результатам таких торгов"), GroupClaim = groupClaim, Description = "О признании торгов недействительными по иску заинтересованного лица и о применении последствий недействительности государственного контракта, заключенного по результатам таких торгов" },
+                        new SubjectClaim { Code = "21.2", Name = StrTrim("О признании недействительными договоров (государственных контрактов) и применении последствий недействительной сделки"), GroupClaim = groupClaim, Description = "О признании недействительными договоров (государственных контрактов) и применении последствий недействительной сделки" },
+                        new SubjectClaim { Code = "21.3", Name = StrTrim("О расторжении договора (государственного контракта) и взыскании неустойки, штрафа, пеней за неисполнение или ненадлежащее исполнение обязательств по договору"), GroupClaim = groupClaim, Description = "О расторжении договора (государственного контракта) и взыскании неустойки, штрафа, пеней за неисполнение или ненадлежащее исполнение обязательств по договору" },
+                        new SubjectClaim { Code = "21.4", Name = StrTrim("О взыскании с заказчика сумм задолженности по оплате поставленного товара, выполненных работ, оказанных услуг по договору (государственному контракту)"), GroupClaim = groupClaim, Description = "О взыскании с заказчика сумм задолженности по оплате поставленного товара, выполненных работ, оказанных услуг по договору (государственному контракту)" },
+                        new SubjectClaim { Code = "21.5", Name = StrTrim("О взыскании с заказчика сумм неустоек (штрафов, пеней) в случае просрочки исполнения заказчиком обязательств, предусмотренных государственным контрактом, а также в иных случаях неисполнения или ненадлежащего исполнения заказчиком"), GroupClaim = groupClaim, Description = "О взыскании с заказчика сумм неустоек (штрафов, пеней) в случае просрочки исполнения заказчиком обязательств, предусмотренных государственным контрактом, а также в иных случаях неисполнения или ненадлежащего исполнения заказчиком" },
+                        new SubjectClaim { Code = "21.6", Name = StrTrim("О взыскании с заказчика процентов за пользование чужими денежными средствами, начисленных на сумму задолженности по государственному контракту, которая взыскана с ПФР на основании решения суда, вступившего в законную силу"), GroupClaim = groupClaim, Description = "О взыскании с заказчика процентов за пользование чужими денежными средствами, начисленных на сумму задолженности по государственному контракту, которая взыскана с ПФР на основании решения суда, вступившего в законную силу" },
+                        new SubjectClaim { Code = "21.7", Name = StrTrim("О взыскании неосновательного обогащения в связи с поставкой товара, выполнением работ, оказанием услуг в отсутствие государственного контракта"), GroupClaim = groupClaim, Description = "О взыскании неосновательного обогащения в связи с поставкой товара, выполнением работ, оказанием услуг в отсутствие государственного контракта" },
+                        new SubjectClaim { Code = "21.8", Name = StrTrim("О взыскании убытков (упущенной выгоды), причиненных незаконным отклонением заявки участника закупки"), GroupClaim = groupClaim, Description = "О взыскании убытков (упущенной выгоды), причиненных незаконным отклонением заявки участника закупки" },
+                        new SubjectClaim { Code = "21.9", Name = StrTrim("Взыскание по ДТП"), GroupClaim = groupClaim, Description = "Взыскание по ДТП" },
                     };
                 case 22:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "22", Name = StrTrim("Споры, связанные с выплатой накопительной  пенсии"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "22", Name = StrTrim("Иные"), GroupClaim = groupClaim, Description = "Иные" },
                     };
                 case 23:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "23", Name = StrTrim("Споры, связанные с софинансированием средств пенсионных накоплений"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "23", Name = StrTrim("О взыскании средств пенсионных накоплений (накопительной  пенсии) правопреемниками умерших  застрахованных лиц ( восстановление срока для обращения за выплатой СПН)"), GroupClaim = groupClaim, Description = "О взыскании средств пенсионных накоплений (накопительной  пенсии) правопреемниками умерших  застрахованных лиц ( восстановление срока для обращения за выплатой СПН)" },
                     };
                 case 24:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "24", Name = StrTrim("Споры, возникающие по вопросам применения законодательства РФ о противодействии коррупции"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "24.1", Name = StrTrim("О привлечении к административной ответственности по ст.19.7 КоАП РФ(непредставление, представление в неполном объеме  или в искаженном виде сведений о доходах, об имуществе и обязательствах имущественного характера)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "24.2", Name = StrTrim("О привлечении к административной ответственности по ст. 19.29 КоАП РФ(незаконное привлечение к трудовой деятельности либо к выполнению работ или оказанию услуг государственного или муниципального служащего либо бывшего государственного или муниципального служащего)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "24.3", Name = StrTrim("О привлечении к административной ответственности по ст. 17.7 КоАП РФ(невыполнение законных требований прокурора, следователя, дознавателя или должностного лица, осуществляющего производство по делу об административном правонарушении)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "24.4", Name = StrTrim("О расторжении трудового договора в связи с нарушением территориальным органом ПФР при трудоустройстве требований Федерального закона от 25.12.2008 № 273 - ФЗ О противодействии коррупции"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "24.5", Name = StrTrim("О возложении обязанности устранить нарушения законодательства о противодействии коррупции, признании незаконным заключения трудового договора и расторжении трудового договора"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "24.6", Name = StrTrim("О признании незаконными действий работников ПФР, осуществляющих предпринимательскую деятельность"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "24.7", Name = StrTrim("Об обязании представить работодателю сведения о доходах об имуществе, обязательствах имущественного характера, а также  о доходах, об  имуществе и обязательствах имущественного характера своей супруги и несовершеннолетнего ребенка(территориальный орган ПФР -3 - е лицо)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "24.8", Name = StrTrim("Иные споры, связанные с применением законодательства РФ о противодействии коррупции"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "24.1", Name = StrTrim("Установление фактов, имеющих юридическое значение (территориальный орган ПФР – заинтересованное лицо)"), GroupClaim = groupClaim, Description = "Установление фактов, имеющих юридическое значение (территориальный орган ПФР – заинтересованное лицо)" },
+                        new SubjectClaim { Code = "24.2", Name = StrTrim("Иные дела, рассматриваемые судом в порядке особого производства (территориальный орган ПФР – заинтересованное лицо)"), GroupClaim = groupClaim, Description = "Иные дела, рассматриваемые судом в порядке особого производства (территориальный орган ПФР – заинтересованное лицо)" }
                     };
                 case 25:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "25", Name = StrTrim("Иные споры по которым территориальные органы ПФР привлечены в качестве третьих лиц"), GroupClaim = groupClaim, Description = "" },
-                    };
-                case 26:
-                    return new List<SubjectClaim>
-                    {
-                        new SubjectClaim { Code = "26.1", Name = StrTrim("О нарушении срока регистрации запроса заявителя о предоставлении государственной услуги(п. 1 ст. 11.1 ФЗ № 210 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "26.2", Name = StrTrim("О нарушении срока предоставления государственной услуги(п. 2 ст. 11.1 ФЗ № 210 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "26.3", Name = StrTrim("О требовании у заявителя документов, не предусмотренных нормативными правовыми актами Российской Федерации, для предоставления государственной услуги(п. 3 ст. 11.1 ФЗ № 210 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "26.4", Name = StrTrim("Об отказе в приеме документов, предоставление которых предусмотрено нормативными правовыми актами Российской Федерации, для предоставления государственной услуги, у заявителя(п. 4 ст. 11.1 ФЗ № 210 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "26.5", Name = StrTrim("Об отказе в предоставлении государственной услуги, если основания отказа не предусмотрены федеральными законами   и принятыми в соответствии с ними иными нормативными правовыми актами Российской Федерации(п. 5 ст. 11.1 ФЗ № 210 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "26.6", Name = StrTrim("О затребовании с заявителя при предоставлении государственной услуги платы, не предусмотренной нормативными правовыми  актами Российской Федерации(п. 6 ст. 11.1 ФЗ № 210 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "26.7", Name = StrTrim("Об отказе в исправлении допущенных опечаток и ошибок в выданных в результате предоставления государственной услуги документах либо нарушение установленного срока таких исправлений(п. 7 ст. 11.1 ФЗ № 210 - ФЗ)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "26.8", Name = StrTrim("Иные споры, связанные с применением законодательства РФ о предоставлении государственных услуг"), GroupClaim = groupClaim, Description = "" },
-                    };
-                case 27:
-                    return new List<SubjectClaim>
-                    {
-                        new SubjectClaim { Code = "27", Name = StrTrim("Иные"), GroupClaim = groupClaim, Description = "" },
-                    };
-                case 28:
-                    return new List<SubjectClaim>
-                    {
-                        new SubjectClaim { Code = "28", Name = StrTrim("О взыскании средств пенсионных накоплений(накопительной  пенсии) правопреемниками умерших  застрахованных лиц(восстановление срока для обращение за выплатой СПН)"), GroupClaim = groupClaim, Description = "" },
-                    };
-                case 29:
-                    return new List<SubjectClaim>
-                    {
-                        new SubjectClaim { Code = "29", Name = StrTrim("Об установлении юридических фактов(территориальные органы ПФР -заинтересованные лица)"), GroupClaim = groupClaim, Description = "" },
-                    };
-                case 31:
-                    return new List<SubjectClaim>
-                    {
-                        new SubjectClaim { Code = "31", Name = StrTrim("Оплата госпошлины(арбитраж)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "31.1", Name = StrTrim("Оплата услуг представителя(арбитраж)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "31.2", Name = StrTrim("Иные судебные издержки(арбитраж)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "31.3", Name = StrTrim("Оплата госпошлины(общая юрисдикция)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "31.4", Name = StrTrim("Оплата услуг представителя(общая юрисдикция)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "31.5", Name = StrTrim("Иные судебные издержки(общая юрисдикция)"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "25.1", Name = StrTrim("Оплата госпошлины(арбитраж)"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "25.2", Name = StrTrim("Оплата услуг представителя(арбитраж)"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "25.3", Name = StrTrim("Иные судебные издержки(арбитраж)"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "25.4", Name = StrTrim("Оплата госпошлины(общая юрисдикция)"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "25.5", Name = StrTrim("Оплата услуг представителя(общая юрисдикция)"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "25.6", Name = StrTrim("Иные судебные издержки(общая юрисдикция)"), GroupClaim = groupClaim, Description = "" }
                     };
                 default:
                     return null;
