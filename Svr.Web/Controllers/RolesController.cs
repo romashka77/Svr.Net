@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +7,10 @@ using Svr.Core.Specifications;
 using Svr.Infrastructure.Identity;
 using Svr.Web.Models;
 using Svr.Web.Models.RoleViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
 {
@@ -37,6 +37,7 @@ namespace Svr.Web.Controllers
         }
         #endregion
 
+
         public IActionResult Index() => View(roleManager.Roles.ToList());
 
         [Authorize(Roles = "Администратор")]
@@ -62,7 +63,7 @@ namespace Svr.Web.Controllers
             }
             return View(name);
         }
-        
+
         [HttpPost]
         [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Delete(string id)
@@ -92,7 +93,7 @@ namespace Svr.Web.Controllers
                     UserEmail = user.Email,
                     UserRoles = userRoles,
                     AllRoles = allRoles,
-                    DistrictId= user.DistrictId
+                    DistrictId = user.DistrictId
                 };
                 ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(null)), "Id", "Name", model.DistrictId);
                 return View(model);
@@ -100,6 +101,21 @@ namespace Svr.Web.Controllers
 
             return NotFound();
         }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string userId)
+        {
+            ApplicationUser user = await userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                userManager.RemovePasswordAsync(user);
+                userManager.AddPasswordAsync(user, "123456789");
+                return RedirectToAction(nameof(UserList));
+            }
+            return NotFound();
+        }
+
+
+
         [HttpPost]
         public async Task<IActionResult> Edit(string userId, List<string> roles, long? districtId)
         {
@@ -123,7 +139,7 @@ namespace Svr.Web.Controllers
 
                 await userManager.RemoveFromRolesAsync(user, removedRoles);
 
-                return RedirectToAction("UserList");
+                return RedirectToAction(nameof(UserList));
             }
 
             return NotFound();
