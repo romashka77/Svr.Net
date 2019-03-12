@@ -98,17 +98,17 @@ namespace Svr.Web.Controllers
                 ViewBag.Districts = new SelectList(await districtRepository.ListAsync(new DistrictSpecification(null)), "Id", "Name", model.DistrictId);
                 return View(model);
             }
-
             return NotFound();
         }
-        [HttpPost]
+
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> ResetPassword(string userId)
         {
             ApplicationUser user = await userManager.FindByIdAsync(userId);
             if (user != null)
             {
-                userManager.RemovePasswordAsync(user);
-                userManager.AddPasswordAsync(user, "123456789");
+                await userManager.RemovePasswordAsync(user);
+                await userManager.AddPasswordAsync(user, "Test123456789");
                 return RedirectToAction(nameof(UserList));
             }
             return NotFound();
