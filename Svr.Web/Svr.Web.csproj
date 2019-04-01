@@ -21,10 +21,6 @@
     <None Remove="Entities\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="package.json0" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
