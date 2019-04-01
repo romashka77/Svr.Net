@@ -16,6 +16,13 @@ namespace Svr.Web.Controllers
             return View();
         }
 
+        public IActionResult Test()
+        {
+            ViewData["Message"] = "Test.";
+
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Страница описания сервиса.";
