@@ -2,6 +2,7 @@
 //https://medium.com/front-end-weekly/webpack-by-example-part-3-a4ceaaa6299a
 //https://www.youtube.com/watch?v=_GtHmFFxi_8&list=PL0lO_mIqDDFXaDvwLJ6aMnmIt7sdmujKp&index=6
 //https://monsterlessons.com/project/lessons/redux-js-vstuplenie
+//https://monsterlessons.com/project/lessons/reduxjs-combinereducers
 const path = require('path');
 const webpack = require('webpack');
 const TerserJSPlugin = require("terser-webpack-plugin");
@@ -16,7 +17,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
     context: path.resolve(__dirname, 'Source'),
     devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
-    mode: 'production',
+    //mode: devMode ? 'development' : 'production',
+    mode: 'development',
     entry: {
         claimlist: './claimlist',
         common: './common'
@@ -52,8 +54,9 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            'window.jQuery': 'jquery',
-            Popper: ['popper.js', 'default']
+            'window.jQuery': 'jquery'
+            //,
+            //Popper: ['popper.js', 'default']
         }),
         new webpack.HotModuleReplacementPlugin()
     ],
@@ -70,20 +73,13 @@ module.exports = {
                 test: /.(css|scss)$/,
                 use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"]
             },
-            //{
-            //    test: /\.css$/,
-            //    use: [
-            //        {
-            //            loader: MiniCssExtractPlugin.loader,
-            //            options: {
-            //                // you can specify a publicPath here
-            //                // by default it use publicPath in webpackOptions.output
-            //                publicPath: '/dist/'
-            //            }
-            //        },
-            //        'css-loader'
-            //    ]
-            //},
+            {
+                test: /\.hbs$/,
+                exclude: /(node_modules|bower_components)/,
+                use: [
+                    'handlebars-loder'
+                ]
+            },
             {
                 test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
                 use: [
