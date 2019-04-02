@@ -1,4 +1,4 @@
-﻿export default function () {
+﻿export default function ClaimsReducers() {
     return [
         {
             id: 1,

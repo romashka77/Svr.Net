@@ -1,6 +1,7 @@
 ﻿//https://codeburst.io/how-to-use-webpack-in-asp-net-core-projects-a-basic-react-template-sample-25a3681a5fc2
 //https://medium.com/front-end-weekly/webpack-by-example-part-3-a4ceaaa6299a
 //https://www.youtube.com/watch?v=_GtHmFFxi_8&list=PL0lO_mIqDDFXaDvwLJ6aMnmIt7sdmujKp&index=6
+//https://monsterlessons.com/project/lessons/redux-js-vstuplenie
 const path = require('path');
 const webpack = require('webpack');
 const TerserJSPlugin = require("terser-webpack-plugin");
