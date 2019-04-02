@@ -2,13 +2,13 @@
 import ReactDOM from "react-dom";
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-//import { allReducers } from './Reducers';
-import ClaimsReducers from './Reducers/claim';
+import reducer from './reducers';
+//import claimsReducers from './Reducers/claims';
 import WebPage from './Components/WebPage';
 
-//const store = createStore(allReducers);
 const store = createStore(
-    ClaimsReducers,
+    //claimsReducers,
+    reducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 

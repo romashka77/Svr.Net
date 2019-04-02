@@ -37,7 +37,7 @@ class ClaimsList extends Component {
 //}
 
 export default connect(
-    state => ({ claims: state }),
+    state => ({ claims: state.claims }),
     dispatch => ({
         onAddClaim: (claimId, claimName) => {
             dispatch({ type: 'ADD_CLAIM', claim: { id: claimId, name: claimName } })

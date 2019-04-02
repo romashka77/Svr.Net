@@ -14,14 +14,15 @@
 ];
 
 
-function ClaimsReducers(state = initialState, action) {
+export default function claims(state = initialState, action) {
     console.log(action);
     if (action.type === 'ADD_CLAIM') {
         return [
             ...state,
             action.claim
         ];
+    } else if (action.type === 'DELETE_CLAIM') {
+        return state;
     }
     return state;
 }
-export default ClaimsReducers;

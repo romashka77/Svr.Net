@@ -1,8 +1,8 @@
 ﻿import { combineReducers } from 'redux';
-import { ClaimsReducers } from './claim';
+import claims from './claims';
+import regions from './regions';
 
-const allReducers = combineReducers({
-    claims: ClaimsReducers
-});
-
-export default allReducers;
+export default  combineReducers({
+    claims,
+    regions
+})
