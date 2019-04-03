@@ -1,4 +1,4 @@
-var common =
+var textFirstUpperCase =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	function hotDisposeChunk(chunkId) {
 /******/ 		delete installedChunks[chunkId];
@@ -259,7 +259,7 @@ var common =
 /******/ 				};
 /******/ 			});
 /******/ 			hotUpdate = {};
-/******/ 			var chunkId = "common";
+/******/ 			var chunkId = "textFirstUpperCase";
 /******/ 			// eslint-disable-next-line no-lone-blocks
 /******/ 			{
 /******/ 				/*globals chunkId */
@@ -789,21 +789,26 @@ var common =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire("./common.js")(__webpack_require__.s = "./common.js");
+/******/ 	return hotCreateRequire("./textFirstUpperCase.js")(__webpack_require__.s = "./textFirstUpperCase.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./common.js":
-/*!*******************!*\
-  !*** ./common.js ***!
-  \*******************/
+/***/ "./textFirstUpperCase.js":
+/*!*******************************!*\
+  !*** ./textFirstUpperCase.js ***!
+  \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-
+//Первая заглавная, остальные строчные
+function textFirstUpperCase(text) {
+  if (text.value.length > 0) {
+    text.value = text.value.charAt(0).toUpperCase() + text.value.substr(1, text.value.length - 1).toLowerCase();
+  }
+}
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=common.js.map
+//# sourceMappingURL=textFirstUpperCase.js.map

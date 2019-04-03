@@ -21,6 +21,20 @@
     <None Remove="Entities\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Source\site.css" />
+    <None Remove="Source\site.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Source\site.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Source\site.min.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />

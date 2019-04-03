@@ -8,22 +8,23 @@ const webpack = require('webpack');
 const TerserJSPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-
 const devMode = process.env.NODE_ENV !== 'production';
 //const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-
+console.log('devMode', devMode);
+console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+console.log('================================================');
 module.exports = {
     context: path.resolve(__dirname, 'Source'),
     //devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
     devtool: 'source-map',
-    //mode: devMode ? 'development' : 'production',
-    mode: 'development',
+    mode: devMode ? 'development' : 'production',
     entry: {
         claimlist: './claimlist',
-        common: './common'
-        //site: './site',
+        common: './common',
+        textFirstUpperCase: './textFirstUpperCase',
+        site: './site'
         //validation: './validation'
         //claim: './claim'
     },
@@ -71,8 +72,36 @@ module.exports = {
                 }
             },
             {
-                test: /.(css|scss)$/,
-                use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"]
+                //test: /.(css|scss)$/,
+                test: /.css$/,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '/dist/css/'
+                        }
+                    }, {
+                    //    loader: 'style-loader', // inject CSS to page
+                    //}, {
+                        loader: 'css-loader', // translates CSS into CommonJS modules
+                        options: { url: false, sourceMap: true }
+                    },
+                    //{
+                    //    loader: 'postcss-loader', // Run post css actions
+                    //    options: {
+                    //        plugins: function () { // post css plugins, can be exported to postcss.config.js
+                    //            return [
+                    //                require('precss'),
+                    //                require('autoprefixer')
+                    //            ];
+                    //        }
+                    //    }
+                    //}
+                    //, {
+                    //    loader: 'sass-loader', // compiles SASS to CSS
+                    //options: { sourceMap: true } 
+                    //}
+                ]
             },
             {
                 test: /\.hbs$/,
