@@ -14,7 +14,6 @@
 ];
 
 export default function regions(state = initialState, action) {
-    console.log(action);
     if (action.type === 'ADD_REGION') {
         return state;
     } else if (action.type === 'DELETE_REGION') {

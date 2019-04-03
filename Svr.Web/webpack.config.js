@@ -16,7 +16,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     context: path.resolve(__dirname, 'Source'),
-    devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
+    //devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
+    devtool: 'source-map',
     //mode: devMode ? 'development' : 'production',
     mode: 'development',
     entry: {

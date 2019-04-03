@@ -1,23 +1,31 @@
 ﻿import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-//import { disconnect } from 'cluster';
+import { getClaims } from '../actions/claims';
 
 class ClaimsList extends Component {
-    addClime() {
-        console.log('addClime', this.idInput.value);
-        console.log('addClime', this.nameInput.value);
+    addClaime() {
         this.props.onAddClaim(this.idInput.value, this.nameInput.value);
         this.idInput.value = '';
         this.nameInput.value = '';
     }
+    findClaime() {
+        this.props.onFindClaim(this.searchInput.value);
+    }
     render() {
-        console.log(this.props.claims);
         return (
             <div>
-                <input type="number" ref={(input) => { this.idInput = input }} />
-                <input type="text" ref={(input) => { this.nameInput = input }} />
-                <button onClick={this.addClime.bind(this)} >Добавить иск</button>
+                <div>
+                    <input type="number" ref={(input) => { this.idInput = input }} />
+                    <input type="text" ref={(input) => { this.nameInput = input }} />
+                    <button onClick={this.addClaime.bind(this)} >Добавить иск</button>
+                </div>
+                <div>
+                    <input type="text" onChange={this.findClaime.bind(this)} ref={(input) => { this.searchInput = input }} />
+                    <button onClick={this.findClaime.bind(this)} >Поиск</button>
+                </div>
+                <div>
+                    <button onClick={this.props.onGetClaims} >Получить список исков</button>
+                </div>
                 <ul>
                     {
                         this.props.claims.map((claim, index) =>
@@ -37,11 +45,22 @@ class ClaimsList extends Component {
 //}
 
 export default connect(
-    state => ({ claims: state.claims }),
+    state => ({
+        claims: state.claims.filter(claim => claim.name.toUpperCase().includes(state.filterClaims.toUpperCase()))
+    }),
     dispatch => ({
         onAddClaim: (claimId, claimName) => {
-            dispatch({ type: 'ADD_CLAIM', claim: { id: claimId, name: claimName } })
+            const payload = {
+                id: claimId,
+                name: claimName
+            };
+            dispatch({ type: 'ADD_CLAIM', payload });
+        },
+        onFindClaim: (searchClaim) => {
+            dispatch({ type: 'FIND_CLAIM', payload: searchClaim });
+        },
+        onGetClaims: () => {
+            dispatch(getClaims());
         }
     })
 )(ClaimsList);
-//export default connect(mapStateToProps)(ClaimsList);

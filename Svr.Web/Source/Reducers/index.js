@@ -1,8 +1,10 @@
 ﻿import { combineReducers } from 'redux';
 import claims from './claims';
 import regions from './regions';
+import filterClaims from './filterClaims';
 
-export default  combineReducers({
+export default combineReducers({
     claims,
-    regions
-})
+    regions,
+    filterClaims
+});
