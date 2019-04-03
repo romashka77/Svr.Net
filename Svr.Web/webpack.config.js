@@ -21,7 +21,7 @@ module.exports = {
     devtool: 'source-map',
     mode: devMode ? 'development' : 'production',
     entry: {
-        claimlist: './claimlist',
+        claims: './claims',
         common: './common',
         textFirstUpperCase: './textFirstUpperCase',
         site: './site'
@@ -41,7 +41,10 @@ module.exports = {
             new OptimizeCSSAssetsPlugin({
                 cssProcessorOptions: { map: { inline: false, annotation: true } }
             })
-        ]
+        ],
+        //splitChunks: {
+        //    chunks: 'all'
+        //}
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css']
@@ -78,11 +81,12 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            publicPath: '/dist/css/'
+                            name: '[path][name].css'
+                        //    publicPath: '/dist/'
                         }
                     }, {
-                    //    loader: 'style-loader', // inject CSS to page
-                    //}, {
+                        //    loader: 'style-loader', // inject CSS to page
+                        //}, {
                         loader: 'css-loader', // translates CSS into CommonJS modules
                         options: { url: false, sourceMap: true }
                     },
