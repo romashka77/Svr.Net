@@ -10,7 +10,7 @@ const WebPage = () => (
     <hr />
     <h3>
       Details:
-        </h3>
+    </h3>
   </div>
 );
 

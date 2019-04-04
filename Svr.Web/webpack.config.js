@@ -7,6 +7,7 @@
 // https://flash-player.net/channel/UCQpfDQgPe-b-KadFexdZGXQ
 
 // https://ui-kit.rambler.ru/
+// Web Essentials
 const path = require('path');
 const webpack = require('webpack');
 const TerserJSPlugin = require("terser-webpack-plugin");
