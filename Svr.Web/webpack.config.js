@@ -5,6 +5,8 @@
 // https://monsterlessons.com/project/lessons/reduxjs-combinereducers
 
 // https://flash-player.net/channel/UCQpfDQgPe-b-KadFexdZGXQ
+
+// https://ui-kit.rambler.ru/
 const path = require('path');
 const webpack = require('webpack');
 const TerserJSPlugin = require("terser-webpack-plugin");
