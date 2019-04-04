@@ -13,11 +13,11 @@ const initialState = [
   },
 ];
 
-export default function regions(state = initialState, action) {
+export default (state = initialState, action) => {
   if (action.type === 'ADD_REGION') {
     return state;
   } if (action.type === 'DELETE_REGION') {
     return state;
   }
   return state;
-}
+};

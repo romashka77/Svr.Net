@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import getClaims from '../actions/claims';
 
-class ClaimsList extends React.Component {
+class Claims extends React.Component {
   addClaime() {
     this.props.onAddClaim(this.idInput.value, this.nameInput.value);
     this.idInput.value = '';
@@ -16,36 +16,52 @@ class ClaimsList extends React.Component {
 
   render() {
     return (
-      <div>
         <div>
-          <input type="number" ref={(input) => { this.idInput = input; }} />
-          <input type="text" ref={(input) => { this.nameInput = input; }} />
-          <button onClick={this.addClaime.bind(this)} >Добавить иск</button>
-        </div>
-        <div>
-          <input type="text" onChange={this.findClaime.bind(this)} ref={(input) => { this.searchInput = input; }} />
-          <button onClick={this.findClaime.bind(this)} >Поиск</button>
-        </div>
-        <div>
-          <button onClick={this.props.onGetClaims} >Получить список исков</button>
-        </div>
-        <ul>
-          {
-            this.props.claims.map((claim, index) => <li key={index}>
-              {claim.id}
-              {claim.name}
-            </li>)
+            <div>
+                <input
+                    ref={(input) => { this.idInput = input; }}
+                    type="number"
+                />
+                <input
+                    ref={(input) => { this.nameInput = input; }}
+                    type="text"
+                />
+                <button onClick={this.addClaime.bind(this)} >
+Добавить иск
+                </button>
+            </div>
+            <div>
+                <input
+                    onChange={this.findClaime.bind(this)}
+                    ref={(input) => { this.searchInput = input; }}
+                    type="text"
+                />
+                <button onClick={this.findClaime.bind(this)} >
+Поиск
+                </button>
+            </div>
+            <div>
+                <button onClick={this.props.onGetClaims} >
+Получить список исков
+                </button>
+            </div>
+            <ul>
+                {
+            this.props.claims.map((claim, index) => (<li key={index}>
+                {claim.id}
+                {claim.name}
+                                                     </li>))
           }
-        </ul>
-      </div>
+            </ul>
+        </div>
     );
   }
 }
-ClaimsList.propTypes = {
+Claims.propTypes = {
+  claims: PropTypes.array,
   onAddClaim: PropTypes.func,
   onFindClaim: PropTypes.func,
   onGetClaims: PropTypes.func,
-  claims: PropTypes.array,
 };
 
 export default connect(
@@ -68,4 +84,4 @@ export default connect(
       dispatch(getClaims());
     },
   }),
-)(ClaimsList);
+)(Claims);

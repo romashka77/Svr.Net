@@ -1,7 +1,7 @@
 const initialState = [];
 
 
-export default function claims(state = initialState, action) {
+export default (state = initialState, action) => {
   if (action.type === 'ADD_CLAIM') {
     return [
       ...state,
@@ -11,4 +11,4 @@ export default function claims(state = initialState, action) {
     return action.payload;
   }
   return state;
-}
+};

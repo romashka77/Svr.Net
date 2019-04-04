@@ -13,8 +13,8 @@ const store = createStore(
 );
 
 ReactDOM.render(
-  <Provider store={store}>
-    <WebPage />
-  </Provider>,
-  document.getElementById('fieldToShow'),
+    <Provider store={store}>
+        <WebPage />
+    </Provider>,
+    document.getElementById('fieldToShow'),
 );

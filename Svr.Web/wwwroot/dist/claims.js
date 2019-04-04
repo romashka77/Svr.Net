@@ -64,7 +64,7 @@ var claims =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "2e8a69e1543050ffd104";
+/******/ 	var hotCurrentHash = "5d19dcb886418c86cbba";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -764,7 +764,7 @@ var claims =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "2e8a69e1543050ffd104";
+/******/ 	var hotCurrentHash = "5d19dcb886418c86cbba";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -30865,18 +30865,18 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var ClaimsList =
+var Claims =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(ClaimsList, _React$Component);
+  _inherits(Claims, _React$Component);
 
-  function ClaimsList() {
-    _classCallCheck(this, ClaimsList);
+  function Claims() {
+    _classCallCheck(this, Claims);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(ClaimsList).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(Claims).apply(this, arguments));
   }
 
-  _createClass(ClaimsList, [{
+  _createClass(Claims, [{
     key: "addClaime",
     value: function addClaime() {
       this.props.onAddClaim(this.idInput.value, this.nameInput.value);
@@ -30894,23 +30894,23 @@ function (_React$Component) {
       var _this = this;
 
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "number",
         ref: function ref(input) {
           _this.idInput = input;
-        }
+        },
+        type: "number"
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "text",
         ref: function ref(input) {
           _this.nameInput = input;
-        }
+        },
+        type: "text"
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         onClick: this.addClaime.bind(this)
       }, "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0438\u0441\u043A")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "text",
         onChange: this.findClaime.bind(this),
         ref: function ref(input) {
           _this.searchInput = input;
-        }
+        },
+        type: "text"
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         onClick: this.findClaime.bind(this)
       }, "\u041F\u043E\u0438\u0441\u043A")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
@@ -30923,14 +30923,14 @@ function (_React$Component) {
     }
   }]);
 
-  return ClaimsList;
+  return Claims;
 }(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
 
-ClaimsList.propTypes = {
+Claims.propTypes = {
+  claims: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.array,
   onAddClaim: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func,
   onFindClaim: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func,
-  onGetClaims: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func,
-  claims: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.array
+  onGetClaims: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func
 };
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(function (state) {
   return {
@@ -30960,7 +30960,7 @@ ClaimsList.propTypes = {
       dispatch(Object(_actions_claims__WEBPACK_IMPORTED_MODULE_3__["default"])());
     }
   };
-})(ClaimsList));
+})(Claims));
 
 /***/ }),
 
@@ -30973,7 +30973,6 @@ ClaimsList.propTypes = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return claims; });
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -30983,7 +30982,7 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 var initialState = [];
-function claims() {
+/* harmony default export */ __webpack_exports__["default"] = (function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
@@ -30996,7 +30995,7 @@ function claims() {
   }
 
   return state;
-}
+});
 
 /***/ }),
 
@@ -31009,9 +31008,8 @@ function claims() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return filterClaims; });
 var initialState = '';
-function filterClaims() {
+/* harmony default export */ __webpack_exports__["default"] = (function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
@@ -31020,7 +31018,7 @@ function filterClaims() {
   }
 
   return state;
-}
+});
 
 /***/ }),
 
@@ -31058,7 +31056,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return regions; });
 var initialState = [{
   id: 1,
   name: 'region1'
@@ -31069,7 +31066,7 @@ var initialState = [{
   id: 3,
   name: 'region4'
 }];
-function regions() {
+/* harmony default export */ __webpack_exports__["default"] = (function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
@@ -31082,7 +31079,7 @@ function regions() {
   }
 
   return state;
-}
+});
 
 /***/ }),
 
