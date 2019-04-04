@@ -1,5 +1,5 @@
-﻿import React from 'react';
-import ClaimsList from '../Containers/claims-list';
+import React from 'react';
+import ClaimsList from '../containers/claims';
 
 const WebPage = () => (
     <div>

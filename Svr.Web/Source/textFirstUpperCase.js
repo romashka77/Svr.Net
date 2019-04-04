@@ -1,6 +1,7 @@
-﻿//Первая заглавная, остальные строчные
-function textFirstUpperCase(text) {
-    if (text.value.length > 0) {
-        text.value = text.value.charAt(0).toUpperCase() + text.value.substr(1, text.value.length - 1).toLowerCase();
-    }
-}
+// Первая заглавная, остальные строчные
+const textFirstUpperCase = (value) => {
+  if (value.length > 0) {
+    return `${value.charAt(0).toUpperCase()}${value.substr(1, value.length - 1).toLowerCase()}`;
+  } return value;
+};
+export default textFirstUpperCase;

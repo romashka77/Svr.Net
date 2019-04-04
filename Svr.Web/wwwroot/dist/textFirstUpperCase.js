@@ -64,7 +64,7 @@ var textFirstUpperCase =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "b332403c75f3390c17e2";
+/******/ 	var hotCurrentHash = "2e8a69e1543050ffd104";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -764,7 +764,7 @@ var textFirstUpperCase =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "b332403c75f3390c17e2";
+/******/ 	var hotCurrentHash = "2e8a69e1543050ffd104";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -3080,15 +3080,21 @@ module.exports = function(module) {
 /*!*******************************!*\
   !*** ./textFirstUpperCase.js ***!
   \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-//Первая заглавная, остальные строчные
-function textFirstUpperCase(text) {
-  if (text.value.length > 0) {
-    text.value = text.value.charAt(0).toUpperCase() + text.value.substr(1, text.value.length - 1).toLowerCase();
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// Первая заглавная, остальные строчные
+var textFirstUpperCase = function textFirstUpperCase(value) {
+  if (value.length > 0) {
+    return "".concat(value.charAt(0).toUpperCase()).concat(value.substr(1, value.length - 1).toLowerCase());
   }
-}
+
+  return value;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (textFirstUpperCase);
 
 /***/ }),
 
