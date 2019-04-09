@@ -1,3 +1,0 @@
-﻿export const CLAIM_SELECTED = 'SELECTED_CLAIM';
-export const REQUEST_CLAIMS = 'REQUEST_CLAIMS';
-export const RECEIVE_CLAIMS = 'RECEIVE_CLAIMS';

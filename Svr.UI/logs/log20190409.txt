@@ -1,0 +1,181 @@
+2019-04-09 14:39:48.639 +03:00 [INF] User profile is available. Using 'C:\Users\079MakarovRA\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-04-09 14:39:58.442 +03:00 [INF] [36m=== Webpack compilation mode: development ===[0m
+2019-04-09 14:39:58.807 +03:00 [INF] [36m=== Webpack compilation mode: development ===[0m
+2019-04-09 14:39:59.152 +03:00 [INF] Starting type checking service...
+2019-04-09 14:39:59.158 +03:00 [INF] Using 1 worker with 2048MB memory limit
+2019-04-09 14:39:59.322 +03:00 [INF] Starting type checking service...
+2019-04-09 14:39:59.395 +03:00 [INF] Using 1 worker with 2048MB memory limit
+2019-04-09 14:40:05.893 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/  
+2019-04-09 14:40:05.924 +03:00 [INF] Request starting HTTP/1.1 DEBUG http://localhost:64098/  0
+2019-04-09 14:40:06.150 +03:00 [INF] Request finished in 251.9233ms 200 
+2019-04-09 14:40:06.210 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.MainController.Index (Svr.UI)'
+2019-04-09 14:40:06.395 +03:00 [INF] Route matched with {action = "Index", controller = "Main"}. Executing action Svr.UI.Controllers.MainController.Index (Svr.UI)
+2019-04-09 14:40:06.539 +03:00 [INF] Executing action method Svr.UI.Controllers.MainController.Index (Svr.UI) - Validation state: "Valid"
+2019-04-09 14:40:06.780 +03:00 [INF] Executed action method Svr.UI.Controllers.MainController.Index (Svr.UI), returned result Microsoft.AspNetCore.Mvc.ViewResult in 3.4258ms.
+2019-04-09 14:40:06.932 +03:00 [INF] Type checking in progress...
+2019-04-09 14:40:07.442 +03:00 [INF] Executing ViewResult, running view Index.
+2019-04-09 14:40:07.943 +03:00 [INF] Type checking in progress...
+2019-04-09 14:40:08.373 +03:00 [INF] Node will restart because file changed: C:\Users\079MakarovRA\source\repos\romashka77\Svr.Net\Svr.UI\wwwroot\dist\main-client.js
+2019-04-09 14:40:08.381 +03:00 [INF] webpack built 16bfff6f7cf0d9e9bcb0 in 8824ms
+2019-04-09 14:40:08.389 +03:00 [INF] [34mi[39m [90mя╜вwdmя╜г[39m: Hash: 16bfff6f7cf0d9e9bcb0
+Version: webpack 4.29.6
+Time: 8824ms
+Built at: 2019-04-09 14:40:07
+             Asset      Size       Chunks                    Chunk Names
+    main-client.js  3.53 MiB  main-client  [emitted]  [big]  main-client
+main-client.js.map  29.9 KiB  main-client  [emitted]         main-client
+Entrypoint main-client [big] = main-client.js main-client.js.map
+2019-04-09 14:40:08.396 +03:00 [INF] [34mi[39m [90mя╜вwdmя╜г[39m: Compiled successfully.
+2019-04-09 14:40:10.785 +03:00 [INF] Executed ViewResult - view Index executed in 3592.565ms.
+2019-04-09 14:40:10.801 +03:00 [INF] Executed action Svr.UI.Controllers.MainController.Index (Svr.UI) in 4400.0722000000005ms
+2019-04-09 14:40:10.808 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.MainController.Index (Svr.UI)'
+2019-04-09 14:40:10.874 +03:00 [INF] Request finished in 4944.2816ms 200 text/html; charset=utf-8
+2019-04-09 14:40:11.262 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/vendor.js?v=Ppq5ONHxVY5uMVbYmiI-8ovZq6to0P_rB2CmxTE3H4w  
+2019-04-09 14:40:11.350 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/vendor.css?v=ok1YjWMzS4ntjGr6lTV88q1WNIPQsat3xARp0VtkYTk  
+2019-04-09 14:40:11.376 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/main-client.js?v=np8QncvNcapRba9M1StSU7RycsuwOUanYDxNRm0yZqI  
+2019-04-09 14:40:11.598 +03:00 [INF] No type errors found
+2019-04-09 14:40:11.618 +03:00 [INF] Version: typescript 3.3.3333
+2019-04-09 14:40:11.623 +03:00 [INF] Time: 12392ms
+2019-04-09 14:40:12.296 +03:00 [INF] No type errors found
+2019-04-09 14:40:12.316 +03:00 [INF] Version: typescript 3.3.3333
+2019-04-09 14:40:12.319 +03:00 [INF] Time: 13101ms
+2019-04-09 14:40:13.325 +03:00 [INF] Sending file. Request path: '/dist/vendor.css'. Physical path: 'C:\Users\079MakarovRA\source\repos\romashka77\Svr.Net\Svr.UI\wwwroot\dist\vendor.css'
+2019-04-09 14:40:13.329 +03:00 [INF] Request finished in 1991.4023ms 200 text/css
+2019-04-09 14:40:13.867 +03:00 [INF] Request finished in 2485.0612ms 200 application/javascript; charset=UTF-8
+2019-04-09 14:40:14.040 +03:00 [INF] Sending file. Request path: '/dist/vendor.js'. Physical path: 'C:\Users\079MakarovRA\source\repos\romashka77\Svr.Net\Svr.UI\wwwroot\dist\vendor.js'
+2019-04-09 14:40:14.042 +03:00 [INF] Request finished in 2805.7272ms 200 application/javascript
+2019-04-09 14:40:15.395 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/__webpack_hmr  
+2019-04-09 14:40:15.427 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/favicon.ico  
+2019-04-09 14:40:15.467 +03:00 [INF] Sending file. Request path: '/favicon.ico'. Physical path: 'C:\Users\079MakarovRA\source\repos\romashka77\Svr.Net\Svr.UI\wwwroot\favicon.ico'
+2019-04-09 14:40:15.475 +03:00 [INF] Request finished in 57.0058ms 200 image/x-icon
+2019-04-09 14:40:27.776 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:64098/api/Account/Login application/json;charset=UTF-8 36
+2019-04-09 14:40:27.781 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.AccountController.Login (Svr.UI)'
+2019-04-09 14:40:27.830 +03:00 [INF] Route matched with {action = "Login", controller = "Account"}. Executing action Svr.UI.Controllers.AccountController.Login (Svr.UI)
+2019-04-09 14:40:27.945 +03:00 [INF] Executing action method Svr.UI.Controllers.AccountController.Login (Svr.UI) with arguments (["Svr.UI.Models.LoginModel"]) - Validation state: "Valid"
+2019-04-09 14:40:27.951 +03:00 [INF] Executed action method Svr.UI.Controllers.AccountController.Login (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 1.8135000000000001ms.
+2019-04-09 14:40:27.956 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result`1[[Svr.UI.Models.ServiceUser, Svr.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2019-04-09 14:40:27.962 +03:00 [INF] Executed action Svr.UI.Controllers.AccountController.Login (Svr.UI) in 130.2621ms
+2019-04-09 14:40:27.965 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.AccountController.Login (Svr.UI)'
+2019-04-09 14:40:27.967 +03:00 [INF] Request finished in 192.9463ms 200 application/json; charset=utf-8
+2019-04-09 14:40:39.891 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/api/Person/Search?term=  
+2019-04-09 14:40:39.911 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 14:40:39.928 +03:00 [INF] Route matched with {action = "Search", controller = "Person"}. Executing action Svr.UI.Controllers.PersonController.Search (Svr.UI)
+2019-04-09 14:40:39.957 +03:00 [INF] Executing action method Svr.UI.Controllers.PersonController.Search (Svr.UI) with arguments ([""]) - Validation state: "Valid"
+2019-04-09 14:40:39.960 +03:00 [INF] Executed action method Svr.UI.Controllers.PersonController.Search (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 1.061ms.
+2019-04-09 14:40:39.962 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result`1[[System.Collections.Generic.List`1[[Svr.UI.Models.PersonModel, Svr.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2019-04-09 14:40:39.970 +03:00 [INF] Executed action Svr.UI.Controllers.PersonController.Search (Svr.UI) in 36.4486ms
+2019-04-09 14:40:39.973 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 14:40:39.977 +03:00 [INF] Request finished in 85.82ms 200 application/json; charset=utf-8
+2019-04-09 14:40:53.717 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/api/Person/Search?term=czczxczc  
+2019-04-09 14:40:53.722 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 14:40:53.724 +03:00 [INF] Route matched with {action = "Search", controller = "Person"}. Executing action Svr.UI.Controllers.PersonController.Search (Svr.UI)
+2019-04-09 14:40:53.729 +03:00 [INF] Executing action method Svr.UI.Controllers.PersonController.Search (Svr.UI) with arguments (["czczxczc"]) - Validation state: "Valid"
+2019-04-09 14:40:53.731 +03:00 [INF] Executed action method Svr.UI.Controllers.PersonController.Search (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 0.3743ms.
+2019-04-09 14:40:53.734 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result`1[[System.Collections.Generic.List`1[[Svr.UI.Models.PersonModel, Svr.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2019-04-09 14:40:53.736 +03:00 [INF] Executed action Svr.UI.Controllers.PersonController.Search (Svr.UI) in 9.9022ms
+2019-04-09 14:40:53.738 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 14:40:53.740 +03:00 [INF] Request finished in 23.9017ms 200 application/json; charset=utf-8
+2019-04-09 14:40:59.617 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:64098/api/Person/Add application/json;charset=UTF-8 49
+2019-04-09 14:40:59.620 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.PersonController.Add (Svr.UI)'
+2019-04-09 14:40:59.624 +03:00 [INF] Route matched with {action = "Add", controller = "Person"}. Executing action Svr.UI.Controllers.PersonController.Add (Svr.UI)
+2019-04-09 14:40:59.631 +03:00 [INF] Executing action method Svr.UI.Controllers.PersonController.Add (Svr.UI) with arguments (["Svr.UI.Models.PersonModel"]) - Validation state: "Valid"
+2019-04-09 14:40:59.635 +03:00 [INF] Executed action method Svr.UI.Controllers.PersonController.Add (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 1.8767ms.
+2019-04-09 14:40:59.638 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result`1[[System.Int32, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2019-04-09 14:40:59.641 +03:00 [INF] Executed action Svr.UI.Controllers.PersonController.Add (Svr.UI) in 14.5846ms
+2019-04-09 14:40:59.643 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.PersonController.Add (Svr.UI)'
+2019-04-09 14:40:59.647 +03:00 [INF] Request finished in 28.3813ms 200 application/json; charset=utf-8
+2019-04-09 14:41:08.535 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/api/Person/Search?term=  
+2019-04-09 14:41:08.540 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 14:41:08.552 +03:00 [INF] Route matched with {action = "Search", controller = "Person"}. Executing action Svr.UI.Controllers.PersonController.Search (Svr.UI)
+2019-04-09 14:41:08.555 +03:00 [INF] Executing action method Svr.UI.Controllers.PersonController.Search (Svr.UI) with arguments ([""]) - Validation state: "Valid"
+2019-04-09 14:41:08.558 +03:00 [INF] Executed action method Svr.UI.Controllers.PersonController.Search (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 0.0073ms.
+2019-04-09 14:41:08.561 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result`1[[System.Collections.Generic.List`1[[Svr.UI.Models.PersonModel, Svr.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2019-04-09 14:41:08.563 +03:00 [INF] Executed action Svr.UI.Controllers.PersonController.Search (Svr.UI) in 9.8583ms
+2019-04-09 14:41:08.568 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 14:41:08.573 +03:00 [INF] Request finished in 40.2514ms 200 application/json; charset=utf-8
+2019-04-09 14:41:17.949 +03:00 [INF] Request starting HTTP/1.1 PATCH http://localhost:64098/api/Person/8 application/json;charset=UTF-8 63
+2019-04-09 14:41:17.956 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.PersonController.Update (Svr.UI)'
+2019-04-09 14:41:17.959 +03:00 [INF] Route matched with {action = "Update", controller = "Person"}. Executing action Svr.UI.Controllers.PersonController.Update (Svr.UI)
+2019-04-09 14:41:17.964 +03:00 [INF] Executing action method Svr.UI.Controllers.PersonController.Update (Svr.UI) with arguments (["Svr.UI.Models.PersonModel"]) - Validation state: "Valid"
+2019-04-09 14:41:17.968 +03:00 [INF] Executed action method Svr.UI.Controllers.PersonController.Update (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 1.2206000000000001ms.
+2019-04-09 14:41:17.978 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result'.
+2019-04-09 14:41:17.981 +03:00 [INF] Executed action Svr.UI.Controllers.PersonController.Update (Svr.UI) in 20.1328ms
+2019-04-09 14:41:17.987 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.PersonController.Update (Svr.UI)'
+2019-04-09 14:41:17.989 +03:00 [INF] Request finished in 42.8131ms 200 application/json; charset=utf-8
+2019-04-09 14:41:30.791 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/vendor.js.map  
+2019-04-09 14:41:30.801 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/main-client.js.map  
+2019-04-09 14:41:30.807 +03:00 [INF] Sending file. Request path: '/dist/vendor.js.map'. Physical path: 'C:\Users\079MakarovRA\source\repos\romashka77\Svr.Net\Svr.UI\wwwroot\dist\vendor.js.map'
+2019-04-09 14:41:30.809 +03:00 [INF] Request finished in 26.7562ms 200 text/plain
+2019-04-09 14:41:30.817 +03:00 [INF] Request finished in 11.842ms 200 application/json; charset=UTF-8
+2019-04-09 14:41:30.920 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/vendor.css?v=ok1YjWMzS4ntjGr6lTV88q1WNIPQsat3xARp0VtkYTk  
+2019-04-09 14:41:30.926 +03:00 [INF] The file /dist/vendor.css was not modified
+2019-04-09 14:41:30.929 +03:00 [INF] Request finished in 9.4042ms 304 text/css
+2019-04-09 14:41:31.288 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/vendor.css.map  
+2019-04-09 14:41:31.302 +03:00 [INF] Sending file. Request path: '/dist/vendor.css.map'. Physical path: 'C:\Users\079MakarovRA\source\repos\romashka77\Svr.Net\Svr.UI\wwwroot\dist\vendor.css.map'
+2019-04-09 14:41:31.305 +03:00 [INF] Request finished in 17.454ms 200 text/plain
+2019-04-09 14:50:01.587 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/api/Person/Search?term=  
+2019-04-09 14:50:01.591 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 14:50:01.594 +03:00 [INF] Route matched with {action = "Search", controller = "Person"}. Executing action Svr.UI.Controllers.PersonController.Search (Svr.UI)
+2019-04-09 14:50:01.597 +03:00 [INF] Executing action method Svr.UI.Controllers.PersonController.Search (Svr.UI) with arguments ([""]) - Validation state: "Valid"
+2019-04-09 14:50:01.600 +03:00 [INF] Executed action method Svr.UI.Controllers.PersonController.Search (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 0.0099ms.
+2019-04-09 14:50:01.602 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result`1[[System.Collections.Generic.List`1[[Svr.UI.Models.PersonModel, Svr.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2019-04-09 14:50:01.604 +03:00 [INF] Executed action Svr.UI.Controllers.PersonController.Search (Svr.UI) in 7.5903ms
+2019-04-09 14:50:01.606 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 14:50:01.616 +03:00 [INF] Request finished in 21.144ms 200 application/json; charset=utf-8
+2019-04-09 14:50:05.934 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:64098/api/Account/Logout  0
+2019-04-09 14:50:05.938 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.AccountController.Logout (Svr.UI)'
+2019-04-09 14:50:05.943 +03:00 [INF] Route matched with {action = "Logout", controller = "Account"}. Executing action Svr.UI.Controllers.AccountController.Logout (Svr.UI)
+2019-04-09 14:50:05.949 +03:00 [INF] Executing action method Svr.UI.Controllers.AccountController.Logout (Svr.UI) - Validation state: "Valid"
+2019-04-09 14:50:05.953 +03:00 [INF] Executed action method Svr.UI.Controllers.AccountController.Logout (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 1.0643ms.
+2019-04-09 14:50:05.956 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result'.
+2019-04-09 14:50:05.959 +03:00 [INF] Executed action Svr.UI.Controllers.AccountController.Logout (Svr.UI) in 13.430800000000001ms
+2019-04-09 14:50:05.962 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.AccountController.Logout (Svr.UI)'
+2019-04-09 14:50:05.983 +03:00 [INF] Request finished in 42.7886ms 200 application/json; charset=utf-8
+2019-04-09 14:50:13.890 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:64098/api/Account/Login application/json;charset=UTF-8 36
+2019-04-09 14:50:13.898 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.AccountController.Login (Svr.UI)'
+2019-04-09 14:50:13.901 +03:00 [INF] Route matched with {action = "Login", controller = "Account"}. Executing action Svr.UI.Controllers.AccountController.Login (Svr.UI)
+2019-04-09 14:50:13.952 +03:00 [INF] Executing action method Svr.UI.Controllers.AccountController.Login (Svr.UI) with arguments (["Svr.UI.Models.LoginModel"]) - Validation state: "Valid"
+2019-04-09 14:50:13.954 +03:00 [INF] Executed action method Svr.UI.Controllers.AccountController.Login (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 0.046400000000000004ms.
+2019-04-09 14:50:13.963 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result`1[[Svr.UI.Models.ServiceUser, Svr.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2019-04-09 14:50:13.966 +03:00 [INF] Executed action Svr.UI.Controllers.AccountController.Login (Svr.UI) in 62.4998ms
+2019-04-09 14:50:13.969 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.AccountController.Login (Svr.UI)'
+2019-04-09 14:50:13.990 +03:00 [INF] Request finished in 85.4638ms 200 application/json; charset=utf-8
+2019-04-09 15:06:38.199 +03:00 [INF] [34mi[39m [90mя╜вwdmя╜г[39m: Compiling...
+2019-04-09 15:06:38.248 +03:00 [INF] webpack building...
+2019-04-09 15:06:39.173 +03:00 [INF] Type checking in progress...
+2019-04-09 15:06:39.241 +03:00 [INF] webpack built 5479d83b2b7f2d207ea8 in 769ms
+2019-04-09 15:06:39.249 +03:00 [INF] [34mi[39m [90mя╜вwdmя╜г[39m: Hash: 5479d83b2b7f2d207ea8
+Version: webpack 4.29.6
+Time: 769ms
+Built at: 2019-04-09 15:06:39
+                                             Asset       Size       Chunks                    Chunk Names
+              16bfff6f7cf0d9e9bcb0.hot-update.json   53 bytes               [emitted]         
+    main-client.16bfff6f7cf0d9e9bcb0.hot-update.js   15.4 KiB  main-client  [emitted]         main-client
+main-client.16bfff6f7cf0d9e9bcb0.hot-update.js.map  123 bytes  main-client  [emitted]         main-client
+                                    main-client.js   3.53 MiB  main-client  [emitted]  [big]  main-client
+                                main-client.js.map   29.9 KiB  main-client  [emitted]         main-client
+Entrypoint main-client [big] = main-client.js main-client.16bfff6f7cf0d9e9bcb0.hot-update.js main-client.js.map main-client.16bfff6f7cf0d9e9bcb0.hot-update.js.map
+2019-04-09 15:06:39.253 +03:00 [INF] [34mi[39m [90mя╜вwdmя╜г[39m: Compiled successfully.
+2019-04-09 15:06:39.262 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/16bfff6f7cf0d9e9bcb0.hot-update.json  
+2019-04-09 15:06:39.279 +03:00 [INF] No type errors found
+2019-04-09 15:06:39.283 +03:00 [INF] Version: typescript 3.3.3333
+2019-04-09 15:06:39.311 +03:00 [INF] Time: 877ms
+2019-04-09 15:06:39.315 +03:00 [INF] No type errors found
+2019-04-09 15:06:39.316 +03:00 [INF] Request finished in 56.3992ms 200 application/json; charset=UTF-8
+2019-04-09 15:06:39.319 +03:00 [INF] Version: typescript 3.3.3333
+2019-04-09 15:06:39.325 +03:00 [INF] Time: 903ms
+2019-04-09 15:06:39.327 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/main-client.16bfff6f7cf0d9e9bcb0.hot-update.js  
+2019-04-09 15:06:39.333 +03:00 [INF] Request finished in 12.8622ms 200 application/javascript; charset=UTF-8
+2019-04-09 15:06:39.380 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/main-client.16bfff6f7cf0d9e9bcb0.hot-update.js.map  
+2019-04-09 15:06:39.405 +03:00 [INF] Request finished in 26.7913ms 200 application/json; charset=UTF-8
+2019-04-09 15:06:39.436 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/dist/main-client.16bfff6f7cf0d9e9bcb0.hot-update.js.map  
+2019-04-09 15:06:39.439 +03:00 [INF] Request finished in 4.8188ms 200 application/json; charset=UTF-8
+2019-04-09 15:06:51.865 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:64098/api/Person/Search?term=  
+2019-04-09 15:06:51.870 +03:00 [INF] Executing endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 15:06:51.872 +03:00 [INF] Route matched with {action = "Search", controller = "Person"}. Executing action Svr.UI.Controllers.PersonController.Search (Svr.UI)
+2019-04-09 15:06:51.876 +03:00 [INF] Executing action method Svr.UI.Controllers.PersonController.Search (Svr.UI) with arguments ([""]) - Validation state: "Valid"
+2019-04-09 15:06:51.880 +03:00 [INF] Executed action method Svr.UI.Controllers.PersonController.Search (Svr.UI), returned result Microsoft.AspNetCore.Mvc.JsonResult in 0.0096000000000000009ms.
+2019-04-09 15:06:51.883 +03:00 [INF] Executing JsonResult, writing value of type 'Svr.UI.Infrastructure.Result`1[[System.Collections.Generic.List`1[[Svr.UI.Models.PersonModel, Svr.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2019-04-09 15:06:51.885 +03:00 [INF] Executed action Svr.UI.Controllers.PersonController.Search (Svr.UI) in 10.6503ms
+2019-04-09 15:06:51.888 +03:00 [INF] Executed endpoint 'Svr.UI.Controllers.PersonController.Search (Svr.UI)'
+2019-04-09 15:06:51.890 +03:00 [INF] Request finished in 25.881ms 200 application/json; charset=utf-8

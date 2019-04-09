@@ -3,15 +3,11 @@ import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as Counter from './Counter';
 import * as WeatherForecasts from './WeatherForecasts';
-import ClaimsReducer from '../reducers/claims';
-import ActiveClaimReducer from '../reducers/claim-active';
 
 export default function configureStore (history, initialState) {
   const reducers = {
     counter: Counter.reducer,
-    weatherForecasts: WeatherForecasts.reducer,
-    claims: ClaimsReducer,
-    activeclaims: ActiveClaimReducer
+    weatherForecasts: WeatherForecasts.reducer
   };
 
   const middleware = [
