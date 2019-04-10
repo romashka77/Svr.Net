@@ -1,8 +1,8 @@
 ﻿import React from 'react';
-import './app-header.css';
+import './claims-header.css';
 
 export default ({ label, count }) => (
-    <div className="app-header d-flex">
+  <div className="claims-header d-flex">
         <h1>
             {label}
         </h1>
