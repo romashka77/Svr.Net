@@ -1,4 +1,10 @@
 ﻿import React from 'react';
-export default ({ name}) => {
-  return (<span>{name}</span>);
+import './claims-list-item.css';
+
+export default ({ name }) => {
+    return (
+        <span className="claims-list-item">
+            {name}
+        </span>
+    );
 }

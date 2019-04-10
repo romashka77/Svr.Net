@@ -12,8 +12,8 @@ const ClaimsData = [
 ];
 
 export default () => (
-  <div>
-    <AppHeader label="Иски" />
+    <div>
+        <AppHeader label="Иски" count={ClaimsData.length} />
     <SearchPanel />
     <ClaimsList data={ClaimsData} />
   </div>
