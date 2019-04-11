@@ -142,19 +142,19 @@ namespace Svr.Infrastructure.Data
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(12));
 
-            groupClaim = new GroupClaim { Name = StrTrim("Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»"), Description = "Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»", Code = "13", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("О взыскании незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и(или) пенсий по государственному пенсионному"), Description = "О взыскании незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и(или) пенсий по государственному пенсионному", Code = "13", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(13));
 
-            groupClaim = new GroupClaim { Name = StrTrim("Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»"), Description = "Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»", Code = "14", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»"), Description = "Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»", Code = "14", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(14));
 
-            groupClaim = new GroupClaim { Name = StrTrim("Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»"), Description = "Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»", Code = "15", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»"), Description = "Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»", Code = "15", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(15));
 
-            groupClaim = new GroupClaim { Name = StrTrim("Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой"), Description = "Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой", Code = "16", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»"), Description = "Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»", Code = "16", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(16));
 
@@ -166,9 +166,13 @@ namespace Svr.Infrastructure.Data
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(18));
 
-            groupClaim = new GroupClaim { Name = StrTrim("Судебные расходы"), Description = "Судебные расходы", Code = "19", CategoryDispute = categoryDispute };
+            groupClaim = new GroupClaim { Name = StrTrim("Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой"), Description = "Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой", Code = "19", CategoryDispute = categoryDispute };
             await dataContext.GroupClaims.AddAsync(groupClaim);
             await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(19));
+
+            groupClaim = new GroupClaim { Name = StrTrim("Судебные расходы"), Description = "Судебные расходы", Code = "20", CategoryDispute = categoryDispute };
+            await dataContext.GroupClaims.AddAsync(groupClaim);
+            await dataContext.SubjectClaims.AddRangeAsync(GetPreconfiguredSubjectClaimsOut(20));
 
             return new List<CategoryDispute>() { categoryDispute };
         }
@@ -684,29 +688,29 @@ namespace Svr.Infrastructure.Data
                 case 12:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "12.1", Name = StrTrim("О взыскании незаконно полученной компенсации стоимости проезда к месту отдыха за пределами территории Российской Федерации"), GroupClaim = groupClaim, Description = "О взыскании незаконно полученной компенсации стоимости проезда к месту отдыха за пределами территории Российской Федерации" },
-                        new SubjectClaim { Code = "12.2", Name = StrTrim("О взыскании незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и (или) пенсий по государственному пенсионному"), GroupClaim = groupClaim, Description = "О взыскании незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и (или) пенсий по государственному пенсионному" }
+                        new SubjectClaim { Code = "12.1", Name = StrTrim("О взыскании незаконно полученной компенсации стоимости проезда к месту отдыха за пределами территории Российской Федерации"), GroupClaim = groupClaim, Description = "О взыскании незаконно полученной компенсации стоимости проезда к месту отдыха за пределами территории Российской Федерации" }
                     };
                 case 13:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "13", Name = StrTrim("Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»"), GroupClaim = groupClaim, Description = "Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»" }
+                        new SubjectClaim { Code = "13", Name = StrTrim("О взыскании незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и(или) пенсий по государственному пенсионному"), GroupClaim = groupClaim, Description = "О взыскании незаконно полученной компенсации расходов, связанных с переездом из районов Крайнего Севера и приравненных к ним местностей, лицам, являющимся получателями трудовых пенсий и(или) пенсий по государственному пенсионному" }
                     };
                 case 14:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "14", Name = StrTrim("Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»"), GroupClaim = groupClaim, Description = "Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»" }
-                     };
+                        new SubjectClaim { Code = "14", Name = StrTrim("Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»"), GroupClaim = groupClaim, Description = "Реализация постановления Правительства Российской Федерации от 16.07.2016 № 674 «О формировании и ведении федерального реестра инвалидов и об использовании содержащихся в нем сведений»" },
+                        new SubjectClaim { Code = "14.1", Name = StrTrim("Непредставление должностным лицом сведений, подлежащих включению в федеральный реестр инвалидов, неразмещение или нарушение установленных законодательством Российской Федерации порядка и (или) сроков размещения в данном"), GroupClaim = groupClaim, Description = "Непредставление должностным лицом сведений, подлежащих включению в федеральный реестр инвалидов, неразмещение или нарушение установленных законодательством Российской Федерации порядка и (или) сроков размещения в данном " }
+                    };
                 case 15:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "15", Name = StrTrim("Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»"), GroupClaim = groupClaim, Description = "Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»" }
-                    };
+                        new SubjectClaim { Code = "15", Name = StrTrim("Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»"), GroupClaim = groupClaim, Description = "Реализация постановления Правительства Российской Федерации от 14.02.2017 № 181 «О единой государственной информационной системе социального обеспечения»" }
+                     };
                 case 16:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "16", Name = StrTrim("Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой"), GroupClaim = groupClaim, Description = "Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой" }
-                        };
+                        new SubjectClaim { Code = "16", Name = StrTrim("Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»"), GroupClaim = groupClaim, Description = "Реализация ФЗ от 28.12.2017 № 418-ФЗ «О ежемесячных выплатах семьям, имеющим детей»" }
+                    };
                 case 17:
                     return new List<SubjectClaim>
                     {
@@ -725,10 +729,15 @@ namespace Svr.Infrastructure.Data
                 case 19:
                     return new List<SubjectClaim>
                     {
-                        new SubjectClaim { Code = "19.1", Name = StrTrim("Оплата госпошлины (арбитраж)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "19.2", Name = StrTrim("Иные судебные издержки (арбитраж)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "19.3", Name = StrTrim("Оплата госпошлины (общая юрисдикция)"), GroupClaim = groupClaim, Description = "" },
-                        new SubjectClaim { Code = "19.4", Name = StrTrim("Иные судебные издержки (общая юрисдикция)"), GroupClaim = groupClaim, Description = "" }
+                        new SubjectClaim { Code = "19", Name = StrTrim("Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой"), GroupClaim = groupClaim, Description = "Иск пенсионера, работника или прокурора к работодателю об обязании уплатить страховые взносы, подать в ПФР сведения ПУ или расчет по начисленным и уплаченным страховым взносам, о взыскании суммы неполученной пенсии в связи с неуплатой" }
+                    };
+                case 20:
+                    return new List<SubjectClaim>
+                    {
+                        new SubjectClaim { Code = "20.1", Name = StrTrim("Оплата госпошлины (арбитраж)"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "20.2", Name = StrTrim("Иные судебные издержки (арбитраж)"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "20.3", Name = StrTrim("Оплата госпошлины (общая юрисдикция)"), GroupClaim = groupClaim, Description = "" },
+                        new SubjectClaim { Code = "20.4", Name = StrTrim("Иные судебные издержки (общая юрисдикция)"), GroupClaim = groupClaim, Description = "" }
                     };
                 default:
                     return null;
@@ -798,6 +807,7 @@ namespace Svr.Infrastructure.Data
                         new SubjectClaim { Code = "10.3.1", Name = StrTrim("Установление страховой пенсии, о праве на назначение пенсий (кроме ст. 30 ФЗ № 400-ФЗ)"), GroupClaim = groupClaim, Description = "Установление страховой пенсии, о праве на назначение пенсий (кроме ст. 30 ФЗ № 400-ФЗ)" },
                         new SubjectClaim { Code = "10.3.2", Name = StrTrim("Установление страховой пенсии, об исчислении размера пенсии"), GroupClaim = groupClaim, Description = "Установление страховой пенсии, об исчислении размера пенсии" },
                         new SubjectClaim { Code = "10.3.3", Name = StrTrim("Установление страховой пенсии, о сроках назначения пенсии"), GroupClaim = groupClaim, Description = "Установление страховой пенсии, о сроках назначения пенсии" },
+                        new SubjectClaim { Code = "10.3.4", Name = StrTrim("О праве на повышенную фиксированную выплату к страховой пенсии (ч. 14 ст. 17 ФЗ № 400-ФЗ)"), GroupClaim = groupClaim, Description = "О праве на повышенную фиксированную выплату к страховой пенсии (ч. 14 ст. 17 ФЗ № 400-ФЗ)" },
                         new SubjectClaim { Code = "10.4", Name = StrTrim("Выплата пенсии"), GroupClaim = groupClaim, Description = "Выплата пенсии" },
                         new SubjectClaim { Code = "10.5", Name = StrTrim("Компенсационные и ежемесячные выплаты трудоспособному лицу, доплаты к пенсии и иные социальные выплаты"), GroupClaim = groupClaim, Description = "Компенсационные и ежемесячные выплаты трудоспособному лицу, доплаты к пенсии и иные социальные выплаты" },
                         new SubjectClaim { Code = "10.6", Name = StrTrim("Иски об установлении, перерасчете и выплате федеральной социальной доплаты к пенсии"), GroupClaim = groupClaim, Description = "Иски об установлении, перерасчете и выплате федеральной социальной доплаты к пенсии" },

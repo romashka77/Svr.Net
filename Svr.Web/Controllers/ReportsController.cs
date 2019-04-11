@@ -616,7 +616,7 @@ namespace Svr.Web.Controllers
                     if (template.Name.Equals(fileTemplateNameIn))
                         cat = "25.1";
                     else
-                        cat = "19.1";
+                        cat = "20.1";
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
                     worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countDutySatisfied1 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
                     worksheet.Cells[$"J{acells.Last().End.Row}"].Value = dutySatisfied1 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
@@ -664,7 +664,7 @@ namespace Svr.Web.Controllers
                     if (template.Name.Equals(fileTemplateNameIn))
                         cat = "25.3";
                     else
-                        cat = "19.2";
+                        cat = "20.2";
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
                     worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countСostSatisfied1 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
                     worksheet.Cells[$"J{acells.Last().End.Row}"].Value = costSatisfied1 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
@@ -690,7 +690,7 @@ namespace Svr.Web.Controllers
                     if (template.Name.Equals(fileTemplateNameIn))
                         cat = "25.4";
                     else
-                        cat = "19.3";
+                        cat = "20.3";
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
                     worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countDutySatisfied11 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
                     worksheet.Cells[$"J{acells.Last().End.Row}"].Value = dutySatisfied11 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
@@ -738,7 +738,7 @@ namespace Svr.Web.Controllers
                     if (template.Name.Equals(fileTemplateNameIn))
                         cat = "25.6";
                     else
-                        cat = "19.4";
+                        cat = "20.4";
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
                     worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countСostSatisfied11 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
                     worksheet.Cells[$"J{acells.Last().End.Row}"].Value = costSatisfied11 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
