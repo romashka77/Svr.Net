@@ -37,13 +37,13 @@ export default function register() {
         checkValidServiceWorker(swUrl);
       } else {
         // Is not local host. Just register service worker
-        registerValidSW(swUrl);
+        registerValidSw(swUrl);
       }
     });
   }
 }
 
-function registerValidSW(swUrl) {
+function registerValidSw(swUrl) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
@@ -83,13 +83,13 @@ function checkValidServiceWorker(swUrl) {
       ) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
-          registration.unregister().then(() => {
+          registration.UnRegister().then(() => {
             window.location.reload();
           });
         });
       } else {
         // Service worker found. Proceed as normal.
-        registerValidSW(swUrl);
+        registerValidSw(swUrl);
       }
     })
     .catch(() => {
@@ -99,10 +99,10 @@ function checkValidServiceWorker(swUrl) {
     });
 }
 
-export function unregister() {
+export function UnRegister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then(registration => {
-      registration.unregister();
+      registration.UnRegister();
     });
   }
 }

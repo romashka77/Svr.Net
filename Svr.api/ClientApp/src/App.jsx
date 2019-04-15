@@ -8,9 +8,9 @@ import ClaimsPage from './components/claims-page';
 
 export default () => (
   <Layout>
-    <Route exact path='/' component={Home} />
-    <Route path='/counter' component={Counter} />
-    <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-    <Route path='/claims-data' component={ClaimsPage} />
+    <Route exact path="/" component={Home} />
+    <Route path="/counter" component={Counter} />
+    <Route path="/fetch-data/:startDateIndex?" component={FetchData} />
+    <Route path="/claims-data" component={ClaimsPage} />
   </Layout>
 );

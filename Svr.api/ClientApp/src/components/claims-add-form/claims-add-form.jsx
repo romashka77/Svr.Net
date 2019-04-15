@@ -9,5 +9,5 @@ export default class ClaimsAddForm extends Component {
         <button className="btn btn-outline-secondary" onClick={() => this.props.onAdded('test')}>Добавить</button>
       </div>
       );
-  };
+  }
 }

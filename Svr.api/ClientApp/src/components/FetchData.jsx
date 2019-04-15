@@ -34,7 +34,7 @@ class FetchData extends Component {
 
 function renderForecastsTable(props) {
   return (
-    <table className='table table-striped'>
+    <table className="table table-striped">
       <thead>
         <tr>
           <th>Date</th>
@@ -61,9 +61,9 @@ function renderPagination(props) {
   const prevStartDateIndex = (props.startDateIndex || 0) - 5;
   const nextStartDateIndex = (props.startDateIndex || 0) + 5;
 
-  return <p className='clearfix text-center'>
-    <Link className='btn btn-default pull-left' to={`/fetch-data/${prevStartDateIndex}`}>Previous</Link>
-    <Link className='btn btn-default pull-right' to={`/fetch-data/${nextStartDateIndex}`}>Next</Link>
+  return <p className="clearfix text-center">
+    <Link className="btn btn-default pull-left" to={`/fetch-data/${prevStartDateIndex}`}>Previous</Link>
+    <Link className="btn btn-default pull-right" to={`/fetch-data/${nextStartDateIndex}`}>Next</Link>
     {props.isLoading ? <span>Loading...</span> : []}
   </p>;
 }

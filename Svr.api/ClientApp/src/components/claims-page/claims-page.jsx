@@ -40,7 +40,7 @@ export default class ClaimsPage extends Component {
   addItem = (text) => {
     const newItem = this.createClaimsItem(text);
     this.setState(({ claimsData }) => {
-      return { claimsData: [...claimsData, newItem]}; 
+      return { claimsData: [...claimsData, newItem] };
     });
   };
 
@@ -48,7 +48,6 @@ export default class ClaimsPage extends Component {
     return (
       <div className="claims-page">
         <ClaimsHeader label="Иски" count={this.state.claimsData.length} />
-
         <div className="top-panel d-flex">
           <SearchPanel />
           <ItemStatusFilter />
