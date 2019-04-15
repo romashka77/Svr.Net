@@ -12,9 +12,8 @@ namespace Svr.Core.Entities
         /// Группа исков
         /// </summary>
         [Display(Name = "Группы исков")]
-        public virtual ICollection<GroupClaim> GroupClaims { get; set; }
+        public virtual ICollection<GroupClaim> GroupClaims { get; set; } = new List<GroupClaim>();
 
-        public CategoryDispute() { GroupClaims = new List<GroupClaim>(); }
         public override string ToString() => "Категория споров";
     }
 }

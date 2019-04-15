@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Svr.Core.Entities
 {
@@ -12,9 +10,8 @@ namespace Svr.Core.Entities
         public virtual DirName DirName { get; set; }  // навигационное свойство
 
         [Display(Name = "Стороны процесса")]
-        public virtual ICollection<Applicant> Applicants { get; set; }
+        public virtual ICollection<Applicant> Applicants { get; set; } = new List<Applicant>();
 
-        public Dir() { Applicants = new List<Applicant>(); }
         public override string ToString() => "Справочник";
     }
 }

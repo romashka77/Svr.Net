@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Svr.Core.Entities;
 using Svr.Infrastructure.Data.Configurations;
-using Svr.Infrastructure.Data.Extentions;
+using Svr.Infrastructure.Data.Extensions;
 using System.Threading;
 using System.Threading.Tasks;
 

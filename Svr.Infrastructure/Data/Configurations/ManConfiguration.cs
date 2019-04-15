@@ -13,7 +13,7 @@ namespace Svr.Infrastructure.Data.Configurations
             //builder.Property(m => m.FirstName).IsRequired().HasMaxLength(100).IsConcurrencyToken();
             //builder.Property(m => m.MiddleName).HasMaxLength(100).IsConcurrencyToken();
             /*.HasAlternateKey(m => new { m.Snils, m.LastName, m.FirstName, m.MiddleName })*/
-            ;
+            
         }
     }
 }
