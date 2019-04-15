@@ -45,7 +45,7 @@ namespace Svr.Infrastructure.Data
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            return await Entities.AsNoTracking().SingleOrDefaultAsync(m => m.Id == id);
+            return await Entities.AsNoTracking().Where(m => m.Id == id).SingleOrDefaultAsync();
         }
 
         public virtual IEnumerable<T> ListAll()

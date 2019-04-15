@@ -6,6 +6,7 @@ export const actionCreators = {
   requestWeatherForecasts: startDateIndex => async (dispatch, getState) => {
     if (startDateIndex === getState().weatherForecasts.startDateIndex) {
       // Don't issue a duplicate request (we already have or are loading the requested data)
+      // Ќе выдавайте дубликат запроса (у нас уже есть или загружаютс€ запрошенные данные)
       return;
     }
 

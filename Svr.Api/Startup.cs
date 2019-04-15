@@ -1,10 +1,13 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Svr.api
 {
@@ -20,6 +23,15 @@ namespace Svr.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConsole();
+                loggingBuilder.AddDebug();
+            });
+            services.AddDbContext();
+            services.AddRepository();
+            services.AddTransientServices();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // В производстве файлы React будут обслуживаться из этого каталога
@@ -30,11 +42,13 @@ namespace Svr.api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
+                //loggerFactory.AddConsole();
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -42,6 +56,17 @@ namespace Svr.api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            var supportedCultures = new[]
+          {
+                new CultureInfo("ru-RU"),
+                new CultureInfo("ru"),
+            };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("ru-RU"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
