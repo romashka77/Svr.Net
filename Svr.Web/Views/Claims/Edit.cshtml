@@ -1,4 +1,4 @@
-﻿@using Svr.Core.Entities
+﻿@*@using Svr.Core.Entities*@
 @model Svr.Web.Models.ClaimsViewModels.EditViewModel
 
 @{
@@ -6,7 +6,7 @@
 }
 
 <h2>@ViewData["Title"]</h2>
-@Html.Partial("_StatusMessage", Model.StatusMessage)
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 <h4>@Model</h4>
 <hr />
 
@@ -150,5 +150,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

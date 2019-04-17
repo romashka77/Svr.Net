@@ -64,7 +64,7 @@ var textFirstUpperCase =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "750dae92ab95f7f60a6e";
+/******/ 	var hotCurrentHash = "cd42987e055b045f27c5";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -764,7 +764,7 @@ var textFirstUpperCase =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "750dae92ab95f7f60a6e";
+/******/ 	var hotCurrentHash = "cd42987e055b045f27c5";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -3080,21 +3080,10 @@ module.exports = function(module) {
 /*!*******************************!*\
   !*** ./textFirstUpperCase.js ***!
   \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// Первая заглавная, остальные строчные
-var textFirstUpperCase = function textFirstUpperCase(value) {
-  if (value.length > 0) {
-    return "".concat(value.charAt(0).toUpperCase()).concat(value.substr(1, value.length - 1).toLowerCase());
-  }
-
-  return value;
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (textFirstUpperCase);
+throw new Error("Module build failed (from ../node_modules/eslint-loader/index.js):\nError: Cannot find module 'eslint-config-defaults/configurations/eslint'\nReferenced from: e:\\Users\\romas\\.eslintrc\n    at ModuleResolver.resolve (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\util\\module-resolver.js:72:19)\n    at resolve (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:507:28)\n    at load (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:579:26)\n    at configExtends.reduceRight (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:453:36)\n    at Array.reduceRight (<anonymous>)\n    at applyExtends (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:431:26)\n    at loadFromDisk (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:551:22)\n    at Object.load (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:587:20)\n    at Config.getLocalConfigHierarchy (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config.js:240:44)\n    at Config.getConfigHierarchy (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config.js:192:43)\n    at Config.getConfigVector (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config.js:299:21)\n    at Config.getConfig (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\config.js:342:29)\n    at processText (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:181:33)\n    at CLIEngine.executeOnText (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:690:40)\n    at lint (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint-loader\\index.js:263:17)\n    at Object.module.exports (e:\\Users\\romas\\source\\repos\\romashka77\\Svr.Net\\Svr.Web\\node_modules\\eslint-loader\\index.js:258:21)");
 
 /***/ }),
 

@@ -42,7 +42,7 @@
                         <li><a asp-area="" asp-controller="GroupClaims" asp-action="Index">Группы исков</a></li>
                         <li><a asp-area="" asp-controller="SubjectClaims" asp-action="Index">Предметы исков</a></li>
                         <li><a asp-area="" asp-controller="DirNames" asp-action="Index">Справочники</a></li>
-                        @if (User.IsInRole("Администратор"))
+                        if (User.IsInRole("Администратор"))
                         {
                             <li><a asp-area="" asp-controller="Roles" asp-action="Index">Роли</a></li>
                         }
@@ -64,7 +64,7 @@
         <div id="test">
         </div>
         <footer>
-            @RenderSection("Footer", required: false)
+            @await RenderSectionAsync("Footer", required: false)
             <p>&copy; @DateTime.Now.Year – ОПФР по Тамбовской области(Р.А.Макаров, тел:(4752)79-45-10)</p>
         </footer>
     </div>
@@ -92,6 +92,6 @@
 
     @*<script type="text/javascript" src="@Url.Content("~/assets/bundle.js")"></script>*@
 
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
