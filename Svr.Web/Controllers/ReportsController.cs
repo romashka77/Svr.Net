@@ -11,7 +11,6 @@ using OfficeOpenXml.Style;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
-using Svr.Infrastructure.Extensions;
 using Svr.Infrastructure.Identity;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
@@ -451,7 +450,7 @@ namespace Svr.Web.Controllers
                 //var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code, codeComparer);
                 foreach (var subjectClaim in groupClaim.SubjectClaims)
                 {
-                    var claims = claimRepository.List(new ClaimSpecificationRepost(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
+                    var claims = claimRepository.List(new ClaimSpecificationReport(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
                     if (dateS != null)
                     {

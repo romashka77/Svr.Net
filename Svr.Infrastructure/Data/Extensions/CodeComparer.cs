@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Svr.Infrastructure.Extensions
+namespace Svr.Infrastructure.Data.Extensions
 {
-    public class CodeComparer : IComparer<Object>
+    public class CodeComparer : IComparer<object>
     {
         public int Compare(object x, object y)
         {
-            var a = x.ToString().Split('.');
-            var b = y.ToString().Split('.');
-            for (int i = 0; (i < a.Length) && (i < b.Length); i++)
+            var a = x?.ToString().Split('.');
+            var b = y?.ToString().Split('.');
+            for (var i = 0; (i < a?.Length) && (i < b?.Length); i++)
             {
-                if (long.TryParse(a[i], out long c) && long.TryParse(b[i], out long d))
+                if (long.TryParse(a[i], out var c) && long.TryParse(b[i], out var d))
                 {
                     if (c > d)
                         return 1;
@@ -26,11 +25,11 @@ namespace Svr.Infrastructure.Extensions
                         return -1;
                 }
             }
-            if (a.Length>b.Length)
+            if (a?.Length > b?.Length)
             {
                 return 1;
             }
-            if (a.Length < b.Length)
+            if (a?.Length < b?.Length)
             {
                 return -1;
             }

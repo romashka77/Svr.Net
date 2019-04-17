@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Svr.Infrastructure.Identity.Extentions
+namespace Svr.Infrastructure.Identity.Extensions
 {
     public static class ChangeTrackerExtensions
     {

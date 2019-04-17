@@ -93,26 +93,21 @@ namespace Svr.Core.Entities
         /// Колекция инстанций
         /// </summary>
         [Display(Name = "Инстанции")]
-        public virtual ICollection<Instance> Instances { get; set; }
-        
+        public virtual ICollection<Instance> Instances { get; set; } = new List<Instance>();
+
         /// <summary>
         /// Колекция заседаний
         /// </summary>
         [Display(Name = "График заседаний")]
-        public virtual ICollection<Meeting> Meetings { get; set; }
+        public virtual ICollection<Meeting> Meetings { get; set; } = new List<Meeting>();
 
         /// <summary>
         /// Колекция файлов
         /// </summary>
         [Display(Name = "Документы по иску")]
-        public virtual ICollection<FileEntity> FileEntities { get; set; }
+        public virtual ICollection<FileEntity> FileEntities { get; set; } = new List<FileEntity>();
 
         public override string ToString() => "Иск";
-        public Claim()
-        {
-            Instances = new List<Instance>();
-            Meetings = new List<Meeting>();
-            FileEntities = new List<FileEntity>();
-        }
+       
     }
 }

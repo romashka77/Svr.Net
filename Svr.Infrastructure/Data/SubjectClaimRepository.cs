@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
-using Svr.Infrastructure.Extensions;
+using Svr.Infrastructure.Data.Extensions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

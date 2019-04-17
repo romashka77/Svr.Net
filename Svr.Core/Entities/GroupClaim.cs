@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Svr.Core.Entities
 {
@@ -24,9 +21,8 @@ namespace Svr.Core.Entities
         /// Предметы исков
         /// </summary>
         [Display(Name = "Предметы исков")]
-        public virtual ICollection<SubjectClaim> SubjectClaims { get; set; }
+        public virtual ICollection<SubjectClaim> SubjectClaims { get; set; } = new List<SubjectClaim>();
 
-        public GroupClaim() { SubjectClaims = new List<SubjectClaim>(); }
         public override string ToString() => "Группа исков";
     }
 }

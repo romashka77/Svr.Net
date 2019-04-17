@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Svr.Core.Entities
 {
@@ -23,11 +21,7 @@ namespace Svr.Core.Entities
         /// Колекция районов
         /// </summary>
         [Display(Name = "Районы")]
-        public virtual ICollection<DistrictPerformer> DistrictPerformers { get; set; } 
-        public Performer()
-        {
-            DistrictPerformers = new List<DistrictPerformer>();
-        }
+        public virtual ICollection<DistrictPerformer> DistrictPerformers { get; set; } = new List<DistrictPerformer>();
 
         public override string ToString() => "Исполнитель";
     }
