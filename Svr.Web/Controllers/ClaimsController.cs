@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
@@ -154,7 +155,7 @@ namespace Svr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var item = await repository.AddAsync(new Claim { Code = $"{model.Id}-{DateTime.Now.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}", Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg });
+                var item = await repository.AddAsync(new Claim { Code = GetCode(model.Name, model.DateReg, model.CreatedOnUtc.Year, model.Id)/* $"{model.Id}-{DateTime.Now.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}"*/, Name = model.Name, Description = model.Description, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg });
                 if (item != null)
                 {
 
@@ -193,7 +194,7 @@ namespace Svr.Web.Controllers
             {
                 try
                 {
-                    model.Code = $"{model.Id}-{model.CreatedOnUtc.Year.ToString()}-{model.Name}/{model.DateReg.ToString("D")}";
+                    model.Code = GetCode(model.Name, model.DateReg, model.CreatedOnUtc.Year, model.Id); //$"{model.Id}-{model.CreatedOnUtc.Year}-{model.Name}/{model.DateReg.ToString("D")}";
                     if ((model.RegionId != 0) && (model.DistrictId != 0))
                     {
                         await repository.UpdateAsync(new Claim { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, CategoryDisputeId = model.CategoryDisputeId, RegionId = model.RegionId, DistrictId = model.DistrictId, DateReg = model.DateReg, DateIn = model.DateIn, GroupClaimId = model.GroupClaimId, SubjectClaimId = model.SubjectClaimId, СourtId = model.СourtId, PerformerId = model.PerformerId, Sum = model.Sum, PlaintiffId = model.PlaintiffId, RespondentId = model.RespondentId, Person3rdId = model.Person3rdId });
@@ -250,6 +251,12 @@ namespace Svr.Web.Controllers
             }
         }
         #endregion
+        #region Utils
+        private string GetCode(string name, DateTime date, int? year, long? id)
+        {
+            return (id != null ? $"{id}-" : "") + (year != null ? $"{year}-" : "") + $"{name}/{date:D}";
+        }
+
         private async Task SetViewBag(EditViewModel model)
         {
             ViewBag.Regions = new SelectList((await regionRepository.ListAllAsync()).OrderBy(n => n.Name), "Id", "Name", model.RegionId);
@@ -275,7 +282,6 @@ namespace Svr.Web.Controllers
             ViewBag.Performers = new SelectList(p.OrderBy(n => n.Name), "Id", "Name", model.PerformerId);
             ViewBag.Applicants = new SelectList((await applicantRepository.ListAsync(new ApplicantSpecification(null))).OrderBy(n => n.Name).Select(a => new { Id = a.Id, Name = string.Concat(a.Name, " ", a.Address) }), "Id", "Name", model.PlaintiffId);
         }
-
-
+        #endregion
     }
 }

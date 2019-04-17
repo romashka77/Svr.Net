@@ -455,11 +455,11 @@ namespace Svr.Web.Controllers
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
                     if (dateS != null)
                     {
-                        claims = claims.Where(c => c.DateReg >= dateS);
+                        claims = claims.Where(c => c.DateIn >= dateS);
                     }
                     if (datePo != null)
                     {
-                        claims = claims.Where(c => c.DateReg <= datePo);
+                        claims = claims.Where(c => c.DateIn <= datePo);
                     }
                     var count = await claims.CountAsync();
                     if (count > 0)
@@ -478,11 +478,11 @@ namespace Svr.Web.Controllers
                     }
                     if (dateS != null)
                     {
-                        instances = instances.Where(c => c.DateCourtDecision >= dateS);
+                        instances = instances.Where(c => c.DateInCourtDecision >= dateS);
                     }
                     if (datePo != null)
                     {
-                        instances = instances.Where(c => c.DateCourtDecision <= datePo);
+                        instances = instances.Where(c => c.DateInCourtDecision <= datePo);
                     }
 
                     int countEnd0 = 0;
