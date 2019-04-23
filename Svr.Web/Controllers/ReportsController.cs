@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -311,7 +312,7 @@ namespace Svr.Web.Controllers
         {
             template = await GetFileTemplateName(category);
             if (template == null) return null;
-            ExcelPackage package = new ExcelPackage( template, true);
+            ExcelPackage package = new ExcelPackage(template, true);
             package.Workbook.Properties.Author = User.Identity.Name;
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
             //Группы споров
@@ -616,46 +617,50 @@ namespace Svr.Web.Controllers
                         cat = "25.1";
                     else
                         cat = "20.1";
+                    int t;
+                    decimal t0;
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countDutySatisfied1 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = dutySatisfied1 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countDutyDenied1 + int.Parse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = dutyDenied1 + decimal.Parse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countDutySatisfied2 + int.Parse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = dutySatisfied2 + decimal.Parse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = countDutyDenied2 + int.Parse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = dutyDenied2 + decimal.Parse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countDutySatisfied3 + int.Parse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = dutySatisfied3 + decimal.Parse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = countDutyDenied3 + int.Parse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = dutyDenied3 + decimal.Parse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countDutySatisfied4 + int.Parse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = dutySatisfied4 + decimal.Parse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = countDutyDenied4 + int.Parse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = dutyDenied4 + decimal.Parse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text);
+                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countDutySatisfied1 + t : countDutySatisfied1;
+                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? dutySatisfied1 + t0 : dutySatisfied1;
+                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countDutyDenied1 + t : countDutyDenied1;
+                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? dutyDenied1 + t0 : dutyDenied1;
+                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countDutySatisfied2 + t : countDutySatisfied2;
+                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? dutySatisfied2 + t0 : dutySatisfied2;
+                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countDutyDenied2 + t : countDutyDenied2;
+                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? dutyDenied2 + t0 : dutyDenied2;
+                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countDutySatisfied3 + t : countDutySatisfied3;
+                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? dutySatisfied3 + t0 : dutySatisfied3;
+                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countDutyDenied3 + t : countDutyDenied3;
+                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? dutyDenied3 + t0 : dutyDenied3;
+                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countDutySatisfied4 + t : countDutySatisfied4;
+                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? dutySatisfied4 + t0 : dutySatisfied4;
+                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countDutyDenied4 + t : countDutyDenied4;
+                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? dutyDenied4 + t0 : dutyDenied4;
                 }
                 if (countServicesSatisfied1 > 0 || countServicesDenied1 > 0 || countServicesSatisfied2 > 0 || countServicesDenied2 > 0 || countServicesSatisfied3 > 0 || countServicesDenied3 > 0 || countServicesSatisfied4 > 0 || countServicesDenied4 > 0)
                 {
                     string cat = "";
                     if (template.Name.Equals(fileTemplateNameIn))
                         cat = "25.2";
+                    int t;
+                    decimal t0;
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countServicesSatisfied1 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = servicesSatisfied1 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countServicesDenied1 + int.Parse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = servicesDenied1 + decimal.Parse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countServicesSatisfied2 + int.Parse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = servicesSatisfied2 + decimal.Parse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = countServicesDenied2 + int.Parse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = servicesDenied2 + decimal.Parse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countServicesSatisfied3 + int.Parse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = servicesSatisfied3 + decimal.Parse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = countServicesDenied3 + int.Parse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = servicesDenied3 + decimal.Parse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countServicesSatisfied4 + int.Parse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = servicesSatisfied4 + decimal.Parse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = countServicesDenied4 + int.Parse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = servicesDenied4 + decimal.Parse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text);
+                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied1 + t : countServicesSatisfied1;
+                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied1 + t0 : servicesSatisfied1;
+                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countServicesDenied1 + t : countServicesDenied1;
+                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? servicesDenied1 + t0 : servicesDenied1;
+                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied2 + t : countServicesSatisfied2;
+                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied2 + t0 : servicesSatisfied2;
+                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countServicesDenied2 + t : countServicesDenied2;
+                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? servicesDenied2 + t0 : servicesDenied2;
+                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied3 + t : countServicesSatisfied3;
+                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied3 + t0 : servicesSatisfied3;
+                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countServicesDenied3 + t : countServicesDenied3;
+                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? servicesDenied3 + t0 : servicesDenied3;
+                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied4 + t : countServicesSatisfied4;
+                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied4 + t0 : servicesSatisfied4;
+                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countServicesDenied4 + t : countServicesDenied4;
+                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? servicesDenied4 + t0 : servicesDenied4;
                 }
                 if (countСostSatisfied1 > 0 || countСostDenied1 > 0 || countСostSatisfied2 > 0 || countСostDenied2 > 0 || countСostSatisfied3 > 0 || countСostDenied3 > 0 || countСostSatisfied4 > 0 || countСostDenied4 > 0)
                 {
@@ -664,72 +669,78 @@ namespace Svr.Web.Controllers
                         cat = "25.3";
                     else
                         cat = "20.2";
+                    int t;
+                    decimal t0;
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countСostSatisfied1 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = costSatisfied1 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countСostDenied1 + int.Parse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = costDenied1 + decimal.Parse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countСostSatisfied2 + int.Parse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = costSatisfied2 + decimal.Parse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = countСostDenied2 + int.Parse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = costDenied2 + decimal.Parse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countСostSatisfied3 + int.Parse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = costSatisfied3 + decimal.Parse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = countСostDenied3 + int.Parse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = costDenied3 + decimal.Parse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countСostSatisfied4 + int.Parse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = costSatisfied4 + decimal.Parse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = countСostDenied4 + int.Parse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = costDenied4 + decimal.Parse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text);
+                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied1 + t : countСostSatisfied1;
+                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? costSatisfied1 + t0 : costSatisfied1;
+                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countСostDenied1 + t : countСostDenied1;
+                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? costDenied1 + t0 : costDenied1;
+                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied2 + t : countСostSatisfied2;
+                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? costSatisfied2 + t0 : costSatisfied2;
+                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countСostDenied2 + t : countСostDenied2;
+                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? costDenied2 + t0 : costDenied2;
+                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied3 + t : countСostSatisfied3;
+                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? costSatisfied3 + t0 : costSatisfied3;
+                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countСostDenied3 + t : countСostDenied3;
+                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? costDenied3 + t0 : costDenied3;
+                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied4 + t : countСostSatisfied4;
+                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? costSatisfied4 + t0 : costSatisfied4;
+                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countСostDenied4 + t : countСostDenied4;
+                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? costDenied4 + t0 : costDenied4;
                 }
 
                 if (countDutySatisfied11 > 0 || countDutyDenied11 > 0 || countDutySatisfied22 > 0 || countDutyDenied22 > 0 || countDutySatisfied33 > 0 || countDutyDenied33 > 0 || countDutySatisfied44 > 0 || countDutyDenied44 > 0)
                 {
-                    string cat = "";
+                    var cat = "";
                     if (template.Name.Equals(fileTemplateNameIn))
                         cat = "25.4";
                     else
                         cat = "20.3";
+                    int tmp = 0;
+                    decimal tmp1 = 0;
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countDutySatisfied11 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = dutySatisfied11 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countDutyDenied11 + int.Parse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = dutyDenied11 + decimal.Parse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countDutySatisfied22 + int.Parse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = dutySatisfied22 + decimal.Parse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = countDutyDenied22 + int.Parse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = dutyDenied22 + decimal.Parse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countDutySatisfied33 + int.Parse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = dutySatisfied33 + decimal.Parse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = countDutyDenied33 + int.Parse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = dutyDenied33 + decimal.Parse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countDutySatisfied44 + int.Parse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = dutySatisfied44 + decimal.Parse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = countDutyDenied44 + int.Parse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = dutyDenied44 + decimal.Parse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text);
+                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out tmp) ? (countDutySatisfied11 + tmp) : countDutySatisfied11;
+                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out tmp1) ? dutySatisfied11 + tmp1 : dutySatisfied11;
+                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out tmp) ? countDutyDenied11 + tmp : countDutyDenied11;
+                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out tmp1) ? dutyDenied11 + tmp1 : dutyDenied11;
+                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out tmp) ? countDutySatisfied22 + tmp : countDutySatisfied22;
+                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out tmp1) ? dutySatisfied22 + tmp1 : dutySatisfied22;
+                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out tmp) ? countDutyDenied22 + tmp : countDutyDenied22;
+                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out tmp1) ? dutyDenied22 + tmp1 : dutyDenied22;
+                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out tmp) ? countDutySatisfied33 + tmp : countDutySatisfied33;
+                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out tmp1) ? dutySatisfied33 + tmp1 : dutySatisfied33;
+                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out tmp) ? countDutyDenied33 + tmp : countDutyDenied33;
+                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out tmp1) ? dutyDenied33 + tmp1 : dutyDenied33;
+                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out tmp) ? countDutySatisfied44 + tmp : countDutySatisfied44;
+                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out tmp1) ? dutySatisfied44 + tmp1 : dutySatisfied44;
+                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out tmp) ? countDutyDenied44 + tmp : countDutyDenied44;
+                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out tmp1) ? dutyDenied44 + tmp1 : dutyDenied44;
                 }
                 if (countServicesSatisfied11 > 0 || countServicesDenied11 > 0 || countServicesSatisfied22 > 0 || countServicesDenied22 > 0 || countServicesSatisfied33 > 0 || countServicesDenied33 > 0 || countServicesSatisfied44 > 0 || countServicesDenied44 > 0)
                 {
                     string cat = "";
                     if (template.Name.Equals(fileTemplateNameIn))
                         cat = "25.5";
+                    int t;
+                    decimal t0;
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countServicesSatisfied11 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = servicesSatisfied11 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countServicesDenied11 + int.Parse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = servicesDenied11 + decimal.Parse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countServicesSatisfied22 + int.Parse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = servicesSatisfied22 + decimal.Parse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = countServicesDenied22 + int.Parse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = servicesDenied22 + decimal.Parse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countServicesSatisfied33 + int.Parse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = servicesSatisfied33 + decimal.Parse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = countServicesDenied33 + int.Parse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = servicesDenied33 + decimal.Parse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countServicesSatisfied44 + int.Parse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = servicesSatisfied44 + decimal.Parse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = countServicesDenied44 + int.Parse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = servicesDenied44 + decimal.Parse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text);
+                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied11 + t : countServicesSatisfied11;
+                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied11 + t0 : servicesSatisfied11;
+                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countServicesDenied11 + t : countServicesDenied11;
+                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? servicesDenied11 + t0 : servicesDenied11;
+                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied22 + t : countServicesSatisfied22;
+                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied22 + t0 : servicesSatisfied22;
+                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countServicesDenied22 + t : countServicesDenied22;
+                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? servicesDenied22 + t0 : servicesDenied22;
+                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied33 + t : countServicesSatisfied33;
+                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied33 + t0 : servicesSatisfied33;
+                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countServicesDenied33 + t : countServicesDenied33;
+                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? servicesDenied33 + t0 : servicesDenied33;
+                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied44 + t : countServicesSatisfied44;
+                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied44 + t0 : servicesSatisfied44;
+                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countServicesDenied44 + t : countServicesDenied44;
+                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? servicesDenied44 + t0 : servicesDenied44;
                 }
                 if (countСostSatisfied11 > 0 || countСostDenied11 > 0 || countСostSatisfied22 > 0 || countСostDenied22 > 0 || countСostSatisfied33 > 0 || countСostDenied33 > 0)
                 {
@@ -738,23 +749,25 @@ namespace Svr.Web.Controllers
                         cat = "25.6";
                     else
                         cat = "20.4";
+                    int t;
+                    decimal t0;
                     var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countСostSatisfied11 + int.Parse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = costSatisfied11 + decimal.Parse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countСostDenied11 + int.Parse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = costDenied11 + decimal.Parse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countСostSatisfied22 + int.Parse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = costSatisfied22 + decimal.Parse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = countСostDenied22 + int.Parse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = costDenied22 + decimal.Parse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countСostSatisfied33 + int.Parse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = costSatisfied33 + decimal.Parse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = countСostDenied33 + int.Parse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = costDenied33 + decimal.Parse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countСostSatisfied44 + int.Parse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = costSatisfied44 + decimal.Parse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = countСostDenied44 + int.Parse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text);
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = costDenied44 + decimal.Parse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text);
+                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied11 + t : countСostSatisfied11;
+                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? costSatisfied11 + t0 : costSatisfied11;
+                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countСostDenied11 + t : countСostDenied11;
+                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? costDenied11 + t0 : costDenied11;
+                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied22 + t : countСostSatisfied22;
+                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? costSatisfied22 + t0 : costSatisfied22;
+                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countСostDenied22 + t : countСostDenied22;
+                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? costDenied22 + t0 : costDenied22;
+                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied33 + t : countСostSatisfied33;
+                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? costSatisfied33 + t0 : costSatisfied33;
+                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countСostDenied33 + t : countСostDenied33;
+                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? costDenied33 + t0 : costDenied33;
+                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied44 + t : countСostSatisfied44;
+                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? costSatisfied44 + t0 : costSatisfied44;
+                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countСostDenied44 + t : countСostDenied44;
+                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? costDenied44 + t0 : costDenied44;
                 }
             }
             return package;
