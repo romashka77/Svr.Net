@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using OfficeOpenXml.Style;
 //using OfficeOpenXml.Table;
 using Svr.Core.Entities;
@@ -42,7 +43,7 @@ namespace Svr.Web.Controllers
         private FileInfo template;
         private string reportsFolder = "Reports";
         private const string templatesFolder = "Templates";
-        private const string fileTemplateNameOut = "0901.xlsx";//"Template1.xlsx";
+        private const string fileTemplateNameOut = "0901.xlsx"; //"Template1.xlsx";
         private const string fileTemplateNameIn = "0902.xlsx";
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<ClaimsController> logger;
@@ -54,10 +55,15 @@ namespace Svr.Web.Controllers
         private readonly IClaimRepository claimRepository;
         private readonly IInstanceRepository instanceRepository;
 
-        [TempData]
-        public string StatusMessage { get; set; }
+        [TempData] public string StatusMessage { get; set; }
+
         #region Конструктор
-        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, ILogger<ClaimsController> logger, IDistrictRepository districtRepository, IRegionRepository regionRepository, ICategoryDisputeRepository categoryDisputeRepository, IGroupClaimRepository groupClaimRepository, IClaimRepository claimRepository, IInstanceRepository instanceRepository)
+
+        public ReportsController(IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager,
+            ILogger<ClaimsController> logger, IDistrictRepository districtRepository,
+            IRegionRepository regionRepository, ICategoryDisputeRepository categoryDisputeRepository,
+            IGroupClaimRepository groupClaimRepository, IClaimRepository claimRepository,
+            IInstanceRepository instanceRepository)
         {
             this.logger = logger;
             this.userManager = userManager;
@@ -70,8 +76,11 @@ namespace Svr.Web.Controllers
             this.claimRepository = claimRepository;
             this.instanceRepository = instanceRepository;
         }
+
         #endregion
+
         #region Деструктор
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -80,10 +89,15 @@ namespace Svr.Web.Controllers
                 //regionRepository = null;
                 //logger = null;
             }
+
             base.Dispose(disposing);
         }
+
         #endregion
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? dateS = null, DateTime? datePo = null, string category = null)
+
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null,
+            string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? dateS = null,
+            DateTime? datePo = null, string category = null)
         {
             if (String.IsNullOrEmpty(owner))
             {
@@ -94,6 +108,7 @@ namespace Svr.Web.Controllers
                     lord = "1";
                 }
             }
+
             var path = await GetPath(lord.ToLong(), owner.ToLong());
 
             DirectoryInfo dirInfo = new DirectoryInfo(path);
@@ -101,12 +116,16 @@ namespace Svr.Web.Controllers
             {
                 dirInfo.Create();
             }
+
             IEnumerable<FileInfo> list = dirInfo.GetFiles();
             //фильтрация
             if (!String.IsNullOrEmpty(searchString))
             {
-                list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Extension.ToUpper().Contains(searchString.ToUpper()));
+                list = list.Where(d =>
+                    d.Name.ToUpper().Contains(searchString.ToUpper()) ||
+                    d.Extension.ToUpper().Contains(searchString.ToUpper()));
             }
+
             // сортировка
             switch (sortOrder)
             {
@@ -135,6 +154,7 @@ namespace Svr.Web.Controllers
                     list = list.OrderBy(s => s.Name);
                     break;
             }
+
             // пагинация
             var count = list.Count();
             var itemsOnPage = list.Skip((page - 1) * itemsPage).Take(itemsPage).ToList();
@@ -149,13 +169,22 @@ namespace Svr.Web.Controllers
                 }),
                 PageViewModel = new PageViewModel(count, page, itemsPage),
                 SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(searchString, owner, (await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong()))).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord, (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) }), dateS, datePo, category, (await categoryDisputeRepository.ListAllAsync()).Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString(), Selected = (category == a.Id.ToString()) })),
+                FilterViewModel = new FilterViewModel(searchString, owner,
+                    (await districtRepository.ListAsync(new DistrictSpecification(lord.ToLong()))).Select(a =>
+                        new SelectListItem
+                        { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord,
+                    (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem
+                    { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) }), dateS, datePo,
+                    category,
+                    (await categoryDisputeRepository.ListAllAsync()).Select(a => new SelectListItem
+                    { Text = a.Name, Value = a.Id.ToString(), Selected = (category == a.Id.ToString()) })),
                 StatusMessage = StatusMessage
             };
             return View(indexModel);
         }
 
-        public async Task<IActionResult> InMemoryReport(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
+        public async Task<IActionResult> InMemoryReport(string lord = null, string owner = null, DateTime? dateS = null,
+            DateTime? datePo = null, string category = null)
         {
             if (String.IsNullOrEmpty(owner))
             {
@@ -165,6 +194,7 @@ namespace Svr.Web.Controllers
                     owner = user.DistrictId.ToString();
                 }
             }
+
             byte[] reportBytes;
             using (var package = await createExcelPackage(lord, owner, dateS, datePo, category))
             {
@@ -172,13 +202,16 @@ namespace Svr.Web.Controllers
                 {
                     return RedirectToAction(nameof(Index));
                 }
+
                 reportBytes = package.GetAsByteArray();
             }
+
             return File(reportBytes, XlsxContentType, GetFileName(dateS, datePo));
         }
 
 
-        public async Task<IActionResult> FileReport(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
+        public async Task<IActionResult> FileReport(string lord = null, string owner = null, DateTime? dateS = null,
+            DateTime? datePo = null, string category = null)
         {
             if (String.IsNullOrEmpty(owner))
             {
@@ -188,6 +221,7 @@ namespace Svr.Web.Controllers
                     owner = user.DistrictId.ToString();
                 }
             }
+
             var path = await GetPath(lord.ToLong(), owner.ToLong());
             //byte[] reportBytes;
             using (var package = await createExcelPackage(lord, owner, dateS, datePo, category))
@@ -196,10 +230,13 @@ namespace Svr.Web.Controllers
                 {
                     return RedirectToAction(nameof(Index));
                 }
+
                 //reportBytes = package.GetAsByteArray();
                 package.SaveAs(new FileInfo(Path.Combine(path, GetFileName(dateS, datePo))));
             }
-            return File(/*path*//*reportBytes*/Path.Combine(path, GetFileName(dateS, datePo)), XlsxContentType, GetFileName(dateS, datePo));
+
+            return File( /*path*/ /*reportBytes*/Path.Combine(path, GetFileName(dateS, datePo)), XlsxContentType,
+                GetFileName(dateS, datePo));
         }
 
         private async Task<FileInfo> GetFileTemplateName(string category)
@@ -210,24 +247,33 @@ namespace Svr.Web.Controllers
                 StatusMessage = $"Ошибка: Выберите категорию.";
                 return null;
             }
-            else if ((await categoryDisputeRepository.GetByIdAsync(category.ToLong())).Name.ToUpper().Equals("Входящие".ToUpper()))
+            else if ((await categoryDisputeRepository.GetByIdAsync(category.ToLong())).Name.ToUpper()
+                .Equals("Входящие".ToUpper()))
                 fileTemplateName = fileTemplateNameIn;
-            else if ((await categoryDisputeRepository.GetByIdAsync(category.ToLong())).Name.ToUpper().Equals("Исходящие".ToUpper()))
+            else if ((await categoryDisputeRepository.GetByIdAsync(category.ToLong())).Name.ToUpper()
+                .Equals("Исходящие".ToUpper()))
                 fileTemplateName = fileTemplateNameOut;
             else
             {
                 StatusMessage = $"Ошибка: Категория не определена.";
                 return null;
             }
-            FileInfo template = new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, templatesFolder, fileTemplateName));
+
+            FileInfo template =
+                new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, templatesFolder, fileTemplateName));
             if (!template.Exists)
             {
                 StatusMessage = $"Ошибка: Файл Excel-шаблона {fileTemplateName} отсутствует.";
                 return null;
             }
+
             return template;
         }
-        private int GetSumInstances(List<Instance> instances, out int countSatisfied, out decimal sumSatisfied, out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo, out decimal sumNo, ref int countDutySatisfied, ref decimal dutySatisfied, ref int countDutyDenied, ref decimal dutyDenied, ref int countServicesSatisfied, ref decimal servicesSatisfied, ref int countServicesDenied, ref decimal servicesDenied, ref int countСostSatisfied, ref decimal costSatisfied, ref int countСostDenied, ref decimal costDenied, ref int countDutyPaid, ref decimal dutyPaid)
+
+        private int GetSumInstances(List<Instance> instances, out int countSatisfied, out decimal sumSatisfied,
+            out int countDenied, out decimal sumDenied, out int countEnd, out decimal sumEnd, out int countNo,
+            out decimal sumNo, Record dutySatisfied, Record dutyDenied, Record servicesSatisfied,
+            Record servicesDenied, Record costSatisfied, Record costDenied, Record dutyPaid)
         {
             int result = 0;
             countSatisfied = 0;
@@ -249,191 +295,175 @@ namespace Svr.Web.Controllers
                         sumSatisfied = sumSatisfied + (item?.SumSatisfied ?? 0);
                         sumDenied = sumDenied + (item?.SumDenied ?? 0);
                     }
-                    else
-                    if (item.CourtDecision.Name.ToUpper().Equals("Отказано".ToUpper()))
+                    else if (item.CourtDecision.Name.ToUpper().Equals("Отказано".ToUpper()))
                     {
                         countDenied++;
                         sumDenied = sumDenied + (item?.SumDenied ?? 0);
                     }
-                    else
-                    if (item.CourtDecision.Name.ToUpper().Equals("Прекращено".ToUpper()))
+                    else if (item.CourtDecision.Name.ToUpper().Equals("Прекращено".ToUpper()))
                     {
                         countEnd++;
                         sumEnd = sumEnd + (item?.Claim?.Sum ?? 0);
                     }
-                    else
-                    if (item.CourtDecision.Name.ToUpper().Equals("Оставлено без рассмотрения".ToUpper()))
+                    else if (item.CourtDecision.Name.ToUpper().Equals("Оставлено без рассмотрения".ToUpper()))
                     {
                         countNo++;
                         sumNo = sumNo + (item?.Claim?.Sum ?? 0);
                     }
+
                     if (item?.DutySatisfied != null && item.DutySatisfied > 0)
                     {
-                        countDutySatisfied++;
-                        dutySatisfied = dutySatisfied + (item?.DutySatisfied ?? 0);
+                        dutySatisfied.Count++;
+                        dutySatisfied.Sum = dutySatisfied.Sum + (item?.DutySatisfied ?? 0);
                     }
+
                     if (item?.DutyDenied != null && item?.DutyDenied > 0)
                     {
-                        countDutyDenied++;
-                        dutyDenied = dutyDenied + (item?.DutyDenied ?? 0);
+                        dutyDenied.Count++;
+                        dutyDenied.Sum = dutyDenied.Sum + (item?.DutyDenied ?? 0);
                     }
+
                     if (item?.ServicesSatisfied != null && item?.ServicesSatisfied > 0)
                     {
-                        countServicesSatisfied++;
-                        servicesSatisfied = servicesSatisfied + (item?.ServicesSatisfied ?? 0);
+                        servicesSatisfied.Count++;
+                        servicesSatisfied.Sum = servicesSatisfied.Sum + (item?.ServicesSatisfied ?? 0);
                     }
+
                     if (item?.ServicesDenied != null && item?.ServicesDenied > 0)
                     {
-                        countServicesDenied++;
-                        servicesDenied = servicesDenied + (item?.ServicesDenied ?? 0);
+                        servicesDenied.Count++;
+                        servicesDenied.Sum = servicesDenied.Sum + (item?.ServicesDenied ?? 0);
                     }
+
                     if (item?.СostSatisfied != null && item?.СostSatisfied > 0)
                     {
-                        countСostSatisfied++;
-                        costSatisfied = costSatisfied + (item?.СostSatisfied ?? 0);
+                        costSatisfied.Count++;
+                        costSatisfied.Sum = costSatisfied.Sum + (item?.СostSatisfied ?? 0);
                     }
+
                     if (item?.СostDenied != null && item?.СostDenied > 0)
                     {
-                        countСostDenied++;
-                        costDenied = costDenied + (item?.СostDenied ?? 0);
+                        costDenied.Count++;
+                        costDenied.Sum = costDenied.Sum + (item?.СostDenied ?? 0);
                     }
+
                     //-----------------
                     if (item?.DutyPaid != null && item?.DutyPaid > 0)
                     {
-                        countDutyPaid++;
-                        dutyPaid = dutyPaid + (item?.DutyPaid ?? 0);
+                        dutyPaid.Count++;
+                        dutyPaid.Sum = dutyPaid.Sum + (item?.DutyPaid ?? 0);
                     }
                 }
             }
+
             return result;
         }
 
-        private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null, DateTime? dateS = null, DateTime? datePo = null, string category = null)
+        private static int CellToInt(string text, int count)
+        {
+            return int.TryParse(text, out var t) ? count + t : count;
+        }
+
+        private static decimal CellToDec(string text, decimal count)
+        {
+            return decimal.TryParse(text, out var t) ? count + t : count;
+        }
+
+        private struct Record
+        {
+            public int Count { get; set; }
+
+            public decimal Sum { get; set; }
+        }
+
+        
+        private enum TypeRecord
+        {
+            All, Satisfied, Denied
+        }
+
+        private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null,
+            DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             template = await GetFileTemplateName(category);
             if (template == null) return null;
-            ExcelPackage package = new ExcelPackage(template, true);
+            var package = new ExcelPackage(template, true);
             package.Workbook.Properties.Author = User.Identity.Name;
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
             //Группы споров
-            var groupClaims = (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong()))).OrderBy(a => a.Code.ToLong());
+            var groupClaims =
+                    (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong())))
+                    .OrderBy(a => a.Code.ToLong());
+            //Гос.пошлина удов
+            var dutySatisfied = new Record { Count = 0, Sum = 0 };
+            var dutySatisfied1 = new Record { Count = 0, Sum = 0 };
+            var dutySatisfied11 = new Record { Count = 0, Sum = 0 };
+            var dutySatisfied2 = new Record { Count = 0, Sum = 0 };
+            var dutySatisfied22 = new Record { Count = 0, Sum = 0 };
+            var dutySatisfied3 = new Record { Count = 0, Sum = 0 };
+            var dutySatisfied33 = new Record { Count = 0, Sum = 0 };
+            var dutySatisfied4 = new Record { Count = 0, Sum = 0 };
+            var dutySatisfied44 = new Record { Count = 0, Sum = 0 };
 
-            int countDutySatisfied = 0;
-            decimal dutySatisfied = 0;
-            int countDutyDenied = 0;
-            decimal dutyDenied = 0;
-            int countServicesSatisfied = 0;
-            decimal servicesSatisfied = 0;
-            int countServicesDenied = 0;
-            decimal servicesDenied = 0;
-            int countСostSatisfied = 0;
-            decimal costSatisfied = 0;
-            int countСostDenied = 0;
-            decimal costDenied = 0;
 
 
-            int countDutySatisfied1 = 0;
-            decimal dutySatisfied1 = 0;
-            int countDutySatisfied11 = 0;
-            decimal dutySatisfied11 = 0;
-            int countDutyDenied1 = 0;
-            decimal dutyDenied1 = 0;
-            int countDutyDenied11 = 0;
-            decimal dutyDenied11 = 0;
-            int countServicesSatisfied1 = 0;
-            decimal servicesSatisfied1 = 0;
-            int countServicesSatisfied11 = 0;
-            decimal servicesSatisfied11 = 0;
-            int countServicesDenied1 = 0;
-            decimal servicesDenied1 = 0;
-            int countServicesDenied11 = 0;
-            decimal servicesDenied11 = 0;
-            int countСostSatisfied1 = 0;
-            decimal costSatisfied1 = 0;
-            int countСostSatisfied11 = 0;
-            decimal costSatisfied11 = 0;
-            int countСostDenied1 = 0;
-            decimal costDenied1 = 0;
-            int countСostDenied11 = 0;
-            decimal costDenied11 = 0;
 
-            int countDutySatisfied2 = 0;
-            decimal dutySatisfied2 = 0;
-            int countDutySatisfied22 = 0;
-            decimal dutySatisfied22 = 0;
-            int countDutyDenied2 = 0;
-            decimal dutyDenied2 = 0;
-            int countDutyDenied22 = 0;
-            decimal dutyDenied22 = 0;
-            int countServicesSatisfied2 = 0;
-            decimal servicesSatisfied2 = 0;
-            int countServicesSatisfied22 = 0;
-            decimal servicesSatisfied22 = 0;
-            int countServicesDenied2 = 0;
-            decimal servicesDenied2 = 0;
-            int countServicesDenied22 = 0;
-            decimal servicesDenied22 = 0;
-            int countСostSatisfied2 = 0;
-            decimal costSatisfied2 = 0;
-            int countСostSatisfied22 = 0;
-            decimal costSatisfied22 = 0;
-            int countСostDenied2 = 0;
-            decimal costDenied2 = 0;
-            int countСostDenied22 = 0;
-            decimal costDenied22 = 0;
+            //Гос.пошлина отк.
+            var dutyDenied = new Record { Count = 0, Sum = 0 };
+            var dutyDenied1 = new Record { Count = 0, Sum = 0 };
+            var dutyDenied11 = new Record { Count = 0, Sum = 0 };
+            var dutyDenied2 = new Record { Count = 0, Sum = 0 };
+            var dutyDenied22 = new Record { Count = 0, Sum = 0 };
+            var dutyDenied3 = new Record { Count = 0, Sum = 0 };
+            var dutyDenied33 = new Record { Count = 0, Sum = 0 };
+            var dutyDenied4 = new Record { Count = 0, Sum = 0 };
+            var dutyDenied44 = new Record { Count = 0, Sum = 0 };
 
-            int countDutySatisfied3 = 0;
-            decimal dutySatisfied3 = 0;
-            int countDutySatisfied33 = 0;
-            decimal dutySatisfied33 = 0;
-            int countDutyDenied3 = 0;
-            decimal dutyDenied3 = 0;
-            int countDutyDenied33 = 0;
-            decimal dutyDenied33 = 0;
-            int countServicesSatisfied3 = 0;
-            decimal servicesSatisfied3 = 0;
-            int countServicesSatisfied33 = 0;
-            decimal servicesSatisfied33 = 0;
-            int countServicesDenied3 = 0;
-            decimal servicesDenied3 = 0;
-            int countServicesDenied33 = 0;
-            decimal servicesDenied33 = 0;
-            int countСostSatisfied3 = 0;
-            decimal costSatisfied3 = 0;
-            int countСostSatisfied33 = 0;
-            decimal costSatisfied33 = 0;
-            int countСostDenied3 = 0;
-            decimal costDenied3 = 0;
-            int countСostDenied33 = 0;
-            decimal costDenied33 = 0;
+            //Услуги пред.удов.
+            var servicesSatisfied = new Record { Count = 0, Sum = 0 };
+            var servicesSatisfied1 = new Record { Count = 0, Sum = 0 };
+            var servicesSatisfied11 = new Record { Count = 0, Sum = 0 };
+            var servicesSatisfied2 = new Record { Count = 0, Sum = 0 };
+            var servicesSatisfied22 = new Record { Count = 0, Sum = 0 };
+            var servicesSatisfied3 = new Record { Count = 0, Sum = 0 };
+            var servicesSatisfied33 = new Record { Count = 0, Sum = 0 };
+            var servicesSatisfied4 = new Record { Count = 0, Sum = 0 };
+            var servicesSatisfied44 = new Record { Count = 0, Sum = 0 };
 
-            int countDutySatisfied4 = 0;
-            decimal dutySatisfied4 = 0;
-            int countDutySatisfied44 = 0;
-            decimal dutySatisfied44 = 0;
-            int countDutyDenied4 = 0;
-            decimal dutyDenied4 = 0;
-            int countDutyDenied44 = 0;
-            decimal dutyDenied44 = 0;
-            int countServicesSatisfied4 = 0;
-            decimal servicesSatisfied4 = 0;
-            int countServicesSatisfied44 = 0;
-            decimal servicesSatisfied44 = 0;
-            int countServicesDenied4 = 0;
-            decimal servicesDenied4 = 0;
-            int countServicesDenied44 = 0;
-            decimal servicesDenied44 = 0;
-            int countСostSatisfied4 = 0;
-            decimal costSatisfied4 = 0;
-            int countСostSatisfied44 = 0;
-            decimal costSatisfied44 = 0;
-            int countСostDenied4 = 0;
-            decimal costDenied4 = 0;
-            int countСostDenied44 = 0;
-            decimal costDenied44 = 0;
+            //Услуги пред.отк.
+            var servicesDenied = new Record { Count = 0, Sum = 0 };
+            var servicesDenied1 = new Record { Count = 0, Sum = 0 };
+            var servicesDenied11 = new Record { Count = 0, Sum = 0 };
+            var servicesDenied2 = new Record { Count = 0, Sum = 0 };
+            var servicesDenied22 = new Record { Count = 0, Sum = 0 };
+            var servicesDenied3 = new Record { Count = 0, Sum = 0 };
+            var servicesDenied33 = new Record { Count = 0, Sum = 0 };
+            var servicesDenied4 = new Record { Count = 0, Sum = 0 };
+            var servicesDenied44 = new Record { Count = 0, Sum = 0 };
 
-            int countDutyPaid = 0;
-            decimal dutyPaid = 0;
+            //Суд.издер.удов.
+            var costSatisfied = new Record { Count = 0, Sum = 0 };
+            var costSatisfied1 = new Record { Count = 0, Sum = 0 };
+            var costSatisfied11 = new Record { Count = 0, Sum = 0 };
+            var costSatisfied2 = new Record { Count = 0, Sum = 0 };
+            var costSatisfied22 = new Record { Count = 0, Sum = 0 };
+            var costSatisfied3 = new Record { Count = 0, Sum = 0 };
+            var costSatisfied33 = new Record { Count = 0, Sum = 0 };
+            var costSatisfied4 = new Record { Count = 0, Sum = 0 };
+            var costSatisfied44 = new Record { Count = 0, Sum = 0 };
+
+            //Суд.издер.отк.
+            var costDenied = new Record { Count = 0, Sum = 0 };
+            var costDenied1 = new Record { Count = 0, Sum = 0 };
+            var costDenied11 = new Record { Count = 0, Sum = 0 };
+            var costDenied2 = new Record { Count = 0, Sum = 0 };
+            var costDenied22 = new Record { Count = 0, Sum = 0 };
+            var costDenied3 = new Record { Count = 0, Sum = 0 };
+            var costDenied33 = new Record { Count = 0, Sum = 0 };
+            var costDenied4 = new Record { Count = 0, Sum = 0 };
+            var costDenied44 = new Record { Count = 0, Sum = 0 };
+
+            var dutyPaid = new Record { Count = 0, Sum = 0 };
 
             foreach (var groupClaim in groupClaims)
             {
@@ -452,326 +482,328 @@ namespace Svr.Web.Controllers
                 foreach (var subjectClaim in groupClaim.SubjectClaims)
                 {
                     var claims = claimRepository.List(new ClaimSpecificationReport(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
-                    var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
-                    if (dateS != null)
+                    //var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
+                    var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell)
+                        ?.Last().End.Row;
+                    if (n != null)
                     {
-                        claims = claims.Where(c => c.DateIn >= dateS);
-                    }
-                    if (datePo != null)
-                    {
-                        claims = claims.Where(c => c.DateIn <= datePo);
-                    }
-                    var count = await claims.CountAsync();
-                    if (count > 0)
-                    {
-                        worksheet.Cells[$"C{acells.Last().End.Row}"].Value = count;
-                        var sum = await claims.SumAsync(c => c.Sum);
-                        if (sum != null)
+                        var cells = worksheet.Cells;
+                        if (dateS != null)
                         {
-                            worksheet.Cells[$"D{acells.Last().End.Row}"].Value = sum;
+                            claims = claims.Where(c => c.DateIn >= dateS);
                         }
-                    }
-                    var instances = instanceRepository.ListReport().Where(i => i.Claim.SubjectClaimId == subjectClaim.Id);
-                    if (owner != null)
-                    {
-                        instances = instances.Where(i => i.Claim.DistrictId == owner.ToLong());
-                    }
-                    if (dateS != null)
-                    {
-                        instances = instances.Where(c => c.DateInCourtDecision >= dateS);
-                    }
-                    if (datePo != null)
-                    {
-                        instances = instances.Where(c => c.DateInCourtDecision <= datePo);
-                    }
-
-                    int countEnd0 = 0;
-                    decimal sumEnd0 = 0;
-                    int countNo0 = 0;
-                    decimal sumNo0 = 0;
-                    int countSatisfied = 0; decimal sumSatisfied = 0; int countDenied = 0; decimal sumDenied = 0; int countEnd = 0; decimal sumEnd = 0; int countNo = 0; decimal sumNo = 0;
-
-                    //int countDutySatisfied = 0;
-                    //decimal dutySatisfied = 0;
-
-                    var instances1 = await instances.Where(i => i.Number == 1).AsNoTracking().ToListAsync();
-                    if (instances1.Count > 0)
-                    {
-                        if (flg == 1)
+                        if (datePo != null)
                         {
-                            count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied1, ref dutySatisfied1, ref countDutyDenied1, ref dutyDenied1, ref countServicesSatisfied1, ref servicesSatisfied1, ref countServicesDenied1, ref servicesDenied1, ref countСostSatisfied1, ref costSatisfied1, ref countСostDenied1, ref costDenied1, ref countDutyPaid, ref dutyPaid);
+                            claims = claims.Where(c => c.DateIn <= datePo);
                         }
-                        else if (flg == 2)
-                        {
-                            count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied11, ref dutySatisfied11, ref countDutyDenied11, ref dutyDenied11, ref countServicesSatisfied11, ref servicesSatisfied11, ref countServicesDenied11, ref servicesDenied11, ref countСostSatisfied11, ref costSatisfied11, ref countСostDenied11, ref costDenied11, ref countDutyPaid, ref dutyPaid);
-                        }
-                        else
-                            count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied, ref dutySatisfied, ref countDutyDenied, ref dutyDenied, ref countServicesSatisfied, ref servicesSatisfied, ref countServicesDenied, ref servicesDenied, ref countСostSatisfied, ref costSatisfied, ref countСostDenied, ref costDenied, ref countDutyPaid, ref dutyPaid);
+                        var count = await claims.CountAsync();
                         if (count > 0)
                         {
-                            worksheet.Cells[$"I{acells.Last().End.Row}"].Value = countSatisfied;
-                            worksheet.Cells[$"J{acells.Last().End.Row}"].Value = sumSatisfied;
-                            worksheet.Cells[$"U{acells.Last().End.Row}"].Value = countDenied;
-                            worksheet.Cells[$"V{acells.Last().End.Row}"].Value = sumDenied;
-                            countEnd0 = countEnd0 + countEnd;
-                            sumEnd0 = sumEnd0 + sumEnd;
-                            countNo0 = countNo0 + countNo;
-                            sumNo0 = sumNo0 + sumNo;
+                            cells[$"C{n}"].Value = count;
+                            var sum = await claims.SumAsync(c => c.Sum);
+                            if (sum != null)
+                            {
+                                cells[$"D{n}"].Value = sum;
+                            }
                         }
-                    }
-                    var instances2 = await instances.Where(i => i.Number == 2).AsNoTracking().ToListAsync();
-                    if (instances2.Count > 0)
-                    {
-                        if (flg == 1)
+                        var instances = instanceRepository.ListReport().Where(i => i.Claim.SubjectClaimId == subjectClaim.Id);
+                        if (owner != null)
                         {
-                            count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied2, ref dutySatisfied2, ref countDutyDenied2, ref dutyDenied2, ref countServicesSatisfied2, ref servicesSatisfied2, ref countServicesDenied2, ref servicesDenied2, ref countСostSatisfied2, ref costSatisfied2, ref countСostDenied2, ref costDenied2, ref countDutyPaid, ref dutyPaid);
+                            instances = instances.Where(i => i.Claim.DistrictId == owner.ToLong());
+                        }
+                        if (dateS != null)
+                        {
+                            instances = instances.Where(c => c.DateInCourtDecision >= dateS);
+                        }
+                        if (datePo != null)
+                        {
+                            instances = instances.Where(c => c.DateInCourtDecision <= datePo);
+                        }
 
-                        }
-                        else if (flg == 2)
-                        {
-                            count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied22, ref dutySatisfied22, ref countDutyDenied22, ref dutyDenied22, ref countServicesSatisfied22, ref servicesSatisfied22, ref countServicesDenied22, ref servicesDenied22, ref countСostSatisfied22, ref costSatisfied22, ref countСostDenied22, ref costDenied22, ref countDutyPaid, ref dutyPaid);
-                        }
-                        else
-                            count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied, ref dutySatisfied, ref countDutyDenied, ref dutyDenied, ref countServicesSatisfied, ref servicesSatisfied, ref countServicesDenied, ref servicesDenied, ref countСostSatisfied, ref costSatisfied, ref countСostDenied, ref costDenied, ref countDutyPaid, ref dutyPaid);
-                        if (count > 0)
-                        {
-                            worksheet.Cells[$"K{acells.Last().End.Row}"].Value = countSatisfied;
-                            worksheet.Cells[$"L{acells.Last().End.Row}"].Value = sumSatisfied;
-                            worksheet.Cells[$"W{acells.Last().End.Row}"].Value = countDenied;
-                            worksheet.Cells[$"X{acells.Last().End.Row}"].Value = sumDenied;
-                            countEnd0 = countEnd0 + countEnd;
-                            sumEnd0 = sumEnd0 + sumEnd;
-                            countNo0 = countNo0 + countNo;
-                            sumNo0 = sumNo0 + sumNo;
-                        }
-                    }
-                    var instances3 = await instances.Where(i => i.Number == 3).AsNoTracking().ToListAsync();
-                    if (instances3.Count > 0)
-                    {
-                        if (flg == 1)
-                        {
-                            count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied3, ref dutySatisfied3, ref countDutyDenied3, ref dutyDenied3, ref countServicesSatisfied3, ref servicesSatisfied3, ref countServicesDenied3, ref servicesDenied3, ref countСostSatisfied3, ref costSatisfied3, ref countСostDenied3, ref costDenied3, ref countDutyPaid, ref dutyPaid);
-                        }
-                        else if (flg == 2)
-                        {
-                            count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied33, ref dutySatisfied33, ref countDutyDenied33, ref dutyDenied33, ref countServicesSatisfied33, ref servicesSatisfied33, ref countServicesDenied33, ref servicesDenied33, ref countСostSatisfied33, ref costSatisfied33, ref countСostDenied33, ref costDenied33, ref countDutyPaid, ref dutyPaid);
-                        }
-                        else
-                            count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied, ref dutySatisfied, ref countDutyDenied, ref dutyDenied, ref countServicesSatisfied, ref servicesSatisfied, ref countServicesDenied, ref servicesDenied, ref countСostSatisfied, ref costSatisfied, ref countСostDenied, ref costDenied, ref countDutyPaid, ref dutyPaid);
-                        if (count > 0)
-                        {
-                            worksheet.Cells[$"M{acells.Last().End.Row}"].Value = countSatisfied;
-                            worksheet.Cells[$"N{acells.Last().End.Row}"].Value = sumSatisfied;
-                            worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = countDenied;
-                            worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = sumDenied;
-                            countEnd0 = countEnd0 + countEnd;
-                            sumEnd0 = sumEnd0 + sumEnd;
-                            countNo0 = countNo0 + countNo;
-                            sumNo0 = sumNo0 + sumNo;
-                        }
-                    }
-                    var instances4 = await instances.Where(i => i.Number == 4).AsNoTracking().ToListAsync();
-                    if (instances4.Count > 0)
-                    {
-                        if (flg == 1)
-                        {
-                            count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied4, ref dutySatisfied4, ref countDutyDenied4, ref dutyDenied4, ref countServicesSatisfied4, ref servicesSatisfied4, ref countServicesDenied4, ref servicesDenied4, ref countСostSatisfied4, ref costSatisfied4, ref countСostDenied4, ref costDenied4, ref countDutyPaid, ref dutyPaid);
-                        }
-                        else if (flg == 2)
-                        {
-                            count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied44, ref dutySatisfied44, ref countDutyDenied44, ref dutyDenied44, ref countServicesSatisfied44, ref servicesSatisfied44, ref countServicesDenied44, ref servicesDenied44, ref countСostSatisfied44, ref costSatisfied44, ref countСostDenied44, ref costDenied44, ref countDutyPaid, ref dutyPaid);
-                        }
-                        else
-                            count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, ref countDutySatisfied, ref dutySatisfied, ref countDutyDenied, ref dutyDenied, ref countServicesSatisfied, ref servicesSatisfied, ref countServicesDenied, ref servicesDenied, ref countСostSatisfied, ref costSatisfied, ref countСostDenied, ref costDenied, ref countDutyPaid, ref dutyPaid);
-                        if (count > 0)
-                        {
-                            worksheet.Cells[$"O{acells.Last().End.Row}"].Value = countSatisfied;
-                            worksheet.Cells[$"P{acells.Last().End.Row}"].Value = sumSatisfied;
-                            worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = countDenied;
-                            worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = sumDenied;
-                            countEnd0 = countEnd0 + countEnd;
-                            sumEnd0 = sumEnd0 + sumEnd;
-                            countNo0 = countNo0 + countNo;
-                            sumNo0 = sumNo0 + sumNo;
-                        }
-                    }
-                    if (countEnd0 > 0)
-                    {
-                        worksheet.Cells[$"AE{acells.Last().End.Row}"].Value = countEnd0;
-                        worksheet.Cells[$"AF{acells.Last().End.Row}"].Value = sumEnd0;
-                    }
-                    if (countNo0 > 0)
-                    {
-                        worksheet.Cells[$"AG{acells.Last().End.Row}"].Value = countNo0;
-                        worksheet.Cells[$"AH{acells.Last().End.Row}"].Value = sumNo0;
-                    }
+                        int countEnd0 = 0;
+                        decimal sumEnd0 = 0;
+                        int countNo0 = 0;
+                        decimal sumNo0 = 0;
+                        int countSatisfied = 0; decimal sumSatisfied = 0; int countDenied = 0; decimal sumDenied = 0; int countEnd = 0; decimal sumEnd = 0; int countNo = 0; decimal sumNo = 0;
 
+                        //int countDutySatisfied = 0;
+                        //decimal dutySatisfied = 0;
+
+                        var instances1 = await instances.Where(i => i.Number == 1).AsNoTracking().ToListAsync();
+                        if (instances1.Count > 0)
+                        {
+                            if (flg == 1)
+                            {
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied1, dutyDenied1, servicesSatisfied1, servicesDenied1, costSatisfied1, costDenied1, dutyPaid);
+                            }
+                            else if (flg == 2)
+                            {
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied11, dutyDenied11, servicesSatisfied11, servicesDenied11, costSatisfied11, costDenied11, dutyPaid);
+                            }
+                            else
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied, dutyDenied, servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            if (count > 0)
+                            {
+                                cells[$"I{n}"].Value = countSatisfied;
+                                cells[$"J{n}"].Value = sumSatisfied;
+                                cells[$"U{n}"].Value = countDenied;
+                                cells[$"V{n}"].Value = sumDenied;
+                                countEnd0 = countEnd0 + countEnd;
+                                sumEnd0 = sumEnd0 + sumEnd;
+                                countNo0 = countNo0 + countNo;
+                                sumNo0 = sumNo0 + sumNo;
+                            }
+                        }
+                        var instances2 = await instances.Where(i => i.Number == 2).AsNoTracking().ToListAsync();
+                        if (instances2.Count > 0)
+                        {
+                            if (flg == 1)
+                            {
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied2, dutyDenied2, servicesSatisfied2, servicesDenied2, costSatisfied2, costDenied2, dutyPaid);
+
+                            }
+                            else if (flg == 2)
+                            {
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied22, dutyDenied22, servicesSatisfied22, servicesDenied22, costSatisfied22, costDenied22, dutyPaid);
+                            }
+                            else
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied, dutyDenied, servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            if (count > 0)
+                            {
+                                cells[$"K{n}"].Value = countSatisfied;
+                                cells[$"L{n}"].Value = sumSatisfied;
+                                cells[$"W{n}"].Value = countDenied;
+                                cells[$"X{n}"].Value = sumDenied;
+                                countEnd0 = countEnd0 + countEnd;
+                                sumEnd0 = sumEnd0 + sumEnd;
+                                countNo0 = countNo0 + countNo;
+                                sumNo0 = sumNo0 + sumNo;
+                            }
+                        }
+                        var instances3 = await instances.Where(i => i.Number == 3).AsNoTracking().ToListAsync();
+                        if (instances3.Count > 0)
+                        {
+                            if (flg == 1)
+                            {
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied3, dutyDenied3, servicesSatisfied3, servicesDenied3, costSatisfied3, costDenied3, dutyPaid);
+                            }
+                            else if (flg == 2)
+                            {
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied33, dutyDenied33, servicesSatisfied33, servicesDenied33, costSatisfied33, costDenied33, dutyPaid);
+                            }
+                            else
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied, dutyDenied, servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            if (count > 0)
+                            {
+                                cells[$"M{n}"].Value = countSatisfied;
+                                cells[$"N{n}"].Value = sumSatisfied;
+                                cells[$"Y{n}"].Value = countDenied;
+                                cells[$"Z{n}"].Value = sumDenied;
+                                countEnd0 = countEnd0 + countEnd;
+                                sumEnd0 = sumEnd0 + sumEnd;
+                                countNo0 = countNo0 + countNo;
+                                sumNo0 = sumNo0 + sumNo;
+                            }
+                        }
+                        var instances4 = await instances.Where(i => i.Number == 4).AsNoTracking().ToListAsync();
+                        if (instances4.Count > 0)
+                        {
+                            if (flg == 1)
+                            {
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied4, dutyDenied4, servicesSatisfied4, servicesDenied4, costSatisfied4, costDenied4, dutyPaid);
+                            }
+                            else if (flg == 2)
+                            {
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied44, dutyDenied44, servicesSatisfied44, servicesDenied44, costSatisfied44, costDenied44, dutyPaid);
+                            }
+                            else
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied, dutyDenied, servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            if (count > 0)
+                            {
+                                cells[$"O{n}"].Value = countSatisfied;
+                                cells[$"P{n}"].Value = sumSatisfied;
+                                cells[$"AA{n}"].Value = countDenied;
+                                cells[$"AB{n}"].Value = sumDenied;
+                                countEnd0 = countEnd0 + countEnd;
+                                sumEnd0 = sumEnd0 + sumEnd;
+                                countNo0 = countNo0 + countNo;
+                                sumNo0 = sumNo0 + sumNo;
+                            }
+                        }
+                        if (countEnd0 > 0)
+                        {
+                            cells[$"AE{n}"].Value = countEnd0;
+                            cells[$"AF{n}"].Value = sumEnd0;
+                        }
+                        if (countNo0 > 0)
+                        {
+                            cells[$"AG{n}"].Value = countNo0;
+                            cells[$"AH{n}"].Value = sumNo0;
+                        }
+                    }
                 }
             }
-            //if (template.Name.Equals(fileTemplateNameIn))
+            if (dutySatisfied1.Count > 0 || dutyDenied1.Count > 0 || dutySatisfied2.Count > 0 || dutyDenied2.Count > 0 || dutySatisfied3.Count > 0 || dutyDenied3.Count > 0 || dutySatisfied4.Count > 0 || dutyDenied4.Count > 0)
             {
-                if (countDutySatisfied1 > 0 || countDutyDenied1 > 0 || countDutySatisfied2 > 0 || countDutyDenied2 > 0 || countDutySatisfied3 > 0 || countDutyDenied3 > 0 || countDutySatisfied4 > 0 || countDutyDenied4 > 0)
+                var cat = template.Name.Equals(fileTemplateNameIn) ? "25.1" : "20.1";
+                var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End.Row;
+                if (n != null)
                 {
-                    string cat = "";
-                    if (template.Name.Equals(fileTemplateNameIn))
-                        cat = "25.1";
-                    else
-                        cat = "20.1";
-                    int t;
-                    decimal t0;
-                    var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countDutySatisfied1 + t : countDutySatisfied1;
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? dutySatisfied1 + t0 : dutySatisfied1;
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countDutyDenied1 + t : countDutyDenied1;
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? dutyDenied1 + t0 : dutyDenied1;
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countDutySatisfied2 + t : countDutySatisfied2;
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? dutySatisfied2 + t0 : dutySatisfied2;
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countDutyDenied2 + t : countDutyDenied2;
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? dutyDenied2 + t0 : dutyDenied2;
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countDutySatisfied3 + t : countDutySatisfied3;
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? dutySatisfied3 + t0 : dutySatisfied3;
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countDutyDenied3 + t : countDutyDenied3;
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? dutyDenied3 + t0 : dutyDenied3;
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countDutySatisfied4 + t : countDutySatisfied4;
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? dutySatisfied4 + t0 : dutySatisfied4;
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countDutyDenied4 + t : countDutyDenied4;
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? dutyDenied4 + t0 : dutyDenied4;
+                    var cells = worksheet.Cells;
+                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, dutySatisfied1.Count);
+                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, dutySatisfied1.Sum);
+                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, dutyDenied1.Count);
+                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, dutyDenied1.Sum);
+                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, dutySatisfied2.Count);
+                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, dutySatisfied2.Sum);
+                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, dutyDenied2.Count);
+                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, dutyDenied2.Sum);
+                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, dutySatisfied3.Count);
+                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, dutySatisfied3.Sum);
+                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, dutyDenied3.Count);
+                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, dutyDenied3.Sum);
+                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, dutySatisfied4.Count);
+                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, dutySatisfied4.Sum);
+                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, dutyDenied4.Count);
+                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, dutyDenied4.Sum);
                 }
-                if (countServicesSatisfied1 > 0 || countServicesDenied1 > 0 || countServicesSatisfied2 > 0 || countServicesDenied2 > 0 || countServicesSatisfied3 > 0 || countServicesDenied3 > 0 || countServicesSatisfied4 > 0 || countServicesDenied4 > 0)
+            }
+            if (servicesSatisfied1.Count > 0 || servicesDenied1.Count > 0 || servicesSatisfied2.Count > 0 || servicesDenied2.Count > 0 || servicesSatisfied3.Count > 0 || servicesDenied3.Count > 0 || servicesSatisfied4.Count > 0 || servicesDenied4.Count > 0)
+            {
+                var cat = template.Name.Equals(fileTemplateNameIn) ? "25.2" : "";
+                var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End.Row;
+                if (n != null)
                 {
-                    string cat = "";
-                    if (template.Name.Equals(fileTemplateNameIn))
-                        cat = "25.2";
-                    int t;
-                    decimal t0;
-                    var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied1 + t : countServicesSatisfied1;
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied1 + t0 : servicesSatisfied1;
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countServicesDenied1 + t : countServicesDenied1;
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? servicesDenied1 + t0 : servicesDenied1;
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied2 + t : countServicesSatisfied2;
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied2 + t0 : servicesSatisfied2;
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countServicesDenied2 + t : countServicesDenied2;
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? servicesDenied2 + t0 : servicesDenied2;
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied3 + t : countServicesSatisfied3;
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied3 + t0 : servicesSatisfied3;
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countServicesDenied3 + t : countServicesDenied3;
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? servicesDenied3 + t0 : servicesDenied3;
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied4 + t : countServicesSatisfied4;
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied4 + t0 : servicesSatisfied4;
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countServicesDenied4 + t : countServicesDenied4;
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? servicesDenied4 + t0 : servicesDenied4;
+                    var cells = worksheet.Cells;
+                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, servicesSatisfied1.Count);
+                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, servicesSatisfied1.Sum);
+                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, servicesDenied1.Count);
+                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, servicesDenied1.Sum);
+                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, servicesSatisfied2.Count);
+                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, servicesSatisfied2.Sum);
+                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, servicesDenied2.Count);
+                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, servicesDenied2.Sum);
+                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, servicesSatisfied3.Count);
+                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, servicesSatisfied3.Sum);
+                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, servicesDenied3.Count);
+                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, servicesDenied3.Sum);
+                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, servicesSatisfied4.Count);
+                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, servicesSatisfied4.Sum);
+                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, servicesDenied4.Count);
+                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, servicesDenied4.Sum);
                 }
-                if (countСostSatisfied1 > 0 || countСostDenied1 > 0 || countСostSatisfied2 > 0 || countСostDenied2 > 0 || countСostSatisfied3 > 0 || countСostDenied3 > 0 || countСostSatisfied4 > 0 || countСostDenied4 > 0)
+            }
+            if (costSatisfied1.Count > 0 || costDenied1.Count > 0 || costSatisfied2.Count > 0 || costDenied2.Count > 0 || costSatisfied3.Count > 0 || costDenied3.Count > 0 || costSatisfied4.Count > 0 || costDenied4.Count > 0)
+            {
+                var cat = template.Name.Equals(fileTemplateNameIn) ? "25.3" : "20.2";
+                var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End.Row;
+                if (n != null)
                 {
-                    string cat = "";
-                    if (template.Name.Equals(fileTemplateNameIn))
-                        cat = "25.3";
-                    else
-                        cat = "20.2";
-                    int t;
-                    decimal t0;
-                    var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied1 + t : countСostSatisfied1;
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? costSatisfied1 + t0 : costSatisfied1;
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countСostDenied1 + t : countСostDenied1;
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? costDenied1 + t0 : costDenied1;
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied2 + t : countСostSatisfied2;
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? costSatisfied2 + t0 : costSatisfied2;
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countСostDenied2 + t : countСostDenied2;
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? costDenied2 + t0 : costDenied2;
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied3 + t : countСostSatisfied3;
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? costSatisfied3 + t0 : costSatisfied3;
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countСostDenied3 + t : countСostDenied3;
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? costDenied3 + t0 : costDenied3;
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied4 + t : countСostSatisfied4;
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? costSatisfied4 + t0 : costSatisfied4;
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countСostDenied4 + t : countСostDenied4;
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? costDenied4 + t0 : costDenied4;
+                    var cells = worksheet.Cells;
+                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, costSatisfied1.Count);
+                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, costSatisfied1.Sum);
+                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, costDenied1.Count);
+                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, costDenied1.Sum);
+                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, costSatisfied2.Count);
+                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, costSatisfied2.Sum);
+                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, costDenied2.Count);
+                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, costDenied2.Sum);
+                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, costSatisfied3.Count);
+                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, costSatisfied3.Sum);
+                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, costDenied3.Count);
+                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, costDenied3.Sum);
+                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, costSatisfied4.Count);
+                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, costSatisfied4.Sum);
+                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, costDenied4.Count);
+                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, costDenied4.Sum);
                 }
+            }
 
-                if (countDutySatisfied11 > 0 || countDutyDenied11 > 0 || countDutySatisfied22 > 0 || countDutyDenied22 > 0 || countDutySatisfied33 > 0 || countDutyDenied33 > 0 || countDutySatisfied44 > 0 || countDutyDenied44 > 0)
+            if (dutySatisfied11.Count > 0 || dutyDenied11.Count > 0 || dutySatisfied22.Count > 0 || dutyDenied22.Count > 0 || dutySatisfied33.Count > 0 || dutyDenied33.Count > 0 || dutySatisfied44.Count > 0 || dutyDenied44.Sum > 0)
+            {
+                var cat = template.Name.Equals(fileTemplateNameIn) ? "25.4" : "20.3";
+                var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End.Row;
+                if (n != null)
                 {
-                    var cat = "";
-                    if (template.Name.Equals(fileTemplateNameIn))
-                        cat = "25.4";
-                    else
-                        cat = "20.3";
-                    int tmp = 0;
-                    decimal tmp1 = 0;
-                    var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out tmp) ? (countDutySatisfied11 + tmp) : countDutySatisfied11;
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out tmp1) ? dutySatisfied11 + tmp1 : dutySatisfied11;
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out tmp) ? countDutyDenied11 + tmp : countDutyDenied11;
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out tmp1) ? dutyDenied11 + tmp1 : dutyDenied11;
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out tmp) ? countDutySatisfied22 + tmp : countDutySatisfied22;
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out tmp1) ? dutySatisfied22 + tmp1 : dutySatisfied22;
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out tmp) ? countDutyDenied22 + tmp : countDutyDenied22;
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out tmp1) ? dutyDenied22 + tmp1 : dutyDenied22;
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out tmp) ? countDutySatisfied33 + tmp : countDutySatisfied33;
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out tmp1) ? dutySatisfied33 + tmp1 : dutySatisfied33;
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out tmp) ? countDutyDenied33 + tmp : countDutyDenied33;
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out tmp1) ? dutyDenied33 + tmp1 : dutyDenied33;
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out tmp) ? countDutySatisfied44 + tmp : countDutySatisfied44;
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out tmp1) ? dutySatisfied44 + tmp1 : dutySatisfied44;
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out tmp) ? countDutyDenied44 + tmp : countDutyDenied44;
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out tmp1) ? dutyDenied44 + tmp1 : dutyDenied44;
+                    var cells = worksheet.Cells;
+                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, dutySatisfied11.Count);
+                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, dutySatisfied11.Sum);
+                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, dutyDenied11.Count);
+                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, dutyDenied11.Sum);
+                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, dutySatisfied22.Count);
+                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, dutySatisfied22.Sum);
+                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, dutyDenied22.Count);
+                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, dutyDenied22.Sum);
+                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, dutySatisfied33.Count);
+                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, dutySatisfied33.Sum);
+                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, dutyDenied33.Count);
+                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, dutyDenied33.Sum);
+                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, dutySatisfied44.Count);
+                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, dutySatisfied44.Sum);
+                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, dutyDenied44.Count);
+                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, dutyDenied44.Sum);
                 }
-                if (countServicesSatisfied11 > 0 || countServicesDenied11 > 0 || countServicesSatisfied22 > 0 || countServicesDenied22 > 0 || countServicesSatisfied33 > 0 || countServicesDenied33 > 0 || countServicesSatisfied44 > 0 || countServicesDenied44 > 0)
+            }
+
+            if (servicesSatisfied11.Count > 0 || servicesDenied11.Count > 0 || servicesSatisfied22.Count > 0 ||
+                servicesDenied22.Count > 0 || servicesSatisfied33.Count > 0 || servicesDenied33.Count > 0 ||
+                servicesSatisfied44.Count > 0 || servicesDenied44.Count > 0)
+            {
+                var cat = template.Name.Equals(fileTemplateNameIn) ? "25.5" : "";
+                var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End
+                    .Row;
+                if (n != null)
                 {
-                    string cat = "";
-                    if (template.Name.Equals(fileTemplateNameIn))
-                        cat = "25.5";
-                    int t;
-                    decimal t0;
-                    var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied11 + t : countServicesSatisfied11;
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied11 + t0 : servicesSatisfied11;
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countServicesDenied11 + t : countServicesDenied11;
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? servicesDenied11 + t0 : servicesDenied11;
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied22 + t : countServicesSatisfied22;
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied22 + t0 : servicesSatisfied22;
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countServicesDenied22 + t : countServicesDenied22;
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? servicesDenied22 + t0 : servicesDenied22;
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied33 + t : countServicesSatisfied33;
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied33 + t0 : servicesSatisfied33;
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countServicesDenied33 + t : countServicesDenied33;
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? servicesDenied33 + t0 : servicesDenied33;
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countServicesSatisfied44 + t : countServicesSatisfied44;
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? servicesSatisfied44 + t0 : servicesSatisfied44;
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countServicesDenied44 + t : countServicesDenied44;
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? servicesDenied44 + t0 : servicesDenied44;
+                    var cells = worksheet.Cells;
+                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, servicesSatisfied11.Count);
+                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, servicesSatisfied11.Sum);
+                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, servicesDenied11.Count);
+                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, servicesDenied11.Sum);
+                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, servicesSatisfied22.Count);
+                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, servicesSatisfied22.Sum);
+                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, servicesDenied22.Count);
+                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, servicesDenied22.Sum);
+                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, servicesSatisfied33.Count);
+                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, servicesSatisfied33.Sum);
+                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, servicesDenied33.Count);
+                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, servicesDenied33.Sum);
+                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, servicesSatisfied44.Count);
+                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, servicesSatisfied44.Sum);
+                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, servicesDenied44.Count);
+                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, servicesDenied44.Sum);
                 }
-                if (countСostSatisfied11 > 0 || countСostDenied11 > 0 || countСostSatisfied22 > 0 || countСostDenied22 > 0 || countСostSatisfied33 > 0 || countСostDenied33 > 0)
+            }
+
+            if (costSatisfied11.Count > 0 || costDenied11.Count > 0 || costSatisfied22.Count > 0 ||
+                costDenied22.Count > 0 || costSatisfied33.Count > 0 || costDenied33.Count > 0)
+            {
+                var cat = template.Name.Equals(fileTemplateNameIn) ? "25.5" : "20.4";
+                var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End
+                    .Row;
+                if (n != null)
                 {
-                    string cat = "";
-                    if (template.Name.Equals(fileTemplateNameIn))
-                        cat = "25.6";
-                    else
-                        cat = "20.4";
-                    int t;
-                    decimal t0;
-                    var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell;
-                    worksheet.Cells[$"I{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"I{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied11 + t : countСostSatisfied11;
-                    worksheet.Cells[$"J{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"J{acells.Last().End.Row}"].Text, out t0) ? costSatisfied11 + t0 : costSatisfied11;
-                    worksheet.Cells[$"U{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"U{acells.Last().End.Row}"].Text, out t) ? countСostDenied11 + t : countСostDenied11;
-                    worksheet.Cells[$"V{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"V{acells.Last().End.Row}"].Text, out t0) ? costDenied11 + t0 : costDenied11;
-                    worksheet.Cells[$"K{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"K{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied22 + t : countСostSatisfied22;
-                    worksheet.Cells[$"L{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"L{acells.Last().End.Row}"].Text, out t0) ? costSatisfied22 + t0 : costSatisfied22;
-                    worksheet.Cells[$"W{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"W{acells.Last().End.Row}"].Text, out t) ? countСostDenied22 + t : countСostDenied22;
-                    worksheet.Cells[$"X{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"X{acells.Last().End.Row}"].Text, out t0) ? costDenied22 + t0 : costDenied22;
-                    worksheet.Cells[$"M{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"M{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied33 + t : countСostSatisfied33;
-                    worksheet.Cells[$"N{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"N{acells.Last().End.Row}"].Text, out t0) ? costSatisfied33 + t0 : costSatisfied33;
-                    worksheet.Cells[$"Y{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"Y{acells.Last().End.Row}"].Text, out t) ? countСostDenied33 + t : countСostDenied33;
-                    worksheet.Cells[$"Z{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"Z{acells.Last().End.Row}"].Text, out t0) ? costDenied33 + t0 : costDenied33;
-                    worksheet.Cells[$"O{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"O{acells.Last().End.Row}"].Text, out t) ? countСostSatisfied44 + t : countСostSatisfied44;
-                    worksheet.Cells[$"P{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"P{acells.Last().End.Row}"].Text, out t0) ? costSatisfied44 + t0 : costSatisfied44;
-                    worksheet.Cells[$"AA{acells.Last().End.Row}"].Value = int.TryParse(worksheet.Cells[$"AA{acells.Last().End.Row}"].Text, out t) ? countСostDenied44 + t : countСostDenied44;
-                    worksheet.Cells[$"AB{acells.Last().End.Row}"].Value = decimal.TryParse(worksheet.Cells[$"AB{acells.Last().End.Row}"].Text, out t0) ? costDenied44 + t0 : costDenied44;
+                    var cells = worksheet.Cells;
+                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, costSatisfied11.Count);
+                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, costSatisfied11.Sum);
+                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, costDenied11.Count);
+                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, costDenied11.Sum);
+                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, costSatisfied22.Count);
+                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, costSatisfied22.Sum);
+                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, costDenied22.Count);
+                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, costDenied22.Sum);
+                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, costSatisfied33.Count);
+                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, costSatisfied33.Sum);
+                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, costDenied33.Count);
+                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, costDenied33.Sum);
+                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, costSatisfied44.Count);
+                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, costSatisfied44.Sum);
+                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, costDenied44.Count);
+                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, costDenied44.Sum);
                 }
             }
             return package;
         }
+
         private string GetFileName(DateTime? dateS, DateTime? datePo)
         {
             return $"{dateS?.ToString("yyyy.MM.dd")}-{datePo?.ToString("yyyy.MM.dd")} {template.Name}";
