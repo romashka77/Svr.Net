@@ -395,29 +395,50 @@ namespace Svr.Web.Controllers
                     (await groupClaimRepository.ListAsync(new GroupClaimSpecificationReport(category.ToLong())))
                     .OrderBy(a => a.Code.ToLong());
             //Гос.пошлина удов
-            var dutySatisfied = new Record { Count = 0, Sum = 0 };
-            var dutySatisfied1 = new Record { Count = 0, Sum = 0 };
-            var dutySatisfied11 = new Record { Count = 0, Sum = 0 };
-            var dutySatisfied2 = new Record { Count = 0, Sum = 0 };
-            var dutySatisfied22 = new Record { Count = 0, Sum = 0 };
-            var dutySatisfied3 = new Record { Count = 0, Sum = 0 };
-            var dutySatisfied33 = new Record { Count = 0, Sum = 0 };
-            var dutySatisfied4 = new Record { Count = 0, Sum = 0 };
-            var dutySatisfied44 = new Record { Count = 0, Sum = 0 };
-
-
-
+            //var dutySatisfied = new Record { Count = 0, Sum = 0 }; 0
+            //var dutySatisfied1 = new Record { Count = 0, Sum = 0 }; 1
+            //var dutySatisfied11 = new Record { Count = 0, Sum = 0 }; 2
+            //var dutySatisfied2 = new Record { Count = 0, Sum = 0 }; 3
+            //var dutySatisfied22 = new Record { Count = 0, Sum = 0 }; 4
+            //var dutySatisfied3 = new Record { Count = 0, Sum = 0 }; 5
+            //var dutySatisfied33 = new Record { Count = 0, Sum = 0 }; 6
+            //var dutySatisfied4 = new Record { Count = 0, Sum = 0 }; 7
+            //var dutySatisfied44 = new Record { Count = 0, Sum = 0 }; 8
+            var dutySatisfied = new Record[9]
+            {
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0}
+            };
 
             //Гос.пошлина отк.
-            var dutyDenied = new Record { Count = 0, Sum = 0 };
-            var dutyDenied1 = new Record { Count = 0, Sum = 0 };
-            var dutyDenied11 = new Record { Count = 0, Sum = 0 };
-            var dutyDenied2 = new Record { Count = 0, Sum = 0 };
-            var dutyDenied22 = new Record { Count = 0, Sum = 0 };
-            var dutyDenied3 = new Record { Count = 0, Sum = 0 };
-            var dutyDenied33 = new Record { Count = 0, Sum = 0 };
-            var dutyDenied4 = new Record { Count = 0, Sum = 0 };
-            var dutyDenied44 = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied1 = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied11 = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied2 = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied22 = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied3 = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied33 = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied4 = new Record { Count = 0, Sum = 0 };
+            //var dutyDenied44 = new Record { Count = 0, Sum = 0 };
+            var dutyDenied = new Record[9]
+            {
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0},
+                new Record {Count = 0, Sum = 0}
+            };
 
             //Услуги пред.удов.
             var servicesSatisfied = new Record { Count = 0, Sum = 0 };
@@ -534,14 +555,23 @@ namespace Svr.Web.Controllers
                         {
                             if (flg == 1)
                             {
-                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied1, dutyDenied1, servicesSatisfied1, servicesDenied1, costSatisfied1, costDenied1, dutyPaid);
+                                const int k = 1;
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied1, servicesDenied1, costSatisfied1, costDenied1, dutyPaid);
                             }
                             else if (flg == 2)
                             {
-                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied11, dutyDenied11, servicesSatisfied11, servicesDenied11, costSatisfied11, costDenied11, dutyPaid);
+                                const int k = 2;
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied11, servicesDenied11, costSatisfied11, costDenied11, dutyPaid);
                             }
                             else
-                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied, dutyDenied, servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            {
+                                const int k = 0;
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied,
+                                    out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
+                                    dutySatisfied[k], dutyDenied[k], servicesSatisfied, servicesDenied, costSatisfied,
+                                    costDenied, dutyPaid);
+                            }
+
                             if (count > 0)
                             {
                                 cells[$"I{n}"].Value = countSatisfied;
@@ -559,15 +589,24 @@ namespace Svr.Web.Controllers
                         {
                             if (flg == 1)
                             {
-                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied2, dutyDenied2, servicesSatisfied2, servicesDenied2, costSatisfied2, costDenied2, dutyPaid);
+                                const int k = 3;
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied2, servicesDenied2, costSatisfied2, costDenied2, dutyPaid);
 
                             }
                             else if (flg == 2)
                             {
-                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied22, dutyDenied22, servicesSatisfied22, servicesDenied22, costSatisfied22, costDenied22, dutyPaid);
+                                const int k = 4;
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied22, servicesDenied22, costSatisfied22, costDenied22, dutyPaid);
                             }
                             else
-                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied, dutyDenied, servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            {
+                                const int k = 0;
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied,
+                                    out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
+                                    dutySatisfied[k], dutyDenied[k], servicesSatisfied, servicesDenied, costSatisfied,
+                                    costDenied, dutyPaid);
+                            }
+
                             if (count > 0)
                             {
                                 cells[$"K{n}"].Value = countSatisfied;
@@ -585,14 +624,23 @@ namespace Svr.Web.Controllers
                         {
                             if (flg == 1)
                             {
-                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied3, dutyDenied3, servicesSatisfied3, servicesDenied3, costSatisfied3, costDenied3, dutyPaid);
+                                const int k = 5;
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied3, servicesDenied3, costSatisfied3, costDenied3, dutyPaid);
                             }
                             else if (flg == 2)
                             {
-                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied33, dutyDenied33, servicesSatisfied33, servicesDenied33, costSatisfied33, costDenied33, dutyPaid);
+                                const int k = 6;
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied33, servicesDenied33, costSatisfied33, costDenied33, dutyPaid);
                             }
                             else
-                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied, dutyDenied, servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            {
+                                const int k = 0;
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied,
+                                    out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
+                                    dutySatisfied[k], dutyDenied[k], servicesSatisfied, servicesDenied, costSatisfied,
+                                    costDenied, dutyPaid);
+                            }
+
                             if (count > 0)
                             {
                                 cells[$"M{n}"].Value = countSatisfied;
@@ -610,14 +658,18 @@ namespace Svr.Web.Controllers
                         {
                             if (flg == 1)
                             {
-                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied4, dutyDenied4, servicesSatisfied4, servicesDenied4, costSatisfied4, costDenied4, dutyPaid);
+                                const int k = 7;
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied4, servicesDenied4, costSatisfied4, costDenied4, dutyPaid);
                             }
                             else if (flg == 2)
                             {
-                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied44, dutyDenied44, servicesSatisfied44, servicesDenied44, costSatisfied44, costDenied44, dutyPaid);
+                                const int k = 8;
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied44, servicesDenied44, costSatisfied44, costDenied44, dutyPaid);
                             }
-                            else
-                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied, dutyDenied, servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            else {
+                                const int k = 0;
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, dutySatisfied[k], dutyDenied[k], servicesSatisfied, servicesDenied, costSatisfied, costDenied, dutyPaid);
+                            }
                             if (count > 0)
                             {
                                 cells[$"O{n}"].Value = countSatisfied;
@@ -643,29 +695,29 @@ namespace Svr.Web.Controllers
                     }
                 }
             }
-            if (dutySatisfied1.Count > 0 || dutyDenied1.Count > 0 || dutySatisfied2.Count > 0 || dutyDenied2.Count > 0 || dutySatisfied3.Count > 0 || dutyDenied3.Count > 0 || dutySatisfied4.Count > 0 || dutyDenied4.Count > 0)
+            if (dutySatisfied[1].Count > 0 || dutyDenied[1].Count > 0 || dutySatisfied[3].Count > 0 || dutyDenied[3].Count > 0 || dutySatisfied[5].Count > 0 || dutyDenied[5].Count > 0 || dutySatisfied[7].Count > 0 || dutyDenied[7].Count > 0)
             {
                 var cat = template.Name.Equals(fileTemplateNameIn) ? "25.1" : "20.1";
                 var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End.Row;
                 if (n != null)
                 {
                     var cells = worksheet.Cells;
-                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, dutySatisfied1.Count);
-                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, dutySatisfied1.Sum);
-                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, dutyDenied1.Count);
-                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, dutyDenied1.Sum);
-                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, dutySatisfied2.Count);
-                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, dutySatisfied2.Sum);
-                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, dutyDenied2.Count);
-                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, dutyDenied2.Sum);
-                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, dutySatisfied3.Count);
-                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, dutySatisfied3.Sum);
-                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, dutyDenied3.Count);
-                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, dutyDenied3.Sum);
-                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, dutySatisfied4.Count);
-                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, dutySatisfied4.Sum);
-                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, dutyDenied4.Count);
-                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, dutyDenied4.Sum);
+                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, dutySatisfied[1].Count);
+                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, dutySatisfied[1].Sum);
+                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, dutyDenied[1].Count);
+                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, dutyDenied[1].Sum);
+                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, dutySatisfied[3].Count);
+                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, dutySatisfied[3].Sum);
+                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, dutyDenied[3].Count);
+                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, dutyDenied[3].Sum);
+                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, dutySatisfied[5].Count);
+                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, dutySatisfied[5].Sum);
+                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, dutyDenied[5].Count);
+                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, dutyDenied[5].Sum);
+                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, dutySatisfied[7].Count);
+                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, dutySatisfied[7].Sum);
+                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, dutyDenied[7].Count);
+                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, dutyDenied[7].Sum);
                 }
             }
             if (servicesSatisfied1.Count > 0 || servicesDenied1.Count > 0 || servicesSatisfied2.Count > 0 || servicesDenied2.Count > 0 || servicesSatisfied3.Count > 0 || servicesDenied3.Count > 0 || servicesSatisfied4.Count > 0 || servicesDenied4.Count > 0)
@@ -719,29 +771,29 @@ namespace Svr.Web.Controllers
                 }
             }
 
-            if (dutySatisfied11.Count > 0 || dutyDenied11.Count > 0 || dutySatisfied22.Count > 0 || dutyDenied22.Count > 0 || dutySatisfied33.Count > 0 || dutyDenied33.Count > 0 || dutySatisfied44.Count > 0 || dutyDenied44.Sum > 0)
+            if (dutySatisfied[2].Count > 0 || dutyDenied[2].Count > 0 || dutySatisfied[4].Count > 0 || dutyDenied[4].Count > 0 || dutySatisfied[6].Count > 0 || dutyDenied[6].Count > 0 || dutySatisfied[8].Count > 0 || dutyDenied[8].Sum > 0)
             {
                 var cat = template.Name.Equals(fileTemplateNameIn) ? "25.4" : "20.3";
                 var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End.Row;
                 if (n != null)
                 {
                     var cells = worksheet.Cells;
-                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, dutySatisfied11.Count);
-                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, dutySatisfied11.Sum);
-                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, dutyDenied11.Count);
-                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, dutyDenied11.Sum);
-                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, dutySatisfied22.Count);
-                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, dutySatisfied22.Sum);
-                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, dutyDenied22.Count);
-                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, dutyDenied22.Sum);
-                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, dutySatisfied33.Count);
-                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, dutySatisfied33.Sum);
-                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, dutyDenied33.Count);
-                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, dutyDenied33.Sum);
-                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, dutySatisfied44.Count);
-                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, dutySatisfied44.Sum);
-                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, dutyDenied44.Count);
-                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, dutyDenied44.Sum);
+                    cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, dutySatisfied[2].Count);
+                    cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, dutySatisfied[2].Sum);
+                    cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, dutyDenied[2].Count);
+                    cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, dutyDenied[2].Sum);
+                    cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, dutySatisfied[4].Count);
+                    cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, dutySatisfied[4].Sum);
+                    cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, dutyDenied[4].Count);
+                    cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, dutyDenied[4].Sum);
+                    cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, dutySatisfied[6].Count);
+                    cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, dutySatisfied[6].Sum);
+                    cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, dutyDenied[6].Count);
+                    cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, dutyDenied[6].Sum);
+                    cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, dutySatisfied[8].Count);
+                    cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, dutySatisfied[8].Sum);
+                    cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, dutyDenied[8].Count);
+                    cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, dutyDenied[8].Sum);
                 }
             }
 
