@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Svr.Web.Controllers
@@ -390,7 +391,7 @@ namespace Svr.Web.Controllers
             All, Satisfied, Denied
         }
 
-        private static List<Rec> InitialRec(int count = 1)
+        private static List<Rec> InitialRec(int count = 11)
         {
             var res = new List<Rec>(count);
             for (var i = 0; i < count; i++)
@@ -416,13 +417,40 @@ namespace Svr.Web.Controllers
 
         private static void SetCells2(ExcelWorksheet worksheet, List<Rec> record, string cat = "")
         {
+            var sum = 0;
+            foreach (var rec in record)
+                sum += rec.Count;
+            if (sum == 0) return;
             var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(cat) select cell)?.Last().End.Row;
-            if (n != null)
-            {
-                var cells = worksheet.Cells;
-                cells[$"C{n}"].Value = CellToInt(cells[$"C{n}"].Text, record[0].Count);
-                cells[$"D{n}"].Value = CellToDec(cells[$"D{n}"].Text, record[0].Sum);
-            }
+            if (n == null) return;
+            var cells = worksheet.Cells;
+            cells[$"C{n}"].Value = CellToInt(cells[$"C{n}"].Text, record[0].Count);
+            cells[$"D{n}"].Value = CellToDec(cells[$"D{n}"].Text, record[0].Sum);
+            cells[$"I{n}"].Value = CellToInt(cells[$"I{n}"].Text, record[1].Count);
+            cells[$"J{n}"].Value = CellToDec(cells[$"J{n}"].Text, record[1].Sum);
+            cells[$"U{n}"].Value = CellToInt(cells[$"U{n}"].Text, record[2].Count);
+            cells[$"V{n}"].Value = CellToDec(cells[$"V{n}"].Text, record[2].Sum);
+            cells[$"K{n}"].Value = CellToInt(cells[$"K{n}"].Text, record[3].Count);
+            cells[$"L{n}"].Value = CellToDec(cells[$"L{n}"].Text, record[3].Sum);
+            cells[$"W{n}"].Value = CellToInt(cells[$"W{n}"].Text, record[4].Count);
+            cells[$"X{n}"].Value = CellToDec(cells[$"X{n}"].Text, record[4].Sum);
+            cells[$"M{n}"].Value = CellToInt(cells[$"M{n}"].Text, record[5].Count);
+            cells[$"N{n}"].Value = CellToDec(cells[$"N{n}"].Text, record[5].Sum);
+            cells[$"Y{n}"].Value = CellToInt(cells[$"Y{n}"].Text, record[6].Count);
+            cells[$"Z{n}"].Value = CellToDec(cells[$"Z{n}"].Text, record[6].Sum);
+            cells[$"O{n}"].Value = CellToInt(cells[$"O{n}"].Text, record[7].Count);
+            cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, record[7].Sum);
+            cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, record[8].Count);
+            cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, record[8].Sum);
+            cells[$"AE{n}"].Value = CellToInt(cells[$"AE{n}"].Text, record[9].Count);
+            cells[$"AF{n}"].Value = CellToDec(cells[$"AF{n}"].Text, record[9].Sum);
+            cells[$"AG{n}"].Value = CellToInt(cells[$"AG{n}"].Text, record[10].Count);
+            cells[$"AH{n}"].Value = CellToDec(cells[$"AH{n}"].Text, record[10].Sum);
+            var regex = new Regex(@"\.[^.]*$");
+            var substitution = @"";
+            var cat1 = regex.Replace(cat, substitution, 1);
+            if (cat1 == cat) return;
+            SetCells2(worksheet, record, cat1);
         }
 
         private static void SetCells(ExcelWorksheet worksheet, List<Record> record, string cat = "", byte d = 0)
@@ -454,8 +482,6 @@ namespace Svr.Web.Controllers
             }
 
         }
-
-
 
         private async Task<ExcelPackage> createExcelPackage(string lord = null, string owner = null,
             DateTime? dateS = null, DateTime? datePo = null, string category = null)
@@ -491,206 +517,240 @@ namespace Svr.Web.Controllers
                 {
                     flg = 2;
                 }
-                
+
                 /// Предметы иска
                 var subjectClaims = groupClaim.SubjectClaims.OrderBy(a => a.Code);
                 foreach (var subjectClaim in subjectClaims)
                 {
-                    var groupRecord = InitialRec();
-                    var claims = claimRepository.List(new ClaimSpecificationReport(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
-                    //var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
-                    var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell)
-                        ?.Last().End.Row;
-                    if (n == null) continue;
+                    try
+                    {
 
-                    var cells = worksheet.Cells;
-                    if (dateS != null)
-                    {
-                        claims = claims.Where(c => c.DateIn >= dateS);
-                    }
-                    if (datePo != null)
-                    {
-                        claims = claims.Where(c => c.DateIn <= datePo);
-                    }
-                    var count = await claims.CountAsync();
-                    if (count > 0)
-                    {
-                        //cells[$"C{n}"].Value = count;
-                        groupRecord[0].Count += count;
 
-                        var sum = await claims.SumAsync(c => c.Sum);
-                        if (sum != null)
+                        var groupRecord = InitialRec();
+                        var claims = claimRepository.List(new ClaimSpecificationReport(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
+                        //var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
+                        var n = (from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell)
+                            ?.Last().End.Row;
+
+
+                        if (n == null) continue;
+
+                        var cells = worksheet.Cells;
+                        if (dateS != null)
                         {
-                            //cells[$"D{n}"].Value = sum;
-                            groupRecord[0].Sum += (sum ?? 0);
+                            claims = claims.Where(c => c.DateIn >= dateS);
                         }
-                    }
-                    var instances = instanceRepository.ListReport().Where(i => i.Claim.SubjectClaimId == subjectClaim.Id);
-                    if (owner != null)
-                    {
-                        instances = instances.Where(i => i.Claim.DistrictId == owner.ToLong());
-                    }
-                    if (dateS != null)
-                    {
-                        instances = instances.Where(c => c.DateInCourtDecision >= dateS);
-                    }
-                    if (datePo != null)
-                    {
-                        instances = instances.Where(c => c.DateInCourtDecision <= datePo);
-                    }
-
-                    int countEnd0 = 0;
-                    decimal sumEnd0 = 0;
-                    int countNo0 = 0;
-                    decimal sumNo0 = 0;
-                    int countSatisfied = 0; decimal sumSatisfied = 0; int countDenied = 0; decimal sumDenied = 0; int countEnd = 0; decimal sumEnd = 0; int countNo = 0; decimal sumNo = 0;
-
-                    //int countDutySatisfied = 0;
-                    //decimal dutySatisfied = 0;
-
-                    var instances1 = await instances.Where(i => i.Number == 1).AsNoTracking().ToListAsync();
-                    if (instances1.Count > 0)
-                    {
-                        if (flg == 1)
+                        if (datePo != null)
                         {
-                            const int k = 1;
-                            count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            claims = claims.Where(c => c.DateIn <= datePo);
                         }
-                        else if (flg == 2)
-                        {
-                            const int k = 2;
-                            count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                        }
-                        else
-                        {
-                            const int k = 0;
-                            count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied,
-                                out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
-                                duty[k], services[k], cost[k], dutyPaid);
-                        }
-
+                        var count = await claims.CountAsync();
                         if (count > 0)
                         {
-                            cells[$"I{n}"].Value = countSatisfied;
-                            cells[$"J{n}"].Value = sumSatisfied;
-                            cells[$"U{n}"].Value = countDenied;
-                            cells[$"V{n}"].Value = sumDenied;
-                            countEnd0 = countEnd0 + countEnd;
-                            sumEnd0 = sumEnd0 + sumEnd;
-                            countNo0 = countNo0 + countNo;
-                            sumNo0 = sumNo0 + sumNo;
+                            //cells[$"C{n}"].Value = count;
+                            groupRecord[0].Count += count;
+                            var sum = await claims.SumAsync(c => c.Sum);
+                            if (sum != null)
+                            {
+                                //cells[$"D{n}"].Value = sum;
+                                groupRecord[0].Sum += (sum ?? 0);
+                            }
                         }
-                    }
-                    var instances2 = await instances.Where(i => i.Number == 2).AsNoTracking().ToListAsync();
-                    if (instances2.Count > 0)
-                    {
-                        if (flg == 1)
+                        var instances = instanceRepository.ListReport().Where(i => i.Claim.SubjectClaimId == subjectClaim.Id);
+                        if (owner != null)
                         {
-                            const int k = 3;
-                            count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-
+                            instances = instances.Where(i => i.Claim.DistrictId == owner.ToLong());
                         }
-                        else if (flg == 2)
+                        if (dateS != null)
                         {
-                            const int k = 4;
-                            count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            instances = instances.Where(c => c.DateInCourtDecision >= dateS);
                         }
-                        else
+                        if (datePo != null)
                         {
-                            const int k = 0;
-                            count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied,
-                                out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
-                                duty[k], services[k], cost[k], dutyPaid);
+                            instances = instances.Where(c => c.DateInCourtDecision <= datePo);
                         }
 
-                        if (count > 0)
-                        {
-                            cells[$"K{n}"].Value = countSatisfied;
-                            cells[$"L{n}"].Value = sumSatisfied;
-                            cells[$"W{n}"].Value = countDenied;
-                            cells[$"X{n}"].Value = sumDenied;
-                            countEnd0 = countEnd0 + countEnd;
-                            sumEnd0 = sumEnd0 + sumEnd;
-                            countNo0 = countNo0 + countNo;
-                            sumNo0 = sumNo0 + sumNo;
-                        }
-                    }
-                    var instances3 = await instances.Where(i => i.Number == 3).AsNoTracking().ToListAsync();
-                    if (instances3.Count > 0)
-                    {
-                        if (flg == 1)
-                        {
-                            const int k = 5;
-                            count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                        }
-                        else if (flg == 2)
-                        {
-                            const int k = 6;
-                            count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                        }
-                        else
-                        {
-                            const int k = 0;
-                            count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                        }
+                        int countEnd0 = 0;
+                        decimal sumEnd0 = 0;
+                        int countNo0 = 0;
+                        decimal sumNo0 = 0;
+                        int countSatisfied = 0; decimal sumSatisfied = 0; int countDenied = 0; decimal sumDenied = 0; int countEnd = 0; decimal sumEnd = 0; int countNo = 0; decimal sumNo = 0;
 
-                        if (count > 0)
+                        //int countDutySatisfied = 0;
+                        //decimal dutySatisfied = 0;
+
+                        var instances1 = await instances.Where(i => i.Number == 1).AsNoTracking().ToListAsync();
+                        if (instances1.Count > 0)
                         {
-                            cells[$"M{n}"].Value = countSatisfied;
-                            cells[$"N{n}"].Value = sumSatisfied;
-                            cells[$"Y{n}"].Value = countDenied;
-                            cells[$"Z{n}"].Value = sumDenied;
-                            countEnd0 = countEnd0 + countEnd;
-                            sumEnd0 = sumEnd0 + sumEnd;
-                            countNo0 = countNo0 + countNo;
-                            sumNo0 = sumNo0 + sumNo;
+                            if (flg == 1)
+                            {
+                                const int k = 1;
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+                            else if (flg == 2)
+                            {
+                                const int k = 2;
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+                            else
+                            {
+                                const int k = 0;
+                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied,
+                                    out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
+                                    duty[k], services[k], cost[k], dutyPaid);
+                            }
+
+                            if (count > 0)
+                            {
+                                //cells[$"I{n}"].Value = countSatisfied;
+                                groupRecord[1].Count += countSatisfied;
+                                //cells[$"J{n}"].Value = sumSatisfied;
+                                groupRecord[1].Sum += sumSatisfied;
+                                //cells[$"U{n}"].Value = countDenied;
+                                groupRecord[2].Count += countDenied;
+                                //cells[$"V{n}"].Value = sumDenied;
+                                groupRecord[2].Sum += sumDenied;
+                                countEnd0 = countEnd0 + countEnd;
+                                sumEnd0 = sumEnd0 + sumEnd;
+                                countNo0 = countNo0 + countNo;
+                                sumNo0 = sumNo0 + sumNo;
+                            }
                         }
+                        var instances2 = await instances.Where(i => i.Number == 2).AsNoTracking().ToListAsync();
+                        if (instances2.Count > 0)
+                        {
+                            if (flg == 1)
+                            {
+                                const int k = 3;
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+
+                            }
+                            else if (flg == 2)
+                            {
+                                const int k = 4;
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+                            else
+                            {
+                                const int k = 0;
+                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied,
+                                    out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
+                                    duty[k], services[k], cost[k], dutyPaid);
+                            }
+
+                            if (count > 0)
+                            {
+                                //cells[$"K{n}"].Value = countSatisfied;
+                                groupRecord[3].Count += countSatisfied;
+                                //cells[$"L{n}"].Value = sumSatisfied;
+                                groupRecord[3].Sum += sumSatisfied;
+                                //cells[$"W{n}"].Value = countDenied;
+                                groupRecord[4].Count += countDenied;
+                                //cells[$"X{n}"].Value = sumDenied;
+                                groupRecord[4].Sum += sumDenied;
+                                countEnd0 = countEnd0 + countEnd;
+                                sumEnd0 = sumEnd0 + sumEnd;
+                                countNo0 = countNo0 + countNo;
+                                sumNo0 = sumNo0 + sumNo;
+                            }
+                        }
+                        var instances3 = await instances.Where(i => i.Number == 3).AsNoTracking().ToListAsync();
+                        if (instances3.Count > 0)
+                        {
+                            if (flg == 1)
+                            {
+                                const int k = 5;
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+                            else if (flg == 2)
+                            {
+                                const int k = 6;
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+                            else
+                            {
+                                const int k = 0;
+                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+
+                            if (count > 0)
+                            {
+                                //cells[$"M{n}"].Value = countSatisfied;
+                                groupRecord[5].Count += countSatisfied;
+                                //cells[$"N{n}"].Value = sumSatisfied;
+                                groupRecord[5].Sum += sumSatisfied;
+                                //cells[$"Y{n}"].Value = countDenied;
+                                groupRecord[6].Count += countDenied;
+                                //cells[$"Z{n}"].Value = sumDenied;
+                                groupRecord[6].Sum += sumDenied;
+                                countEnd0 = countEnd0 + countEnd;
+                                sumEnd0 = sumEnd0 + sumEnd;
+                                countNo0 = countNo0 + countNo;
+                                sumNo0 = sumNo0 + sumNo;
+                            }
+                        }
+                        var instances4 = await instances.Where(i => i.Number == 4).AsNoTracking().ToListAsync();
+                        if (instances4.Count > 0)
+                        {
+                            if (flg == 1)
+                            {
+                                const int k = 7;
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+                            else if (flg == 2)
+                            {
+                                const int k = 8;
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+                            else
+                            {
+                                const int k = 0;
+                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
+                            }
+                            if (count > 0)
+                            {
+                                //cells[$"O{n}"].Value = countSatisfied;
+                                groupRecord[7].Count += countSatisfied;
+                                //cells[$"P{n}"].Value = sumSatisfied;
+                                groupRecord[7].Sum += sumSatisfied;
+                                //cells[$"AA{n}"].Value = countDenied;
+                                groupRecord[8].Count += countDenied;
+                                //cells[$"AB{n}"].Value = sumDenied;
+                                groupRecord[8].Sum += sumDenied;
+                                countEnd0 = countEnd0 + countEnd;
+                                sumEnd0 = sumEnd0 + sumEnd;
+                                countNo0 = countNo0 + countNo;
+                                sumNo0 = sumNo0 + sumNo;
+                            }
+                        }
+                        if (countEnd0 > 0)
+                        {
+                            //cells[$"AE{n}"].Value = countEnd0;
+                            groupRecord[9].Count += countEnd0;
+                            //cells[$"AF{n}"].Value = sumEnd0;
+                            groupRecord[9].Sum += sumEnd0;
+
+                        }
+                        if (countNo0 > 0)
+                        {
+                            //cells[$"AG{n}"].Value = countNo0;
+                            groupRecord[10].Count += countNo0;
+                            //cells[$"AH{n}"].Value = sumNo0;
+                            groupRecord[10].Sum += sumNo0;
+                        }
+                        SetCells2(worksheet, groupRecord, subjectClaim.Code);
+                        groupRecord = null;
                     }
-                    var instances4 = await instances.Where(i => i.Number == 4).AsNoTracking().ToListAsync();
-                    if (instances4.Count > 0)
+
+
+
+                    catch (Exception e)
                     {
-                        if (flg == 1)
-                        {
-                            const int k = 7;
-                            count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                        }
-                        else if (flg == 2)
-                        {
-                            const int k = 8;
-                            count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                        }
-                        else
-                        {
-                            const int k = 0;
-                            count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                        }
-                        if (count > 0)
-                        {
-                            cells[$"O{n}"].Value = countSatisfied;
-                            cells[$"P{n}"].Value = sumSatisfied;
-                            cells[$"AA{n}"].Value = countDenied;
-                            cells[$"AB{n}"].Value = sumDenied;
-                            countEnd0 = countEnd0 + countEnd;
-                            sumEnd0 = sumEnd0 + sumEnd;
-                            countNo0 = countNo0 + countNo;
-                            sumNo0 = sumNo0 + sumNo;
-                        }
+                        Console.WriteLine($"{e.Message}  subjectClaim.Code = {subjectClaim.Code}");
+                        throw;
                     }
-                    if (countEnd0 > 0)
-                    {
-                        cells[$"AE{n}"].Value = countEnd0;
-                        cells[$"AF{n}"].Value = sumEnd0;
-                    }
-                    if (countNo0 > 0)
-                    {
-                        cells[$"AG{n}"].Value = countNo0;
-                        cells[$"AH{n}"].Value = sumNo0;
-                    }
-                    SetCells2(worksheet, groupRecord, subjectClaim.Code);
-                    groupRecord = null;
                 }
             }
-
             SetCells(worksheet, duty, (template.Name.Equals(fileTemplateNameIn) ? "25.1" : "20.1"));
             SetCells(worksheet, services, (template.Name.Equals(fileTemplateNameIn) ? "25.2" : ""));
             SetCells(worksheet, cost, (template.Name.Equals(fileTemplateNameIn) ? "25.3" : "20.2"));
