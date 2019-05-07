@@ -80,11 +80,11 @@ namespace Svr.Web.Controllers
         // GET: Claims
         public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc, string lord = null, string owner = null, string searchString = null, int page = 1, int itemsPage = 10)
         {
-            if (String.IsNullOrEmpty(owner))
+            if (string.IsNullOrEmpty(owner))
             {
-                if (String.IsNullOrEmpty(lord))
+                if (string.IsNullOrEmpty(lord))
                 {
-                    ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
+                    var user = await userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
                         owner = user.DistrictId.ToString();
@@ -93,7 +93,7 @@ namespace Svr.Web.Controllers
             }
             var list = repository.List(new ClaimSpecification(owner.ToLong()));
             //фильтрация
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d => d.Name.ToUpper().Contains(searchString.ToUpper()) || d.Code.ToUpper().Contains(searchString.ToUpper()));
             }

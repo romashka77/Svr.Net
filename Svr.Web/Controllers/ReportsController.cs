@@ -9,6 +9,7 @@ using OfficeOpenXml;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
+using Svr.Infrastructure.Extensions;
 using Svr.Infrastructure.Identity;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
@@ -19,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 //using OfficeOpenXml.Table;
 
 namespace Svr.Web.Controllers
@@ -95,19 +97,27 @@ namespace Svr.Web.Controllers
             string owner = null, string searchString = null, int page = 1, int itemsPage = 10, DateTime? dateS = null,
             DateTime? datePo = null, string category = null)
         {
-            if (String.IsNullOrEmpty(owner))
+            //if (string.IsNullOrEmpty(owner))
+            //{
+            //    if (string.IsNullOrEmpty(lord))
+            //    {
+            //        var user = await userManager.FindByNameAsync(User.Identity.Name);
+            //        owner = user.DistrictId.ToString();
+            //        lord = "1";
+            //    }
+            //}
+            if (string.IsNullOrEmpty(owner) && (string.IsNullOrEmpty(lord)))
             {
-                if (String.IsNullOrEmpty(lord))
+                var user = await userManager.FindByNameAsync(User.Identity.Name);
+                if (user != null)
                 {
-                    ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
                     owner = user.DistrictId.ToString();
-                    lord = "1";
                 }
             }
 
             var path = await GetPath(lord.ToLong(), owner.ToLong());
 
-            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            var dirInfo = new DirectoryInfo(path);
             if (!dirInfo.Exists)
             {
                 dirInfo.Create();
@@ -115,43 +125,16 @@ namespace Svr.Web.Controllers
 
             IEnumerable<FileInfo> list = dirInfo.GetFiles();
             //фильтрация
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 list = list.Where(d =>
                     d.Name.ToUpper().Contains(searchString.ToUpper()) ||
                     d.Extension.ToUpper().Contains(searchString.ToUpper()));
             }
-
             // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    list = list.OrderByDescending(p => p.Name);
-                    break;
-                case SortState.CodeAsc:
-                    list = list.OrderBy(p => p.Extension);
-                    break;
-                case SortState.CodeDesc:
-                    list = list.OrderByDescending(p => p.Extension);
-                    break;
-                case SortState.CreatedOnUtcAsc:
-                    list = list.OrderBy(p => p.CreationTime);
-                    break;
-                case SortState.CreatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.CreationTime);
-                    break;
-                case SortState.UpdatedOnUtcAsc:
-                    list = list.OrderBy(p => p.LastWriteTime);
-                    break;
-                case SortState.UpdatedOnUtcDesc:
-                    list = list.OrderByDescending(p => p.LastWriteTime);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Name);
-                    break;
-            }
+            list = list.Sort(sortOrder);
 
-            // пагинация
+            // определение страниц
             // ReSharper disable once PossibleMultipleEnumeration
             var count = list.Count();
             // ReSharper disable once PossibleMultipleEnumeration
@@ -173,7 +156,7 @@ namespace Svr.Web.Controllers
                         { Text = a.Name, Value = a.Id.ToString(), Selected = (owner == a.Id.ToString()) }), lord,
                     (await regionRepository.ListAllAsync()).ToList().Select(a => new SelectListItem
                     { Text = a.Name, Value = a.Id.ToString(), Selected = (lord == a.Id.ToString()) }), dateS, datePo,
-                    category,
+                     category,
                     (await categoryDisputeRepository.ListAllAsync()).Select(a => new SelectListItem
                     { Text = a.Name, Value = a.Id.ToString(), Selected = (category == a.Id.ToString()) })),
                 StatusMessage = StatusMessage
@@ -184,45 +167,34 @@ namespace Svr.Web.Controllers
         public async Task<IActionResult> InMemoryReport(string lord = null, string owner = null, DateTime? dateS = null,
             DateTime? datePo = null, string category = null)
         {
-            if (String.IsNullOrEmpty(owner))
+            if (string.IsNullOrEmpty(owner) && string.IsNullOrEmpty(lord))
             {
-                if (String.IsNullOrEmpty(lord))
-                {
-                    ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
-                    owner = user.DistrictId.ToString();
-                }
+                var user = await userManager.FindByNameAsync(User.Identity.Name);
+                owner = user.DistrictId.ToString();
             }
-
             byte[] reportBytes;
-            using (var package = await CreateExcelPackage(lord, owner, dateS, datePo, category))
+            using (var package = await CreateExcelPackage(owner, dateS, datePo, category))
             {
                 if (package == null)
                 {
                     return RedirectToAction(nameof(Index));
                 }
-
                 reportBytes = package.GetAsByteArray();
             }
-
             return File(reportBytes, XlsxContentType, GetFileName(dateS, datePo));
         }
-
 
         public async Task<IActionResult> FileReport(string lord = null, string owner = null, DateTime? dateS = null,
             DateTime? datePo = null, string category = null)
         {
-            if (String.IsNullOrEmpty(owner))
+            if (string.IsNullOrEmpty(owner) && string.IsNullOrEmpty(lord))
             {
-                if (String.IsNullOrEmpty(lord))
-                {
-                    ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
-                    owner = user.DistrictId.ToString();
-                }
+                var user = await userManager.FindByNameAsync(User.Identity.Name);
+                owner = user.DistrictId.ToString();
             }
-
             var path = await GetPath(lord.ToLong(), owner.ToLong());
             //byte[] reportBytes;
-            using (var package = await CreateExcelPackage(lord, owner, dateS, datePo, category))
+            using (var package = await CreateExcelPackage(owner, dateS, datePo, category))
             {
                 if (package == null)
                 {
@@ -358,9 +330,9 @@ namespace Svr.Web.Controllers
         private class Record
         {
             //удовлетворено
-            public Rec Satisfied { get; set; }
+            public Rec Satisfied { get; }
             //отказано
-            public Rec Denied { get; set; }
+            public Rec Denied { get; }
 
             public Record()
             {
@@ -399,7 +371,7 @@ namespace Svr.Web.Controllers
             var sum = record.Sum(rec => rec.Count);
             if (sum == 0) return;
             var n = GetNumRow(worksheet, cat);
-            if (n==0)return;
+            if (n == 0) return;
             var cells = worksheet.Cells;
             cells[$"C{n}"].Value = CellToInt(cells[$"C{n}"].Text, record[0].Count);
             cells[$"D{n}"].Value = CellToDec(cells[$"D{n}"].Text, record[0].Sum);
@@ -458,7 +430,7 @@ namespace Svr.Web.Controllers
 
         }
 
-        private async Task<ExcelPackage> CreateExcelPackage(string lord = null, string owner = null,
+        private async Task<ExcelPackage> CreateExcelPackage(string owner = null,
             DateTime? dateS = null, DateTime? datePo = null, string category = null)
         {
             template = await GetFileTemplateName(category);
@@ -474,7 +446,7 @@ namespace Svr.Web.Controllers
             var duty = InitialRecord();
             //Услуги пред.
             var services = InitialRecord();
-            //Суд.издер.
+            //Суд.издержки
             var cost = InitialRecord();
 
 
