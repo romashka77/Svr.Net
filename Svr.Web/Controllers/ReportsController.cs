@@ -524,8 +524,6 @@ namespace Svr.Web.Controllers
                 {
                     try
                     {
-
-
                         var groupRecord = InitialRec();
                         var claims = claimRepository.List(new ClaimSpecificationReport(owner.ToLong())).Where(c => c.SubjectClaimId == subjectClaim.Id);
                         //var acells = from cell in worksheet.Cells["A:A"] where cell.Text.Equals(subjectClaim.Code) select cell;
@@ -547,12 +545,10 @@ namespace Svr.Web.Controllers
                         var count = await claims.CountAsync();
                         if (count > 0)
                         {
-                            //cells[$"C{n}"].Value = count;
                             groupRecord[0].Count += count;
                             var sum = await claims.SumAsync(c => c.Sum);
                             if (sum != null)
                             {
-                                //cells[$"D{n}"].Value = sum;
                                 groupRecord[0].Sum += (sum ?? 0);
                             }
                         }
@@ -574,41 +570,23 @@ namespace Svr.Web.Controllers
                         decimal sumEnd0 = 0;
                         int countNo0 = 0;
                         decimal sumNo0 = 0;
-                        int countSatisfied = 0; decimal sumSatisfied = 0; int countDenied = 0; decimal sumDenied = 0; int countEnd = 0; decimal sumEnd = 0; int countNo = 0; decimal sumNo = 0;
-
-                        //int countDutySatisfied = 0;
-                        //decimal dutySatisfied = 0;
+                        int countSatisfied = 0;
+                        decimal sumSatisfied = 0; int countDenied = 0; decimal sumDenied = 0; int countEnd = 0; decimal sumEnd = 0; int countNo = 0; decimal sumNo = 0;
 
                         var instances1 = await instances.Where(i => i.Number == 1).AsNoTracking().ToListAsync();
                         if (instances1.Count > 0)
                         {
+                            var k = 0;
                             if (flg == 1)
-                            {
-                                const int k = 1;
-                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
+                                k = 1;
                             else if (flg == 2)
-                            {
-                                const int k = 2;
-                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
-                            else
-                            {
-                                const int k = 0;
-                                count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied,
-                                    out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
-                                    duty[k], services[k], cost[k], dutyPaid);
-                            }
-
+                                k = 2;
+                            count = GetSumInstances(instances1, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
                             if (count > 0)
                             {
-                                //cells[$"I{n}"].Value = countSatisfied;
                                 groupRecord[1].Count += countSatisfied;
-                                //cells[$"J{n}"].Value = sumSatisfied;
                                 groupRecord[1].Sum += sumSatisfied;
-                                //cells[$"U{n}"].Value = countDenied;
                                 groupRecord[2].Count += countDenied;
-                                //cells[$"V{n}"].Value = sumDenied;
                                 groupRecord[2].Sum += sumDenied;
                                 countEnd0 = countEnd0 + countEnd;
                                 sumEnd0 = sumEnd0 + sumEnd;
@@ -619,34 +597,17 @@ namespace Svr.Web.Controllers
                         var instances2 = await instances.Where(i => i.Number == 2).AsNoTracking().ToListAsync();
                         if (instances2.Count > 0)
                         {
+                            var k = 0;
                             if (flg == 1)
-                            {
-                                const int k = 3;
-                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-
-                            }
+                                k = 3;
                             else if (flg == 2)
-                            {
-                                const int k = 4;
-                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
-                            else
-                            {
-                                const int k = 0;
-                                count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied,
-                                    out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo,
-                                    duty[k], services[k], cost[k], dutyPaid);
-                            }
-
+                                k = 4;
+                            count = GetSumInstances(instances2, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
                             if (count > 0)
                             {
-                                //cells[$"K{n}"].Value = countSatisfied;
                                 groupRecord[3].Count += countSatisfied;
-                                //cells[$"L{n}"].Value = sumSatisfied;
                                 groupRecord[3].Sum += sumSatisfied;
-                                //cells[$"W{n}"].Value = countDenied;
                                 groupRecord[4].Count += countDenied;
-                                //cells[$"X{n}"].Value = sumDenied;
                                 groupRecord[4].Sum += sumDenied;
                                 countEnd0 = countEnd0 + countEnd;
                                 sumEnd0 = sumEnd0 + sumEnd;
@@ -657,31 +618,17 @@ namespace Svr.Web.Controllers
                         var instances3 = await instances.Where(i => i.Number == 3).AsNoTracking().ToListAsync();
                         if (instances3.Count > 0)
                         {
+                            var k = 0;
                             if (flg == 1)
-                            {
-                                const int k = 5;
-                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
+                                k = 5;
                             else if (flg == 2)
-                            {
-                                const int k = 6;
-                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
-                            else
-                            {
-                                const int k = 0;
-                                count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
-
+                                k = 6;
+                            count = GetSumInstances(instances3, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
                             if (count > 0)
                             {
-                                //cells[$"M{n}"].Value = countSatisfied;
                                 groupRecord[5].Count += countSatisfied;
-                                //cells[$"N{n}"].Value = sumSatisfied;
                                 groupRecord[5].Sum += sumSatisfied;
-                                //cells[$"Y{n}"].Value = countDenied;
                                 groupRecord[6].Count += countDenied;
-                                //cells[$"Z{n}"].Value = sumDenied;
                                 groupRecord[6].Sum += sumDenied;
                                 countEnd0 = countEnd0 + countEnd;
                                 sumEnd0 = sumEnd0 + sumEnd;
@@ -692,30 +639,17 @@ namespace Svr.Web.Controllers
                         var instances4 = await instances.Where(i => i.Number == 4).AsNoTracking().ToListAsync();
                         if (instances4.Count > 0)
                         {
+                            var k = 0;
                             if (flg == 1)
-                            {
-                                const int k = 7;
-                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
+                                k = 7;
                             else if (flg == 2)
-                            {
-                                const int k = 8;
-                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
-                            else
-                            {
-                                const int k = 0;
-                                count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
-                            }
+                                k = 8;
+                            count = GetSumInstances(instances4, out countSatisfied, out sumSatisfied, out countDenied, out sumDenied, out countEnd, out sumEnd, out countNo, out sumNo, duty[k], services[k], cost[k], dutyPaid);
                             if (count > 0)
                             {
-                                //cells[$"O{n}"].Value = countSatisfied;
                                 groupRecord[7].Count += countSatisfied;
-                                //cells[$"P{n}"].Value = sumSatisfied;
                                 groupRecord[7].Sum += sumSatisfied;
-                                //cells[$"AA{n}"].Value = countDenied;
                                 groupRecord[8].Count += countDenied;
-                                //cells[$"AB{n}"].Value = sumDenied;
                                 groupRecord[8].Sum += sumDenied;
                                 countEnd0 = countEnd0 + countEnd;
                                 sumEnd0 = sumEnd0 + sumEnd;
@@ -725,25 +659,17 @@ namespace Svr.Web.Controllers
                         }
                         if (countEnd0 > 0)
                         {
-                            //cells[$"AE{n}"].Value = countEnd0;
                             groupRecord[9].Count += countEnd0;
-                            //cells[$"AF{n}"].Value = sumEnd0;
                             groupRecord[9].Sum += sumEnd0;
-
                         }
                         if (countNo0 > 0)
                         {
-                            //cells[$"AG{n}"].Value = countNo0;
                             groupRecord[10].Count += countNo0;
-                            //cells[$"AH{n}"].Value = sumNo0;
                             groupRecord[10].Sum += sumNo0;
                         }
                         SetCells2(worksheet, groupRecord, subjectClaim.Code);
                         groupRecord = null;
                     }
-
-
-
                     catch (Exception e)
                     {
                         Console.WriteLine($"{e.Message}  subjectClaim.Code = {subjectClaim.Code}");
