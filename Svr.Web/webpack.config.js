@@ -8,9 +8,9 @@
 // Web Essentials
 const path = require('path');
 const webpack = require('webpack');
-const terserJsPlugin = require('terser-webpack-plugin');
+const TerserJsPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const optimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -20,6 +20,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // console.log('devMode', devMode);
 // console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 // console.log('================================================');
+
 module.exports = {
   context: path.resolve(__dirname, 'Source'),
   // devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
@@ -38,24 +39,24 @@ module.exports = {
     publicPath: '/dist/',
     filename: '[name].js',
     chunkFilename: '[id].js',
-    library: '[name]'
+    library: '[name]',
   },
   optimization: {
     minimizer: [
-      new terserJsPlugin({}),
-      new optimizeCssAssetsPlugin({
-        cssProcessorOptions: { map: { inline: false, annotation: true } }
-      })
+      new TerserJsPlugin({}),
+      new OptimizeCssAssetsPlugin({
+        cssProcessorOptions: { map: { inline: false, annotation: true } },
+      }),
     ],
-    //splitChunks: {
+    // splitChunks: {
     //    chunks: 'all'
-    //}
+    // }
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css']
+    extensions: ['.js', '.jsx', '.css'],
   },
   plugins: [
-    //new webpack.ProgressPlugin(),
+    // new webpack.ProgressPlugin(),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css',
@@ -65,47 +66,47 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
-      //"React": "react",
-      //"Provider": "react-redux"
-      //,
-      //Popper: ['popper.js', 'default']
+      // "React": "react",
+      // "Provider": "react-redux"
+      // ,
+      // Popper: ['popper.js', 'default']
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
   ],
   module: {
     rules: [
       {
         test: /\.js?$/,
-        exclude: /(node_modules|bower_components)/,//excluded node_modules 
+        exclude: /(node_modules|bower_components)/, // excluded node_modules
         use: [
           {
-            loader: "babel-loader"
+            loader: 'babel-loader',
           }, {
-            loader: "eslint-loader",
+            loader: 'eslint-loader',
             options: {
-              //emitError: true,
-              fix: true
-            }
-          }
-        ]
+              // emitError: true,
+              fix: true,
+            },
+          },
+        ],
       },
       {
-        //test: /.(css|scss)$/,
+        // test: /.(css|scss)$/,
         test: /.css$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              name: '[path][name].css'
+              name: '[path][name].css',
               //    publicPath: '/dist/'
-            }
+            },
           }, {
             //    loader: 'style-loader', // inject CSS to page
-            //}, {
+            // }, {
             loader: 'css-loader', // translates CSS into CommonJS modules
-            options: { url: false, sourceMap: true }
+            options: { url: false, sourceMap: true },
           },
-          //{
+          // {
           //    loader: 'postcss-loader', // Run post css actions
           //    options: {
           //        plugins: function () { // post css plugins, can be exported to postcss.config.js
@@ -115,35 +116,35 @@ module.exports = {
           //            ];
           //        }
           //    }
-          //}
-          //, {
+          // }
+          // , {
           //    loader: 'sass-loader', // compiles SASS to CSS
-          //options: { sourceMap: true } 
-          //}
-        ]
+          // options: { sourceMap: true }
+          // }
+        ],
       },
       {
         test: /\.hbs$/,
         exclude: /(node_modules|bower_components)/,
         use: [
-          'handlebars-loder'
-        ]
+          'handlebars-loader',
+        ],
       },
       {
         test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
         use: [
           {
-            loader: "file-loader",
+            loader: 'file-loader',
             options: {
-              name: "[path][name]-[hash:8].[ext]"
-            }
-          }
-        ]
-        //loader: 'url-loader',
-        //options: {
+              name: '[path][name]-[hash:8].[ext]',
+            },
+          },
+        ],
+        // loader: 'url-loader',
+        // options: {
         //    limit: 10000
-        //}
-      }
-    ]
-  }
+        // }
+      },
+    ],
+  },
 };
