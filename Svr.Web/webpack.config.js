@@ -3,35 +3,35 @@
 // https://www.youtube.com/watch?v=_GtHmFFxi_8&list=PL0lO_mIqDDFXaDvwLJ6aMnmIt7sdmujKp&index=6
 // https://monsterlessons.com/project/lessons/redux-js-vstuplenie
 // https://monsterlessons.com/project/lessons/reduxjs-combinereducers
-
 // https://flash-player.net/channel/UCQpfDQgPe-b-KadFexdZGXQ
-
 // https://ui-kit.rambler.ru/
 // Web Essentials
 const path = require('path');
 const webpack = require('webpack');
-const TerserJSPlugin = require("terser-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const terserJsPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const optimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 const devMode = process.env.NODE_ENV !== 'production';
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const extractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-console.log('devMode', devMode);
-console.log('process.env.NODE_ENV', process.env.NODE_ENV);
-console.log('================================================');
+
+// console.log('devMode', devMode);
+// console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+// console.log('================================================');
 module.exports = {
   context: path.resolve(__dirname, 'Source'),
-  //devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
+  // devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
   devtool: 'source-map',
   mode: devMode ? 'development' : 'production',
   entry: {
     claims: './claims',
     common: './common',
     textFirstUpperCase: './textFirstUpperCase',
-    site: './site'
-    //validation: './validation'
-    //claim: './claim'
+    site: './site',
+    // validation: './validation'
+    // claim: './claim'
   },
   output: {
     path: path.resolve(__dirname, 'wwwroot/dist'),
@@ -42,8 +42,8 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      new TerserJSPlugin({}),
-      new OptimizeCSSAssetsPlugin({
+      new terserJsPlugin({}),
+      new optimizeCssAssetsPlugin({
         cssProcessorOptions: { map: { inline: false, annotation: true } }
       })
     ],

@@ -366,10 +366,9 @@ namespace Svr.Web.Controllers
                 res = enumerable.Last().End.Row;
             return res;
         }
-        private static void SetCells2(ExcelWorksheet worksheet, IReadOnlyList<Rec> record, string cat = "")
+        private static void SetCells2(ExcelWorksheet worksheet, IReadOnlyList<Rec> record,string cat = "")
         {
-            var sum = record.Sum(rec => rec.Count);
-            if (sum == 0) return;
+            if (string.IsNullOrEmpty(cat) || (record.Sum(rec => rec.Count) == 0)) return;
             var n = GetNumRow(worksheet, cat);
             if (n == 0) return;
             var cells = worksheet.Cells;
@@ -395,11 +394,9 @@ namespace Svr.Web.Controllers
             cells[$"AF{n}"].Value = CellToDec(cells[$"AF{n}"].Text, record[9].Sum);
             cells[$"AG{n}"].Value = CellToInt(cells[$"AG{n}"].Text, record[10].Count);
             cells[$"AH{n}"].Value = CellToDec(cells[$"AH{n}"].Text, record[10].Sum);
-            var regex = new Regex(@"\.[^.]*$");
-            var substitution = @"";
-            var cat1 = regex.Replace(cat, substitution, 1);
-            if (cat1 == cat) return;
-            SetCells2(worksheet, record, cat1);
+            var regex = new Regex(@"(\d+|\.[^.]*)$");//(@"\.[^.]*$");
+            // ReSharper disable once TailRecursiveCall
+            SetCells2(worksheet, record, regex.Replace(cat, string.Empty, 1));
         }
 
         private static void SetCells(ExcelWorksheet worksheet, IReadOnlyList<Record> record, string cat = "", byte d = 0)
@@ -427,7 +424,6 @@ namespace Svr.Web.Controllers
             cells[$"P{n}"].Value = CellToDec(cells[$"P{n}"].Text, record[7 + d].Satisfied.Sum);
             cells[$"AA{n}"].Value = CellToInt(cells[$"AA{n}"].Text, record[7 + d].Denied.Count);
             cells[$"AB{n}"].Value = CellToDec(cells[$"AB{n}"].Text, record[7 + d].Denied.Sum);
-
         }
 
         private async Task<ExcelPackage> CreateExcelPackage(string owner = null,
