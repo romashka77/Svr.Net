@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
 {
-    public class EfRepository<T>: ISort<T>, IRepository<T>, IRepositoryAsync<T> where T : BaseEntity
+    public class EfRepository<T> : ISort<T>, IRepository<T>, IRepositoryAsync<T> where T : BaseEntity
     {
         private readonly DataContext dbContext;
         private DbSet<T> entities;
@@ -80,15 +80,15 @@ namespace Svr.Infrastructure.Data
         {
             //try
             //{
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            Entities.Add(entity);
-            dbContext.SaveChanges();
+                if (entity == null)
+                    throw new ArgumentNullException(nameof(entity));
+                Entities.Add(entity);
+                dbContext.SaveChanges();
             //}
             //catch (DbUpdateConcurrencyException dbEx)
             //{
             //    //ensure that the detailed error text is saved in the Log
-            //    throw new Exception(GetFullErrorTextAndRollbackEntityChanges(dbEx), dbEx);
+            //    //throw new Exception(GetFullErrorTextAndRollbackEntityChanges(dbEx), dbEx);
             //}
             return entity;
         }
@@ -202,10 +202,8 @@ namespace Svr.Infrastructure.Data
         /// Entities
         /// </summary>
         /*protected*/
-        public virtual DbSet<T> Entities
-        {
-            get { return entities ?? (entities = dbContext.Set<T>()); }
-        }
+        public virtual DbSet<T> Entities => entities ?? (entities = dbContext.Set<T>());
+
         #endregion
     }
 }

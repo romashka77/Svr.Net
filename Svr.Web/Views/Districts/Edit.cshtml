@@ -50,13 +50,13 @@
             <div class="col-md-10">
                 @foreach (Performer p in ViewBag.Performers)
                 {
-                    bool t = false;
-                    foreach (DistrictPerformer d in Model.DistrictPerformers)
+                    var t = false;
+                    foreach (var d in Model.DistrictPerformers)
                     {
                         t = d?.PerformerId == p?.Id;
                         if (t) { break; }
                     }
-                    <input type="checkbox" name="selectedPerformers" value="@p.Id" @(t ? "checked=\"checked\"" : "") />@p.Name
+                    <input type="checkbox" name="selectedPerformers" value="@p?.Id" @(t ? "checked=\"checked\"" : "") />@p?.Name
                     <br />
                 }
             </div>

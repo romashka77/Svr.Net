@@ -21,8 +21,6 @@ namespace Svr.Infrastructure.Identity.Extensions
                         baseEntity.CreatedOnUtc = now;
                         baseEntity.UpdatedOnUtc = now;
                         break;
-                    default:
-                        break;
                 }
 
             }

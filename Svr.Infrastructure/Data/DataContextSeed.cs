@@ -47,7 +47,7 @@ namespace Svr.Infrastructure.Data
                     //dataContext.DirName.AddRange(GetPreconfiguredDirNamePerformers(dataContext));
                     //await dataContext.SaveChangesAsync();
 
-                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameOPF(dataContext));
+                    await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameOpf(dataContext));
                     await dataContext.SaveChangesAsync();
                     await dataContext.DirName.AddRangeAsync(await GetPreconfiguredDirNameCourt(dataContext));
                     await dataContext.SaveChangesAsync();
@@ -289,19 +289,17 @@ namespace Svr.Infrastructure.Data
             await dataContext.DirName.AddAsync(_dirName);
             await dataContext.Dir.AddRangeAsync(await GetPreconfiguredTypeApplicant(dataContext));
 
-            var result = new List<DirName>();
-            result.Add(_dirName);
+            var result = new List<DirName> {_dirName};
             return result;
         }
-        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameOPF(DataContext dataContext)
+        private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameOpf(DataContext dataContext)
         {
             _dirName = new DirName { Name = "ОПФ" };
             await dataContext.DirName.AddAsync(_dirName);
-            await dataContext.Dir.AddRangeAsync(GetPreconfiguredOPF());
+            await dataContext.Dir.AddRangeAsync(GetPreconfiguredOpf());
 
-            var resault = new List<DirName> { };
-            resault.Add(_dirName);
-            return resault;
+            var result = new List<DirName> {_dirName};
+            return result;
         }
         private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourtDecision1(DataContext dataContext)
         {
@@ -309,9 +307,8 @@ namespace Svr.Infrastructure.Data
             await dataContext.DirName.AddAsync(_dirName);
             await dataContext.Dir.AddRangeAsync(GetPreconfiguredDecision1());
 
-            var resault = new List<DirName> { };
-            resault.Add(_dirName);
-            return resault;
+            var result = new List<DirName> {_dirName};
+            return result;
         }
         private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourtDecision2(DataContext dataContext)
         {
@@ -319,9 +316,8 @@ namespace Svr.Infrastructure.Data
             await dataContext.DirName.AddAsync(_dirName);
             await dataContext.Dir.AddRangeAsync(GetPreconfiguredDecision2());
 
-            var resault = new List<DirName> { };
-            resault.Add(_dirName);
-            return resault;
+            var result = new List<DirName> {_dirName};
+            return result;
         }
         private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourtDecision3(DataContext dataContext)
         {
@@ -329,9 +325,8 @@ namespace Svr.Infrastructure.Data
             await dataContext.DirName.AddAsync(_dirName);
             await dataContext.Dir.AddRangeAsync(GetPreconfiguredDecision3());
 
-            var resault = new List<DirName> { };
-            resault.Add(_dirName);
-            return resault;
+            var result = new List<DirName> {_dirName};
+            return result;
         }
         private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourtDecision4(DataContext dataContext)
         {
@@ -339,9 +334,8 @@ namespace Svr.Infrastructure.Data
             await dataContext.DirName.AddAsync(_dirName);
             await dataContext.Dir.AddRangeAsync(GetPreconfiguredDecision4());
 
-            var resault = new List<DirName> { };
-            resault.Add(_dirName);
-            return resault;
+            var result = new List<DirName> {_dirName};
+            return result;
         }
         private static async Task<IEnumerable<DirName>> GetPreconfiguredDirNameCourt(DataContext dataContext)
         {
@@ -349,9 +343,8 @@ namespace Svr.Infrastructure.Data
             await dataContext.DirName.AddAsync(_dirName);
             await dataContext.Dir.AddRangeAsync(GetPreconfiguredCourt());
 
-            var resault = new List<DirName> { };
-            resault.Add(_dirName);
-            return resault;
+            var result = new List<DirName> {_dirName};
+            return result;
         }
         private static IEnumerable<Dir> GetPreconfiguredCourt()
         {
@@ -478,7 +471,7 @@ namespace Svr.Infrastructure.Data
                 new Dir {Name="Прекращено", DirName=_dirName }
             };
         }
-        private static IEnumerable<Dir> GetPreconfiguredOPF()
+        private static IEnumerable<Dir> GetPreconfiguredOpf()
         {
             return new List<Dir>()
             {

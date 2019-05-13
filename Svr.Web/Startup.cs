@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Svr.Web.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using System.Globalization;
@@ -18,11 +11,11 @@ namespace Svr.Web
 {
     public class Startup
     {
-        public IConfiguration configuration { get; }
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
 
-            this.configuration = configuration;
+            Configuration = configuration;
         }
 
         //Этот метод вызывается средой выполнения. Используйте этот метод для добавления служб в контейнер.

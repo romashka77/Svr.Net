@@ -51,6 +51,16 @@ namespace Svr.Infrastructure.Data
                     return source.OrderBy(s => s.Claim.Name);
                 case SortState.OwnerDesc:
                     return source.OrderByDescending(s => s.Claim.Name);
+                case SortState.NameAsc:
+                    return source.OrderBy(s => s.Name);
+                case SortState.CodeAsc:
+                    return source;
+                case SortState.CodeDesc:
+                    return source;
+                case SortState.LordAsc:
+                    return source;
+                case SortState.LordDesc:
+                    return source;
                 default:
                     return source.OrderBy(s => s.Name);
             }

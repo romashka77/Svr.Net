@@ -6,12 +6,10 @@ using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
-using Svr.Infrastructure.Data;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.DirViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -114,6 +112,7 @@ namespace Svr.Web.Controllers
                 if (item != null)
                 {
                     StatusMessage = item.MessageAddOk();
+                    logger.LogInformation($"{model} create");
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -149,6 +148,7 @@ namespace Svr.Web.Controllers
                 {
                     await repository.UpdateAsync(new Dir { Id = model.Id, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, DirNameId = model.DirNameId });
                     StatusMessage = model.MessageEditOk();
+                    logger.LogInformation($"{model} edit");
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -191,6 +191,7 @@ namespace Svr.Web.Controllers
             {
                 await repository.DeleteAsync(new Dir { Id = model.Id, Name = model.Name });
                 StatusMessage = model.MessageDeleteOk();
+                logger.LogInformation($"{model} delete");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

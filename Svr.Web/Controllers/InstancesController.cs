@@ -6,12 +6,10 @@ using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
-using Svr.Infrastructure.Data;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.InstanceViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -142,11 +140,13 @@ namespace Svr.Web.Controllers
                 if (item != null)
                 {
                     StatusMessage = item.MessageAddOk();
+                    logger.LogInformation($"{model} create");
                     return RedirectToAction(nameof(Index), new { owner = item.ClaimId });
                 }
             }
             ModelState.AddModelError(string.Empty, model.MessageAddError());
             await SetViewBag(model);
+
             return View(model);
         }
         #endregion
@@ -178,6 +178,7 @@ namespace Svr.Web.Controllers
                 {
                     await repository.UpdateAsync(new Instance { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, CourtDecision = model.CourtDecision, DateCourtDecision = model.DateCourtDecision, DateInCourtDecision = model.DateInCourtDecision, DateTransfer = model.DateTransfer, DutyDenied = model.DutyDenied, DutySatisfied = model.DutySatisfied, DutyPaid = model.DutyPaid, ServicesDenied = model.ServicesDenied, SumDenied = model.SumDenied, ServicesSatisfied = model.ServicesSatisfied, SumSatisfied = model.SumSatisfied, СostDenied = model.СostDenied, СostSatisfied = model.СostSatisfied, Number = model.Number, CourtDecisionId = model.CourtDecisionId });
                     StatusMessage = model.MessageEditOk();
+                    logger.LogInformation($"{model} edit");
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -220,11 +221,13 @@ namespace Svr.Web.Controllers
             {
                 await repository.DeleteAsync(new Instance { Id = model.Id, Name = model.Name });
                 StatusMessage = model.MessageDeleteOk();
+                logger.LogInformation($"{model} delete");
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
             catch (Exception ex)
             {
                 StatusMessage = $"{model.MessageDeleteError()} {ex.Message}.";
+                logger.LogInformation($"{model.MessageDeleteError()} delete");
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
         }

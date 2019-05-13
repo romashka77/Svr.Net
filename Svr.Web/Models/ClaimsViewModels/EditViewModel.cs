@@ -1,9 +1,6 @@
 ﻿using Svr.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Svr.Web.Models.ClaimsViewModels
 {
@@ -68,8 +65,8 @@ namespace Svr.Web.Models.ClaimsViewModels
         public long? RespondentId { get; set; }
 
         [Display(Name = "3-е лицо")]
+        // ReSharper disable once InconsistentNaming
         public long? Person3rdId { get; set; }
-        //-----------
 
         [Display(Name = "Дата вступления в законную силу")]
         [DataType(DataType.Date)]

@@ -60,10 +60,12 @@ namespace Svr.Core.Entities
 
         [Display(Name = "Суд.издер.удов.")]
         [Column(TypeName = "money")]
+        // ReSharper disable once IdentifierTypo
         public decimal? СostSatisfied { get; set; }
 
         [Display(Name = "Суд.издер.отк.")]
         [Column(TypeName = "money")]
+        // ReSharper disable once IdentifierTypo
         public decimal? СostDenied { get; set; }
 
         [Display(Name = "Упл.гос.пошлина")]

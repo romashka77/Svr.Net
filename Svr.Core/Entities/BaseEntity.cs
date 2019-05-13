@@ -4,19 +4,17 @@ using System.ComponentModel.DataAnnotations;
 namespace Svr.Core.Entities
 {
     /// <summary>
-    /// Базовый класс для сущностей
+    /// Базовый класс для сущности
     /// </summary>
     public abstract class BaseEntity
     {
         private const string Error = "Ошибка: ";
-        
         protected const string ErrorStringEmpty ="Пожалуйста, заполните поле: {0}";
         protected const string ErrorStringMaxLength = "Максимальная длина поля: {0} не более {1} символов";
         /// <summary>
         /// Возвращает или задает идентификатор сущности
         /// </summary>
         [Key]
-        
         public long Id { get; set; }
         /// <summary>
         /// Дата и время создания

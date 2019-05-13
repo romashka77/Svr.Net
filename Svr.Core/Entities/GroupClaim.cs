@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Svr.Core.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// Группа исков
     /// </summary>

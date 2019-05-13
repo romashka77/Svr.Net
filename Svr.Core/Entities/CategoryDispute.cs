@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Svr.Core.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// Категория споров
     /// </summary>
@@ -13,7 +14,6 @@ namespace Svr.Core.Entities
         /// </summary>
         [Display(Name = "Группы исков")]
         public virtual ICollection<GroupClaim> GroupClaims { get; set; } = new List<GroupClaim>();
-
         public override string ToString() => "Категория споров";
     }
 }

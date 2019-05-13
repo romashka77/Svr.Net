@@ -2,8 +2,9 @@
 
 namespace Svr.Core.Entities
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Базовая сущьность с наименованием и описанием
+    /// Базовая сущность с наименованием и описанием
     /// </summary>
     public abstract class BaseEntityDescription : BaseEntityName
     {
@@ -12,6 +13,6 @@ namespace Svr.Core.Entities
         /// </summary>
         [Display(Name = "Описание", Prompt = "Введите описание")]
         public string Description { get; set; }
-        public override string ToString() => "Базовая сущьность с наименованием и описанием";
+        public override string ToString() => "Базовая сущность с наименованием и описанием";
     }
 }

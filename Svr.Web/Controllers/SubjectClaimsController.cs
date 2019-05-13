@@ -5,10 +5,8 @@ using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
-using Svr.Infrastructure.Data;
 using Svr.Web.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Svr.Web.Models.SubjectClaimsViewModels;
@@ -99,7 +97,7 @@ namespace Svr.Web.Controllers
         // GET: SubjectClaims/Create
         public async Task<IActionResult> Create()
         {
-            ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new { Id = a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
+            ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new {a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
             return View();
         }
         // POST: SubjectClaims/Create
@@ -115,11 +113,12 @@ namespace Svr.Web.Controllers
                 if (item != null)
                 {
                     StatusMessage = item.MessageAddOk();
+                    logger.LogInformation($"{model} create");
                     return RedirectToAction(nameof(Index));
                 }
             }
             ModelState.AddModelError(string.Empty, model.MessageAddError());
-            ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new { Id = a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
+            ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new {a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
             return View(model);
         }
         #endregion
@@ -134,7 +133,7 @@ namespace Svr.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             var model = new ItemViewModel { Id = item.Id, Code = item.Code, Name = item.Name, Description = item.Description, GroupClaimId= item. GroupClaimId, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc };
-            ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new { Id = a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
+            ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new {a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
             return View(model);
         }
         // POST: SubjectClaims/Edit/5
@@ -164,7 +163,8 @@ namespace Svr.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new { Id = a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
+            ViewBag.groupClaims = new SelectList((await groupClaimRepository.ListAllAsync()).Select(a => new {a.Id, Name = $"{a.Code} {a.Name}" }), "Id", "Name", 1);
+            logger.LogInformation($"{model} edit");
             return View(model);
         }
         #endregion
@@ -192,6 +192,7 @@ namespace Svr.Web.Controllers
             {
                 await repository.DeleteAsync(new SubjectClaim { Id = model.Id, Name = model.Name, Code = model.Code, });
                 StatusMessage = model.MessageDeleteOk();
+                logger.LogInformation($"{model} delete");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
 using Svr.Infrastructure.Identity;
-using Svr.Web.Models;
 using Svr.Web.Models.RoleViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,9 +15,9 @@ namespace Svr.Web.Controllers
     [Authorize(Roles = "Администратор")]
     public class RolesController : Controller
     {
-        RoleManager<IdentityRole> roleManager;
-        UserManager<ApplicationUser> userManager;
-        IDistrictRepository districtRepository;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private IDistrictRepository districtRepository;
         public RolesController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IDistrictRepository districtRepository)
         {
             this.roleManager = roleManager;
@@ -48,7 +46,7 @@ namespace Svr.Web.Controllers
         {
             if (!string.IsNullOrEmpty(name))
             {
-                IdentityResult result = await this.roleManager.CreateAsync(new IdentityRole(name));
+                IdentityResult result = await roleManager.CreateAsync(new IdentityRole(name));
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -68,10 +66,10 @@ namespace Svr.Web.Controllers
         [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Delete(string id)
         {
-            IdentityRole role = await roleManager.FindByIdAsync(id);
+            var role = await roleManager.FindByIdAsync(id);
             if (role != null)
             {
-                IdentityResult result = await roleManager.DeleteAsync(role);
+                await roleManager.DeleteAsync(role);
             }
             return RedirectToAction(nameof(Index));
         }
@@ -120,30 +118,22 @@ namespace Svr.Web.Controllers
         public async Task<IActionResult> Edit(string userId, List<string> roles, long? districtId)
         {
             // получаем пользователя
-            ApplicationUser user = await userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                user.DistrictId = districtId;
-                await userManager.UpdateAsync(user);
-                //await userManager.AccessFailedAsync(user);
-                // получем список ролей пользователя
-                var userRoles = await userManager.GetRolesAsync(user);
-                // получаем все роли
-                var allRoles = roleManager.Roles.ToList();
-                // получаем список ролей, которые были добавлены
-                var addedRoles = roles.Except(userRoles);
-                // получаем роли, которые были удалены
-                var removedRoles = userRoles.Except(roles);
-
-                await userManager.AddToRolesAsync(user, addedRoles);
-
-                await userManager.RemoveFromRolesAsync(user, removedRoles);
-
-                return RedirectToAction(nameof(UserList));
-            }
-
-            return NotFound();
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+            user.DistrictId = districtId;
+            await userManager.UpdateAsync(user);
+            //await userManager.AccessFailedAsync(user);
+            // получем список ролей пользователя
+            var userRoles = await userManager.GetRolesAsync(user);
+            // получаем все роли
+            //var allRoles = roleManager.Roles.ToList()
+            // получаем список ролей, которые были добавлены
+            var addedRoles = roles.Except(userRoles);
+            // получаем роли, которые были удалены
+            var removedRoles = userRoles.Except(roles);
+            await userManager.AddToRolesAsync(user, addedRoles);
+            await userManager.RemoveFromRolesAsync(user, removedRoles);
+            return RedirectToAction(nameof(UserList));
         }
-
     }
 }

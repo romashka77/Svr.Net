@@ -1,17 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
-using Svr.Infrastructure.Data;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.MeetingsViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -124,11 +121,11 @@ namespace Svr.Web.Controllers
                 if (item != null)
                 {
                     StatusMessage = item.MessageAddOk();
+                    logger.LogInformation($"{model} create");
                     return RedirectToAction(nameof(Index), new { owner = item.ClaimId });
                 }
             }
             ModelState.AddModelError(string.Empty, model.MessageAddError());
-            await SetViewBag(model);
             return View(model);
         }
         #endregion
@@ -144,7 +141,6 @@ namespace Svr.Web.Controllers
                 throw new ApplicationException(id.ToString().ErrorFind());
             }
             var model = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, StatusMessage = StatusMessage, CreatedOnUtc = item.CreatedOnUtc, Claim = item.Claim, ClaimId = item.ClaimId, Number = item.Number, Date = item.Date, Time = item.Time };
-            await SetViewBag(model);
             return View(model);
         }
 
@@ -161,6 +157,7 @@ namespace Svr.Web.Controllers
                 {
                     await repository.UpdateAsync(new Meeting { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, Number = model.Number, Date = model.Date, Time = model.Time });
                     StatusMessage = model.MessageEditOk();
+                    logger.LogInformation($"{model} edit");
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -175,8 +172,6 @@ namespace Svr.Web.Controllers
                 }
                 //return RedirectToAction(nameof(Index));
             }
-            await SetViewBag(model);
-
             return View(model);
         }
         #endregion
@@ -204,6 +199,7 @@ namespace Svr.Web.Controllers
             {
                 await repository.DeleteAsync(new Meeting { Id = model.Id, Name = model.Name });
                 StatusMessage = model.MessageDeleteOk();
+                logger.LogInformation($"{model} delete");
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
             catch (Exception ex)
@@ -213,8 +209,5 @@ namespace Svr.Web.Controllers
             }
         }
         #endregion
-        private async Task SetViewBag(ItemViewModel model)
-        {
-        }
     }
 }

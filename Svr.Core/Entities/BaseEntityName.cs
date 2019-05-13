@@ -2,6 +2,7 @@
 
 namespace Svr.Core.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// Базовая сущность c наименованием
     /// </summary>

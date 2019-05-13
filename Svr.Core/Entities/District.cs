@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Svr.Core.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// Район
     /// </summary>
@@ -18,13 +19,13 @@ namespace Svr.Core.Entities
         public virtual Region Region { get; set; } 
         
         /// <summary>
-        /// Колекция исполнителей
+        /// Коллекция исполнителей
         /// </summary>
         [Display(Name = "Исполнители")]
         public virtual ICollection<DistrictPerformer> DistrictPerformers { get; set; } = new List<DistrictPerformer>();
 
         /// <summary>
-        /// Колекция исков
+        /// Коллекция исков
         /// </summary>
         [Display(Name = "Иски")]
         public virtual ICollection<Claim> Claims { get; set; } = new List<Claim>();

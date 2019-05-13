@@ -49,7 +49,7 @@
                         t = d?.DistrictId == p?.Id;
                         if (t) { break; }
                     }
-                    <input type="checkbox" name="selectedDistricts" value="@p.Id" @(t ? "checked=\"checked\"" : "") />@p.Name
+                    <input type="checkbox" name="selectedDistricts" value="@p?.Id" @(t ? "checked=\"checked\"" : "") />@p?.Name
                     <br />
                 }
             </div>
