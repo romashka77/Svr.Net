@@ -2,7 +2,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
 using Svr.Infrastructure.Data;
+
 using System;
 
 namespace Svr.api
@@ -28,7 +30,6 @@ namespace Svr.api
                     var dataContext = services.GetRequiredService<DataContext>();
                     //static
                     DataContextSeed.SeedAsync(dataContext/*, loggerFactory*/).Wait();
-
                 }
                 catch (Exception ex)
                 {

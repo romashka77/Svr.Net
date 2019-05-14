@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
+using Svr.Core.Interfaces;
+using Svr.Infrastructure;
 using Svr.Infrastructure.Data;
 using Svr.Infrastructure.Services;
-using Svr.Infrastructure;
-using Svr.Core.Interfaces;
 
 namespace Svr.api
 {
@@ -49,8 +50,6 @@ namespace Svr.api
             services.AddScoped<IFileEntityRepository, FileEntityRepository>();
 
             //services.AddScoped<IRegionService, RegionService>();
-
-
         }
 
         public static void AddTransientServices(this IServiceCollection services)
@@ -70,4 +69,3 @@ namespace Svr.api
         }
     }
 }
-

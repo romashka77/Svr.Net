@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svr.Infrastructure", "Svr.I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svr.Web.Test", "Svr.Web.Test\Svr.Web.Test.csproj", "{E1D46F3E-08A0-4E7B-86A2-2BF58E98919E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Svr.UI", "Svr.UI\Svr.UI.csproj", "{E1D2610D-503E-4E09-B2E6-4A9D08D1BA42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svr.UI", "Svr.UI\Svr.UI.csproj", "{E1D2610D-503E-4E09-B2E6-4A9D08D1BA42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Svr.api", "Svr.api\Svr.api.csproj", "{EC93A75A-879F-4B8F-852D-BF44FBDCFE05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svr.api", "Svr.api\Svr.api.csproj", "{EC93A75A-879F-4B8F-852D-BF44FBDCFE05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
