@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using System.Globalization;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Svr.api
 {
@@ -81,12 +82,9 @@ namespace Svr.api
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    //spa.UseReactDevelopmentServer(npmScript: "start");
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                }
+                if (!env.IsDevelopment()) return;
+                spa.UseReactDevelopmentServer(npmScript: "start");
+                spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
             });
         }
     }
