@@ -83,7 +83,7 @@ namespace Svr.api
             {
                 spa.Options.SourcePath = "ClientApp";
                 if (!env.IsDevelopment()) return;
-                spa.UseReactDevelopmentServer(npmScript: "start");
+                //spa.UseReactDevelopmentServer(npmScript: "start");
                 spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
             });
         }
