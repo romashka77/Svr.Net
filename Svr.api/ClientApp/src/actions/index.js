@@ -1,11 +1,12 @@
+import claimsLoadedType from  '../action-types/claim-types';
 
-const booksLoaded = (newBooks) => {
+const claimsLoaded = (newClaims) => {
   return {
-    type: 'BOOKS_LOADED',
-    payload: newBooks
+    type: claimsLoadedType,
+    payload: newClaims
   };
 };
 
 export {
-  booksLoaded
+  claimsLoaded
 };

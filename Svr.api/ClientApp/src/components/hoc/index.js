@@ -1,5 +1,5 @@
-import withBookstoreService from './with-claimstore-service';
+import withClaimStoreService from './with-claim-store-service';
 
 export {
-  withBookstoreService
+  withClaimStoreService
 };

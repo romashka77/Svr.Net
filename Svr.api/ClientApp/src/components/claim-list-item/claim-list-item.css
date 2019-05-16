@@ -1,0 +1,30 @@
+.claim-list-item {
+    display: flex;
+    margin: 15px 0;
+}
+
+    .claim-list-item .claim-cover {
+        flex-shrink: 0;
+        width: 120px;
+        margin-right: 30px;
+    }
+
+        .claim-list-item .claim-cover img {
+            max-width: 100%;
+        }
+
+    .claim-list-item .claim-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        align-items: flex-start;
+    }
+
+        .claim-list-item .claim-details .claim-title {
+            font-size: 1.2rem;
+        }
+
+        .claim-list-item .claim-details .claim-price {
+            font-size: 1.4rem;
+        }

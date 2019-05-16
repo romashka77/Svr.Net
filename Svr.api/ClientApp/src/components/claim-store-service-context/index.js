@@ -1,9 +1,9 @@
 import {
-  claimStoreServiceProvider,
-  claimStoreServiceConsumer
+  ClaimStoreServiceProvider,
+  ClaimStoreServiceConsumer
 } from './claim-store-service-context';
 
 export {
-  claimStoreServiceProvider,
-  claimStoreServiceConsumer
+  ClaimStoreServiceProvider,
+  ClaimStoreServiceConsumer
 };
