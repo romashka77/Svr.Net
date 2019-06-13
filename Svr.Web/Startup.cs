@@ -40,7 +40,7 @@ namespace Svr.Web
                 loggerFactory.AddConsole();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {HotModuleReplacement =true,ReactHotModuleReplacement = true}); // мы включаем поддержку webpack, теперь у нас не будет болеть голова за сборку клиентских ресурсов и нам не нужно будет каждый раз вручную ее запускать, прописывать куда нибудь в PostBuildEvents или держать открытым окошко консоли с запущенной webpack –watch. Этой строкой мы создаем инстанс webpack-а в памяти, который будет отслеживать изменения в файлах и запускать инкрементальную сборку. 
+                //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {HotModuleReplacement =true,ReactHotModuleReplacement = true}); // мы включаем поддержку webpack, теперь у нас не будет болеть голова за сборку клиентских ресурсов и нам не нужно будет каждый раз вручную ее запускать, прописывать куда нибудь в PostBuildEvents или держать открытым окошко консоли с запущенной webpack –watch. Этой строкой мы создаем инстанс webpack-а в памяти, который будет отслеживать изменения в файлах и запускать инкрементальную сборку. 
             }
             else
             {
