@@ -13,7 +13,7 @@ using Svr.Web.Models.DirNameViewModels;
 
 namespace Svr.Web.Controllers
 {
-    [Authorize(Roles = "Администратор, Администратор ОПФР")]
+    [Authorize(Roles = "Администратор")]
     public class DirNamesController : Controller
     {
         private readonly ILogger<DirNamesController> logger;
