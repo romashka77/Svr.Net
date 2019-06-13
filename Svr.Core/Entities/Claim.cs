@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Svr.Core.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// Иск
     /// </summary>
@@ -76,11 +77,12 @@ namespace Svr.Core.Entities
         [ForeignKey("RespondentId")]
         public Applicant Respondent { get; set; }
 
+        // ReSharper disable once InconsistentNaming
         public long? Person3rdId { get; set; }
         [Display(Name = "3-е лицо")]
         [ForeignKey("Person3rdId")]
+        // ReSharper disable once InconsistentNaming
         public Applicant Person3rd { get; set; }
-        //-----------
 
         [Display(Name = "Дата вступления в законную силу")]
         [DataType(DataType.Date)]
@@ -90,29 +92,23 @@ namespace Svr.Core.Entities
         public string FinalDecision { get; set; }
 
         /// <summary>
-        /// Колекция инстанций
+        /// Коллекция инстанций
         /// </summary>
         [Display(Name = "Инстанции")]
-        public virtual ICollection<Instance> Instances { get; set; }
-        
+        public virtual ICollection<Instance> Instances { get; set; } = new List<Instance>();
+
         /// <summary>
-        /// Колекция заседаний
+        /// Коллекция заседаний
         /// </summary>
         [Display(Name = "График заседаний")]
-        public virtual ICollection<Meeting> Meetings { get; set; }
+        public virtual ICollection<Meeting> Meetings { get; set; } = new List<Meeting>();
 
         /// <summary>
-        /// Колекция файлов
+        /// Коллекция файлов
         /// </summary>
         [Display(Name = "Документы по иску")]
-        public virtual ICollection<FileEntity> FileEntities { get; set; }
+        public virtual ICollection<FileEntity> FileEntities { get; set; } = new List<FileEntity>();
 
         public override string ToString() => "Иск";
-        public Claim()
-        {
-            Instances = new List<Instance>();
-            Meetings = new List<Meeting>();
-            FileEntities = new List<FileEntity>();
-        }
     }
 }

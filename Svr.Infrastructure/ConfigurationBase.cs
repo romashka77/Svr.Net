@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Extensions.Configuration;
 
 namespace Svr.Infrastructure
@@ -9,11 +7,13 @@ namespace Svr.Infrastructure
     {
         protected IConfigurationRoot GetConfiguration()
         {
+            // ReSharper disable once StringLiteralTypo
             return new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
         }
 
         protected void RaiseValueNotFoundException(string configurationKey)
         {
+            // ReSharper disable once StringLiteralTypo
             throw new Exception($"не удалось найти ключ appsettings ({configurationKey}).");
         }
     }

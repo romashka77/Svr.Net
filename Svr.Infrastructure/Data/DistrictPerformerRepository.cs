@@ -11,6 +11,7 @@ namespace Svr.Infrastructure.Data
     public class DistrictPerformerRepository : IDistrictPerformerRepository
     {
         private readonly DataContext dbContext;
+        // ReSharper disable once InconsistentNaming
         private DbSet<DistrictPerformer> _entities;
 
         #region Ctor

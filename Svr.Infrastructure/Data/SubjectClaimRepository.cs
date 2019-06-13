@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
-using Svr.Infrastructure.Extensions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ namespace Svr.Infrastructure.Data
     {
         public SubjectClaimRepository(DataContext context) : base(context)
         {
-
         }
 
         public virtual SubjectClaim GetByIdWithItems(long? id)
@@ -33,7 +31,6 @@ namespace Svr.Infrastructure.Data
         }
         public override IQueryable<SubjectClaim> Sort(IQueryable<SubjectClaim> source, SortState sortOrder)
         {
-            //CodeComparer codeComparer = new CodeComparer();
             switch (sortOrder)
             {
                 case SortState.NameDesc:
@@ -58,6 +55,12 @@ namespace Svr.Infrastructure.Data
                     return source.OrderBy(s => s.GroupClaim.Name);
                 case SortState.OwnerDesc:
                     return source.OrderByDescending(s => s.GroupClaim.Name);
+                case SortState.NameAsc:
+                    return source.OrderBy(s => s.Name);
+                case SortState.LordAsc:
+                    return source;
+                case SortState.LordDesc:
+                    return source;
                 default:
                     return source.OrderBy(s => s.Name);
             }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
-using Svr.Web.Interfaces;
 using Svr.Web.Models;
 using Svr.Web.Models.RegionsViewModels;
 

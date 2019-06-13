@@ -38,8 +38,6 @@ namespace Svr.Core.Entities
         [Display(Name = "ОПФ")]
         public virtual Dir Opf { get; set; }
 
-
         public override string ToString() => "Сторона процесса";
-
     }
 }

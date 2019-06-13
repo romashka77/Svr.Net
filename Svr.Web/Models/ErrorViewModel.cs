@@ -1,5 +1,3 @@
-using System;
-
 namespace Svr.Web.Models
 {
     public class ErrorViewModel

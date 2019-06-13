@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Svr.Core.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// Человек
     /// </summary>
@@ -26,8 +27,8 @@ namespace Svr.Core.Entities
         public DateTime? DateofBirth { get; set; }//Дата рождения
 
         [Display(Name = "СНИЛС", Prompt = "Введите СНИЛС")]
-        [Range(typeof(UInt32), "0", "999999999", ErrorMessage = "Значение {0} должно быть в диапазоне от {1} до {2}")]
-        public UInt32? Snils { get; set; }
+        [Range(typeof(uint), "0", "999999999", ErrorMessage = "Значение {0} должно быть в диапазоне от {1} до {2}")]
+        public uint? Snils { get; set; }
         /// <summary>
         /// Район
         /// </summary>

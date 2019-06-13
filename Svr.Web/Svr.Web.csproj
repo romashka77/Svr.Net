@@ -22,7 +22,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="package.json0" />
+    <None Remove="Source\site.css" />
+    <None Remove="Source\site.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Source\site.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Source\site.min.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 
@@ -40,6 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Svr.Core\Svr.Core.csproj" />
     <ProjectReference Include="..\Svr.Infrastructure\Svr.Infrastructure.csproj" />
   </ItemGroup>
 

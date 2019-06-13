@@ -1,12 +1,11 @@
-﻿@using Svr.Core.Entities
-@model Svr.Web.Models.InstanceViewModels.ItemViewModel
+﻿@model Svr.Web.Models.InstanceViewModels.ItemViewModel
 
 @{
     ViewData["Title"] = "Редактировать";
 }
 
 <h2>@ViewData["Title"]</h2>
-@Html.Partial("_StatusMessage", Model.StatusMessage)
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 <h4>@Model</h4>
 <hr />
 

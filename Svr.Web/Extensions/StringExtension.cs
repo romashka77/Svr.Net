@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Svr.Web.Extensions
 {
@@ -9,13 +6,13 @@ namespace Svr.Web.Extensions
     {
         public static long? ToLong(this string str)
         {
-            if (String.IsNullOrEmpty(str))
+            if (string.IsNullOrEmpty(str))
             {
                 return null;
             }
             try
             {
-                return Int64.Parse(str);
+                return long.Parse(str);
             }
             catch (Exception)
             {

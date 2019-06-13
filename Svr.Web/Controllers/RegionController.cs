@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
-using Svr.Infrastructure.Data;
 
 namespace Svr.Web.Controllers
 {
@@ -19,7 +15,7 @@ namespace Svr.Web.Controllers
     public class RegionController : Controller
     {
         private ILogger<RegionController> logger;
-        private IRegionRepository regionRepository;
+        private readonly IRegionRepository regionRepository;
 
         //private readonly DataContext _context;
 
@@ -70,6 +66,7 @@ namespace Svr.Web.Controllers
             try
             {
                 await regionRepository.UpdateAsync(region);
+                logger.LogInformation($"{region} edite");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -94,6 +91,7 @@ namespace Svr.Web.Controllers
                 return BadRequest(ModelState);
             }
             await regionRepository.AddAsync(region);
+            logger.LogInformation($"{region} create");
             return CreatedAtAction("GetRegion", new { id = region.Id }, region);
         }
 
@@ -111,6 +109,7 @@ namespace Svr.Web.Controllers
                 return NotFound();
             }
             await regionRepository.DeleteAsync(region);
+            logger.LogInformation($"{region} delete");
             return Ok(region);
         }
 

@@ -2,9 +2,7 @@
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
@@ -58,6 +56,12 @@ namespace Svr.Infrastructure.Data
                     return source.OrderBy(s => s.Region.Name);
                 case SortState.OwnerDesc:
                     return source.OrderByDescending(s => s.Region.Name);
+                case SortState.NameAsc:
+                    return source.OrderBy(s => s.Name);
+                case SortState.LordAsc:
+                    return source;
+                case SortState.LordDesc:
+                    return source;
                 default:
                     return source.OrderBy(s => s.Name);
             }

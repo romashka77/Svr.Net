@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Svr.Core.Entities;
 using Svr.Infrastructure.Data.Configurations;
-using Svr.Infrastructure.Data.Extentions;
+using Svr.Infrastructure.Data.Extensions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
 {
-    public class DataContext : DbContext
+    public sealed class DataContext : DbContext
     {
-        private readonly string schema = "jurist";
+        private const string Schema = "jurist";
 
         public DbSet<Region> Regions { get; set; }
         public DbSet<District> Districts { get; set; }
@@ -44,7 +44,7 @@ namespace Svr.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Fluent API, https://metanit.com/sharp/entityframeworkcore/2.3.php
-            modelBuilder.HasDefaultSchema(this.schema);
+            modelBuilder.HasDefaultSchema(Schema);
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
             modelBuilder.ApplyConfiguration(new DistrictPerformerConfiguration());
 

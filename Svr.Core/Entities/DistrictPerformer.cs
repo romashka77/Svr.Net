@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Svr.Core.Entities
 {
     /// <summary>
-    /// связь сногие ко многим
+    /// связь многие ко многим
     /// </summary>
     public class DistrictPerformer
     {

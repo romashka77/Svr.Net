@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -124,15 +123,9 @@ namespace Svr.Web.Controllers
                 var item = await repository.AddAsync(new Applicant { Name = model.Name, TypeApplicantId = model.TypeApplicantId, /*Description = model.Description, FullName = model.FullName, OpfId = model.OpfId, Inn = model.Inn, Address = model.Address, AddressBank = model.AddressBank, Born = model.Born */});
                 if (item != null)
                 {
+                    logger.LogInformation($"{model} create");
                     StatusMessage = item.MessageAddOk();
                     return RedirectToAction(nameof(Index));
-                    model.IsMan = item.TypeApplicant.Name == "Физическое лицо";
-                    ViewBag.TypeApplicants = await GetTypeApplicants(model.TypeApplicantId.ToString());
-                    if (!model.IsMan)
-                    {
-                        ViewBag.Opfs = await GetOpfs(model.OpfId.ToString());
-                    }
-                    return RedirectToAction(nameof(Edit), new { id = item.Id });
                 }
             }
             ModelState.AddModelError(string.Empty, model.MessageAddError());
@@ -174,6 +167,7 @@ namespace Svr.Web.Controllers
                 {
                     await repository.UpdateAsync(new Applicant { Id = model.Id, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, TypeApplicantId = model.TypeApplicantId, Description = model.Description, FullName = model.FullName, OpfId = model.OpfId, Address = model.Address, AddressBank = model.AddressBank, Born = model.Born, Inn = model.Inn });
                     StatusMessage = model.MessageEditOk();
+                    logger.LogInformation($"{model} edit");
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -228,6 +222,7 @@ namespace Svr.Web.Controllers
             {
                 await repository.DeleteAsync(new Applicant { Id = model.Id, Name = model.Name });
                 StatusMessage = model.MessageDeleteOk();
+                logger.LogInformation($"{model} delete");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

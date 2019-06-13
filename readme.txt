@@ -1,1 +1,0 @@
-https://metanit.com/sharp/aspnet5/12.2.php

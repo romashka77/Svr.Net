@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Svr.Web.Models.AccountViewModels
 {
@@ -10,7 +6,7 @@ namespace Svr.Web.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "E-mail", Description = "Email Адресс", Prompt = "Введите E-mail")]
+        [Display(Name = "E-mail", Description = "Email Адрес", Prompt = "Введите E-mail")]
         public string Email { get; set; }
 
         [Required]

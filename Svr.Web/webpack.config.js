@@ -1,83 +1,150 @@
-﻿//'use strict';
-
+﻿// https://codeburst.io/how-to-use-webpack-in-asp-net-core-projects-a-basic-react-template-sample-25a3681a5fc2
+// https://medium.com/front-end-weekly/webpack-by-example-part-3-a4ceaaa6299a
+// https://www.youtube.com/watch?v=_GtHmFFxi_8&list=PL0lO_mIqDDFXaDvwLJ6aMnmIt7sdmujKp&index=6
+// https://monsterlessons.com/project/lessons/redux-js-vstuplenie
+// https://monsterlessons.com/project/lessons/reduxjs-combinereducers
+// https://flash-player.net/channel/UCQpfDQgPe-b-KadFexdZGXQ
+// https://ui-kit.rambler.ru/
+// Web Essentials
+const path = require('path');
 const webpack = require('webpack');
-var path = require('path');
-const bundleFolder = "./wwwroot/assets/";
-const srcFolder = "./App/";
+const TerserJsPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
+const devMode = process.env.NODE_ENV !== 'production';
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const extractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+// console.log('devMode', devMode);
+// console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+// console.log('================================================');
 
 module.exports = {
-    entry: 
-        { regionlist: srcFolder + "regionlist.jsx" }
-    ,
-    //entry: {
-
-    //iskovoezajvlenie: "./Scripts/components/IskovoeZajvlenie.jsx"
-    //"./src/app.jsx"
-    //}, // входная точка - исходный файл
-    devtool: "source-map",
-    output: {
-        filename: "[name].js",
-        publicPath: 'assets/',
-        path: path.resolve(__dirname, bundleFolder)
-    },
-    //output: {
-    //    path: path.resolve(__dirname, './Scripts'),     // путь к каталогу выходных файлов - папка public
-    //    publicPath: '/Scripts/',
-    //    filename: "[name].bundle.js"       // название создаваемого файла
-    //},
-    module: {
-        rules: [
-            {
-                test: /\.jsx$/,
-                exclude: /(node_modules)/,
-                loader: "babel-loader",
-                query: {
-                    presets: ["es2015", "stage-0", "react"]
-                }
-            }
-        ]
-    },
-
-    //module: {
-    //    rules: [   //загрузчик для jsx
-    //        {
-    //            test: /\.jsx?$/, // определяем тип файлов
-    //            exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
-    //            loader: "babel-loader",   // определяем загрузчик
-    //            options: {
-    //                presets: [
-    //                    "@babel/preset-env",
-    //                    "@babel/preset-react",
-    //                    {
-    //                        'plugins': [
-    //                            '@babel/plugin-proposal-class-properties'
-    //                        ]
-    //                    }
-    //                ]    // используемые плагины
-    //            }
-    //        },
-    //        {
-    //            test: /\.css$/,
-    //            use: [
-    //                {
-    //                    loader: "style-loader"
-    //                },
-    //                {
-    //                    loader: "css-loader",
-    //                    options: {
-    //                        sourceMap: true,
-    //                        modules: true,
-    //                        localIdentName: "[local]___[hash:base64:5]"
-    //                    }
-    //                },
-    //                {
-    //                    loader: "less-loader"
-    //                }
-    //            ]
-    //        }
-    //    ]
-    //}
-    plugins: [
-    ]
+  context: path.resolve(__dirname, 'Source'),
+  // devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
+  devtool: 'source-map',
+  mode: devMode ? 'development' : 'production',
+  entry: {
+    claims: './claims',
+    common: './common',
+    textFirstUpperCase: './textFirstUpperCase',
+    site: './site',
+    // validation: './validation'
+    // claim: './claim'
+  },
+  output: {
+    path: path.resolve(__dirname, 'wwwroot/dist'),
+    publicPath: '/dist/',
+    filename: '[name].js',
+    chunkFilename: '[id].js',
+    library: '[name]',
+  },
+  optimization: {
+    minimizer: [
+      new TerserJsPlugin({}),
+      new OptimizeCssAssetsPlugin({
+        cssProcessorOptions: { map: { inline: false, annotation: true } },
+      }),
+    ],
+    // splitChunks: {
+    //    chunks: 'all'
+    // }
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.css'],
+  },
+  plugins: [
+    // new webpack.ProgressPlugin(),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      // "React": "react",
+      // "Provider": "react-redux"
+      // ,
+      // Popper: ['popper.js', 'default']
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js?$/,
+        exclude: /(node_modules|bower_components)/, // excluded node_modules
+        use: [
+          {
+            loader: 'babel-loader',
+          }, {
+            loader: 'eslint-loader',
+            options: {
+              // emitError: true,
+              fix: true,
+            },
+          },
+        ],
+      },
+      {
+        // test: /.(css|scss)$/,
+        test: /.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              name: '[path][name].css',
+              //    publicPath: '/dist/'
+            },
+          }, {
+            //    loader: 'style-loader', // inject CSS to page
+            // }, {
+            loader: 'css-loader', // translates CSS into CommonJS modules
+            options: { url: false, sourceMap: true },
+          },
+          // {
+          //    loader: 'postcss-loader', // Run post css actions
+          //    options: {
+          //        plugins: function () { // post css plugins, can be exported to postcss.config.js
+          //            return [
+          //                require('precss'),
+          //                require('autoprefixer')
+          //            ];
+          //        }
+          //    }
+          // }
+          // , {
+          //    loader: 'sass-loader', // compiles SASS to CSS
+          // options: { sourceMap: true }
+          // }
+        ],
+      },
+      {
+        test: /\.hbs$/,
+        exclude: /(node_modules|bower_components)/,
+        use: [
+          'handlebars-loader',
+        ],
+      },
+      {
+        test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name]-[hash:8].[ext]',
+            },
+          },
+        ],
+        // loader: 'url-loader',
+        // options: {
+        //    limit: 10000
+        // }
+      },
+    ],
+  },
 };

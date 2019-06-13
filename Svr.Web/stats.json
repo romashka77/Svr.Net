@@ -1,0 +1,689 @@
+devMode true
+process.env.NODE_ENV development
+================================================
+{
+  "errors": [
+    "./common.js\nModule build failed (from ../node_modules/eslint-loader/index.js):\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\n    at Function.require.resolve (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\v8-compile-cache\\v8-compile-cache.js:162:23)\n    at Plugins.load (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\plugins.js:104:29)\n    at Array.forEach (<anonymous>)\n    at Plugins.loadAll (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\plugins.js:165:21)\n    at loadFromDisk (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:529:35)\n    at Object.load (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:587:20)\n    at Config.getPersonalConfig (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:167:37)\n    at Config.getLocalConfigHierarchy (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:261:41)\n    at Config.getConfigHierarchy (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:192:43)\n    at Config.getConfigVector (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:299:21)\n    at Config.getConfig (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:342:29)\n    at processText (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:181:33)\n    at CLIEngine.executeOnText (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:690:40)\n    at lint (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js:263:17)\n    at Object.module.exports (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js:258:21)",
+    "./claims.js\nModule build failed (from ../node_modules/eslint-loader/index.js):\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\n    at Function.require.resolve (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\v8-compile-cache\\v8-compile-cache.js:162:23)\n    at Plugins.load (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\plugins.js:104:29)\n    at Array.forEach (<anonymous>)\n    at Plugins.loadAll (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\plugins.js:165:21)\n    at loadFromDisk (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:529:35)\n    at Object.load (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:587:20)\n    at Config.getPersonalConfig (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:167:37)\n    at Config.getLocalConfigHierarchy (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:261:41)\n    at Config.getConfigHierarchy (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:192:43)\n    at Config.getConfigVector (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:299:21)\n    at Config.getConfig (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:342:29)\n    at processText (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:181:33)\n    at CLIEngine.executeOnText (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:690:40)\n    at lint (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js:263:17)\n    at Object.module.exports (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js:258:21)",
+    "./textFirstUpperCase.js\nModule build failed (from ../node_modules/eslint-loader/index.js):\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\n    at Function.require.resolve (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\v8-compile-cache\\v8-compile-cache.js:162:23)\n    at Plugins.load (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\plugins.js:104:29)\n    at Array.forEach (<anonymous>)\n    at Plugins.loadAll (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\plugins.js:165:21)\n    at loadFromDisk (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:529:35)\n    at Object.load (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:587:20)\n    at Config.getPersonalConfig (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:167:37)\n    at Config.getLocalConfigHierarchy (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:261:41)\n    at Config.getConfigHierarchy (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:192:43)\n    at Config.getConfigVector (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:299:21)\n    at Config.getConfig (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:342:29)\n    at processText (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:181:33)\n    at CLIEngine.executeOnText (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:690:40)\n    at lint (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js:263:17)\n    at Object.module.exports (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js:258:21)",
+    "./site.js\nModule build failed (from ../node_modules/eslint-loader/index.js):\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\n    at Function.require.resolve (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\v8-compile-cache\\v8-compile-cache.js:162:23)\n    at Plugins.load (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\plugins.js:104:29)\n    at Array.forEach (<anonymous>)\n    at Plugins.loadAll (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\plugins.js:165:21)\n    at loadFromDisk (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:529:35)\n    at Object.load (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config\\config-file.js:587:20)\n    at Config.getPersonalConfig (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:167:37)\n    at Config.getLocalConfigHierarchy (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:261:41)\n    at Config.getConfigHierarchy (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:192:43)\n    at Config.getConfigVector (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:299:21)\n    at Config.getConfig (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\config.js:342:29)\n    at processText (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:181:33)\n    at CLIEngine.executeOnText (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint\\lib\\cli-engine.js:690:40)\n    at lint (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js:263:17)\n    at Object.module.exports (C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js:258:21)"
+  ],
+  "warnings": [],
+  "version": "4.29.6",
+  "hash": "de89b0cd167b0193a46d",
+  "time": 1264,
+  "builtAt": 1554362341624,
+  "publicPath": "/dist/",
+  "outputPath": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\wwwroot\\dist",
+  "assetsByChunkName": {
+    "claims": [
+      "claims.js",
+      "claims.js.map"
+    ],
+    "common": [
+      "common.js",
+      "common.js.map"
+    ],
+    "site": [
+      "site.js",
+      "site.js.map"
+    ],
+    "textFirstUpperCase": [
+      "textFirstUpperCase.js",
+      "textFirstUpperCase.js.map"
+    ]
+  },
+  "assets": [
+    {
+      "name": "claims.js",
+      "size": 31521,
+      "chunks": [
+        "claims"
+      ],
+      "chunkNames": [
+        "claims"
+      ],
+      "emitted": true
+    },
+    {
+      "name": "claims.js.map",
+      "size": 30615,
+      "chunks": [
+        "claims"
+      ],
+      "chunkNames": [
+        "claims"
+      ],
+      "emitted": true
+    },
+    {
+      "name": "common.js",
+      "size": 31521,
+      "chunks": [
+        "common"
+      ],
+      "chunkNames": [
+        "common"
+      ],
+      "emitted": true
+    },
+    {
+      "name": "common.js.map",
+      "size": 30615,
+      "chunks": [
+        "common"
+      ],
+      "chunkNames": [
+        "common"
+      ],
+      "emitted": true
+    },
+    {
+      "name": "site.js",
+      "size": 31503,
+      "chunks": [
+        "site"
+      ],
+      "chunkNames": [
+        "site"
+      ],
+      "emitted": true
+    },
+    {
+      "name": "site.js.map",
+      "size": 30607,
+      "chunks": [
+        "site"
+      ],
+      "chunkNames": [
+        "site"
+      ],
+      "emitted": true
+    },
+    {
+      "name": "textFirstUpperCase.js",
+      "size": 31629,
+      "chunks": [
+        "textFirstUpperCase"
+      ],
+      "chunkNames": [
+        "textFirstUpperCase"
+      ],
+      "emitted": true
+    },
+    {
+      "name": "textFirstUpperCase.js.map",
+      "size": 30663,
+      "chunks": [
+        "textFirstUpperCase"
+      ],
+      "chunkNames": [
+        "textFirstUpperCase"
+      ],
+      "emitted": true
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "claims": {
+      "chunks": [
+        "claims"
+      ],
+      "assets": [
+        "claims.js",
+        "claims.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "common": {
+      "chunks": [
+        "common"
+      ],
+      "assets": [
+        "common.js",
+        "common.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "textFirstUpperCase": {
+      "chunks": [
+        "textFirstUpperCase"
+      ],
+      "assets": [
+        "textFirstUpperCase.js",
+        "textFirstUpperCase.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "site": {
+      "chunks": [
+        "site"
+      ],
+      "assets": [
+        "site.js",
+        "site.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "namedChunkGroups": {
+    "claims": {
+      "chunks": [
+        "claims"
+      ],
+      "assets": [
+        "claims.js",
+        "claims.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "common": {
+      "chunks": [
+        "common"
+      ],
+      "assets": [
+        "common.js",
+        "common.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "textFirstUpperCase": {
+      "chunks": [
+        "textFirstUpperCase"
+      ],
+      "assets": [
+        "textFirstUpperCase.js",
+        "textFirstUpperCase.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "site": {
+      "chunks": [
+        "site"
+      ],
+      "assets": [
+        "site.js",
+        "site.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "chunks": [
+    {
+      "id": "claims",
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 2182,
+      "names": [
+        "claims"
+      ],
+      "files": [
+        "claims.js",
+        "claims.js.map"
+      ],
+      "hash": "88f98ce9adafc667f329",
+      "siblings": [],
+      "parents": [],
+      "children": [],
+      "childrenByOrder": {},
+      "modules": [
+        {
+          "id": "./claims.js",
+          "identifier": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\babel-loader\\lib\\index.js!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js??ref--4-1!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\Source\\claims.js",
+          "name": "./claims.js",
+          "index": 0,
+          "index2": 0,
+          "size": 2182,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "claims"
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "profile": {
+            "factory": 561,
+            "building": 484
+          },
+          "failed": true,
+          "errors": 1,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "./claims",
+              "loc": "claims"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 0,
+          "source": "throw new Error(\"Module build failed (from ../node_modules/eslint-loader/index.js):\\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\\n    at Function.require.resolve (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\v8-compile-cache\\\\v8-compile-cache.js:162:23)\\n    at Plugins.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:104:29)\\n    at Array.forEach (<anonymous>)\\n    at Plugins.loadAll (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:165:21)\\n    at loadFromDisk (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:529:35)\\n    at Object.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:587:20)\\n    at Config.getPersonalConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:167:37)\\n    at Config.getLocalConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:261:41)\\n    at Config.getConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:192:43)\\n    at Config.getConfigVector (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:299:21)\\n    at Config.getConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:342:29)\\n    at processText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:181:33)\\n    at CLIEngine.executeOnText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:690:40)\\n    at lint (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:263:17)\\n    at Object.module.exports (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:258:21)\");"
+        }
+      ],
+      "filteredModules": 0,
+      "origins": [
+        {
+          "module": "",
+          "moduleIdentifier": "",
+          "moduleName": "",
+          "loc": "claims",
+          "request": "./claims",
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "id": "common",
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 2182,
+      "names": [
+        "common"
+      ],
+      "files": [
+        "common.js",
+        "common.js.map"
+      ],
+      "hash": "b587941e5e1e90dfe578",
+      "siblings": [],
+      "parents": [],
+      "children": [],
+      "childrenByOrder": {},
+      "modules": [
+        {
+          "id": "./common.js",
+          "identifier": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\babel-loader\\lib\\index.js!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js??ref--4-1!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\Source\\common.js",
+          "name": "./common.js",
+          "index": 1,
+          "index2": 1,
+          "size": 2182,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "common"
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "profile": {
+            "factory": 49,
+            "building": 969
+          },
+          "failed": true,
+          "errors": 1,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "./common",
+              "loc": "common"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 0,
+          "source": "throw new Error(\"Module build failed (from ../node_modules/eslint-loader/index.js):\\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\\n    at Function.require.resolve (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\v8-compile-cache\\\\v8-compile-cache.js:162:23)\\n    at Plugins.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:104:29)\\n    at Array.forEach (<anonymous>)\\n    at Plugins.loadAll (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:165:21)\\n    at loadFromDisk (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:529:35)\\n    at Object.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:587:20)\\n    at Config.getPersonalConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:167:37)\\n    at Config.getLocalConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:261:41)\\n    at Config.getConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:192:43)\\n    at Config.getConfigVector (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:299:21)\\n    at Config.getConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:342:29)\\n    at processText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:181:33)\\n    at CLIEngine.executeOnText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:690:40)\\n    at lint (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:263:17)\\n    at Object.module.exports (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:258:21)\");"
+        }
+      ],
+      "filteredModules": 0,
+      "origins": [
+        {
+          "module": "",
+          "moduleIdentifier": "",
+          "moduleName": "",
+          "loc": "common",
+          "request": "./common",
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 2182,
+      "names": [
+        "site"
+      ],
+      "files": [
+        "site.js",
+        "site.js.map"
+      ],
+      "hash": "7dad695e1f8dbd6fe0e7",
+      "siblings": [],
+      "parents": [],
+      "children": [],
+      "childrenByOrder": {},
+      "modules": [
+        {
+          "id": "./site.js",
+          "identifier": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\babel-loader\\lib\\index.js!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js??ref--4-1!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\Source\\site.js",
+          "name": "./site.js",
+          "index": 3,
+          "index2": 3,
+          "size": 2182,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "site"
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "profile": {
+            "factory": 549,
+            "building": 496
+          },
+          "failed": true,
+          "errors": 1,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "./site",
+              "loc": "site"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 0,
+          "source": "throw new Error(\"Module build failed (from ../node_modules/eslint-loader/index.js):\\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\\n    at Function.require.resolve (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\v8-compile-cache\\\\v8-compile-cache.js:162:23)\\n    at Plugins.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:104:29)\\n    at Array.forEach (<anonymous>)\\n    at Plugins.loadAll (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:165:21)\\n    at loadFromDisk (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:529:35)\\n    at Object.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:587:20)\\n    at Config.getPersonalConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:167:37)\\n    at Config.getLocalConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:261:41)\\n    at Config.getConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:192:43)\\n    at Config.getConfigVector (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:299:21)\\n    at Config.getConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:342:29)\\n    at processText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:181:33)\\n    at CLIEngine.executeOnText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:690:40)\\n    at lint (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:263:17)\\n    at Object.module.exports (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:258:21)\");"
+        }
+      ],
+      "filteredModules": 0,
+      "origins": [
+        {
+          "module": "",
+          "moduleIdentifier": "",
+          "moduleName": "",
+          "loc": "site",
+          "request": "./site",
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "id": "textFirstUpperCase",
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 2182,
+      "names": [
+        "textFirstUpperCase"
+      ],
+      "files": [
+        "textFirstUpperCase.js",
+        "textFirstUpperCase.js.map"
+      ],
+      "hash": "a04348c68240a5a2b869",
+      "siblings": [],
+      "parents": [],
+      "children": [],
+      "childrenByOrder": {},
+      "modules": [
+        {
+          "id": "./textFirstUpperCase.js",
+          "identifier": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\babel-loader\\lib\\index.js!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js??ref--4-1!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\Source\\textFirstUpperCase.js",
+          "name": "./textFirstUpperCase.js",
+          "index": 2,
+          "index2": 2,
+          "size": 2182,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "textFirstUpperCase"
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "profile": {
+            "factory": 549,
+            "building": 488
+          },
+          "failed": true,
+          "errors": 1,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "./textFirstUpperCase",
+              "loc": "textFirstUpperCase"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 0,
+          "source": "throw new Error(\"Module build failed (from ../node_modules/eslint-loader/index.js):\\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\\n    at Function.require.resolve (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\v8-compile-cache\\\\v8-compile-cache.js:162:23)\\n    at Plugins.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:104:29)\\n    at Array.forEach (<anonymous>)\\n    at Plugins.loadAll (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:165:21)\\n    at loadFromDisk (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:529:35)\\n    at Object.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:587:20)\\n    at Config.getPersonalConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:167:37)\\n    at Config.getLocalConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:261:41)\\n    at Config.getConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:192:43)\\n    at Config.getConfigVector (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:299:21)\\n    at Config.getConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:342:29)\\n    at processText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:181:33)\\n    at CLIEngine.executeOnText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:690:40)\\n    at lint (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:263:17)\\n    at Object.module.exports (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:258:21)\");"
+        }
+      ],
+      "filteredModules": 0,
+      "origins": [
+        {
+          "module": "",
+          "moduleIdentifier": "",
+          "moduleName": "",
+          "loc": "textFirstUpperCase",
+          "request": "./textFirstUpperCase",
+          "reasons": []
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "./claims.js",
+      "identifier": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\babel-loader\\lib\\index.js!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js??ref--4-1!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\Source\\claims.js",
+      "name": "./claims.js",
+      "index": 0,
+      "index2": 0,
+      "size": 2182,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "claims"
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "profile": {
+        "factory": 561,
+        "building": 484
+      },
+      "failed": true,
+      "errors": 1,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": null,
+          "moduleIdentifier": null,
+          "module": null,
+          "moduleName": null,
+          "type": "single entry",
+          "userRequest": "./claims",
+          "loc": "claims"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 0,
+      "source": "throw new Error(\"Module build failed (from ../node_modules/eslint-loader/index.js):\\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\\n    at Function.require.resolve (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\v8-compile-cache\\\\v8-compile-cache.js:162:23)\\n    at Plugins.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:104:29)\\n    at Array.forEach (<anonymous>)\\n    at Plugins.loadAll (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:165:21)\\n    at loadFromDisk (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:529:35)\\n    at Object.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:587:20)\\n    at Config.getPersonalConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:167:37)\\n    at Config.getLocalConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:261:41)\\n    at Config.getConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:192:43)\\n    at Config.getConfigVector (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:299:21)\\n    at Config.getConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:342:29)\\n    at processText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:181:33)\\n    at CLIEngine.executeOnText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:690:40)\\n    at lint (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:263:17)\\n    at Object.module.exports (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:258:21)\");"
+    },
+    {
+      "id": "./common.js",
+      "identifier": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\babel-loader\\lib\\index.js!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js??ref--4-1!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\Source\\common.js",
+      "name": "./common.js",
+      "index": 1,
+      "index2": 1,
+      "size": 2182,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "common"
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "profile": {
+        "factory": 49,
+        "building": 969
+      },
+      "failed": true,
+      "errors": 1,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": null,
+          "moduleIdentifier": null,
+          "module": null,
+          "moduleName": null,
+          "type": "single entry",
+          "userRequest": "./common",
+          "loc": "common"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 0,
+      "source": "throw new Error(\"Module build failed (from ../node_modules/eslint-loader/index.js):\\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\\n    at Function.require.resolve (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\v8-compile-cache\\\\v8-compile-cache.js:162:23)\\n    at Plugins.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:104:29)\\n    at Array.forEach (<anonymous>)\\n    at Plugins.loadAll (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:165:21)\\n    at loadFromDisk (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:529:35)\\n    at Object.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:587:20)\\n    at Config.getPersonalConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:167:37)\\n    at Config.getLocalConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:261:41)\\n    at Config.getConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:192:43)\\n    at Config.getConfigVector (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:299:21)\\n    at Config.getConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:342:29)\\n    at processText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:181:33)\\n    at CLIEngine.executeOnText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:690:40)\\n    at lint (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:263:17)\\n    at Object.module.exports (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:258:21)\");"
+    },
+    {
+      "id": "./site.js",
+      "identifier": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\babel-loader\\lib\\index.js!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js??ref--4-1!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\Source\\site.js",
+      "name": "./site.js",
+      "index": 3,
+      "index2": 3,
+      "size": 2182,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "site"
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "profile": {
+        "factory": 549,
+        "building": 496
+      },
+      "failed": true,
+      "errors": 1,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": null,
+          "moduleIdentifier": null,
+          "module": null,
+          "moduleName": null,
+          "type": "single entry",
+          "userRequest": "./site",
+          "loc": "site"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 0,
+      "source": "throw new Error(\"Module build failed (from ../node_modules/eslint-loader/index.js):\\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\\n    at Function.require.resolve (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\v8-compile-cache\\\\v8-compile-cache.js:162:23)\\n    at Plugins.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:104:29)\\n    at Array.forEach (<anonymous>)\\n    at Plugins.loadAll (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:165:21)\\n    at loadFromDisk (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:529:35)\\n    at Object.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:587:20)\\n    at Config.getPersonalConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:167:37)\\n    at Config.getLocalConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:261:41)\\n    at Config.getConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:192:43)\\n    at Config.getConfigVector (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:299:21)\\n    at Config.getConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:342:29)\\n    at processText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:181:33)\\n    at CLIEngine.executeOnText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:690:40)\\n    at lint (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:263:17)\\n    at Object.module.exports (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:258:21)\");"
+    },
+    {
+      "id": "./textFirstUpperCase.js",
+      "identifier": "C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\babel-loader\\lib\\index.js!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\node_modules\\eslint-loader\\index.js??ref--4-1!C:\\Users\\079MakarovRA\\source\\repos\\Svr.Web\\Svr.Web\\Source\\textFirstUpperCase.js",
+      "name": "./textFirstUpperCase.js",
+      "index": 2,
+      "index2": 2,
+      "size": 2182,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "textFirstUpperCase"
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "profile": {
+        "factory": 549,
+        "building": 488
+      },
+      "failed": true,
+      "errors": 1,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": null,
+          "moduleIdentifier": null,
+          "module": null,
+          "moduleName": null,
+          "type": "single entry",
+          "userRequest": "./textFirstUpperCase",
+          "loc": "textFirstUpperCase"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 0,
+      "source": "throw new Error(\"Module build failed (from ../node_modules/eslint-loader/index.js):\\nError: Failed to load plugin react: Cannot find module 'eslint-plugin-react'\\n    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)\\n    at Function.require.resolve (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\v8-compile-cache\\\\v8-compile-cache.js:162:23)\\n    at Plugins.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:104:29)\\n    at Array.forEach (<anonymous>)\\n    at Plugins.loadAll (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\plugins.js:165:21)\\n    at loadFromDisk (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:529:35)\\n    at Object.load (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config\\\\config-file.js:587:20)\\n    at Config.getPersonalConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:167:37)\\n    at Config.getLocalConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:261:41)\\n    at Config.getConfigHierarchy (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:192:43)\\n    at Config.getConfigVector (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:299:21)\\n    at Config.getConfig (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\config.js:342:29)\\n    at processText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:181:33)\\n    at CLIEngine.executeOnText (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint\\\\lib\\\\cli-engine.js:690:40)\\n    at lint (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:263:17)\\n    at Object.module.exports (C:\\\\Users\\\\079MakarovRA\\\\source\\\\repos\\\\Svr.Web\\\\Svr.Web\\\\node_modules\\\\eslint-loader\\\\index.js:258:21)\");"
+    }
+  ],
+  "filteredModules": 0,
+  "children": []
+}

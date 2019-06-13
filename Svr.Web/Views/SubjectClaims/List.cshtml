@@ -6,7 +6,7 @@
 {
     @Html.Partial("_sort", Model)
     @Html.Partial("_pagination", Model)
-    @foreach (var item in Model.ItemViewModels)
+    foreach (var item in Model.ItemViewModels)
     {
         <div>
             <hr />
@@ -62,7 +62,7 @@
 }
 else
 {
-    <div class="esh-catalog-items row">
+    <div class="row">
         НЕТ РЕЗУЛЬТАТОВ, СООТВЕТСТВУЮЩИХ ВАШЕМУ ПОИСКУ
     </div>
 }

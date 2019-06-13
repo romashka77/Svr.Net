@@ -53,6 +53,16 @@ namespace Svr.Infrastructure.Data
                     return source.OrderBy(p => p.UpdatedOnUtc);
                 case SortState.UpdatedOnUtcDesc:
                     return source.OrderByDescending(p => p.UpdatedOnUtc);
+                case SortState.NameAsc:
+                    return source.OrderBy(p => p.Name);
+                case SortState.LordAsc:
+                    return source;
+                case SortState.LordDesc:
+                    return source;
+                case SortState.OwnerAsc:
+                    return source;
+                case SortState.OwnerDesc:
+                    return source;
                 default:
                     return source.OrderBy(p => p.Name);
             }

@@ -1,12 +1,12 @@
 ﻿@model Svr.Web.Models.FileEntityViewModels.IndexViewModel
 
-@Html.Partial("_filtration", Model.FilterViewModel)
+@await Html.PartialAsync("_filtration", Model.FilterViewModel)
 
 @if (Model.ItemViewModels.Any())
 {
-    @Html.Partial("_sort", Model)
-    @Html.Partial("_pagination", Model)
-    @foreach (var item in Model.ItemViewModels)
+    @await Html.PartialAsync("_sort", Model)
+    @await Html.PartialAsync("_pagination", Model)
+    foreach (var item in Model.ItemViewModels)
     {
         <div>
             <hr />
@@ -57,11 +57,11 @@
             <a asp-action="Delete" asp-controller="FileEntities" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
         </div>
     }
-    @Html.Partial("_pagination", Model)
+    @await Html.PartialAsync("_pagination", Model)
 }
 else
 {
-    <div class="esh-catalog-items row">
+    <div>
         НЕТ РЕЗУЛЬТАТОВ, СООТВЕТСТВУЮЩИХ ВАШЕМУ ПОИСКУ
     </div>
 }

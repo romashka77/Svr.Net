@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
-using Svr.Infrastructure.Data;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.CategoryDisputesViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -110,6 +107,7 @@ namespace Svr.Web.Controllers
                 if (item != null)
                 {
                     StatusMessage = item.MessageAddOk();
+                    logger.LogInformation($"{model} create");
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -143,6 +141,7 @@ namespace Svr.Web.Controllers
                 {
                     await repository.UpdateAsync(new CategoryDispute { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc });
                     StatusMessage = model.MessageEditOk();
+                    logger.LogInformation($"{model} edit");
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -184,6 +183,7 @@ namespace Svr.Web.Controllers
             {
                 await repository.DeleteAsync(new CategoryDispute { Id = model.Id, Name = model.Name });
                 StatusMessage = model.MessageDeleteOk();
+                logger.LogInformation($"{model} delete");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

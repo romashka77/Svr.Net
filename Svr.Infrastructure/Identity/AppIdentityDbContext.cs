@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Svr.Infrastructure.Identity.Extentions;
+using Svr.Infrastructure.Identity.Extensions;
 
 namespace Svr.Infrastructure.Identity
 {
@@ -17,7 +14,7 @@ namespace Svr.Infrastructure.Identity
     //UserClaims: набор объектов IdentityUserClaim, соответствует таблице связи пользователей и объектов claims
     //UserRoles: набор объектов IdentityUserRole, соответствует таблице, которая сопоставляет пользователей и их роли
     //UserTokens: набор объектов IdentityUserToken, соответствует таблице токенов пользователей
-    public class AppIdentityDbContext : IdentityDbContext<ApplicationUser>
+    public sealed class AppIdentityDbContext : IdentityDbContext<ApplicationUser>
     {
         private readonly string schema = "identity";
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
@@ -32,7 +29,7 @@ namespace Svr.Infrastructure.Identity
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Fluent API, я использую анатации https://metanit.com/sharp/entityframeworkcore/2.3.php
-            modelBuilder.HasDefaultSchema(this.schema);
+            modelBuilder.HasDefaultSchema(schema);
             base.OnModelCreating(modelBuilder);
         }
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

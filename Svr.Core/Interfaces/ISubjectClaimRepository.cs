@@ -1,5 +1,4 @@
 ﻿using Svr.Core.Entities;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Svr.Core.Interfaces

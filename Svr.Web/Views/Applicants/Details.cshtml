@@ -1,5 +1,4 @@
-﻿@using Svr.Core.Entities
-@model Svr.Web.Models.ApplicantViewModels.ItemViewModel
+﻿@model Svr.Web.Models.ApplicantViewModels.ItemViewModel
 @{
     ViewData["Title"] = $"Подробности {Model.Name}";
 }
@@ -76,7 +75,7 @@
             <dd>
                 @Html.DisplayFor(model => model.Inn)
             </dd>
-            @if (@Model.Opf != null)
+            if (@Model.Opf != null)
             {
                 <dt>
                     @Html.DisplayNameFor(model => model.Opf)

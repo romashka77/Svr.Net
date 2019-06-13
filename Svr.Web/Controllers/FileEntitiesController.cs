@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
-using Svr.Infrastructure.Data;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.FileEntityViewModels;
@@ -23,7 +20,7 @@ namespace Svr.Web.Controllers
     [Authorize]
     public class FileEntitiesController : Controller
     {
-        private const string filesFolder = "Files";
+        private const string FilesFolder = "Files";
         private readonly IFileEntityRepository repository;
         private readonly IClaimRepository сlaimRepository;
         private readonly ILogger<FileEntitiesController> logger;
@@ -158,6 +155,7 @@ namespace Svr.Web.Controllers
             using (var stream = new FileStream(GetFile(path), FileMode.Open))
             {
                 await stream.CopyToAsync(memory);
+                logger.LogInformation($"{path} create");
             }
             memory.Position = 0;
             return File(memory, GetContentType(path), Path.GetFileName(GetFile(path)));
@@ -191,6 +189,7 @@ namespace Svr.Web.Controllers
                 {
                     await repository.UpdateAsync(new FileEntity { Id = model.Id, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, ClaimId = model.ClaimId, Path = model.Path });
                     StatusMessage = model.MessageEditOk();
+                    logger.LogInformation($"{model} edit");
                     return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -235,7 +234,7 @@ namespace Svr.Web.Controllers
                 await repository.DeleteAsync(new FileEntity { Id = model.Id, Name = model.Name });
                 StatusMessage = model.MessageDeleteOk();
 
-                FileInfo fileInf = new FileInfo(GetFile(model.Path));
+                var fileInf = new FileInfo(GetFile(model.Path));
                 if (fileInf.Exists)
                 {
                     fileInf.Delete();
@@ -243,6 +242,7 @@ namespace Svr.Web.Controllers
                     // File.Delete(path);
                 }
                 StatusMessage = model.MessageDeleteOk();
+                logger.LogInformation($"{model} edit");
                 return RedirectToAction(nameof(Index), new { owner = model.ClaimId });
             }
             catch (Exception ex)
@@ -252,12 +252,13 @@ namespace Svr.Web.Controllers
             }
         }
         #endregion
-        private async Task SetViewBag(ItemViewModel model)
+        private static async Task SetViewBag(ItemViewModel model)
         {
+            return;
         }
         private string GetFile(string path)
         {
-            return Path.Combine(hostingEnvironment.WebRootPath, filesFolder, path);
+            return Path.Combine(hostingEnvironment.WebRootPath, FilesFolder, path);
         }
         private string GetContentType(string path)
         {

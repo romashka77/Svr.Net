@@ -2,9 +2,7 @@
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Svr.Infrastructure.Data
@@ -48,6 +46,20 @@ namespace Svr.Infrastructure.Data
                     return source.OrderBy(s => s.DirName.Name);
                 case SortState.OwnerDesc:
                     return source.OrderByDescending(s => s.DirName.Name);
+                case SortState.NameAsc:
+                    return source.OrderBy(s => s.Name);
+                case SortState.CodeAsc:
+                    return source;
+                case SortState.CodeDesc:
+                    return source;
+                case SortState.DescriptionAsc:
+                    return source;
+                case SortState.DescriptionDesc:
+                    return source;
+                case SortState.LordAsc:
+                    return source;
+                case SortState.LordDesc:
+                    return source;
                 default:
                     return source.OrderBy(s => s.Name);
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -9,11 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Svr.Infrastructure.Identity;
 using Svr.Web.Extensions;
 using Svr.Core.Interfaces;
-using Svr.Web.Models;
 using Svr.Web.Models.ManageViewModels;
 
 namespace Svr.Web.Controllers
@@ -136,7 +133,7 @@ namespace Svr.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction(nameof(Index));
             }
 
             var user = await userManager.GetUserAsync(User);
@@ -346,7 +343,7 @@ namespace Svr.Web.Controllers
             var model = new TwoFactorAuthenticationViewModel
             {
                 HasAuthenticator = await userManager.GetAuthenticatorKeyAsync(user) != null,
-                Is2faEnabled = user.TwoFactorEnabled,
+                Is2FaEnabled = user.TwoFactorEnabled,
                 RecoveryCodesLeft = await userManager.CountRecoveryCodesAsync(user),
             };
 
@@ -354,7 +351,7 @@ namespace Svr.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Disable2faWarning()
+        public async Task<IActionResult> Disable2FaWarning()
         {
             var user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -367,12 +364,12 @@ namespace Svr.Web.Controllers
                 throw new ApplicationException($"Непредвиденная ошибка при отключении 2FA пользователя с ID '{user.Id}'.");
             }
 
-            return View(nameof(Disable2fa));
+            return View(nameof(Disable2Fa));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Disable2fa()
+        public async Task<IActionResult> Disable2Fa()
         {
             var user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -380,8 +377,8 @@ namespace Svr.Web.Controllers
                 throw new ApplicationException($"Не удалось загрузить пользователя с ID '{userManager.GetUserId(User)}'.");
             }
 
-            var disable2faResult = await userManager.SetTwoFactorEnabledAsync(user, false);
-            if (!disable2faResult.Succeeded)
+            var disable2FaResult = await userManager.SetTwoFactorEnabledAsync(user, false);
+            if (!disable2FaResult.Succeeded)
             {
                 throw new ApplicationException($"Непредвиденная ошибка при отключении 2FA пользователя с ID '{user.Id}'.");
             }
@@ -425,10 +422,10 @@ namespace Svr.Web.Controllers
             //Полосы и дефисы
             var verificationCode = model.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-            var is2faTokenValid = await userManager.VerifyTwoFactorTokenAsync(
+            var is2FaTokenValid = await userManager.VerifyTwoFactorTokenAsync(
                 user, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
 
-            if (!is2faTokenValid)
+            if (!is2FaTokenValid)
             {
                 ModelState.AddModelError("Code", "Неверный код подтверждения.");
                 await LoadSharedKeyAndQrCodeUriAsync(user, model);

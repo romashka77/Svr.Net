@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace Svr.Infrastructure
 {
     public class DatabaseConfiguration : ConfigurationBase
     {
-        private readonly string DataConnectionKey = "svrDataConnection";
-        private readonly string AuthConnectionKey = "svrIdentityConnection";
+        private const string DataConnectionKey = "svrDataConnection";
+        private const string AuthConnectionKey = "svrIdentityConnection";
 
         public string GetDataConnectionString() => GetConfiguration().GetConnectionString(DataConnectionKey);
 

@@ -5,10 +5,10 @@
 }
 
 <h4>@ViewData["Title"]</h4>
-@Html.Partial("_StatusMessage", Model.StatusMessage)
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 <p>
     <a asp-action="Create" asp-controller="Performers" class="btn btn-default">Добавить</a>
 </p>
 
-@Html.Partial("List", Model)
+@await Html.PartialAsync("List", Model)
 

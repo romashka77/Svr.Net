@@ -6,12 +6,10 @@ using Microsoft.Extensions.Logging;
 using Svr.Core.Entities;
 using Svr.Core.Interfaces;
 using Svr.Core.Specifications;
-using Svr.Infrastructure.Data;
 using Svr.Web.Extensions;
 using Svr.Web.Models;
 using Svr.Web.Models.DistrictsViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -123,6 +121,7 @@ namespace Svr.Web.Controllers
                 if (item != null)
                 {
                     StatusMessage = item.MessageAddOk();
+                    logger.LogInformation($"{model} create");
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -166,6 +165,7 @@ namespace Svr.Web.Controllers
                         }
                     }
                     await repository.UpdateAsync(new District { Id = model.Id, Code = model.Code, Description = model.Description, Name = model.Name, CreatedOnUtc = model.CreatedOnUtc, RegionId = model.RegionId });
+                    logger.LogInformation($"{model} edit");
                     StatusMessage = model.MessageEditOk();
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -209,6 +209,7 @@ namespace Svr.Web.Controllers
             {
                 await repository.DeleteAsync(new District { Id = model.Id, Name = model.Name, Code = model.Code, });
                 StatusMessage = model.MessageDeleteOk();
+                logger.LogInformation($"{model} delete");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

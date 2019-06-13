@@ -6,12 +6,6 @@ using Svr.Infrastructure;
 using Svr.Infrastructure.Data;
 using Svr.Infrastructure.Identity;
 using Svr.Infrastructure.Services;
-using Svr.Web.Interfaces;
-using Svr.Web.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Svr.Web
 {
@@ -55,10 +49,7 @@ namespace Svr.Web
             services.AddScoped<IInstanceRepository, InstanceRepository>();
             services.AddScoped<IMeetingRepository, MeetingRepository>();
             services.AddScoped<IFileEntityRepository, FileEntityRepository>();
-
             //services.AddScoped<IRegionService, RegionService>();
-
-
         }
 
         public static void AddTransientServices(this IServiceCollection services)
@@ -66,11 +57,6 @@ namespace Svr.Web
             //services.AddTransient<IDirectoryService, DirectoryService>();
             services.AddTransient<IEmailSender, EmailSender>();
         }
-
-
-
-
-
 
         private static string GetAuthConnectionStringFromConfig()
         {
